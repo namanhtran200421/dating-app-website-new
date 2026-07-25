@@ -114,24 +114,6 @@
         <h2 id="contact-form-title" class="font-display text-[clamp(28px,3vw,38px)] font-semibold">
           Slide into our inbox ⊹ ࣪ ˖
         </h2>
-        @if (submitted()) {
-          <div
-            class="mb-7 flex items-start gap-3 rounded-2xl border border-rose/20 bg-blossom/60 p-4 text-ink"
-            role="status"
-            aria-live="polite"
-          >
-            <span
-              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rose text-sm font-bold text-white"
-              >&#10003;</span
-            >
-            <div>
-              <p class="font-display text-[17px] font-semibold">Message delivered. You ate.</p>
-              <p class="mt-1 text-sm font-medium text-ink/70">
-                We got the lore. Keep an eye on your inbox for the reply arc.
-              </p>
-            </div>
-          </div>
-        }
 
         <form [formGroup]="contactForm" (ngSubmit)="addContact()" novalidate class="space-y-5">
           <div class="grid gap-5 sm:grid-cols-2">

@@ -27,7 +27,7 @@ app.use(express.json());
 // 5 reqs per 15 mins
 const formLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 5,
+  limit: 12220,
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: {

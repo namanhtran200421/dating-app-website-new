@@ -1,6 +1,7 @@
 import { PreSignupService } from './../../services/pre-signup.service';
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import Swal from 'sweetalert2/dist/sweetalert2.esm.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -11,8 +12,6 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 })
 export class ContactUs {
   constructor(private preSignupService: PreSignupService) {}
-
-  protected readonly submitted = signal(false);
 
   protected readonly contactForm = new FormGroup({
     firstName: new FormControl('', {
@@ -38,7 +37,6 @@ export class ContactUs {
   });
 
   protected addContact(): void {
-    this.submitted.set(false);
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
       return;
@@ -47,10 +45,50 @@ export class ContactUs {
     this.preSignupService.addContact(this.contactForm.getRawValue()).subscribe({
       next: () => {
         this.contactForm.reset();
-        this.submitted.set(true);
+        Swal.fire({
+          title: 'Message delivered. You ate.',
+          text: 'We got the lore. Keep an eye on your inbox for the reply arc.',
+          icon: 'success',
+          iconColor: '#d81e4a',
+
+          position: 'center',
+          target: document.body,
+          width: 'min(92vw, 440px)',
+
+          timer: 2400,
+          timerProgressBar: true,
+          showConfirmButton: false,
+
+          heightAuto: false,
+          backdrop: 'rgba(28, 20, 24, 0.48)',
+
+          showClass: {
+            popup: 'rosemarry-swal-enter',
+            backdrop: 'rosemarry-backdrop-enter',
+          },
+
+          hideClass: {
+            popup: 'rosemarry-swal-exit',
+            backdrop: 'rosemarry-backdrop-exit',
+          },
+
+          customClass: {
+            container: 'rosemarry-swal-container',
+            popup: 'rosemarry-swal-popup',
+            icon: 'rosemarry-swal-icon',
+            title: 'rosemarry-swal-title',
+            htmlContainer: 'rosemarry-swal-text',
+            timerProgressBar: 'rosemarry-swal-progress',
+          },
+
+          didOpen: (popup) => {
+            const icon = popup.querySelector('.swal2-icon');
+
+            icon?.classList.add('rosemarry-icon-bounce');
+          },
+        });
       },
       error: (error) => console.error('Unable to send contact message', error),
     });
-      alert("sending works");
   }
 }
