@@ -16,7 +16,7 @@ export class PreSignupService {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       this.baseUrl = 'http://localhost:3000';
     } else {
-      this.baseUrl = '';
+      this.baseUrl = 'https://rosemarry-api.onrender.com';
     }
   }
 
