@@ -11,7 +11,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:4200",
-  "https://dating-app-website-new.vercel.app",
+  "https://www.rosemarry.app",
 ];
 
 app.use(
