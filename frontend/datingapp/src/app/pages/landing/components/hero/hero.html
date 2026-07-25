@@ -8,29 +8,82 @@
     </h1>
 
     <div
-      class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)] rounded-[40px] bg-blossom p-[clamp(26px,3.5vw,52px)]"
+      data-reveal
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Why Rosemarry is different"
+      tabindex="0"
+      class="animate-reveal [animation-delay:60ms] overflow-hidden rounded-[32px] bg-blossom outline-none ring-rose/40 focus-visible:ring-4 sm:rounded-[40px]"
+      (keydown)="onCarouselKeydown($event)"
     >
-      <div class="min-w-[280px] flex-1 basis-[360px]">
-        <p
-          data-reveal
-          class="animate-reveal [animation-delay:60ms] font-body font-medium text-[clamp(21px,2.3vw,29px)] leading-[1.4] tracking-[-0.3px] text-ink mb-5"
+      <p class="sr-only" aria-live="polite" aria-atomic="true">
+        Slide {{ activeSlide() + 1 }} of {{ slides.length }}:
+        {{ slides[activeSlide()].eyebrow }}
+      </p>
+
+      <div
+        class="touch-pan-y overflow-hidden"
+        (pointerdown)="onPointerDown($event)"
+        (pointerup)="onPointerUp($event)"
+        (pointercancel)="cancelPointerGesture()"
+        (pointerleave)="cancelPointerGesture()"
+      >
+        <div
+          class="flex transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          [style.transform]="'translate3d(-' + activeSlide() * 100 + '%, 0, 0)'"
         >
-          <span class="text-rose font-semibold">Rosemarry</span> makes online dating
-          <span class="text-rose font-semibold">way less pricey and way more intentional.</span>
-        </p>
-        <p
-          data-reveal
-          class="animate-reveal [animation-delay:120ms] font-body font-medium text-[clamp(20px,2.1vw,27px)] leading-[1.32] tracking-[-0.4px] text-ink mb-3.5 max-w-[440px]"
-        >
-          No doom-swiping. No random add-ons draining your bank account.
-        </p>
-        <p
-          data-reveal
-          class="animate-reveal [animation-delay:150ms] font-body font-semibold text-[clamp(16px,1.7vw,20px)] leading-[1.35] tracking-[-0.2px] text-rose mb-[30px] max-w-[440px]"
-        >
-          Get in early and score one month of Advanced for free. Major W.
-        </p>
-        <div data-reveal class="animate-reveal flex flex-wrap gap-3 [animation-delay:180ms]">
+          @for (slide of slides; track slide.eyebrow; let index = $index) {
+            <article
+              role="group"
+              aria-roledescription="slide"
+              [attr.aria-label]="'Slide ' + (index + 1) + ' of ' + slides.length"
+              [attr.aria-hidden]="index === activeSlide() ? null : 'true'"
+              [attr.inert]="index === activeSlide() ? null : ''"
+              class="w-full shrink-0"
+            >
+              <div
+                class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)] p-[clamp(26px,3.5vw,52px)] pb-[clamp(30px,4vw,58px)]"
+              >
+                <div class="min-w-0 w-full flex-1 basis-[360px]">
+
+                  <p
+                    class="mb-5 font-body text-[clamp(21px,2.3vw,29px)] font-medium leading-[1.4] tracking-[-0.3px] text-ink"
+                  >
+                    {{ slide.lead }}
+                    <span class="font-semibold text-rose">{{ slide.emphasis }}</span>
+                  </p>
+                  <p
+                    class="mb-3.5 max-w-[460px] font-body text-[clamp(18px,2.1vw,26px)] font-medium leading-[1.35] tracking-[-0.4px] text-ink"
+                  >
+                    {{ slide.body }}
+                  </p>
+                  <p
+                    class="max-w-[460px] font-body text-[clamp(15px,1.7vw,19px)] font-semibold leading-[1.4] tracking-[-0.2px] text-rose"
+                  >
+                    {{ slide.offer }}
+                  </p>
+                </div>
+
+                <div class="min-w-0 w-full flex-1 basis-[340px]">
+                  <div
+                    class="relative w-full overflow-hidden rounded-[28px]  bg-cream p-2.5 shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)] sm:p-3"
+                  >
+                    <div class="overflow-hidden rounded-[20px]">
+                      <app-image-placeholder ratio="4/3" [label]="slide.imageLabel" />
+                    </div>
+          
+                  </div>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col gap-5 border-t border-ink/10 bg-cream/30 px-[clamp(26px,3.5vw,52px)] py-5 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div class="flex flex-wrap gap-3">
           <a
             href="https://www.instagram.com"
             target="_blank"
@@ -48,13 +101,45 @@
             Claim the free month
           </a>
         </div>
-      </div>
-      <div class="min-w-[280px] flex-1 basis-[340px]">
-        <div class="w-full overflow-hidden shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)]">
-          <app-image-placeholder
-            ratio="4/3"
-            label="Main-character moment — two people actually vibing"
-          />
+
+        <div class="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
+          <div class="flex items-center gap-1 sm:gap-2" role="group" aria-label="Choose a slide">
+            @for (slide of slides; track slide.eyebrow; let index = $index) {
+              <button
+                type="button"
+                class="group grid h-7 w-7 place-items-center rounded-full outline-none ring-rose/50 transition focus-visible:ring-2 sm:h-8 sm:w-8"
+                [attr.aria-label]="'Go to slide ' + (index + 1)"
+                [attr.aria-current]="index === activeSlide() ? 'true' : null"
+                (click)="goToSlide(index)"
+              >
+                <span
+                  class="h-2.5 rounded-full bg-ink/25 transition-all duration-300 group-hover:bg-rose/60 motion-reduce:transition-none"
+                  [class.w-6]="index === activeSlide()"
+                  [class.w-2.5]="index !== activeSlide()"
+                  [class.bg-rose]="index === activeSlide()"
+                ></span>
+              </button>
+            }
+          </div>
+
+          <div class="flex gap-2">
+            <button
+              type="button"
+              aria-label="Previous slide"
+              class="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-transparent text-ink transition duration-200 hover:-translate-y-1 hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 active:translate-y-0 motion-reduce:transform-none sm:h-12 sm:w-12"
+              (click)="previousSlide()"
+            >
+              <span aria-hidden="true" class="text-xl leading-none">←</span>
+            </button>
+            <button
+              type="button"
+              aria-label="Next slide"
+              class="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-white transition duration-200 hover:-translate-y-1 hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 active:translate-y-0 motion-reduce:transform-none sm:h-12 sm:w-12"
+              (click)="nextSlide()"
+            >
+              <span aria-hidden="true" class="text-xl leading-none">→</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
