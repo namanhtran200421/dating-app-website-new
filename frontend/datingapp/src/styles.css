@@ -1,202 +1,199 @@
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  html,
-  body,
-  app-root {
-    min-height: 100%;
-    background-color: #fbf2e9;
-  }
+html,
+body,
+app-root {
+  min-height: 100%;
+  background-color: #fbf2e9;
+}
 
-  .pricing-card-hover {
-    transition-duration: 300ms;
-    transition-property: color, background-color, border-color, filter, box-shadow, transform;
-    transition-timing-function: ease;
-  }
+.pricing-card-hover {
+  transition-duration: 300ms;
+  transition-property: color, background-color, border-color, filter, box-shadow, transform;
+  transition-timing-function: ease;
+}
 
-  .pricing-card-hover:hover {
-    transform: translateY(-0.375rem);
-    box-shadow: 6px 6px 0 rgba(28, 20, 24, 0.25);
-  }
+.pricing-card-hover:hover {
+  transform: translateY(-0.375rem);
+  box-shadow: 6px 6px 0 rgba(28, 20, 24, 0.25);
+}
 
+.pricing-card-hover:active {
+  transform: translateY(-0.125rem);
+  box-shadow: 2px 2px 0 rgba(28, 20, 24, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-card-hover:hover,
   .pricing-card-hover:active {
-    transform: translateY(-0.125rem);
-    box-shadow: 2px 2px 0 rgba(28, 20, 24, 0.25);
+    transform: none;
+  }
+}
+
+.pricing-card-hover--accent:hover {
+  box-shadow: 6px 6px 0 rgba(242, 127, 168, 0.45);
+}
+
+.pricing-card-hover--accent:active {
+  box-shadow: 2px 2px 0 rgba(242, 127, 168, 0.45);
+}
+
+.rosemarry-swal-container {
+  position: fixed !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+}
+
+.rosemarry-swal-container .swal2-popup {
+  align-self: center !important;
+  margin: 0 !important;
+}
+
+.rosemarry-swal-container {
+  padding: 1rem;
+}
+
+.rosemarry-swal-popup {
+  border-radius: 32px;
+  background: #fff8f3;
+  padding: 1.75rem 1.5rem 2rem;
+  color: #1c1418;
+  font-family: var(--font-body);
+  box-shadow:
+    0 24px 70px rgba(28, 20, 24, 0.18),
+    0 8px 24px rgba(216, 30, 74, 0.1);
+}
+
+.rosemarry-swal-title {
+  margin-top: 0.75rem;
+  color: #1c1418;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.rosemarry-swal-text {
+  margin-top: 0.75rem;
+  color: rgba(28, 20, 24, 0.65);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.rosemarry-swal-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: #d81e4a;
+}
+
+.rosemarry-swal-enter {
+  animation: rosemarry-popup-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rosemarry-swal-exit {
+  animation: rosemarry-popup-exit 240ms ease-in both;
+}
+
+.rosemarry-backdrop-enter {
+  animation: rosemarry-backdrop-in 260ms ease-out both;
+}
+
+.rosemarry-backdrop-exit {
+  animation: rosemarry-backdrop-out 220ms ease-in both;
+}
+
+.rosemarry-icon-bounce {
+  animation: rosemarry-icon-bounce 650ms cubic-bezier(0.34, 1.56, 0.64, 1) 120ms both;
+}
+
+@keyframes rosemarry-popup-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+    filter: blur(5px);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .pricing-card-hover:hover,
-    .pricing-card-hover:active {
-      transform: none;
-    }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.015);
+    filter: blur(0);
   }
 
-  .pricing-card-hover--accent:hover {
-    box-shadow: 6px 6px 0 rgba(242, 127, 168, 0.45);
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes rosemarry-popup-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
-  .pricing-card-hover--accent:active {
-    box-shadow: 2px 2px 0 rgba(242, 127, 168, 0.45);
+  to {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+}
+
+@keyframes rosemarry-backdrop-in {
+  from {
+    opacity: 0;
   }
 
-  .rosemarry-swal-container {
-    position: fixed !important;
-    inset: 0 !important;
-    display: grid !important;
-    place-items: center !important;
-    padding: 1rem !important;
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rosemarry-backdrop-out {
+  from {
+    opacity: 1;
   }
 
-  .rosemarry-swal-container .swal2-popup {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    place-self: center !important;
-    margin: 0 !important;
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rosemarry-icon-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(-12deg);
   }
 
-  .rosemarry-swal-container {
-    padding: 1rem;
+  55% {
+    opacity: 1;
+    transform: scale(1.15) rotate(4deg);
   }
 
-  .rosemarry-swal-popup {
-    border-radius: 32px;
-    background: #fff8f3;
-    padding: 1.75rem 1.5rem 2rem;
-    color: #1c1418;
-    font-family: var(--font-body);
-    box-shadow:
-      0 24px 70px rgba(28, 20, 24, 0.18),
-      0 8px 24px rgba(216, 30, 74, 0.1);
+  75% {
+    transform: scale(0.94) rotate(-2deg);
   }
 
-  .rosemarry-swal-title {
-    margin-top: 0.75rem;
-    color: #1c1418;
-    font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 600;
-    line-height: 1.15;
-    text-align: center;
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
   }
+}
 
-  .rosemarry-swal-text {
-    margin-top: 0.75rem;
-    color: rgba(28, 20, 24, 0.65);
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.6;
-    text-align: center;
-  }
-
-  .rosemarry-swal-progress {
-    height: 4px;
-    border-radius: 999px;
-    background: #d81e4a;
-  }
-
-  .rosemarry-swal-enter {
-    animation: rosemarry-popup-enter 420ms
-      cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .rosemarry-swal-exit {
-    animation: rosemarry-popup-exit 240ms ease-in both;
-  }
-
-  .rosemarry-backdrop-enter {
-    animation: rosemarry-backdrop-in 260ms ease-out both;
-  }
-
-  .rosemarry-backdrop-exit {
-    animation: rosemarry-backdrop-out 220ms ease-in both;
-  }
-
+@media (prefers-reduced-motion: reduce) {
+  .rosemarry-swal-enter,
+  .rosemarry-swal-exit,
+  .rosemarry-backdrop-enter,
+  .rosemarry-backdrop-exit,
   .rosemarry-icon-bounce {
-    animation: rosemarry-icon-bounce 650ms
-      cubic-bezier(0.34, 1.56, 0.64, 1) 120ms both;
+    animation: none;
   }
-
-  @keyframes rosemarry-popup-enter {
-    0% {
-      opacity: 0;
-      transform: translateY(24px) scale(0.92);
-      filter: blur(5px);
-    }
-
-    60% {
-      opacity: 1;
-      transform: translateY(-4px) scale(1.015);
-      filter: blur(0);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
-    }
-  }
-
-  @keyframes rosemarry-popup-exit {
-    from {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateY(14px) scale(0.96);
-    }
-  }
-
-  @keyframes rosemarry-backdrop-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes rosemarry-backdrop-out {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-    }
-  }
-
-  @keyframes rosemarry-icon-bounce {
-    0% {
-      opacity: 0;
-      transform: scale(0.35) rotate(-12deg);
-    }
-
-    55% {
-      opacity: 1;
-      transform: scale(1.15) rotate(4deg);
-    }
-
-    75% {
-      transform: scale(0.94) rotate(-2deg);
-    }
-
-    100% {
-      opacity: 1;
-      transform: scale(1) rotate(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .rosemarry-swal-enter,
-    .rosemarry-swal-exit,
-    .rosemarry-backdrop-enter,
-    .rosemarry-backdrop-exit,
-    .rosemarry-icon-bounce {
-      animation: none;
-    }
-  }
+}
