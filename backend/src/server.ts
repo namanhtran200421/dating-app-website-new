@@ -9,7 +9,19 @@ import contactRouter from "./routes/contactRoute.js";
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:4200",
+  "https://dating-app-website-new.vercel.app/",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  }),
+);
+
 app.use(express.json());
 
 // 5 reqs per 15 mins
