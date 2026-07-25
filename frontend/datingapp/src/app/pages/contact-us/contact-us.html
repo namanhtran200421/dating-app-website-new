@@ -4,7 +4,6 @@
 >
   <div class="mx-auto max-w-[1180px]">
     <header data-motion-reveal="fade" class="mb-[clamp(34px,5vw,64px)] max-w-[860px]">
-
       <h1
         class="font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
       >
@@ -43,14 +42,13 @@
           </svg>
         </div>
 
-     <h2 class="font-display text-[clamp(28px,3vw,42px)] font-semibold leading-tight">
-  Talk to us ❤︎
-</h2>
+        <h2 class="font-display text-[clamp(28px,3vw,42px)] font-semibold leading-tight">
+          Talk to us ❤︎
+        </h2>
 
-<p class="mt-5 text-[16px] font-medium leading-[1.7] text-ink/70">
-  Questions, ideas, or collabs? We’re listening.
-</p>
-
+        <p class="mt-5 text-[16px] font-medium leading-[1.7] text-ink/70">
+          Questions, ideas, or collabs? We’re listening.
+        </p>
 
         <div class="mt-6">
           <div class="mb-5 flex w-full items-center gap-3 text-rose/60" aria-hidden="true">
@@ -59,9 +57,7 @@
             <span class="h-px flex-1 bg-ink/20"></span>
           </div>
 
-          <p class="text-sm font-semibold uppercase tracking-[0.13em] text-rose">
-            Post-send
-          </p>
+          <p class="text-sm font-semibold uppercase tracking-[0.13em] text-rose">Post-send</p>
 
           <ol class="mt-5 space-y-4">
             <li class="flex gap-3 text-[15px] font-medium leading-relaxed text-ink/75">
@@ -208,21 +204,41 @@
 
           <label class="block text-sm font-semibold">
             What&rsquo;s the vibe?
-            <select
-              formControlName="subject"
-              class="mt-2 block w-full rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition focus:border-rose focus:ring-4 focus:ring-rose/10"
-              [class.border-rose]="
-                contactForm.controls.subject.touched && contactForm.controls.subject.invalid
-              "
-              [class.border-ink/15]="
-                !contactForm.controls.subject.touched || contactForm.controls.subject.valid
-              "
-            >
-              <option value="" disabled>Select</option>
-              <option value="General question">Just a quick question</option>
-              <option value="Feedback">I have thoughts</option>
-              <option value="Partnerships">Let&rsquo;s collab</option>
-            </select>
+            <div class="group relative mt-2">
+              <select
+                formControlName="subject"
+                class="block w-full appearance-none rounded-2xl border bg-white py-3.5 pl-4 pr-16 font-body text-[15px] font-medium text-ink outline-none transition focus:border-rose focus:ring-4 focus:ring-rose/10"
+                [class.border-rose]="
+                  contactForm.controls.subject.touched && contactForm.controls.subject.invalid
+                "
+                [class.border-ink/15]="
+                  !contactForm.controls.subject.touched || contactForm.controls.subject.valid
+                "
+              >
+                <option value="" disabled>Select</option>
+                <option value="General question">Just a quick question</option>
+                <option value="Feedback">I have thoughts</option>
+                <option value="Partnerships">Let&rsquo;s collab</option>
+              </select>
+
+              <span
+                aria-hidden="true"
+                class="pointer-events-none absolute right-2.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center text-rose transition-colors duration-200 group-hover:text-birdpink group-focus-within:text-rose"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m7 9.5 5 5 5-5"></path>
+                </svg>
+              </span>
+            </div>
             @if (contactForm.controls.subject.touched && contactForm.controls.subject.invalid) {
               <span class="mt-1.5 block text-xs font-medium text-rose"
                 >Pick a vibe so we know who gets this.</span
