@@ -21,17 +21,17 @@ export class Hero {
 
   protected readonly slides: readonly HeroSlide[] = [
     {
-      lead: 'Rosemarry makes online dating',
-      emphasis: 'way less pricey and way more intentional.',
-      body: 'No doom-swiping. No random add-ons draining your bank account.',
+      lead: 'Rosemarry aims to make online dating',
+      emphasis: 'cheaper and easier.',
+      body: 'No expensive paywalls or cash-grabbing features.',
       offer: 'Get in early and score one month of Advanced for free. Major W.',
       imageLabel: 'Main-character moment — two people actually vibing',
     },
     {
       lead: 'Meet people you actually want to know',
-      emphasis: 'without losing your whole evening to the feed.',
-      body: 'Thoughtful profiles and calmer matching make every hello feel a little more human.',
-      offer: 'Your time is hot. We help you spend it well.',
+      emphasis: 'without losing your whole day.',
+      body: 'Better matching make every conversation exciting!',
+      offer: 'Your time is important. We help you spend it well.',
       imageLabel: 'A first date that feels easy, warm and genuinely fun',
     },
   ];

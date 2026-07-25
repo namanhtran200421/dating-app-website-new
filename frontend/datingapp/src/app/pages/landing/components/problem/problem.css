@@ -49,19 +49,6 @@
   background: #fbf2e9;
 }
 
-.problem-card__number {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  color: rgba(28, 20, 24, 0.25);
-  font-size: 0.75rem;
-  font-weight: 800;
-}
-
-.problem-card--safety .problem-card__number {
-  color: rgba(255, 255, 255, 0.25);
-}
-
 .problem-card__eyebrow {
   margin-bottom: 0.75rem;
   color: #d81e4a;
@@ -127,11 +114,17 @@
   font-weight: 700;
 }
 
+.safety-signal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
 .safety-signal {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  margin-top: 1.75rem;
   border: 1px solid rgba(242, 127, 168, 0.35);
   border-radius: 999px;
   background: rgba(242, 127, 168, 0.1);
@@ -139,6 +132,35 @@
   color: #f27fa8;
   font-size: 0.72rem;
   font-weight: 700;
+}
+
+.safety-signal--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.safety-signal--link:hover {
+  background: #f27fa8;
+  color: #1c1418;
+  transform: translateY(-0.375rem);
+  box-shadow: 6px 6px 0 rgba(242, 127, 168, 0.45);
+}
+
+.safety-signal--link:active {
+  transform: translateY(-0.125rem);
+  box-shadow: 2px 2px 0 rgba(242, 127, 168, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .safety-signal--link:hover,
+  .safety-signal--link:active {
+    transform: none;
+  }
 }
 
 .safety-signal__pulse {
