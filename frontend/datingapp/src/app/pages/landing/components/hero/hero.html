@@ -1,0 +1,62 @@
+<section id="top" class="relative px-[clamp(18px,5vw,56px)] pt-[118px] pb-10">
+  <div class="max-w-[1180px] mx-auto">
+    <h1
+      data-reveal
+      class="animate-reveal font-display font-semibold text-[clamp(46px,9vw,120px)] leading-[0.98] tracking-[-2px] mb-8"
+    >
+      Dating, minus the <span class="text-rose">cringe.</span>
+    </h1>
+
+    <div
+      class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)] rounded-[40px] bg-blossom p-[clamp(26px,3.5vw,52px)]"
+    >
+      <div class="min-w-[280px] flex-1 basis-[360px]">
+        <p
+          data-reveal
+          class="animate-reveal [animation-delay:60ms] font-body font-medium text-[clamp(21px,2.3vw,29px)] leading-[1.4] tracking-[-0.3px] text-ink mb-5"
+        >
+          <span class="text-rose font-semibold">Rosemarry</span> makes online dating
+          <span class="text-rose font-semibold">way less pricey and way more intentional.</span>
+        </p>
+        <p
+          data-reveal
+          class="animate-reveal [animation-delay:120ms] font-body font-medium text-[clamp(20px,2.1vw,27px)] leading-[1.32] tracking-[-0.4px] text-ink mb-3.5 max-w-[440px]"
+        >
+          No doom-swiping. No random add-ons draining your bank account.
+        </p>
+        <p
+          data-reveal
+          class="animate-reveal [animation-delay:150ms] font-body font-semibold text-[clamp(16px,1.7vw,20px)] leading-[1.35] tracking-[-0.2px] text-rose mb-[30px] max-w-[440px]"
+        >
+          Get in early and score one month of Advanced for free. Major W.
+        </p>
+        <div data-reveal class="animate-reveal flex flex-wrap gap-3 [animation-delay:180ms]">
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:bg-ink"
+          >
+            Catch us on Insta
+          </a>
+
+          <a
+            href="#join"
+            class="pricing-card-hover inline-flex cursor-pointer items-center gap-2.5 rounded-2xl border-[1.5px] border-ink bg-ink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-birdpink hover:bg-birdpink"
+            (click)="$event.preventDefault(); signup.goToSignup()"
+          >
+            Claim the free month
+          </a>
+        </div>
+      </div>
+      <div class="min-w-[280px] flex-1 basis-[340px]">
+        <div class="w-full overflow-hidden shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)]">
+          <app-image-placeholder
+            ratio="4/3"
+            label="Main-character moment — two people actually vibing"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

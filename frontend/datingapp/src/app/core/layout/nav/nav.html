@@ -1,0 +1,103 @@
+<nav
+  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 border-b px-[clamp(14px,4vw,44px)] py-3 transition-colors duration-300"
+  [class.bg-cream/90]="scrolled() || menuOpen()"
+  [class.backdrop-blur-md]="scrolled() || menuOpen()"
+  [class.border-ink/10]="scrolled() || menuOpen()"
+  [class.border-transparent]="!scrolled() && !menuOpen()"
+>
+  <a routerLink="/" fragment="top" (click)="closeMenu()" class="flex min-w-0 items-center gap-2 no-underline">
+    <img src="images/rosemarry/logo.png" alt="Rosemarry" class="h-9 w-auto block" />
+    <span class="font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink">Rosemarry</span>
+  </a>
+
+  <div class="hidden items-center gap-3.5 md:flex">
+    <a
+      routerLink="/contact-us"
+      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-ink text-white text-sm font-semibold no-underline cursor-pointer transition-colors duration-200 hover:bg-birdpink"
+    >
+      Spill the tea
+    </a>
+    <a
+      href="#join"
+      (click)="$event.preventDefault(); signup.goToSignup()"
+      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-ink text-white text-sm font-semibold no-underline cursor-pointer transition-colors duration-200 hover:bg-birdpink"
+    >
+      Get in early
+    </a>
+    <a
+      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-birdpink text-white text-sm font-semibold no-underline shadow-[0_8px_20px_-10px_rgba(236,92,141,0.9)] hover:brightness-[1.06]"
+      href="https://www.instagram.com"
+      target="_blank"
+      rel="noopener"
+    >
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+      Catch us on Insta
+    </a>
+  </div>
+
+  <button
+    type="button"
+    class="pricing-card-hover inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-white shadow-[0_10px_24px_-14px_rgba(28,20,24,0.85)] transition-[background-color,transform] duration-200 hover:-translate-y-0.5 md:hidden"
+    [class.bg-ink]="!menuOpen()"
+    [class.bg-birdpink]="menuOpen()"
+    aria-label="Toggle navigation menu"
+    aria-controls="mobile-navigation"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
+    @if (menuOpen()) {
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    } @else {
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    }
+  </button>
+
+  <div
+    id="mobile-navigation"
+    class="absolute inset-x-3 top-full mt-2 flex origin-top flex-col gap-2 rounded-[28px] border border-rose/15 bg-blossom p-3 shadow-[0_24px_50px_-24px_rgba(28,20,24,0.45)] transition-[opacity,transform] duration-200 ease-out md:hidden"
+    [class.pointer-events-none]="!menuOpen()"
+    [class.-translate-y-1]="!menuOpen()"
+    [class.scale-[0.985]]="!menuOpen()"
+    [class.opacity-0]="!menuOpen()"
+    [class.translate-y-0]="menuOpen()"
+    [class.scale-100]="menuOpen()"
+    [class.opacity-100]="menuOpen()"
+    [attr.aria-hidden]="!menuOpen()"
+    [attr.inert]="menuOpen() ? null : ''"
+  >
+    <a
+      routerLink="/contact-us"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      Spill the tea
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+    <a
+      href="#join"
+      (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-rose"
+    >
+      Get in early
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+    <a
+      href="https://www.instagram.com"
+      target="_blank"
+      rel="noopener"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-[filter] hover:brightness-105"
+    >
+      Catch us on Insta
+      <span aria-hidden="true">&nearr;</span>
+    </a>
+  </div>
+</nav>

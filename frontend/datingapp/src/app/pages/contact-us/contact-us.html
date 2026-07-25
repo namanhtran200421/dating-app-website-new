@@ -1,0 +1,274 @@
+<main
+  id="top"
+  class="font-body min-h-screen overflow-x-hidden bg-cream px-[clamp(18px,5vw,56px)] pb-[clamp(64px,8vw,104px)] pt-[118px] text-ink"
+>
+  <div class="mx-auto max-w-[1180px]">
+    <header class="mb-[clamp(34px,5vw,64px)] max-w-[860px]">
+      <span
+        class="mb-4 inline-flex rounded-full border border-rose/20 bg-white/60 px-4 py-2 text-sm font-semibold text-rose"
+      >
+        Got something to say? We’re all ears.
+      </span>
+      <h1
+        class="animate-reveal font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
+      >
+        Spill the <span class="text-rose">tea !</span>
+      </h1>
+      <p
+        class="mt-6 max-w-[700px] text-[clamp(18px,2vw,24px)] font-medium leading-[1.55] text-ink/75"
+      >
+        Got a question, a big-brain idea, or a spicy take? Drop it below and we&rsquo;ll tap back
+      </p>
+    </header>
+
+    <div
+      class="grid gap-[clamp(24px,4vw,52px)] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-stretch"
+    >
+      <aside class="overflow-hidden rounded-[36px] bg-blossom p-[clamp(28px,4vw,48px)]">
+        <div
+          class="mb-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-white shadow-[0_12px_30px_-16px_rgba(28,20,24,0.8)]"
+        >
+          <svg
+            aria-hidden="true"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+            <path d="M8 9h8M8 13h5"></path>
+          </svg>
+        </div>
+
+        <h2 class="font-display text-[clamp(28px,3vw,42px)] font-semibold leading-tight">
+          Okay, talk to us ❤︎
+        </h2>
+
+        <p class="mt-5 text-[16px] font-medium leading-[1.7] text-ink/70">
+          Need help, have a take, or want to collab? Pick the vibe and give us the full lore.
+        </p>
+
+        <div class="mt-6">
+          <div class="mb-5 flex w-full items-center gap-3 text-rose/60" aria-hidden="true">
+            <span class="h-px flex-1 bg-ink/20"></span>
+            <span class="font-display text-lg leading-none">୨ৎ</span>
+            <span class="h-px flex-1 bg-ink/20"></span>
+          </div>
+
+          <p class="text-sm font-semibold uppercase tracking-[0.13em] text-rose">
+            The post-send lore
+          </p>
+
+          <ol class="mt-5 space-y-4">
+            <li class="flex gap-3 text-[15px] font-medium leading-relaxed text-ink/75">
+              <span
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/65 text-xs font-bold text-rose"
+              >
+                1
+              </span>
+              Your message lands with the Rosemarry crew.
+            </li>
+
+            <li class="flex gap-3 text-[15px] font-medium leading-relaxed text-ink/75">
+              <span
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/65 text-xs font-bold text-rose"
+              >
+                2
+              </span>
+              We route it to whoever gets the assignment.
+            </li>
+
+            <li class="flex gap-3 text-[15px] font-medium leading-relaxed text-ink/75">
+              <span
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/65 text-xs font-bold text-rose"
+              >
+                3
+              </span>
+              A real human reads it. Yes, actually.
+            </li>
+
+            <li class="flex gap-3 text-[15px] font-medium leading-relaxed text-ink/75">
+              <span
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/65 text-xs font-bold text-rose"
+              >
+                4
+              </span>
+              We tap back by email. Keep an eye on that inbox.
+            </li>
+          </ol>
+        </div>
+      </aside>
+
+      <section
+        class="rounded-[36px] border border-ink/10 bg-white/70 p-[clamp(24px,4vw,48px)] shadow-[0_28px_70px_-48px_rgba(28,20,24,0.45)]"
+        aria-labelledby="contact-form-title"
+      >
+        <h2 id="contact-form-title" class="font-display text-[clamp(28px,3vw,38px)] font-semibold">
+          Slide into our inbox ⊹ ࣪ ˖
+        </h2>
+        <p class="mb-8 mt-2 text-[15px] font-medium text-ink/60">
+          Every box needs a lil something.
+        </p>
+
+        @if (submitted()) {
+          <div
+            class="mb-7 flex items-start gap-3 rounded-2xl border border-rose/20 bg-blossom/60 p-4 text-ink"
+            role="status"
+            aria-live="polite"
+          >
+            <span
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rose text-sm font-bold text-white"
+              >&#10003;</span
+            >
+            <div>
+              <p class="font-display text-[17px] font-semibold">Message delivered. You ate.</p>
+              <p class="mt-1 text-sm font-medium text-ink/70">
+                We got the lore. Keep an eye on your inbox for the reply arc.
+              </p>
+            </div>
+          </div>
+        }
+
+        <form [formGroup]="contactForm" (ngSubmit)="addContact()" novalidate class="space-y-5">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="block text-sm font-semibold">
+              First name, pls
+              <input
+                type="text"
+                formControlName="firstName"
+                autocomplete="given-name"
+                class="mt-2 block w-full rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition focus:border-rose focus:ring-4 focus:ring-rose/10"
+                [class.border-rose]="
+                  contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid
+                "
+                [class.border-ink/15]="
+                  !contactForm.controls.firstName.touched || contactForm.controls.firstName.valid
+                "
+              />
+              @if (
+                contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid
+              ) {
+                <span class="mt-1.5 block text-xs font-medium text-rose"
+                  >Drop your first name real quick.</span
+                >
+              }
+            </label>
+
+            <label class="block text-sm font-semibold">
+              Last name, too
+              <input
+                type="text"
+                formControlName="lastName"
+                autocomplete="family-name"
+                class="mt-2 block w-full rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition focus:border-rose focus:ring-4 focus:ring-rose/10"
+                [class.border-rose]="
+                  contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid
+                "
+                [class.border-ink/15]="
+                  !contactForm.controls.lastName.touched || contactForm.controls.lastName.valid
+                "
+              />
+              @if (contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid) {
+                <span class="mt-1.5 block text-xs font-medium text-rose"
+                  >We need the last name for the full lore.</span
+                >
+              }
+            </label>
+          </div>
+
+          <label class="block text-sm font-semibold">
+            Your email (no spammy vibes)
+            <input
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="yourname@internet.com"
+              class="mt-2 block w-full rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition placeholder:text-ink/35 focus:border-rose focus:ring-4 focus:ring-rose/10"
+              [class.border-rose]="
+                contactForm.controls.email.touched && contactForm.controls.email.invalid
+              "
+              [class.border-ink/15]="
+                !contactForm.controls.email.touched || contactForm.controls.email.valid
+              "
+            />
+            @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+              <span class="mt-1.5 block text-xs font-medium text-rose"
+                >That email is not emailing. Try again?</span
+              >
+            }
+          </label>
+
+          <label class="block text-sm font-semibold">
+            What&rsquo;s the vibe?
+            <select
+              formControlName="subject"
+              class="mt-2 block w-full rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition focus:border-rose focus:ring-4 focus:ring-rose/10"
+              [class.border-rose]="
+                contactForm.controls.subject.touched && contactForm.controls.subject.invalid
+              "
+              [class.border-ink/15]="
+                !contactForm.controls.subject.touched || contactForm.controls.subject.valid
+              "
+            >
+              <option value="" disabled>Pick the lore</option>
+              <option value="General question">Just a quick question</option>
+              <option value="Feedback">I have thoughts</option>
+              <option value="Partnerships">Let&rsquo;s collab</option>
+            </select>
+            @if (contactForm.controls.subject.touched && contactForm.controls.subject.invalid) {
+              <span class="mt-1.5 block text-xs font-medium text-rose"
+                >Pick a vibe so we know who gets this.</span
+              >
+            }
+          </label>
+
+          <label class="block text-sm font-semibold">
+            Drop the lore
+            <textarea
+              formControlName="message"
+              rows="6"
+              placeholder="Give us the full story..."
+              class="mt-2 block w-full resize-y rounded-2xl border bg-white px-4 py-3.5 font-body text-[15px] font-medium text-ink outline-none transition placeholder:text-ink/35 focus:border-rose focus:ring-4 focus:ring-rose/10"
+              [class.border-rose]="
+                contactForm.controls.message.touched && contactForm.controls.message.invalid
+              "
+              [class.border-ink/15]="
+                !contactForm.controls.message.touched || contactForm.controls.message.valid
+              "
+            ></textarea>
+            @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+              <span class="mt-1.5 block text-xs font-medium text-rose"
+                >Don&rsquo;t leave us on read — drop a message.</span
+              >
+            }
+          </label>
+
+          <button
+            type="submit"
+            class="pricing-card-hover inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink bg-ink px-6 py-4 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-birdpink hover:bg-birdpink hover:shadow-[0_12px_24px_-12px_rgba(236,92,141,0.9)] sm:w-auto"
+          >
+            Send it
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m22 2-7 20-4-9-9-4Z"></path>
+              <path d="M22 2 11 13"></path>
+            </svg>
+          </button>
+        </form>
+      </section>
+    </div>
+  </div>
+</main>
