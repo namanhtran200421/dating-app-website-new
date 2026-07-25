@@ -12,7 +12,7 @@
       <h1
         class="font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
       >
-        Spill the <span class="text-rose">tea !</span>
+        Message <span class="text-rose">us!</span>
       </h1>
       <p
         class="mt-6 max-w-[700px] text-[clamp(18px,2vw,24px)] font-medium leading-[1.55] text-ink/75"
@@ -22,7 +22,7 @@
     </header>
 
     <div
-      class="grid gap-[clamp(24px,4vw,52px)] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-stretch"
+      class="grid gap-[clamp(24px,4vw,52px)] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start"
     >
       <aside
         data-motion-reveal
@@ -63,7 +63,7 @@
           </div>
 
           <p class="text-sm font-semibold uppercase tracking-[0.13em] text-rose">
-            The post-send lore
+            Post-send
           </p>
 
           <ol class="mt-5 space-y-4">
@@ -103,6 +103,12 @@
               We tap back by email. Keep an eye on that inbox.
             </li>
           </ol>
+
+          <div class="mt-5 flex w-full items-center gap-3 text-rose/60" aria-hidden="true">
+            <span class="h-px flex-1 bg-ink/20"></span>
+            <span class="font-display text-lg leading-none">୨ৎ</span>
+            <span class="h-px flex-1 bg-ink/20"></span>
+          </div>
         </div>
       </aside>
 
@@ -115,10 +121,6 @@
         <h2 id="contact-form-title" class="font-display text-[clamp(28px,3vw,38px)] font-semibold">
           Slide into our inbox ⊹ ࣪ ˖
         </h2>
-        <p class="mb-8 mt-2 text-[15px] font-medium text-ink/60">
-          Every box needs a lil something.
-        </p>
-
         @if (submitted()) {
           <div
             class="mb-7 flex items-start gap-3 rounded-2xl border border-rose/20 bg-blossom/60 p-4 text-ink"
@@ -186,7 +188,7 @@
           </div>
 
           <label class="block text-sm font-semibold">
-            Your email (no spammy vibes)
+            Your email
             <input
               type="email"
               formControlName="email"
@@ -219,7 +221,7 @@
                 !contactForm.controls.subject.touched || contactForm.controls.subject.valid
               "
             >
-              <option value="" disabled>Pick the lore</option>
+              <option value="" disabled>Select</option>
               <option value="General question">Just a quick question</option>
               <option value="Feedback">I have thoughts</option>
               <option value="Partnerships">Let&rsquo;s collab</option>
@@ -232,7 +234,7 @@
           </label>
 
           <label class="block text-sm font-semibold">
-            Drop the lore
+            Tell us more
             <textarea
               formControlName="message"
               rows="6"
@@ -254,7 +256,7 @@
 
           <button
             type="submit"
-            class="pricing-card-hover inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink bg-ink px-6 py-4 text-[15px] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-birdpink hover:bg-birdpink hover:shadow-[0_12px_24px_-12px_rgba(236,92,141,0.9)] sm:w-auto"
+            class="pricing-card-hover inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink bg-ink px-6 py-4 text-[15px] font-semibold text-white transition-colors duration-200 hover:border-birdpink hover:bg-birdpink sm:w-auto"
           >
             Send it
             <svg

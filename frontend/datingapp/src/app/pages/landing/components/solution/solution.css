@@ -155,11 +155,13 @@
 }
 
 .moderation-list i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 999px;
-  background: #f27fa8;
-  box-shadow: 0 0 0 0.3rem rgba(242, 127, 168, 0.12);
+  font-style: normal;
+  font-weight: 800;
+  color: #f27fa8;
 }
 
 .starter-preview {

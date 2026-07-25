@@ -31,3 +31,11 @@ app-root {
     transform: none;
   }
 }
+
+.pricing-card-hover--accent:hover {
+  box-shadow: 6px 6px 0 rgba(242, 127, 168, 0.45);
+}
+
+.pricing-card-hover--accent:active {
+  box-shadow: 2px 2px 0 rgba(242, 127, 168, 0.45);
+}
