@@ -5,22 +5,35 @@
   [class.border-ink/10]="scrolled() || menuOpen()"
   [class.border-transparent]="!scrolled() && !menuOpen()"
 >
-  <a routerLink="/" fragment="top" (click)="closeMenu()" class="flex min-w-0 items-center gap-2 no-underline">
+  <a
+    routerLink="/"
+    fragment="top"
+    (click)="closeMenu()"
+    class="flex min-w-0 items-center gap-2 no-underline"
+  >
     <img src="images/rosemarry/logo.png" alt="Rosemarry" class="h-9 w-auto block" />
-    <span class="font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink">Rosemarry</span>
+    <span class="font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink"
+      >Rosemarry</span
+    >
   </a>
 
   <div class="hidden items-center gap-3.5 md:flex">
     <a
+      routerLink="/about-us"
+      class="relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose after:absolute after:bottom-1 after:left-2 after:h-[2px] after:w-[calc(100%-1rem)] after:origin-left after:scale-x-0 after:rounded-full after:bg-rose after:transition-transform after:duration-300 hover:after:scale-x-100"
+    >
+      Our story
+    </a>
+    <a
       routerLink="/contact-us"
-      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-ink text-white text-sm font-semibold no-underline cursor-pointer transition-colors duration-200 hover:bg-birdpink"
+      class="relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose after:absolute after:bottom-1 after:left-2 after:h-[2px] after:w-[calc(100%-1rem)] after:origin-left after:scale-x-0 after:rounded-full after:bg-rose after:transition-transform after:duration-300 hover:after:scale-x-100"
     >
       Message us
     </a>
     <a
       href="#join"
       (click)="$event.preventDefault(); signup.goToSignup()"
-      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-ink text-white text-sm font-semibold no-underline cursor-pointer transition-colors duration-200 hover:bg-birdpink"
+      class="relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose after:absolute after:bottom-1 after:left-2 after:h-[2px] after:w-[calc(100%-1rem)] after:origin-left after:scale-x-0 after:rounded-full after:bg-rose after:transition-transform after:duration-300 hover:after:scale-x-100"
     >
       Get in early
     </a>
@@ -30,7 +43,16 @@
       target="_blank"
       rel="noopener"
     >
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        width="17"
+        height="17"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -50,11 +72,29 @@
     (click)="toggleMenu()"
   >
     @if (menuOpen()) {
-      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <svg
+        aria-hidden="true"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
         <path d="M6 6l12 12M18 6 6 18"></path>
       </svg>
     } @else {
-      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <svg
+        aria-hidden="true"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      >
         <path d="M4 7h16M4 12h16M4 17h16"></path>
       </svg>
     }
@@ -73,6 +113,14 @@
     [attr.aria-hidden]="!menuOpen()"
     [attr.inert]="menuOpen() ? null : ''"
   >
+    <a
+      routerLink="/about-us"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      Our story
+      <span aria-hidden="true">&rarr;</span>
+    </a>
     <a
       routerLink="/contact-us"
       (click)="closeMenu()"

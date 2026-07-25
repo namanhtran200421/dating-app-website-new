@@ -1,6 +1,6 @@
 <section id="problem" class="bg-cream px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]">
   <div class="mx-auto max-w-[1180px]">
-    <header class="mb-12 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
+    <header data-motion-reveal class="mb-12 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
       <div>
         <span
           class="mb-4 inline-flex rounded-full bg-blossom px-4 py-2 text-sm font-bold text-rose"
@@ -24,7 +24,7 @@
       </p>
     </header>
 
-    <div class="problem-grid">
+    <div data-motion-reveal="fade" class="problem-grid">
       <article class="problem-card problem-card--paywall">
         <div>
           <p class="problem-card__eyebrow">Paywall fatigue</p>
@@ -66,25 +66,14 @@
           <span>Preferences</span>
         </div>
       </article>
-
-      <article class="problem-card problem-card--safety">
+      <article class="problem-card problem-card--safety flex flex-col justify-center items-start">
+        <div class="problem-card__number">03</div>
         <p class="problem-card__eyebrow">Trust issues</p>
         <h3>Scams and harmful behaviour can stay visible for too long.</h3>
         <p>
           Fake profiles, suspicious behaviour, abusive messages, and financial scams need earlier,
           more consistent detection.
         </p>
-
-        <div class="safety-signal-row">
-          <div class="safety-signal" aria-hidden="true">
-            <span class="safety-signal__pulse"></span>
-            Suspicious activity detected
-          </div>
-          <a href="#join" class="safety-signal safety-signal--link">
-            <span class="safety-signal__pulse"></span>
-            User get vaporised
-          </a>
-        </div>
       </article>
 
       <article class="problem-card problem-card--ghosting">

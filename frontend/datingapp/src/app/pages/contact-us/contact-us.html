@@ -3,9 +3,14 @@
   class="font-body min-h-screen overflow-x-hidden bg-cream px-[clamp(18px,5vw,56px)] pb-[clamp(64px,8vw,104px)] pt-[118px] text-ink"
 >
   <div class="mx-auto max-w-[1180px]">
-    <header class="mb-[clamp(34px,5vw,64px)] max-w-[860px]">
+    <header data-motion-reveal="fade" class="mb-[clamp(34px,5vw,64px)] max-w-[860px]">
+      <span
+        class="mb-4 inline-flex rounded-full border border-rose/20 bg-white/60 px-4 py-2 text-sm font-semibold text-rose"
+      >
+        Got something to say? We’re all ears.
+      </span>
       <h1
-        class="animate-reveal font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
+        class="font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
       >
         Message <span class="text-rose">us!</span>
       </h1>
@@ -19,8 +24,44 @@
     <div
       class="grid gap-[clamp(24px,4vw,52px)] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start"
     >
-      <aside class="overflow-hidden rounded-[36px] bg-blossom p-[clamp(28px,4vw,48px)] lg:pb-6">
-        <div>
+      <aside
+        data-motion-reveal
+        class="overflow-hidden rounded-[36px] bg-blossom p-[clamp(28px,4vw,48px)]"
+      >
+        <div
+          class="mb-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-white shadow-[0_12px_30px_-16px_rgba(28,20,24,0.8)]"
+        >
+          <svg
+            aria-hidden="true"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+            <path d="M8 9h8M8 13h5"></path>
+          </svg>
+        </div>
+
+        <h2 class="font-display text-[clamp(28px,3vw,42px)] font-semibold leading-tight">
+          Okay, talk to us ❤︎
+        </h2>
+
+        <p class="mt-5 text-[16px] font-medium leading-[1.7] text-ink/70">
+          Need help, have a take, or want to collab? Pick the vibe and give us the full lore.
+        </p>
+
+        <div class="mt-6">
+          <div class="mb-5 flex w-full items-center gap-3 text-rose/60" aria-hidden="true">
+            <span class="h-px flex-1 bg-ink/20"></span>
+            <span class="font-display text-lg leading-none">୨ৎ</span>
+            <span class="h-px flex-1 bg-ink/20"></span>
+          </div>
+
           <p class="text-sm font-semibold uppercase tracking-[0.13em] text-rose">
             Post-send
           </p>
@@ -72,6 +113,8 @@
       </aside>
 
       <section
+        data-motion-reveal
+        data-motion-delay="0.08"
         class="rounded-[36px] border border-ink/10 bg-white/70 p-[clamp(24px,4vw,48px)] shadow-[0_28px_70px_-48px_rgba(28,20,24,0.45)]"
         aria-labelledby="contact-form-title"
       >
