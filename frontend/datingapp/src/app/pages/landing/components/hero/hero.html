@@ -45,7 +45,6 @@
                 class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)] p-[clamp(26px,3.5vw,52px)] pb-[clamp(30px,4vw,58px)]"
               >
                 <div class="min-w-0 w-full flex-1 basis-[360px]">
-
                   <p
                     class="mb-5 font-body text-[clamp(21px,2.3vw,29px)] font-medium leading-[1.4] tracking-[-0.3px] text-ink"
                   >
@@ -66,12 +65,11 @@
 
                 <div class="min-w-0 w-full flex-1 basis-[340px]">
                   <div
-                    class="relative w-full overflow-hidden rounded-[28px]  bg-cream p-2.5 shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)] sm:p-3"
+                    class="relative w-full overflow-hidden rounded-[28px] bg-cream p-2.5 shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)] sm:p-3"
                   >
                     <div class="overflow-hidden rounded-[20px]">
                       <app-image-placeholder ratio="4/3" [label]="slide.imageLabel" />
                     </div>
-          
                   </div>
                 </div>
               </div>
@@ -126,7 +124,7 @@
             <button
               type="button"
               aria-label="Previous slide"
-              class="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-transparent text-ink transition duration-200 hover:-translate-y-1 hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 active:translate-y-0 motion-reduce:transform-none sm:h-12 sm:w-12"
+              class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-transparent text-ink hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
               (click)="previousSlide()"
             >
               <span aria-hidden="true" class="text-xl leading-none">←</span>
@@ -134,7 +132,7 @@
             <button
               type="button"
               aria-label="Next slide"
-              class="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-white transition duration-200 hover:-translate-y-1 hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 active:translate-y-0 motion-reduce:transform-none sm:h-12 sm:w-12"
+              class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-white hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
               (click)="nextSlide()"
             >
               <span aria-hidden="true" class="text-xl leading-none">→</span>
