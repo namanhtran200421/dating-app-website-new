@@ -1,9 +1,14 @@
 @if (visible()) {
-  <div class="early-stage-banner early-stage-modal" (click)="dismiss()">
+  <div
+    class="early-stage-banner early-stage-modal"
+    [class.early-stage-modal--closing]="closing()"
+    (click)="dismiss()"
+  >
     <section
       class="early-stage-modal__panel"
       role="dialog"
       aria-modal="true"
+      [attr.aria-busy]="closing()"
       aria-labelledby="early-stage-title"
       aria-describedby="early-stage-description"
       (click)="$event.stopPropagation()"
@@ -19,6 +24,7 @@
           type="button"
           class="early-stage-modal__close mr-2"
           aria-label="Dismiss early-stage notice"
+          [disabled]="closing()"
           (click)="dismiss()"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -59,6 +65,7 @@
             #primaryAction
             type="button"
             class="early-stage-modal__primary"
+            [disabled]="closing()"
             (click)="dismiss()"
           >
             <span>Got it, show me around</span>

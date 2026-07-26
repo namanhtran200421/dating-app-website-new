@@ -57,7 +57,6 @@ export class ContactUs {
           width: 'min(92vw, 440px)',
 
           timer: 2400,
-          timerProgressBar: true,
           showConfirmButton: false,
 
           heightAuto: false,
@@ -79,7 +78,6 @@ export class ContactUs {
             icon: 'rosemarry-swal-icon',
             title: 'rosemarry-swal-title',
             htmlContainer: 'rosemarry-swal-text',
-            timerProgressBar: 'rosemarry-swal-progress',
           },
 
           didOpen: (popup) => {
