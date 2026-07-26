@@ -1,8 +1,8 @@
 <app-nav />
 
 <main appScrollReveal class="min-h-screen">
-  <router-outlet />
+  <router-outlet (activate)="onRouteActivate()" />
 </main>
 
-<app-footer />
+<app-footer [showScallop]="!isHomePage" />
 <app-early-stage-banner />

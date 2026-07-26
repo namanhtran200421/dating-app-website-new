@@ -132,7 +132,7 @@
 .footer-signup__form button:focus-visible,
 .footer-signup__form input:focus-visible,
 .footer-signup__instagram:focus-visible,
-.footer-directory__links a:focus-visible,
+.footer-social-orbit__link:focus-visible,
 .footer-legal a:focus-visible {
   outline: 3px solid rgb(216 30 74 / 32%);
   outline-offset: 3px;
@@ -246,65 +246,132 @@
 }
 
 .footer-directory__brand {
-  max-width: 31rem;
+  display: block;
 }
 
-.footer-directory__brand > div {
+.footer-social-orbit {
+  position: relative;
+  width: min(100%, 31rem);
+  height: 10rem;
+  margin: 0 auto 0.5rem;
+}
+
+.footer-social-orbit__paths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.footer-social-orbit__paths path {
+  stroke: rgb(246 201 239 / 46%);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 3 8;
+}
+
+.footer-social-orbit__paths circle {
+  fill: #f27fa8;
+}
+
+.footer-social-orbit__link {
+  position: absolute;
+  z-index: 1;
   display: flex;
+  height: 4rem;
   align-items: center;
-  gap: 0.65rem;
-}
-
-.footer-directory__brand img {
-  width: auto;
-  height: 2.35rem;
-}
-
-.footer-directory__brand span {
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-size: 1.3rem;
-  font-weight: 650;
-}
-
-.footer-directory__brand p {
-  margin-top: 1rem;
-  color: rgb(251 242 233 / 58%);
-  font-size: 0.9rem;
-  font-weight: 500;
-  line-height: 1.7;
-}
-
-.footer-directory__links {
-  display: grid;
-  gap: 0.6rem;
-}
-
-.footer-directory__links a {
-  display: flex;
-  min-width: min(100%, 15rem);
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  border: 1px solid rgb(251 242 233 / 16%);
-  border-radius: 999px;
-  background: rgb(251 242 233 / 5%);
-  padding: 0.8rem 1rem;
-  color: rgb(251 242 233 / 72%);
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition:
-    color 250ms ease,
-    background-color 250ms ease,
-    border-color 250ms ease,
-    transform 250ms ease;
-}
-
-.footer-directory__links a:hover {
-  border-color: #f27fa8;
-  background: #f27fa8;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 2px solid rgb(251 242 233 / 72%);
+  border-radius: 1.4rem 1.7rem 1.45rem 1.6rem;
+  padding: 0.5rem 0.9rem;
   color: #1c1418;
-  transform: translateX(0.3rem);
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: 4px 5px 0 rgb(216 30 74 / 72%);
+  transition:
+    color 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.footer-social-orbit__link svg {
+  width: 1.45rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.footer-social-orbit__link--policy {
+  top: 50%;
+  left: 50%;
+  min-width: 8.2rem;
+  border-color: #f6c9ef;
+  background: #d81e4a;
+  color: #fbf2e9;
+  box-shadow: 5px 6px 0 rgb(246 201 239 / 24%);
+  transform: translate(-50%, -50%) rotate(-2deg);
+}
+
+.footer-social-orbit__link--story {
+  top: 0.4rem;
+  left: 0;
+  min-width: 8.2rem;
+  background: #fbf2e9;
+  transform: rotate(-6deg);
+}
+
+.footer-social-orbit__link--message {
+  right: 0;
+  bottom: 0.35rem;
+  min-width: 9.2rem;
+  background: #f27fa8;
+  transform: rotate(5deg);
+}
+
+.footer-social-orbit__link:hover {
+  border-color: #fbf2e9;
+  background: #d81e4a;
+  color: #fbf2e9;
+  box-shadow: 7px 8px 0 rgb(246 201 239 / 24%);
+  transform: translateY(-0.35rem) rotate(0);
+}
+
+.footer-social-orbit__link--policy:hover {
+  transform: translate(-50%, calc(-50% - 0.35rem)) rotate(0);
+}
+
+.footer-social-orbit__spark {
+  position: absolute;
+  color: #f6c9ef;
+  font-family: system-ui, sans-serif;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.footer-social-orbit__spark--one {
+  bottom: 0.55rem;
+  left: 5rem;
+  font-size: 1.7rem;
+  transform: rotate(-12deg);
+}
+
+.footer-social-orbit__spark--two {
+  top: 0.2rem;
+  left: 10.8rem;
+  color: #f27fa8;
+  font-size: 1.1rem;
 }
 
 .footer-wordmark {
@@ -359,10 +426,6 @@
   .footer-postcard {
     grid-template-columns: minmax(0, 1.05fr) minmax(19rem, 0.75fr);
   }
-
-  .footer-directory {
-    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.42fr);
-  }
 }
 
 @media (max-width: 560px) {
@@ -398,8 +461,45 @@
     width: 100%;
   }
 
-  .footer-directory__links a {
-    width: 100%;
+  .footer-social-orbit {
+    width: min(100%, 21rem);
+    height: 8.75rem;
+    margin-inline: auto;
+  }
+
+  .footer-social-orbit__link {
+    height: 3.15rem;
+    gap: 0.38rem;
+    border-radius: 1.15rem 1.35rem 1.2rem 1.3rem;
+    padding: 0.4rem 0.62rem;
+    font-size: 0.66rem;
+  }
+
+  .footer-social-orbit__link svg {
+    width: 1.15rem;
+  }
+
+  .footer-social-orbit__link--policy {
+    min-width: 7rem;
+  }
+
+  .footer-social-orbit__link--story {
+    left: 0;
+    right: auto;
+    min-width: 6.8rem;
+  }
+
+  .footer-social-orbit__link--message {
+    right: 0;
+    min-width: 7.5rem;
+  }
+
+  .footer-social-orbit__spark--one {
+    left: 2.7rem;
+  }
+
+  .footer-social-orbit__spark--two {
+    left: 7.2rem;
   }
 
   .footer-wordmark {
@@ -420,13 +520,17 @@
 @media (prefers-reduced-motion: reduce) {
   .footer-signup__primary,
   .footer-signup__form button,
-  .footer-directory__links a {
+  .footer-social-orbit__link {
     transition: none;
   }
 
   .footer-signup__primary:hover,
   .footer-signup__form button:hover,
-  .footer-directory__links a:hover {
+  .footer-social-orbit__link:hover {
     transform: none;
+  }
+
+  .footer-social-orbit__link--policy:hover {
+    transform: translate(-50%, -50%);
   }
 }

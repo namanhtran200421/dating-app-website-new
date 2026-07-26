@@ -46,7 +46,7 @@
       <div class="hero-banner__masthead">
         <div class="flex items-center gap-3">
           <span>
-            <strong>Rosemarry</strong>
+            <strong>Rosemarry · Prototype only · NOT OFFICIAL DESIGN ! </strong>
           </span>
         </div>
 
@@ -98,11 +98,239 @@
                   <div class="hero-polaroid">
                     <span class="hero-polaroid__tape" aria-hidden="true"></span>
                     <div class="hero-polaroid__label">
-                      <span>Proof of chemistry</span>
+                      <span>{{ slide.previewLabel }}</span>
                     </div>
 
-                    <div class="overflow-hidden rounded-[22px]">
-                      <app-image-placeholder ratio="16/10" [label]="slide.imageLabel" />
+                    <div
+                      class="hero-tablet"
+                      [class.hero-tablet--chat]="index === 1"
+                      role="img"
+                      [attr.aria-label]="slide.tabletLabel"
+                    >
+                      <span class="hero-tablet__camera" aria-hidden="true"></span>
+
+                      <div class="hero-tablet__screen">
+                        <div class="hero-tablet__appbar">
+                          <span class="hero-tablet__app-mark" aria-hidden="true">R</span>
+                          <strong>Rosemarry</strong>
+                          <span class="hero-tablet__app-heart" aria-hidden="true">♡</span>
+                        </div>
+
+                        @switch (slide.type) {
+                          @case ('discover') {
+                            <div class="hero-discover">
+                              <div class="hero-discover__toolbar">
+                                <span>
+                                  <small>Discover</small>
+                                  <strong>Made for you</strong>
+                                </span>
+                                <span class="hero-free-plan">Free · matching + chat</span>
+                                <span class="hero-filter-button" aria-hidden="true">☷</span>
+                              </div>
+
+                              <div class="hero-discover__profile">
+                                <div class="hero-discover__avatar" aria-hidden="true">
+                                  <span>A</span>
+                                  <small>✦</small>
+                                </div>
+
+                                <div class="hero-discover__details">
+                                  <span class="hero-fit-pill">92% preference fit</span>
+                                  <h3>Avery, 27</h3>
+                                  <p>9 km away · looking for long-term</p>
+
+                                  <div class="hero-discover__interests">
+                                    <span>Books</span>
+                                    <span>Dogs</span>
+                                    <span>Sunday markets</span>
+                                  </div>
+
+                                  <div class="hero-discover__why">
+                                    <small>Why you&rsquo;re seeing Avery</small>
+                                    <strong
+                                      >Age, distance, gender, interests and goals all line
+                                      up.</strong
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="hero-discover__actions" aria-hidden="true">
+                                <span>×</span>
+                                <span>♡</span>
+                                <span>✦</span>
+                              </div>
+
+                              <div class="hero-app-tabs" aria-hidden="true">
+                                <span class="hero-app-tabs__active">⌂</span>
+                                <span>♡</span>
+                                <span>◌</span>
+                                <span>☺</span>
+                              </div>
+                            </div>
+                          }
+
+                          @case ('chat') {
+                            <div class="hero-conversation">
+                              <div class="hero-conversation__person">
+                                <span class="hero-conversation__avatar" aria-hidden="true">M</span>
+                                <span>
+                                  <strong>Maya</strong>
+                                  <small>active now</small>
+                                </span>
+                                <span class="hero-conversation__timer">
+                                  <small>Reply within</small>
+                                  <strong>47h 32m</strong>
+                                </span>
+                              </div>
+
+                              <div class="hero-conversation__safety">
+                                <span aria-hidden="true">✓</span>
+                                <p>
+                                  <strong>Safety checks are on</strong>
+                                  Risky links and harmful messages are screened quietly.
+                                </p>
+                              </div>
+
+                              <div class="hero-conversation__messages">
+                                <div class="hero-ai-opener">
+                                  <span aria-hidden="true">✦</span>
+                                  <p>
+                                    <small>Need an opener?</small>
+                                    <strong>Ask Maya about her dream Sunday-market find.</strong>
+                                  </p>
+                                  <span class="hero-ai-opener__use">Use</span>
+                                </div>
+
+                                <p
+                                  class="hero-conversation__bubble hero-conversation__bubble--theirs"
+                                >
+                                  Sunday markets are elite. You?
+                                </p>
+                                <p
+                                  class="hero-conversation__bubble hero-conversation__bubble--ours"
+                                >
+                                  Same. Best market snack?
+                                </p>
+                              </div>
+
+                              <div class="hero-conversation__composer" aria-hidden="true">
+                                <span>Write a message…</span>
+                                <span>➶</span>
+                              </div>
+
+                              <div class="hero-app-tabs" aria-hidden="true">
+                                <span>⌂</span>
+                                <span>♡</span>
+                                <span class="hero-app-tabs__active">◌</span>
+                                <span>☺</span>
+                              </div>
+                            </div>
+                          }
+
+                          @case ('safety') {
+                            <div class="hero-safety-centre">
+                              <div class="hero-safety-centre__heading">
+                                <span class="hero-safety-centre__shield" aria-hidden="true">✓</span>
+                                <span>
+                                  <small>Safety Centre</small>
+                                  <strong>Protection is active</strong>
+                                </span>
+                                <span class="hero-safety-centre__status">All checks on</span>
+                              </div>
+
+                              <div class="hero-safety-alert">
+                                <span class="hero-safety-alert__icon" aria-hidden="true">!</span>
+                                <span>
+                                  <small>Suspicious link paused</small>
+                                  <strong>We held a link in your chat with Jordan.</strong>
+                                  <p>You decide whether to review it or keep it hidden.</p>
+                                </span>
+                                <span class="hero-safety-alert__actions">
+                                  <strong>Keep hidden</strong>
+                                  <strong>Review</strong>
+                                </span>
+                              </div>
+
+                              <div class="hero-safety-checks">
+                                <span><strong>✓</strong> Scam signals</span>
+                                <span><strong>✓</strong> Fake profiles</span>
+                                <span><strong>✓</strong> Harmful messages</span>
+                                <span><strong>✓</strong> Odd behaviour</span>
+                              </div>
+
+                              <div class="hero-safety-centre__controls">
+                                <span>Report a concern</span>
+                                <span>Blocked accounts</span>
+                              </div>
+
+                              <div class="hero-app-tabs" aria-hidden="true">
+                                <span>⌂</span>
+                                <span>♡</span>
+                                <span>◌</span>
+                                <span class="hero-app-tabs__active">☺</span>
+                              </div>
+                            </div>
+                          }
+
+                          @case ('plans') {
+                            <div class="hero-membership">
+                              <div class="hero-membership__heading">
+                                <span>
+                                  <small>Membership</small>
+                                  <strong>Pick what feels worth it</strong>
+                                </span>
+                                <span class="hero-membership__current">Current · Free</span>
+                              </div>
+
+                              <div class="hero-membership__plans">
+                                <div class="hero-membership__plan hero-membership__plan--active">
+                                  <span>Free</span>
+                                  <strong>Dating essentials</strong>
+                                  <small>Matches · chat · safety</small>
+                                  <span class="hero-membership__selected">Selected ✓</span>
+                                </div>
+
+                                <div class="hero-membership__plan">
+                                  <span>Basic</span>
+                                  <strong>More control</strong>
+                                  <small>Useful extras, fair price</small>
+                                  <span class="hero-membership__choose">Choose</span>
+                                </div>
+
+                                <div class="hero-membership__plan hero-membership__plan--advanced">
+                                  <span>Advanced</span>
+                                  <strong>The full toolkit</strong>
+                                  <small>For intentional daters</small>
+                                  <span class="hero-membership__choose">Choose</span>
+                                </div>
+                              </div>
+
+                              <div class="hero-membership__lightweight">
+                                <span>
+                                  <small>Why pricing stays fair</small>
+                                  <strong>A lighter app costs less to run.</strong>
+                                </span>
+                                <div>
+                                  <span>Photo-first</span>
+                                  <span>Smaller images</span>
+                                  <span>Fast delivery</span>
+                                  <span>Smart AI</span>
+                                </div>
+                              </div>
+
+                              <div class="hero-app-tabs" aria-hidden="true">
+                                <span>⌂</span>
+                                <span>♡</span>
+                                <span>◌</span>
+                                <span class="hero-app-tabs__active">☺</span>
+                              </div>
+                            </div>
+                          }
+                        }
+                      </div>
+
+                      <span class="hero-tablet__homebar" aria-hidden="true"></span>
                     </div>
 
                     <div class="hero-polaroid__caption">

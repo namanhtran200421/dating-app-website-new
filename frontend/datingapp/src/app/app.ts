@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { Nav } from './core/layout/nav/nav';
 import { Footer } from './core/layout/footer/footer';
 import { EarlyStageBanner } from './core/layout/early-stage-banner/early-stage-banner';
@@ -11,4 +11,13 @@ import { ScrollReveal } from './shared/scroll-reveal/scroll-reveal';
   imports: [RouterOutlet, Nav, Footer, EarlyStageBanner, ScrollReveal],
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  private readonly router = inject(Router);
+
+  protected isHomePage = true;
+
+  protected onRouteActivate(): void {
+    const [path] = this.router.url.split(/[?#]/);
+    this.isHomePage = path === '/';
+  }
+}
