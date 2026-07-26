@@ -277,27 +277,6 @@
   }
 }
 
-@keyframes solution-card-enter {
-  from {
-    opacity: 0;
-    translate: 0 1.5rem;
-  }
-
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-
-@supports (animation-timeline: view()) {
-  .solution-card,
-  .ranking-strip {
-    animation: solution-card-enter linear both;
-    animation-timeline: view();
-    animation-range: entry 8% cover 28%;
-  }
-}
-
 @media (max-width: 800px) {
   .solution-card {
     grid-column: 1 / -1;
@@ -313,8 +292,25 @@
     grid-template-columns: 1fr;
   }
 
+  .match-flow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.55rem;
+    margin-top: 1.65rem;
+  }
+
+  .match-flow span,
+  .match-flow strong {
+    width: 100%;
+    min-height: 3.15rem;
+    padding: 0.75rem 1rem;
+  }
+
   .match-flow i {
-    display: none;
+    display: block;
+    width: 2px;
+    height: 0.8rem;
+    justify-self: center;
   }
 
   .solution-card--timer {
