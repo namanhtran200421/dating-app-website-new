@@ -3,6 +3,8 @@ import express, { type Request, type Response } from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
 import { rateLimit } from "express-rate-limit";
+mongoose.set("sanitizeFilter", true);
+
 
 import preSignupRouter from "./routes/preSignupRoute.js";
 import contactRouter from "./routes/contactRoute.js";
