@@ -173,6 +173,18 @@
   width: auto;
 }
 
+.footer-signup__form button:disabled {
+  border-color: rgb(28 20 24 / 28%);
+  background: rgb(28 20 24 / 48%);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.footer-signup__turnstile {
+  margin-top: 0.15rem;
+}
+
 .footer-signup__error {
   color: #d81e4a;
   font-size: 0.72rem;

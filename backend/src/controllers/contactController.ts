@@ -14,7 +14,6 @@ export async function createContact(
         });
 
     }catch (err:any){
-        console.error("Failed to save contact message:", err);
         return res.status(500).json({ message: "Unable to save contact message", success: false });
     }
 }

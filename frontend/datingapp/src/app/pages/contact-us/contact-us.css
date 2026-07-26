@@ -417,6 +417,17 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
+.contact-form__turnstile {
+  margin-top: 0.15rem;
+}
+
+.contact-form__security-error {
+  margin-top: -0.65rem;
+  color: #d81e4a;
+  font-size: 0.65rem;
+  font-weight: 650;
+}
+
 .contact-form__footer {
   display: flex;
   flex-direction: column;
@@ -475,6 +486,18 @@
 
 .contact-form__footer button:hover svg {
   transform: translate(0.15rem, -0.15rem) rotate(5deg);
+}
+
+.contact-form__footer button:disabled {
+  border-color: rgb(28 20 24 / 28%);
+  background: rgb(28 20 24 / 48%);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-form__footer button:disabled svg {
+  transform: none;
 }
 
 @keyframes contact-status-pulse {

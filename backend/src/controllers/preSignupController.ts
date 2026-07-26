@@ -9,8 +9,6 @@ export async function createPreSignup(
 ){
     try {
         const email = req.body.email;
-         console.log('Received body:', req.body);
-        console.log('Received email:', email);
 
         if(!EMAIL_PATTERN.test(email)){
             return res.status(400).json({
@@ -27,16 +25,14 @@ export async function createPreSignup(
             });
         }
 
-        const preSignup = await PreSignSchema.create({email});
+        await PreSignSchema.create({email});
+
+        res.setHeader("Cache-Control", "no-store");
 
         return res.status(201).json({
             message: "Email registered successful", 
             success: true,
-            data: {
-                id: preSignup._id,
-                email: preSignup.email, 
-                createdAt: preSignup.createdAt, 
-            },
+            
         });
     } catch (err: unknown) {
         return res.status(500).json({

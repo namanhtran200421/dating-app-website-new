@@ -29,6 +29,7 @@ describe('PreSignupService', () => {
       email: 'test@example.com',
       subject: 'General question',
       message: 'Hello',
+      turnstileToken: 'valid-test-token',
     };
 
     service.addContact(contact).subscribe();

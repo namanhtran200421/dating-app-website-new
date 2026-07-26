@@ -1,18 +1,26 @@
 import { PreSignupService } from './../../services/pre-signup.service';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
 import Swal from 'sweetalert2/dist/sweetalert2.esm.js';
+import { TurnstileWidget } from '../../shared/turnstile/turnstile-widget';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Component({
   selector: 'app-contact-us',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TurnstileWidget],
   templateUrl: './contact-us.html',
   styleUrl: './contact-us.css',
 })
 export class ContactUs {
   constructor(private preSignupService: PreSignupService) {}
+
+  protected readonly turnstileToken = signal<string | null>(null);
+  protected readonly turnstileResetVersion = signal(0);
+  protected readonly securityError = signal(false);
+  protected readonly isSubmitting = signal(false);
 
   protected readonly contactForm = new FormGroup({
     firstName: new FormControl('', {
@@ -37,57 +45,98 @@ export class ContactUs {
     }),
   });
 
+  protected setTurnstileToken(token: string | null): void {
+    this.turnstileToken.set(token);
+
+    if (token) {
+      this.securityError.set(false);
+    }
+  }
+
+  protected markTurnstileError(): void {
+    this.turnstileToken.set(null);
+    this.securityError.set(true);
+  }
+
   protected addContact(): void {
+    this.securityError.set(false);
+
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
       return;
     }
 
-    this.preSignupService.addContact(this.contactForm.getRawValue()).subscribe({
-      next: () => {
-        this.contactForm.reset();
-        Swal.fire({
-          title: 'Message delivered. You ate.',
-          text: 'We got the lore. Keep an eye on your inbox for the reply arc.',
-          icon: 'success',
-          iconColor: '#d81e4a',
+    const turnstileToken = this.turnstileToken();
 
-          position: 'center',
-          target: document.body,
-          width: 'min(92vw, 440px)',
+    if (!turnstileToken) {
+      this.securityError.set(true);
+      return;
+    }
 
-          timer: 2400,
-          showConfirmButton: false,
+    this.isSubmitting.set(true);
+    this.preSignupService
+      .addContact({
+        ...this.contactForm.getRawValue(),
+        turnstileToken,
+      })
+      .pipe(
+        finalize(() => {
+          this.isSubmitting.set(false);
+          this.turnstileToken.set(null);
+          this.turnstileResetVersion.update((version) => version + 1);
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.contactForm.reset();
+          Swal.fire({
+            title: 'Message delivered. You ate.',
+            text: 'We got the lore. Keep an eye on your inbox for the reply arc.',
+            icon: 'success',
+            iconColor: '#d81e4a',
 
-          heightAuto: false,
-          backdrop: 'rgba(28, 20, 24, 0.48)',
+            position: 'center',
+            target: document.body,
+            width: 'min(92vw, 440px)',
 
-          showClass: {
-            popup: 'rosemarry-swal-enter',
-            backdrop: 'rosemarry-backdrop-enter',
-          },
+            timer: 2400,
+            showConfirmButton: false,
 
-          hideClass: {
-            popup: 'rosemarry-swal-exit',
-            backdrop: 'rosemarry-backdrop-exit',
-          },
+            heightAuto: false,
+            backdrop: 'rgba(28, 20, 24, 0.48)',
 
-          customClass: {
-            container: 'rosemarry-swal-container',
-            popup: 'rosemarry-swal-popup',
-            icon: 'rosemarry-swal-icon',
-            title: 'rosemarry-swal-title',
-            htmlContainer: 'rosemarry-swal-text',
-          },
+            showClass: {
+              popup: 'rosemarry-swal-enter',
+              backdrop: 'rosemarry-backdrop-enter',
+            },
 
-          didOpen: (popup) => {
-            const icon = popup.querySelector('.swal2-icon');
+            hideClass: {
+              popup: 'rosemarry-swal-exit',
+              backdrop: 'rosemarry-backdrop-exit',
+            },
 
-            icon?.classList.add('rosemarry-icon-bounce');
-          },
-        });
-      },
-      error: (error) => console.error('Unable to send contact message', error),
-    });
+            customClass: {
+              container: 'rosemarry-swal-container',
+              popup: 'rosemarry-swal-popup',
+              icon: 'rosemarry-swal-icon',
+              title: 'rosemarry-swal-title',
+              htmlContainer: 'rosemarry-swal-text',
+            },
+
+            didOpen: (popup) => {
+              const icon = popup.querySelector('.swal2-icon');
+
+              icon?.classList.add('rosemarry-icon-bounce');
+            },
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Unable to send contact message', error);
+
+          if (error.status === 403 || error.status === 503) {
+            this.securityError.set(true);
+          }
+        },
+      });
   }
 }

@@ -53,6 +53,7 @@ describe('SignupState', () => {
         }),
     );
     signup.preSignForm.controls.email.setValue('already@rosemarry.test');
+    signup.setTurnstileToken('valid-test-token');
 
     signup.submit();
 

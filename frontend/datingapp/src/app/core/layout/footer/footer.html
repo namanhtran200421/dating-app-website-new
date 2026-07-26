@@ -43,8 +43,22 @@
                   placeholder="yourname@internet.com"
                   autocomplete="email"
                 />
-                <button type="submit">I&rsquo;m in <span aria-hidden="true">→</span></button>
+                <button
+                  type="submit"
+                  [disabled]="signup.isSubmitting() || !signup.turnstileToken()"
+                >
+                  {{ signup.isSubmitting() ? 'Checking…' : 'I’m in' }}
+                  <span aria-hidden="true">→</span>
+                </button>
               </div>
+
+              <app-turnstile-widget
+                class="footer-signup__turnstile"
+                action="pre_signup"
+                [resetVersion]="signup.turnstileResetVersion()"
+                (tokenChange)="signup.setTurnstileToken($event)"
+                (verificationError)="signup.markTurnstileError()"
+              />
 
               @if (signup.emailError()) {
                 <span class="footer-signup__error" role="alert">
@@ -55,6 +69,12 @@
               @if (signup.duplicateEmailError()) {
                 <span class="footer-signup__error" role="alert">
                   That email already made the guest list. You&rsquo;re already in ♡
+                </span>
+              }
+
+              @if (signup.securityError()) {
+                <span class="footer-signup__error" role="alert">
+                  The security check needs another go. Refresh it and try again.
                 </span>
               }
             </form>

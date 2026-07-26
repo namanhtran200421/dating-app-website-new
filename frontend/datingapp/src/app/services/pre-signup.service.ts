@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Contacts } from '../model/contactModel';
 
-type ContactRequest = Omit<Contacts, '_id' | 'createdAt'>;
+type ContactRequest = Omit<Contacts, '_id' | 'createdAt'> & {
+  turnstileToken: string;
+};
+
+interface PreSignupRequest {
+  email: string;
+  turnstileToken: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +27,7 @@ export class PreSignupService {
     }
   }
 
-  preSignup(presignupData: { email: string }) {
+  preSignup(presignupData: PreSignupRequest) {
     return this.http.post(`${this.baseUrl}/api/pre-signups`, presignupData);
   }
 

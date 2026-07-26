@@ -193,10 +193,24 @@
             }
           </label>
 
+          <app-turnstile-widget
+            class="contact-form__turnstile"
+            action="contact"
+            [resetVersion]="turnstileResetVersion()"
+            (tokenChange)="setTurnstileToken($event)"
+            (verificationError)="markTurnstileError()"
+          />
+
+          @if (securityError()) {
+            <small class="contact-form__security-error" role="alert">
+              The security check needs another go. Refresh it and try again.
+            </small>
+          }
+
           <div class="contact-form__footer">
             <p>By sending this, you agree to let a real person read it.</p>
-            <button type="submit">
-              <span>Send</span>
+            <button type="submit" [disabled]="isSubmitting() || !turnstileToken()">
+              <span>{{ isSubmitting() ? 'Checking…' : 'Send' }}</span>
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
