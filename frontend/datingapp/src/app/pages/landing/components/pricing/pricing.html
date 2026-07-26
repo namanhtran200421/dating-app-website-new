@@ -1,6 +1,6 @@
 <section
   id="pricing"
-  class="relative overflow-hidden bg-blossom px-[clamp(18px,5vw,56px)] pb-[clamp(76px,9vw,118px)] pt-[clamp(40px,6vw,82px)]"
+  class="relative overflow-hidden bg-blossom/90 px-[clamp(18px,5vw,56px)] pb-[clamp(76px,9vw,118px)] pt-[clamp(40px,6vw,82px)]"
 >
 
 
@@ -13,12 +13,12 @@
         <span
           class="mb-4 inline-flex items-center gap-2 rounded-full bg-cream/70 px-4 py-2 text-sm font-bold text-rose"
         >
-          The membership menu
+          Subscription plan
         </span>
         <h2
           class="font-display text-[clamp(48px,8vw,98px)] font-semibold leading-[0.95] tracking-[-2px] text-ink"
         >
-          Pick your pace. <span class="text-rose">Keep your standards</span>
+          Pick your pace.
         </h2>
       </div>
 
@@ -27,14 +27,6 @@
           The core experience stays useful for free. Upgrade when you want more—not because we made
           the app unusable without it.
         </p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <span class="rounded-full border border-ink/10 bg-white/45 px-3 py-2 text-xs font-bold">
-            No mystery boosts
-          </span>
-          <span class="rounded-full border border-ink/10 bg-white/45 px-3 py-2 text-xs font-bold">
-            Cancel anytime
-          </span>
-        </div>
       </div>
     </header>
 
@@ -60,7 +52,7 @@
               <p class="text-xs font-bold uppercase tracking-[0.16em] text-birdpink">
                 Choose your pass
               </p>
-              <p class="mt-1 text-sm font-medium text-cream/55">Tap one to see the full lore.</p>
+              <p class="mt-1 text-sm font-medium text-cream/55">Tap one to see more detail.</p>
             </div>
             <span class="font-display text-2xl text-birdpink" aria-hidden="true">୨ৎ</span>
           </div>
@@ -121,8 +113,8 @@
             }
           </div>
 
-          <p class="mt-auto px-1 pt-6 text-xs font-medium leading-relaxed text-cream/40">
-            Prices are subject to change before launch. No jump-scare charges, promise.
+          <p class="mt-auto px-1 pt-6 text-center text-xs font-medium leading-relaxed text-cream/40">
+            Prices are subject to change before launch.
           </p>
         </div>
 
@@ -139,17 +131,12 @@
           </span>
 
           <div class="relative">
-            <div class="flex flex-wrap items-start justify-between gap-5">
-              <div>
-                <span class="text-xs font-bold uppercase tracking-[0.16em] text-rose">
-                  Your {{ selectedPlan.name }} pass
-                </span>
-                <h3
-                  class="mt-2 font-display text-[clamp(32px,4.5vw,56px)] font-semibold leading-none text-ink"
-                >
-                  {{ selectedPlan.headline }}
-                </h3>
-              </div>
+            <div class="flex flex-wrap items-center gap-4">
+              <h3
+                class="font-display text-[clamp(32px,4.5vw,56px)] font-semibold leading-none text-ink"
+              >
+                {{ selectedPlan.headline }}
+              </h3>
 
               @if (selectedPlan.badge) {
                 <span
