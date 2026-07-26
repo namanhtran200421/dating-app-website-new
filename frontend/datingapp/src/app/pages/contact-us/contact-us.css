@@ -6,8 +6,7 @@
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    linear-gradient(135deg, rgb(246 201 239 / 20%), transparent 34%),
-    rgb(251 242 233 / 90%);
+    linear-gradient(135deg, rgb(246 201 239 / 20%), transparent 34%), rgb(251 242 233 / 90%);
   padding: 7.25rem clamp(1.125rem, 5vw, 3.5rem) clamp(4rem, 8vw, 6.5rem);
   color: #1c1418;
   font-family: 'Playpen Sans', system-ui, sans-serif;
@@ -426,6 +425,33 @@
   color: #d81e4a;
   font-size: 0.65rem;
   font-weight: 650;
+}
+
+.contact-form__submission-error {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  border: 1.5px solid rgb(216 30 74 / 30%);
+  border-radius: 1rem;
+  background: rgb(246 201 239 / 35%);
+  padding: 0.8rem 0.9rem;
+  color: #8f1737;
+  font-size: 0.7rem;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.contact-form__submission-error > span {
+  display: grid;
+  width: 1.35rem;
+  aspect-ratio: 1;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: #d81e4a;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
 }
 
 .contact-form__footer {

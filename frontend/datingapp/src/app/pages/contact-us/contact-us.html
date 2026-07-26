@@ -108,9 +108,16 @@
                 "
               />
               @if (
-                contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid
+                contactForm.controls.firstName.touched &&
+                (contactForm.controls.firstName.hasError('required') ||
+                  contactForm.controls.firstName.hasError('blank'))
               ) {
                 <small>Drop your first name real quick.</small>
+              } @else if (
+                contactForm.controls.firstName.touched &&
+                contactForm.controls.firstName.hasError('maxlength')
+              ) {
+                <small>That first name needs to stay under 100 characters.</small>
               }
             </label>
 
@@ -124,8 +131,17 @@
                   contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid
                 "
               />
-              @if (contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid) {
-                <small>We need the last name</small>
+              @if (
+                contactForm.controls.lastName.touched &&
+                (contactForm.controls.lastName.hasError('required') ||
+                  contactForm.controls.lastName.hasError('blank'))
+              ) {
+                <small>We need the last name, too.</small>
+              } @else if (
+                contactForm.controls.lastName.touched &&
+                contactForm.controls.lastName.hasError('maxlength')
+              ) {
+                <small>That last name needs to stay under 100 characters.</small>
               }
             </label>
           </div>
@@ -141,8 +157,18 @@
                 contactForm.controls.email.touched && contactForm.controls.email.invalid
               "
             />
-            @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+            @if (
+              contactForm.controls.email.touched && contactForm.controls.email.hasError('required')
+            ) {
+              <small>Drop your email so we know where to reply.</small>
+            } @else if (
+              contactForm.controls.email.touched && contactForm.controls.email.hasError('pattern')
+            ) {
               <small>That email is not emailing. Try again?</small>
+            } @else if (
+              contactForm.controls.email.touched && contactForm.controls.email.hasError('maxlength')
+            ) {
+              <small>That email is unusually long. Keep it under 254 characters.</small>
             }
           </label>
 
@@ -173,7 +199,10 @@
                 <path d="m7 9.5 5 5 5-5"></path>
               </svg>
             </span>
-            @if (contactForm.controls.subject.touched && contactForm.controls.subject.invalid) {
+            @if (
+              contactForm.controls.subject.touched &&
+              contactForm.controls.subject.hasError('required')
+            ) {
               <small>Pick a topic so we know who gets this.</small>
             }
           </label>
@@ -188,8 +217,17 @@
                 contactForm.controls.message.touched && contactForm.controls.message.invalid
               "
             ></textarea>
-            @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+            @if (
+              contactForm.controls.message.touched &&
+              (contactForm.controls.message.hasError('required') ||
+                contactForm.controls.message.hasError('blank'))
+            ) {
               <small>Don&rsquo;t leave us on read — drop a message.</small>
+            } @else if (
+              contactForm.controls.message.touched &&
+              contactForm.controls.message.hasError('maxlength')
+            ) {
+              <small>That&rsquo;s a whole novel. Keep the note under 5,000 characters.</small>
             }
           </label>
 
@@ -205,6 +243,13 @@
             <small class="contact-form__security-error" role="alert">
               The security check needs another go. Refresh it and try again.
             </small>
+          }
+
+          @if (submissionError()) {
+            <div class="contact-form__submission-error" role="alert">
+              <span aria-hidden="true">!</span>
+              <p>{{ submissionError() }}</p>
+            </div>
           }
 
           <div class="contact-form__footer">

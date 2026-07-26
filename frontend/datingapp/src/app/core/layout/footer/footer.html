@@ -60,9 +60,21 @@
                 (verificationError)="signup.markTurnstileError()"
               />
 
-              @if (signup.emailError()) {
+              @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
                 <span class="footer-signup__error" role="alert">
-                  That email is not emailing. Check it and try again.
+                  Drop your email so we know where to send the invite.
+                </span>
+              } @else if (
+                signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
+              ) {
+                <span class="footer-signup__error" role="alert">
+                  That email is not emailing. Check the spelling and try again.
+                </span>
+              } @else if (
+                signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
+              ) {
+                <span class="footer-signup__error" role="alert">
+                  That email is unusually long. Keep it under 254 characters.
                 </span>
               }
 
@@ -75,6 +87,12 @@
               @if (signup.securityError()) {
                 <span class="footer-signup__error" role="alert">
                   The security check needs another go. Refresh it and try again.
+                </span>
+              }
+
+              @if (signup.submissionError()) {
+                <span class="footer-signup__error" role="alert">
+                  {{ signup.submissionError() }}
                 </span>
               }
             </form>

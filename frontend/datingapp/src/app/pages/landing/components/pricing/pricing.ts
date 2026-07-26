@@ -16,6 +16,7 @@ interface PricingPlan {
 @Component({
   selector: 'app-landing-pricing',
   templateUrl: './pricing.html',
+  styleUrl: './pricing.css',
 })
 export class Pricing {
   protected readonly signup = inject(SignupState);

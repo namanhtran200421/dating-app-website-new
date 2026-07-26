@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.pricing-section {
+  background:
+    radial-gradient(circle at 94% 13%, rgb(246 201 239 / 42%) 0 8rem, transparent 8.1rem),
+    radial-gradient(circle at 3% 84%, rgb(242 127 168 / 15%) 0 6rem, transparent 6.1rem), #fbf2e9;
+}
+
+@media (max-width: 640px) {
+  .pricing-section {
+    background:
+      radial-gradient(circle at 112% 8%, rgb(246 201 239 / 42%) 0 6rem, transparent 6.1rem), #fbf2e9;
+  }
+}

@@ -19,7 +19,8 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.0",
     "helmet": "^8.3.0",
-    "mongoose": "^9.7.4"
+    "mongoose": "^9.7.4",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PreSignupService } from '../../services/pre-signup.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { getFormErrorMessage } from '../../shared/forms/form-error-message';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -18,7 +19,7 @@ export class SignupState {
       validators: [
         Validators.required,
         Validators.pattern(EMAIL_PATTERN),
-        Validators.maxLength(100),
+        Validators.maxLength(254),
       ],
     }),
   });
@@ -28,6 +29,7 @@ export class SignupState {
   public readonly emailError = signal(false);
   public readonly duplicateEmailError = signal(false);
   public readonly securityError = signal(false);
+  public readonly submissionError = signal('');
   public readonly isSubmitting = signal(false);
   public readonly turnstileToken = signal<string | null>(null);
   public readonly turnstileResetVersion = signal(0);
@@ -65,6 +67,7 @@ export class SignupState {
     this.emailError.set(false);
     this.duplicateEmailError.set(false);
     this.securityError.set(false);
+    this.submissionError.set('');
     this.preSignForm.markAllAsTouched();
 
     if (this.preSignForm.invalid) {
@@ -108,11 +111,15 @@ export class SignupState {
           }
 
           if (error.status === 403 || error.status === 503) {
-            this.securityError.set(true);
+            if (error.status === 403) {
+              this.securityError.set(true);
+            } else {
+              this.submissionError.set(getFormErrorMessage(error, 'signup'));
+            }
             return;
           }
 
-          this.emailError.set(true);
+          this.submissionError.set(getFormErrorMessage(error, 'signup'));
         },
       });
   }

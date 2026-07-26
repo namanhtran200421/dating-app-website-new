@@ -1,11 +1,12 @@
 import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SignupState } from '../../../pages/landing/signup-state';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './nav.html',
+  styleUrl: './nav.css',
 })
 export class Nav {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);

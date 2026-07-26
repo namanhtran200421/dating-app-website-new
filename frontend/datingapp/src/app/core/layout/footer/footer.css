@@ -367,7 +367,7 @@
 .footer-social-orbit__spark {
   position: absolute;
   color: #f6c9ef;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-display);
   line-height: 1;
   pointer-events: none;
 }

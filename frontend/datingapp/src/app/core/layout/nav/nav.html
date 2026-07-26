@@ -1,5 +1,5 @@
 <nav
-  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 border-b px-[clamp(14px,4vw,44px)] py-3 transition-colors duration-300"
+  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 border-b px-[clamp(14px,4vw,44px)] py-3 font-body transition-colors duration-300"
   [class.bg-cream/90]="scrolled() || menuOpen()"
   [class.backdrop-blur-md]="scrolled() || menuOpen()"
   [class.border-ink/10]="scrolled() || menuOpen()"
@@ -20,6 +20,8 @@
   <div class="hidden items-center gap-3.5 md:flex">
     <a
       routerLink="/about-us"
+      routerLinkActive="nav-link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
       class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose"
     >
       <span class="scribble-underline scribble-underline--hover">
@@ -40,6 +42,8 @@
     </a>
     <a
       routerLink="/contact-us"
+      routerLinkActive="nav-link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
       class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose"
     >
       <span class="scribble-underline scribble-underline--hover">
@@ -157,18 +161,22 @@
   >
     <a
       routerLink="/about-us"
+      routerLinkActive="nav-mobile-link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
-      Our story
+      <span class="nav-mobile-link__label">Our story</span>
       <span aria-hidden="true">&rarr;</span>
     </a>
     <a
       routerLink="/contact-us"
+      routerLinkActive="nav-mobile-link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
-      Message us
+      <span class="nav-mobile-link__label">Message us</span>
       <span aria-hidden="true">&rarr;</span>
     </a>
     <a

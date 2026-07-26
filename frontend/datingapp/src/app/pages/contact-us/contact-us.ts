@@ -1,12 +1,26 @@
 import { PreSignupService } from './../../services/pre-signup.service';
 import { Component, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import Swal from 'sweetalert2/dist/sweetalert2.esm.js';
 import { TurnstileWidget } from '../../shared/turnstile/turnstile-widget';
+import { getFormErrorMessage } from '../../shared/forms/form-error-message';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function notBlank(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+
+  return typeof value === 'string' && value.trim().length === 0 ? { blank: true } : null;
+}
 
 @Component({
   selector: 'app-contact-us',
@@ -20,28 +34,33 @@ export class ContactUs {
   protected readonly turnstileToken = signal<string | null>(null);
   protected readonly turnstileResetVersion = signal(0);
   protected readonly securityError = signal(false);
+  protected readonly submissionError = signal('');
   protected readonly isSubmitting = signal(false);
 
   protected readonly contactForm = new FormGroup({
     firstName: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(100)],
+      validators: [Validators.required, notBlank, Validators.maxLength(100)],
     }),
     lastName: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(100)],
+      validators: [Validators.required, notBlank, Validators.maxLength(100)],
     }),
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.pattern(EMAIL_PATTERN)],
+      validators: [
+        Validators.required,
+        Validators.pattern(EMAIL_PATTERN),
+        Validators.maxLength(254),
+      ],
     }),
     subject: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(100)],
+      validators: [Validators.required],
     }),
     message: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(5000)],
+      validators: [Validators.required, notBlank, Validators.maxLength(5000)],
     }),
   });
 
@@ -60,6 +79,7 @@ export class ContactUs {
 
   protected addContact(): void {
     this.securityError.set(false);
+    this.submissionError.set('');
 
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
@@ -88,9 +108,10 @@ export class ContactUs {
       )
       .subscribe({
         next: () => {
+          this.submissionError.set('');
           this.contactForm.reset();
           Swal.fire({
-            title: 'Message delivered. You ate.',
+            title: 'Message delivered!',
             text: 'We got the lore. Keep an eye on your inbox for the reply arc.',
             icon: 'success',
             iconColor: '#d81e4a',
@@ -133,9 +154,12 @@ export class ContactUs {
         error: (error: HttpErrorResponse) => {
           console.error('Unable to send contact message', error);
 
-          if (error.status === 403 || error.status === 503) {
+          if (error.status === 403) {
             this.securityError.set(true);
+            return;
           }
+
+          this.submissionError.set(getFormErrorMessage(error, 'contact'));
         },
       });
   }
