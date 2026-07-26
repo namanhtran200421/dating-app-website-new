@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
-import Swal from 'sweetalert2/dist/sweetalert2.esm.js';
 import { TurnstileWidget } from '../../shared/turnstile/turnstile-widget';
 import { getFormErrorMessage } from '../../shared/forms/form-error-message';
 
@@ -107,9 +106,11 @@ export class ContactUs {
         }),
       )
       .subscribe({
-        next: () => {
+        next: async () => {
           this.submissionError.set('');
           this.contactForm.reset();
+          const { default: Swal } = await import('sweetalert2/dist/sweetalert2.esm.js');
+
           Swal.fire({
             title: 'Message delivered!',
             text: 'We got the lore. Keep an eye on your inbox for the reply arc.',

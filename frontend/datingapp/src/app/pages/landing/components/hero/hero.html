@@ -29,6 +29,11 @@
       </h1>
     </div>
 
+    <p class="hero-intro">
+      Rosemarry is a dating app built for better matches, safer conversations and useful
+      features that stay useful on Free.
+    </p>
+
     <div
       data-reveal
       role="region"
@@ -46,7 +51,7 @@
       <div class="hero-banner__masthead">
         <div class="flex items-center gap-3">
           <span>
-            <strong>Rosemarry · Prototype only · NOT OFFICIAL DESIGN ! </strong>
+            <strong>Rosemarry · Prototype only · NOT OFFICIAL DESIGN!</strong>
           </span>
         </div>
 
@@ -140,7 +145,10 @@
                         <div class="hero-tablet__appbar">
                           <img
                             class="hero-tablet__logo"
-                            src="images/rosemarry/logo.png"
+                            src="images/rosemarry/logo-160.png"
+                            width="160"
+                            height="120"
+                            decoding="async"
                             alt=""
                             aria-hidden="true"
                           />
@@ -167,7 +175,7 @@
 
                                 <div class="hero-discover__details">
                                   <span class="hero-fit-pill">92% preference fit</span>
-                                  <h3>Avery, 27</h3>
+                                  <strong class="hero-discover__name">Avery, 27</strong>
                                   <p>9 km away · looking for long-term</p>
 
                                   <div class="hero-discover__interests">
@@ -334,16 +342,40 @@
 
                         <div class="hero-app-tabs" aria-hidden="true">
                           <span [class.hero-app-tabs__active]="slide.type === 'chat'">
-                            <img src="images/navigation/nav-chat.svg" alt="" />
+                            <img
+                              src="images/navigation/nav-chat.svg"
+                              width="220"
+                              height="143"
+                              decoding="async"
+                              alt=""
+                            />
                           </span>
                           <span [class.hero-app-tabs__active]="slide.type === 'discover'">
-                            <img src="images/navigation/nav-home.svg" alt="" />
+                            <img
+                              src="images/navigation/nav-home.svg"
+                              width="220"
+                              height="140"
+                              decoding="async"
+                              alt=""
+                            />
                           </span>
                           <span [class.hero-app-tabs__active]="slide.type === 'safety'">
-                            <img src="images/navigation/nav-likes.svg" alt="" />
+                            <img
+                              src="images/navigation/nav-likes.svg"
+                              width="220"
+                              height="182"
+                              decoding="async"
+                              alt=""
+                            />
                           </span>
                           <span [class.hero-app-tabs__active]="slide.type === 'plans'">
-                            <img src="images/navigation/nav-user.svg" alt="" />
+                            <img
+                              src="images/navigation/nav-user.svg"
+                              width="220"
+                              height="194"
+                              decoding="async"
+                              alt=""
+                            />
                           </span>
                         </div>
                       </div>
@@ -370,17 +402,17 @@
       <div class="hero-banner__controls">
         <div class="hero-banner__actions flex flex-wrap gap-3">
           <a
-            href="https://www.instagram.com"
+            href="https://www.instagram.com/rosemarry_app/"
             target="_blank"
             rel="noopener noreferrer"
-            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-ink hover:bg-ink"
+            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-ink no-underline transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-white"
           >
             Catch us on Insta .✦ ݁˖
           </a>
 
           <a
             href="#join"
-            class="pricing-card-hover inline-flex cursor-pointer items-center gap-2.5 rounded-2xl border-[1.5px] border-ink bg-ink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-birdpink hover:bg-birdpink"
+            class="pricing-card-hover inline-flex cursor-pointer items-center gap-2.5 rounded-2xl border-[1.5px] border-ink bg-ink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-birdpink hover:bg-birdpink hover:text-ink"
             (click)="$event.preventDefault(); signup.goToSignup()"
           >
             Claim the free month 𑣲⋆
@@ -398,9 +430,9 @@
                 (click)="goToSlide(index)"
               >
                 <span
-                  class="h-2.5 rounded-full bg-ink/25 transition-all duration-300 group-hover:bg-rose/60 motion-reduce:transition-none"
-                  [class.w-6]="index === activeSlide()"
-                  [class.w-2.5]="index !== activeSlide()"
+                  class="h-2.5 w-6 origin-center rounded-full bg-ink/25 transition-[background-color,transform] duration-300 group-hover:bg-rose/60 motion-reduce:transition-none"
+                  [class.scale-x-100]="index === activeSlide()"
+                  [class.scale-x-[0.42]]="index !== activeSlide()"
                   [class.bg-rose]="index === activeSlide()"
                 ></span>
               </button>

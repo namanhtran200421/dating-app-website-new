@@ -69,14 +69,14 @@
 .problem-card p:not(.problem-card__eyebrow) {
   max-width: 580px;
   margin-top: 1rem;
-  color: rgba(28, 20, 24, 0.66);
+  color: rgba(28, 20, 24, 0.76);
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.7;
 }
 
 .problem-card--safety p:not(.problem-card__eyebrow) {
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .fake-paywall {
@@ -164,11 +164,32 @@
 }
 
 .safety-signal__pulse {
+  position: relative;
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 999px;
   background: #f27fa8;
+}
+
+.safety-signal__pulse::after {
+  position: absolute;
+  inset: -0.45rem;
+  border: 2px solid #f27fa8;
+  border-radius: inherit;
+  content: '';
   animation: safety-pulse 1.8s ease-out infinite;
+}
+
+@keyframes safety-pulse {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.45);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
 }
 
 .ghost-chat {
@@ -187,18 +208,8 @@
 }
 
 .ghost-chat .ghost-chat__typing {
-  color: rgba(28, 20, 24, 0.4);
+  color: rgba(28, 20, 24, 0.62);
   font-style: italic;
-}
-
-@keyframes safety-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(242, 127, 168, 0.55);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0.7rem rgba(242, 127, 168, 0);
-  }
 }
 
 @media (max-width: 800px) {
@@ -217,7 +228,7 @@
     transform: none;
   }
 
-  .safety-signal__pulse {
+  .safety-signal__pulse::after {
     animation: none;
   }
 }

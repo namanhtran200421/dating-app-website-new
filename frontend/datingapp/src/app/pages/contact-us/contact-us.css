@@ -66,11 +66,19 @@
 }
 
 .contact-header__status > span {
+  position: relative;
   width: 0.7rem;
   aspect-ratio: 1;
   border-radius: 50%;
   background: #d81e4a;
-  box-shadow: 0 0 0 0 rgb(216 30 74 / 42%);
+}
+
+.contact-header__status > span::after {
+  position: absolute;
+  inset: -0.5rem;
+  border: 2px solid #d81e4a;
+  border-radius: inherit;
+  content: '';
   animation: contact-status-pulse 2.2s ease-out infinite;
 }
 
@@ -86,7 +94,7 @@
 
 .contact-header__status small {
   margin-top: 0.12rem;
-  color: rgb(28 20 24 / 55%);
+  color: rgb(28 20 24 / 72%);
   font-size: 0.62rem;
   font-weight: 700;
 }
@@ -152,7 +160,7 @@
 .contact-route__intro {
   max-width: 22rem;
   margin-top: 0.85rem;
-  color: rgb(251 242 233 / 58%);
+  color: rgb(251 242 233 / 76%);
   font-size: 0.82rem;
   font-weight: 500;
   line-height: 1.65;
@@ -215,7 +223,7 @@
 
 .contact-route__steps p {
   margin-top: 0.25rem;
-  color: rgb(251 242 233 / 54%);
+  color: rgb(251 242 233 / 74%);
   font-size: 0.72rem;
   font-weight: 500;
   line-height: 1.55;
@@ -230,7 +238,7 @@
   border-top: 1px solid rgb(251 242 233 / 14%);
   margin-top: 1.8rem;
   padding-top: 1.25rem;
-  color: rgb(251 242 233 / 58%);
+  color: rgb(251 242 233 / 76%);
   font-size: 0.7rem;
   line-height: 1.55;
 }
@@ -263,7 +271,7 @@
   gap: 0.5rem 1.5rem;
   border-bottom: 1.5px dashed rgb(28 20 24 / 22%);
   padding-bottom: 1rem;
-  color: rgb(28 20 24 / 48%);
+  color: rgb(28 20 24 / 68%);
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -362,7 +370,7 @@
 
 .contact-field input::placeholder,
 .contact-field textarea::placeholder {
-  color: rgb(28 20 24 / 35%);
+  color: rgb(28 20 24 / 58%);
 }
 
 .contact-field input:hover,
@@ -466,7 +474,7 @@
 
 .contact-form__footer > p {
   max-width: 20rem;
-  color: rgb(28 20 24 / 48%);
+  color: rgb(28 20 24 / 68%);
   font-size: 0.65rem;
   font-weight: 600;
   line-height: 1.55;
@@ -528,12 +536,14 @@
 
 @keyframes contact-status-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgb(216 30 74 / 42%);
+    opacity: 0.42;
+    transform: scale(0.4);
   }
 
   65%,
   100% {
-    box-shadow: 0 0 0 0.55rem rgb(216 30 74 / 0%);
+    opacity: 0;
+    transform: scale(1.15);
   }
 }
 
@@ -605,7 +615,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-header__status > span {
+  .contact-header__status > span::after {
     animation: none;
   }
 

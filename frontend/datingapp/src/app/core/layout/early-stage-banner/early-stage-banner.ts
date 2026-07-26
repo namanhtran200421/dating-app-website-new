@@ -1,11 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   HostListener,
   OnDestroy,
   PLATFORM_ID,
+  afterNextRender,
   inject,
   signal,
   viewChild,
@@ -21,35 +21,28 @@ const CLOSE_ANIMATION_MS = 540;
   templateUrl: './early-stage-banner.html',
   styleUrl: './early-stage-banner.css',
 })
-export class EarlyStageBanner implements AfterViewInit, OnDestroy {
+export class EarlyStageBanner implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly primaryAction = viewChild<ElementRef<HTMLButtonElement>>('primaryAction');
   private previousBodyOverflow = '';
   private closeTimer?: ReturnType<typeof setTimeout>;
-  protected readonly visible = signal(true);
+  protected readonly visible = signal(false);
   protected readonly closing = signal(false);
 
   constructor() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+    afterNextRender(() => {
+      try {
+        this.visible.set(sessionStorage.getItem(DISMISSED_KEY) !== 'true');
+      } catch {
+        this.visible.set(true);
+      }
 
-    try {
-      this.visible.set(sessionStorage.getItem(DISMISSED_KEY) !== 'true');
-    } catch {
-      this.visible.set(true);
-    }
-
-    if (this.visible()) {
-      this.previousBodyOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.visible()) {
-      queueMicrotask(() => this.primaryAction()?.nativeElement.focus());
-    }
+      if (this.visible()) {
+        this.previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        queueMicrotask(() => this.primaryAction()?.nativeElement.focus());
+      }
+    });
   }
 
   ngOnDestroy(): void {

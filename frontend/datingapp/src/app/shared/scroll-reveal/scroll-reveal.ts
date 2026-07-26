@@ -7,8 +7,6 @@ import {
   inject,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { inView } from 'motion';
-import { animate } from 'motion/mini';
 
 const REVEAL_SELECTOR = '[data-motion-reveal]';
 
@@ -79,57 +77,58 @@ export class ScrollReveal implements AfterViewInit, OnDestroy {
 
   private observeElement(element: HTMLElement): VoidFunction {
     const fadeOnly = element.dataset['motionReveal'] === 'fade';
-    const restingTransform = fadeOnly ? 'none' : 'translateY(22px)';
     const delay = Number(element.dataset['motionDelay'] ?? 0);
-    let animation: ReturnType<typeof animate> | undefined;
+    let animation: Animation | undefined;
 
     element.style.opacity = '0';
     element.style.willChange = fadeOnly ? 'opacity' : 'opacity, transform';
 
     if (!fadeOnly) {
-      element.style.transform = restingTransform;
+      element.style.transform = 'translate3d(0, 22px, 0)';
     }
 
-    let stopObserving: VoidFunction = () => undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          return;
+        }
 
-    stopObserving = inView(
-      element,
-      () => {
-        animation?.stop();
-        animation = fadeOnly
-          ? animate(
-              element,
-              { opacity: [0, 1] },
-              {
-                duration: 0.62,
-                delay,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            )
-          : animate(
-              element,
-              {
-                opacity: [0, 1],
-                transform: [restingTransform, 'none'],
-              },
-              {
-                duration: 0.62,
-                delay,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            );
+        observer.disconnect();
+        animation?.cancel();
+        animation = element.animate(
+          fadeOnly
+            ? [{ opacity: 0 }, { opacity: 1 }]
+            : [
+                { opacity: 0, transform: 'translate3d(0, 22px, 0)' },
+                { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+              ],
+          {
+            duration: 620,
+            delay: delay * 1000,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards',
+          },
+        );
 
-        stopObserving();
+        void animation.finished
+          .then(() => {
+            element.style.opacity = '1';
+            element.style.transform = 'none';
+            element.style.removeProperty('will-change');
+          })
+          .catch(() => undefined);
       },
       {
-        amount: element.offsetHeight > window.innerHeight * 1.35 ? 'some' : 0.18,
-        margin: '0px 0px -6% 0px',
+        rootMargin: '0px 0px -6% 0px',
+        threshold: 0.12,
       },
     );
 
+    observer.observe(element);
+
     return () => {
-      stopObserving();
-      animation?.stop();
+      observer.disconnect();
+      animation?.cancel();
       element.style.removeProperty('opacity');
       element.style.removeProperty('transform');
       element.style.removeProperty('will-change');

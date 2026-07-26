@@ -21,7 +21,7 @@
       </div>
 
       <div class="max-w-[430px] lg:justify-self-end">
-        <p class="text-[clamp(17px,1.8vw,22px)] font-semibold leading-relaxed text-ink/65">
+        <p class="text-[clamp(17px,1.8vw,22px)] font-semibold leading-relaxed text-ink/75">
           The core experience stays useful for free. Upgrade when you want more, not because we made
           the app unusable without it.
         </p>
@@ -50,7 +50,7 @@
               <p class="text-xs font-bold uppercase tracking-[0.16em] text-birdpink">
                 Choose your pass
               </p>
-              <p class="mt-1 text-sm font-medium text-cream/55">Tap one to see more detail.</p>
+              <p class="mt-1 text-sm font-medium text-cream/75">Tap one to see more detail.</p>
             </div>
             <span class="font-display text-2xl text-birdpink" aria-hidden="true">୨ৎ</span>
           </div>
@@ -88,8 +88,8 @@
                       </span>
                       <span
                         class="mt-0.5 block text-xs font-semibold"
-                        [class.text-ink/55]="index === activePlan()"
-                        [class.text-cream/45]="index !== activePlan()"
+                        [class.text-ink/75]="index === activePlan()"
+                        [class.text-cream/75]="index !== activePlan()"
                       >
                         {{ plan.shortLine }}
                       </span>
@@ -100,8 +100,8 @@
                     <span class="block font-display text-xl font-bold">{{ plan.price }}</span>
                     <span
                       class="block text-[10px] font-bold uppercase tracking-wider"
-                      [class.text-ink/45]="index === activePlan()"
-                      [class.text-cream/40]="index !== activePlan()"
+                      [class.text-ink/75]="index === activePlan()"
+                      [class.text-cream/75]="index !== activePlan()"
                     >
                       {{ plan.cadence }}
                     </span>
@@ -112,7 +112,7 @@
           </div>
 
           <p
-            class="mt-auto px-1 pt-6 text-center text-xs font-medium leading-relaxed text-cream/40"
+            class="mt-auto px-1 pt-6 text-center text-xs font-medium leading-relaxed text-cream/75"
           >
             Prices are subject to change before launch.
           </p>
@@ -153,7 +153,7 @@
               >
                 {{ selectedPlan.price }}
               </span>
-              <span class="pb-1 text-sm font-bold text-ink/45">{{ selectedPlan.priceLabel }}</span>
+              <span class="pb-1 text-sm font-bold text-ink/75">{{ selectedPlan.priceLabel }}</span>
             </div>
 
             <div class="mt-7">
@@ -180,7 +180,7 @@
             <div
               class="mt-8 flex flex-col gap-4 border-t border-dashed border-ink/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
             >
-              <p class="max-w-[390px] text-sm font-semibold leading-relaxed text-ink/55">
+              <p class="max-w-[390px] text-sm font-semibold leading-relaxed text-ink/75">
                 {{ selectedPlan.description }}
               </p>
               <button

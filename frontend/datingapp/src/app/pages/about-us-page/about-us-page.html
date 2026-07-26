@@ -9,7 +9,7 @@
           <span class="mb-4 block text-sm font-bold uppercase tracking-[0.14em] text-rose">
             Why Rosemarry exists ?
           </span>
-          <h2
+          <h1
             id="why-title"
             class="font-display text-[clamp(38px,5.5vw,70px)] font-semibold leading-[1.02] tracking-[-1.5px]"
           >
@@ -34,13 +34,13 @@
                 />
               </svg>
             </span>
-          </h2>
+          </h1>
         </div>
 
         <div
           data-motion-reveal
           data-motion-delay="0.08"
-          class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/70"
+          class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/75"
         >
           <p>
             The usual formula asks people to swipe faster, spend more, and trust a
@@ -107,7 +107,7 @@
           Built by people who <span class="text-rose">get it.</span>
         </h2>
         <p
-          class="mt-6 max-w-[680px] text-[clamp(18px,2vw,23px)] font-medium leading-relaxed text-ink/65"
+          class="mt-6 max-w-[680px] text-[clamp(18px,2vw,23px)] font-medium leading-relaxed text-ink/75"
         >
           The faces, stories, and slightly over-caffeinated brains behind Rosemarry.
         </p>
@@ -145,12 +145,19 @@
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <img
-                    src="images/steve.jpg"
-                    alt="Portrait of Steve Tran"
-                    draggable="false"
-                    class="h-full w-full object-cover"
-                  />
+                  <picture class="block h-full w-full">
+                    <source srcset="images/steve-960.avif" type="image/avif" />
+                    <img
+                      src="images/steve.jpg"
+                      width="960"
+                      height="1280"
+                      loading="lazy"
+                      decoding="async"
+                      alt="Steve Tran, Rosemarry co-founder"
+                      draggable="false"
+                      class="h-full w-full object-cover"
+                    />
+                  </picture>
                 </div>
               </div>
 
@@ -160,7 +167,7 @@
                   Steve Tran
                 </h3>
                 <p class="mt-1 text-sm font-bold text-rose">Co-founder · make stuff work</p>
-                <p class="mt-5 font-medium leading-[1.7] text-ink/65">I like cats.</p>
+                <p class="mt-5 font-medium leading-[1.7] text-ink/75">I like cats.</p>
 
                 <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
                   <span class="h-px flex-1 bg-ink/15"></span>
@@ -174,12 +181,19 @@
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <img
-                    src="images/quang.png"
-                    alt="Portrait of Felix Vu"
-                    draggable="false"
-                    class="h-full w-full object-cover"
-                  />
+                  <picture class="block h-full w-full">
+                    <source srcset="images/quang-960.avif" type="image/avif" />
+                    <img
+                      src="images/quang.png"
+                      width="1020"
+                      height="1020"
+                      loading="lazy"
+                      decoding="async"
+                      alt="Felix Vu, Rosemarry co-founder"
+                      draggable="false"
+                      class="h-full w-full object-cover"
+                    />
+                  </picture>
                 </div>
               </div>
 
@@ -191,7 +205,7 @@
                   Felix Vu
                 </h3>
                 <p class="mt-1 text-sm font-bold text-birdpink">Co-founder · vietnam steve's job</p>
-                <p class="mt-5 font-medium leading-[1.7] text-cream/65">
+                <p class="mt-5 font-medium leading-[1.7] text-cream/75">
                   I feel like I get scammed when using most dating apps, so I&rsquo;m making my own
                   app.
                 </p>
@@ -221,12 +235,19 @@
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <img
-                    src="images/duy.jpg"
-                    alt="Portrait of Jimmy Ly"
-                    draggable="false"
-                    class="h-full w-full object-cover"
-                  />
+                  <picture class="block h-full w-full">
+                    <source srcset="images/duy-960.avif" type="image/avif" />
+                    <img
+                      src="images/duy.jpg"
+                      width="6016"
+                      height="4016"
+                      loading="lazy"
+                      decoding="async"
+                      alt="Jimmy Ly, Rosemarry co-founder"
+                      draggable="false"
+                      class="h-full w-full object-cover"
+                    />
+                  </picture>
                 </div>
               </div>
 
@@ -238,7 +259,7 @@
                 <p class="mt-1 text-sm font-bold text-rose">
                   Co-founder · Billionaire's son (im serious)
                 </p>
-                <p class="mt-5 font-medium leading-[1.7] text-ink/65">
+                <p class="mt-5 font-medium leading-[1.7] text-ink/75">
                   I just cant seems to find tomboys on dating apps, so i'm making my own app.
                 </p>
 
@@ -257,7 +278,7 @@
           <div class="flex items-center gap-3">
             <span class="font-display text-sm font-semibold text-ink">
               0{{ activeFounderPage() + 1 }}
-              <span class="text-ink/35">/ 0{{ founderPageCount }}</span>
+              <span class="text-ink/75">/ 0{{ founderPageCount }}</span>
             </span>
             <span class="h-px w-10 bg-ink/20"></span>
             <span class="text-xs font-bold uppercase tracking-[0.12em] text-rose">
@@ -276,9 +297,9 @@
                   (click)="showFounderPage(page)"
                 >
                   <span
-                    class="h-2.5 rounded-full transition-all duration-300"
-                    [class.w-6]="activeFounderPage() === page"
-                    [class.w-2.5]="activeFounderPage() !== page"
+                    class="h-2.5 w-6 origin-center rounded-full transition-[background-color,transform] duration-300"
+                    [class.scale-x-100]="activeFounderPage() === page"
+                    [class.scale-x-[0.42]]="activeFounderPage() !== page"
                     [class.bg-rose]="activeFounderPage() === page"
                     [class.bg-ink/20]="activeFounderPage() !== page"
                   ></span>

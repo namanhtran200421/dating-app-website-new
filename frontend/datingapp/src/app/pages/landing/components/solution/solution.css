@@ -79,14 +79,14 @@
 .solution-card p {
   max-width: 650px;
   margin-top: 1rem;
-  color: rgba(28, 20, 24, 0.66);
+  color: rgba(28, 20, 24, 0.76);
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.7;
 }
 
 .solution-card--safety p {
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .match-flow {
@@ -267,13 +267,6 @@
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
-}
-
-@keyframes clock-breathe {
-  50% {
-    transform: scale(1.045);
-    box-shadow: 0 0 0 0.7rem rgba(251, 242, 233, 0.18);
-  }
 }
 
 @media (max-width: 800px) {

@@ -11,7 +11,16 @@
     (click)="closeMenu()"
     class="flex min-w-0 items-center gap-2 no-underline"
   >
-    <img src="images/rosemarry/logo.png" alt="Rosemarry" class="h-9 w-auto block" />
+    <img
+      src="images/rosemarry/logo-160.png"
+      width="160"
+      height="120"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      alt="Rosemarry"
+      class="h-9 w-auto block"
+    />
     <span class="font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink"
       >Rosemarry</span
     >
@@ -21,8 +30,9 @@
     <a
       routerLink="/about-us"
       routerLinkActive="nav-link--active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose"
+      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
     >
       <span class="scribble-underline scribble-underline--hover">
         Our story .✦ ݁˖
@@ -43,8 +53,9 @@
     <a
       routerLink="/contact-us"
       routerLinkActive="nav-link--active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose"
+      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
     >
       <span class="scribble-underline scribble-underline--hover">
         Message us ⭑.ᐟ
@@ -65,7 +76,7 @@
     <a
       href="#join"
       (click)="$event.preventDefault(); signup.goToSignup()"
-      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/70 no-underline transition-colors duration-200 hover:text-rose"
+      class="scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
     >
       <span class="scribble-underline scribble-underline--hover">
         Get in early ݁✮⋆˙
@@ -84,7 +95,7 @@
       </span>
     </a>
     <a
-      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-birdpink text-white text-sm font-semibold no-underline shadow-[0_8px_20px_-10px_rgba(236,92,141,0.9)] hover:brightness-[1.06]"
+      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-birdpink text-ink text-sm font-semibold no-underline shadow-[0_8px_20px_-10px_rgba(236,92,141,0.9)] hover:brightness-[1.06]"
       href="https://www.instagram.com/rosemarry_app/"
       target="_blank"
       rel="noopener"
@@ -162,6 +173,7 @@
     <a
       routerLink="/about-us"
       routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
@@ -172,6 +184,7 @@
     <a
       routerLink="/contact-us"
       routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
@@ -188,11 +201,11 @@
       <span aria-hidden="true">⬩➤</span>
     </a>
     <a
-      href="https://www.instagram.com"
+      href="https://www.instagram.com/rosemarry_app/"
       target="_blank"
       rel="noopener"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-[filter] hover:brightness-105"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-[filter] hover:brightness-105"
     >
       Catch us on Insta
       <span aria-hidden="true">ᯓ★</span>

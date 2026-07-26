@@ -2,32 +2,14 @@
   display: block;
 }
 
-.hero-heading-sticker {
-  width: 6.75rem;
-  aspect-ratio: 1;
-  flex: none;
-  place-content: center;
-  border: 2px solid #1c1418;
-  border-radius: 47% 53% 43% 57% / 55% 46% 54% 45%;
-  background: #f6c9ef;
-  color: #d81e4a;
+.hero-intro {
+  width: min(100%, 46rem);
+  margin: -0.8rem auto 2rem;
+  color: rgb(28 20 24 / 76%);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-weight: 650;
+  line-height: 1.65;
   text-align: center;
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-size: 2rem;
-  line-height: 1;
-  transform: rotate(8deg);
-  box-shadow: 5px 6px 0 #1c1418;
-}
-
-.hero-heading-sticker small {
-  display: block;
-  margin-top: 0.55rem;
-  color: #1c1418;
-  font-family: 'Playpen Sans', system-ui, sans-serif;
-  font-size: 0.55rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .hero-banner {
@@ -72,24 +54,11 @@
 
 .hero-banner__masthead small {
   margin-top: 0.12rem;
-  color: rgb(28 20 24 / 55%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-}
-
-.hero-banner__mark {
-  display: grid;
-  width: 2.3rem;
-  aspect-ratio: 1;
-  place-items: center;
-  border-radius: 50%;
-  background: #d81e4a;
-  color: #fbf2e9;
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-weight: 700;
-  transform: rotate(-7deg);
 }
 
 .hero-banner__meta {
@@ -136,7 +105,7 @@
 
 .hero-board-note small {
   margin-bottom: 0.5rem;
-  color: rgb(28 20 24 / 58%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.49rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -226,34 +195,6 @@
   filter: drop-shadow(3px 4px 0 #d81e4a);
 }
 
-.hero-board-sticker--star {
-  top: 0.75rem;
-  left: 48.1%;
-  width: 3.15rem;
-  aspect-ratio: 1;
-  background: #fbf2e9;
-  clip-path: polygon(
-    50% 0%,
-    61% 21%,
-    84% 11%,
-    79% 36%,
-    100% 50%,
-    79% 63%,
-    87% 88%,
-    61% 79%,
-    50% 100%,
-    38% 79%,
-    12% 88%,
-    20% 63%,
-    0 50%,
-    21% 36%,
-    15% 11%,
-    39% 21%
-  );
-  font-size: 0.72rem;
-  transform: rotate(9deg);
-}
-
 .hero-board-sticker--smile {
   right: 0.85rem;
   top: 43%;
@@ -273,13 +214,6 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0.82;
-}
-
-.hero-board-doodle--arrow {
-  top: 5.4rem;
-  left: 45.5%;
-  width: 4.75rem;
-  transform: rotate(-18deg);
 }
 
 .hero-board-doodle--hearts {
@@ -330,18 +264,6 @@
   transform: rotate(-4deg);
 }
 
-.hero-note__eyebrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  color: #d81e4a;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 .hero-note__lead {
   font-size: clamp(1.25rem, 2.1vw, 1.65rem);
   font-weight: 600;
@@ -356,7 +278,7 @@
 
 .hero-note__body {
   margin-top: 1.15rem;
-  color: rgb(28 20 24 / 68%);
+  color: rgb(28 20 24 / 76%);
   font-size: clamp(1rem, 1.65vw, 1.15rem);
   font-weight: 550;
   line-height: 1.55;
@@ -383,7 +305,7 @@
 .hero-note__signoff {
   display: block;
   margin-top: 1.4rem;
-  color: rgb(28 20 24 / 42%);
+  color: rgb(28 20 24 / 68%);
   font-size: 0.72rem;
   font-weight: 700;
   text-align: right;
@@ -516,29 +438,8 @@
 
 .hero-tablet__logo {
   width: 2em;
-  height: 1.8em;
+  height: 1.5em;
   object-fit: contain;
-}
-
-.hero-tablet__app-mark {
-  display: grid;
-  width: 2em;
-  aspect-ratio: 1;
-  place-items: center;
-  border-radius: 44% 56% 51% 49% / 57% 43% 57% 43%;
-  background: #d81e4a;
-  color: #fbf2e9;
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-size: 0.8em;
-  font-weight: 700;
-  transform: rotate(-7deg);
-}
-
-.hero-tablet__app-heart {
-  color: #d81e4a;
-  font-size: 1.65em;
-  font-weight: 800;
-  line-height: 1;
 }
 
 .hero-tablet__homebar {
@@ -681,7 +582,8 @@
   line-height: 1;
 }
 
-.hero-discover__details h3 {
+.hero-discover__name {
+  display: block;
   margin-top: 0.35em;
   font-family: 'DynaPuff', system-ui, sans-serif;
   font-size: 1.2em;
@@ -690,7 +592,7 @@
 
 .hero-discover__details > p {
   margin-top: 0.3em;
-  color: rgb(28 20 24 / 58%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.65em;
   font-weight: 700;
 }
@@ -888,7 +790,7 @@
 }
 
 .hero-conversation__safety p {
-  color: rgb(28 20 24 / 58%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.53em;
 }
 
@@ -981,7 +883,7 @@
   border-radius: 999px;
   background: white;
   padding: 0.38em 0.45em 0.38em 0.7em;
-  color: rgb(28 20 24 / 34%);
+  color: rgb(28 20 24 / 68%);
   font-size: 0.58em;
   font-weight: 700;
 }
@@ -1113,7 +1015,7 @@
 
 .hero-safety-alert p {
   margin-top: 0.25em;
-  color: rgb(28 20 24 / 56%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.55em;
   font-weight: 700;
   line-height: 1.25;
@@ -1155,7 +1057,7 @@
   border-radius: 0.62em;
   background: rgb(255 255 255 / 68%);
   padding: 0.4em;
-  color: rgb(28 20 24 / 65%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.52em;
   font-weight: 750;
   line-height: 1.15;
@@ -1235,7 +1137,7 @@
 
 .hero-membership__plan > small {
   margin-top: 0.32em;
-  color: rgb(28 20 24 / 55%);
+  color: rgb(28 20 24 / 75%);
   font-size: 0.52em;
   font-weight: 700;
   line-height: 1.2;
@@ -1255,7 +1157,7 @@
 }
 
 .hero-membership__plan--advanced > small {
-  color: rgb(251 242 233 / 58%);
+  color: rgb(251 242 233 / 78%);
 }
 
 .hero-membership__selected,
@@ -1411,6 +1313,10 @@
     margin-bottom: 1.25rem;
   }
 
+  .hero-intro {
+    margin: -0.35rem auto 1.35rem;
+  }
+
   .hero-banner {
     border-radius: 1.55rem;
     box-shadow: 5px 6px 0 #1c1418;
@@ -1418,10 +1324,6 @@
 
   .hero-banner__masthead {
     padding: 0.65rem 0.85rem;
-  }
-
-  .hero-banner__mark {
-    width: 2rem;
   }
 
   .hero-banner__masthead strong {
@@ -1455,10 +1357,6 @@
   .hero-slide__layout {
     gap: 1.15rem;
     padding: 1.15rem;
-  }
-
-  .hero-note__eyebrow {
-    margin-bottom: 0.9rem;
   }
 
   .hero-note__lead {

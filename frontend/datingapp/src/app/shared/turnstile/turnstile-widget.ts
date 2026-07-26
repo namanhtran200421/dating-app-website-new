@@ -4,6 +4,7 @@ import {
   ElementRef,
   NgZone,
   OnDestroy,
+  PLATFORM_ID,
   ViewChild,
   effect,
   inject,
@@ -11,6 +12,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { getTurnstileSiteKey } from './turnstile.config';
 
 type TurnstileStatus = 'loading' | 'ready' | 'expired' | 'error';
@@ -75,7 +77,7 @@ const TURNSTILE_SCRIPT_URL =
 
     .turnstile-widget__container {
       width: 100%;
-      min-height: 1px;
+      min-height: 4.1rem;
     }
 
     .turnstile-widget__status {
@@ -96,6 +98,7 @@ export class TurnstileWidget implements AfterViewInit, OnDestroy {
   private static scriptPromise: Promise<TurnstileApi> | null = null;
 
   private readonly zone = inject(NgZone);
+  private readonly platformId = inject(PLATFORM_ID);
   private destroyed = false;
   private widgetId: string | null = null;
 
@@ -112,7 +115,7 @@ export class TurnstileWidget implements AfterViewInit, OnDestroy {
     effect(() => {
       this.resetVersion();
 
-      if (this.widgetId && window.turnstile) {
+      if (isPlatformBrowser(this.platformId) && this.widgetId && window.turnstile) {
         this.status.set('loading');
         this.tokenChange.emit(null);
         window.turnstile.reset(this.widgetId);
@@ -121,6 +124,10 @@ export class TurnstileWidget implements AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     try {
       const turnstile = await TurnstileWidget.loadScript();
 
@@ -179,13 +186,13 @@ export class TurnstileWidget implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed = true;
 
-    if (this.widgetId && window.turnstile) {
+    if (isPlatformBrowser(this.platformId) && this.widgetId && window.turnstile) {
       window.turnstile.remove(this.widgetId);
     }
   }
 
   private reset(): void {
-    if (!this.widgetId || !window.turnstile) {
+    if (!isPlatformBrowser(this.platformId) || !this.widgetId || !window.turnstile) {
       return;
     }
 

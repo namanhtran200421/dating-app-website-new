@@ -7,12 +7,17 @@
   --font-body: 'Playpen Sans', system-ui, sans-serif;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body,
 app-root {
   min-height: 100%;
   background-color: #fbf2e9;
   font-family: var(--font-body);
+  font-synthesis: none;
 }
 
 button,
@@ -44,6 +49,12 @@ h6,
   background-attachment: fixed;
 }
 
+@media (max-width: 767px) {
+  .landing-page {
+    background-attachment: scroll;
+  }
+}
+
 .scribble-underline {
   position: relative;
   display: inline-block;
@@ -70,14 +81,12 @@ h6,
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: scribble-underline-draw 900ms 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  stroke-dashoffset: 0;
 }
 
 .scribble-underline__stroke--second {
   stroke-width: 3;
   opacity: 0.55;
-  animation-delay: 760ms;
 }
 
 .scribble-underline--loose .scribble-underline__line {
@@ -91,7 +100,6 @@ h6,
 .scribble-underline--loose .scribble-underline__stroke {
   stroke-width: 3.5;
   opacity: 0.7;
-  animation-delay: 950ms;
 }
 
 .scribble-underline--finish .scribble-underline__line {
@@ -102,13 +110,11 @@ h6,
 
 .scribble-underline--finish .scribble-underline__stroke {
   stroke-width: 4;
-  animation-delay: 1.2s;
 }
 
 .scribble-underline__stroke--flick {
   stroke-width: 3;
   opacity: 0.65;
-  animation-delay: 1.55s;
 }
 
 .scribble-underline--hover .scribble-underline__line {
@@ -126,12 +132,6 @@ h6,
 .scribble-hover-trigger:focus-visible .scribble-underline--hover .scribble-underline__stroke,
 .scribble-underline--hover:hover .scribble-underline__stroke {
   stroke-dashoffset: 0;
-}
-
-@keyframes scribble-underline-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 
 .pricing-card-hover {
@@ -222,7 +222,7 @@ h6,
 
 .rosemarry-swal-text {
   margin-top: 0.75rem;
-  color: rgba(28, 20, 24, 0.65);
+  color: rgba(28, 20, 24, 0.75);
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
@@ -260,19 +260,16 @@ h6,
   0% {
     opacity: 0;
     transform: translateY(24px) scale(0.92);
-    filter: blur(5px);
   }
 
   60% {
     opacity: 1;
     transform: translateY(-4px) scale(1.015);
-    filter: blur(0);
   }
 
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 
