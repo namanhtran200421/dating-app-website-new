@@ -5,7 +5,9 @@
 .contact-page {
   min-height: 100vh;
   overflow-x: hidden;
-  background: linear-gradient(135deg, rgb(246 201 239 / 20%), transparent 34%), #fbf2e9;
+  background:
+    linear-gradient(135deg, rgb(246 201 239 / 20%), transparent 34%),
+    rgb(251 242 233 / 90%);
   padding: 7.25rem clamp(1.125rem, 5vw, 3.5rem) clamp(4rem, 8vw, 6.5rem);
   color: #1c1418;
   font-family: 'Playpen Sans', system-ui, sans-serif;

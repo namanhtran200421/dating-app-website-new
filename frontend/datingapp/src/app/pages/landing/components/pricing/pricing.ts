@@ -46,7 +46,7 @@ export class Pricing {
       cadence: 'per month',
       priceLabel: '/ month',
       badge: 'The sweet spot',
-      description: 'For people who want fewer limits and more room to follow a good feeling.',
+      description: 'For people who want fewer limits',
       features: [
         'Unlimited likes & rewinds',
         '2 Super Likes every week',
@@ -57,13 +57,13 @@ export class Pricing {
     },
     {
       name: 'Advanced',
-      shortLine: 'Maximum main character',
+      shortLine: 'The peak experience',
       headline: 'Go all in.',
       price: '$11.99',
       cadence: 'per month',
       priceLabel: '/ month',
-      badge: 'Most features',
-      description: 'The full Rosemarry toolkit for daters who know exactly what they came for.',
+      badge: 'All features',
+      description: 'The full Rosemarry toolkit',
       features: [
         'Everything in Basic, obviously',
         '10 Super Likes every week',

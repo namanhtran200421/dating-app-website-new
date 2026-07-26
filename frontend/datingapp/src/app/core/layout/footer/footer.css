@@ -3,7 +3,10 @@
 }
 
 .footer {
+  position: relative;
+  z-index: 1;
   overflow: hidden;
+  margin-top: -1.5rem;
   background: #fbf2e9;
   color: #fbf2e9;
   font-family: 'Playpen Sans', system-ui, sans-serif;
@@ -38,7 +41,6 @@
 
 .footer-postcard__copy {
   max-width: 34rem;
-  padding-top: 1rem;
 }
 
 .footer-postcard__eyebrow,
@@ -51,7 +53,6 @@
 }
 
 .footer-postcard__copy h2 {
-  margin-top: 1rem;
   font-family: 'DynaPuff', system-ui, sans-serif;
   font-size: clamp(2.35rem, 5.5vw, 4.5rem);
   font-weight: 600;
@@ -322,6 +323,7 @@
   font-weight: 650;
   letter-spacing: -0.06em;
   line-height: 1.12;
+  color: white;
 }
 
 .footer-wordmark span {

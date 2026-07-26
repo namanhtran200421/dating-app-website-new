@@ -9,6 +9,14 @@ app-root {
   background-color: #fbf2e9;
 }
 
+body {
+  background-image: url('/images/floral-bg.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 .scribble-underline {
   position: relative;
   display: inline-block;
