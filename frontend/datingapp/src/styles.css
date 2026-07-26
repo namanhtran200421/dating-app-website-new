@@ -20,7 +20,7 @@ app-root {
   position: absolute;
   z-index: -1;
   right: -3%;
-  bottom: -0.12em;
+  bottom: -0.2em;
   width: 106%;
   height: 0.42em;
   overflow: visible;
@@ -47,7 +47,7 @@ app-root {
 
 .scribble-underline--loose .scribble-underline__line {
   right: -2%;
-  bottom: -0.04em;
+  bottom: -0.12em;
   width: 104%;
   height: 0.34em;
   transform: rotate(0.5deg);
@@ -60,7 +60,7 @@ app-root {
 }
 
 .scribble-underline--finish .scribble-underline__line {
-  bottom: -0.1em;
+  bottom: -0.18em;
   height: 0.38em;
   transform: rotate(-0.4deg);
 }
@@ -77,7 +77,7 @@ app-root {
 }
 
 .scribble-underline--hover .scribble-underline__line {
-  bottom: -0.22em;
+  bottom: -0.3em;
   height: 0.34em;
 }
 
