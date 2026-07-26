@@ -311,14 +311,8 @@
   overflow: hidden;
   border: 1px solid rgb(251 242 233 / 24%);
   border-radius: clamp(0.7rem, 2vw, 1.1rem);
-  background:
-    radial-gradient(circle at 90% 12%, rgb(246 201 239 / 74%) 0 12%, transparent 30%), #fffaf6;
+  background: #fffaf6;
   color: #1c1418;
-}
-
-.hero-tablet--chat .hero-tablet__screen {
-  background:
-    radial-gradient(circle at 8% 88%, rgb(242 127 168 / 28%) 0 14%, transparent 31%), #fffaf6;
 }
 
 .hero-tablet__appbar {
@@ -334,6 +328,12 @@
   font-family: 'DynaPuff', system-ui, sans-serif;
   font-size: 1.05em;
   line-height: 1;
+}
+
+.hero-tablet__logo {
+  width: 2em;
+  height: 1.8em;
+  object-fit: contain;
 }
 
 .hero-tablet__app-mark {
@@ -379,7 +379,7 @@
 }
 
 .hero-discover {
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
 .hero-discover__toolbar {
@@ -586,23 +586,38 @@
 
 .hero-app-tabs {
   display: grid;
+  flex: none;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
   border-top: 1px solid rgb(28 20 24 / 10%);
-  padding-top: 0.35em;
-  color: rgb(28 20 24 / 34%);
+  padding: 0.28em 0.2em 0.2em;
   text-align: center;
-  font-size: 0.9em;
-  font-weight: 850;
   line-height: 1;
 }
 
-.hero-app-tabs__active {
-  color: #d81e4a;
+.hero-app-tabs > span {
+  display: grid;
+  place-items: center;
+  opacity: 0.38;
+  transform: scale(0.9);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.hero-app-tabs img {
+  width: 2.75em;
+  height: 2em;
+  object-fit: contain;
+}
+
+.hero-app-tabs > .hero-app-tabs__active {
+  opacity: 1;
+  transform: translateY(-0.08em) scale(1.04);
 }
 
 .hero-conversation {
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
 }
 
 .hero-conversation__person {
@@ -808,7 +823,7 @@
 }
 
 .hero-safety-centre {
-  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
 }
 
 .hero-safety-centre__heading {
@@ -988,7 +1003,7 @@
 }
 
 .hero-membership {
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
 .hero-membership__heading {

@@ -111,9 +111,13 @@
 
                       <div class="hero-tablet__screen">
                         <div class="hero-tablet__appbar">
-                          <span class="hero-tablet__app-mark" aria-hidden="true">R</span>
+                          <img
+                            class="hero-tablet__logo"
+                            src="images/rosemarry/logo.png"
+                            alt=""
+                            aria-hidden="true"
+                          />
                           <strong>Rosemarry</strong>
-                          <span class="hero-tablet__app-heart" aria-hidden="true">♡</span>
                         </div>
 
                         @switch (slide.type) {
@@ -159,13 +163,6 @@
                                 <span>×</span>
                                 <span>♡</span>
                                 <span>✦</span>
-                              </div>
-
-                              <div class="hero-app-tabs" aria-hidden="true">
-                                <span class="hero-app-tabs__active">⌂</span>
-                                <span>♡</span>
-                                <span>◌</span>
-                                <span>☺</span>
                               </div>
                             </div>
                           }
@@ -218,13 +215,6 @@
                                 <span>Write a message…</span>
                                 <span>➶</span>
                               </div>
-
-                              <div class="hero-app-tabs" aria-hidden="true">
-                                <span>⌂</span>
-                                <span>♡</span>
-                                <span class="hero-app-tabs__active">◌</span>
-                                <span>☺</span>
-                              </div>
                             </div>
                           }
 
@@ -262,13 +252,6 @@
                               <div class="hero-safety-centre__controls">
                                 <span>Report a concern</span>
                                 <span>Blocked accounts</span>
-                              </div>
-
-                              <div class="hero-app-tabs" aria-hidden="true">
-                                <span>⌂</span>
-                                <span>♡</span>
-                                <span>◌</span>
-                                <span class="hero-app-tabs__active">☺</span>
                               </div>
                             </div>
                           }
@@ -318,16 +301,24 @@
                                   <span>Smart AI</span>
                                 </div>
                               </div>
-
-                              <div class="hero-app-tabs" aria-hidden="true">
-                                <span>⌂</span>
-                                <span>♡</span>
-                                <span>◌</span>
-                                <span class="hero-app-tabs__active">☺</span>
-                              </div>
                             </div>
                           }
                         }
+
+                        <div class="hero-app-tabs" aria-hidden="true">
+                          <span [class.hero-app-tabs__active]="slide.type === 'chat'">
+                            <img src="images/navigation/nav-chat.svg" alt="" />
+                          </span>
+                          <span [class.hero-app-tabs__active]="slide.type === 'discover'">
+                            <img src="images/navigation/nav-home.svg" alt="" />
+                          </span>
+                          <span [class.hero-app-tabs__active]="slide.type === 'safety'">
+                            <img src="images/navigation/nav-likes.svg" alt="" />
+                          </span>
+                          <span [class.hero-app-tabs__active]="slide.type === 'plans'">
+                            <img src="images/navigation/nav-user.svg" alt="" />
+                          </span>
+                        </div>
                       </div>
 
                       <span class="hero-tablet__homebar" aria-hidden="true"></span>
