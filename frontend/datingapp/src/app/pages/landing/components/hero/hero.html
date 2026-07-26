@@ -51,14 +51,41 @@
         </div>
 
         <div class="hero-banner__meta">
-          <span>Love note 0{{ activeSlide() + 1 }}</span>
-          <span aria-hidden="true">✦</span>
+          <span>Love Board 0{{ activeSlide() + 1 }}</span>
+          <span aria-hidden="true">♡︎</span>
           <span>{{ activeSlide() + 1 }} / {{ slides.length }}</span>
         </div>
       </div>
 
+      <div class="hero-board-decor" aria-hidden="true">
+        <div class="hero-board-note hero-board-note--kind">
+          <span class="hero-board-pin"></span>
+          <small>today&rsquo;s reminder</small>
+          <strong>Spread Joy.<br />Jolie.</strong>
+          <span class="hero-board-note__heart">♡</span>
+        </div>
+
+        <div class="hero-board-note hero-board-note--homework">
+          <span class="hero-board-tape"></span>
+          <small>tiny homework</small>
+          <strong>Make dating<br />feel human.</strong>
+          <span class="hero-board-note__tick">✓</span>
+        </div>
+
+        <span class="hero-board-sticker hero-board-sticker--smile">☺</span>
+
+   
+
+        <svg class="hero-board-doodle hero-board-doodle--hearts" viewBox="0 0 92 62" fill="none">
+          <path d="M16 15C12 7 1 10 3 20C5 29 17 35 17 35C17 35 29 27 29 18C29 9 19 7 16 15Z" />
+          <path
+            d="M59 30C54 20 40 24 43 36C46 47 60 55 60 55C60 55 75 45 74 34C74 23 63 21 59 30Z"
+          />
+        </svg>
+      </div>
+
       <div
-        class="touch-pan-y overflow-hidden"
+        class="hero-banner__viewport touch-pan-y overflow-hidden"
         (pointerdown)="onPointerDown($event)"
         (pointerup)="onPointerUp($event)"
         (pointercancel)="cancelPointerGesture()"
@@ -348,7 +375,7 @@
             rel="noopener noreferrer"
             class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-ink hover:bg-ink"
           >
-            Catch us on Insta
+            Catch us on Insta .✦ ݁˖
           </a>
 
           <a
@@ -356,7 +383,7 @@
             class="pricing-card-hover inline-flex cursor-pointer items-center gap-2.5 rounded-2xl border-[1.5px] border-ink bg-ink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-birdpink hover:bg-birdpink"
             (click)="$event.preventDefault(); signup.goToSignup()"
           >
-            Claim the free month
+            Claim the free month 𑣲⋆
           </a>
         </div>
 
@@ -387,7 +414,7 @@
               class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-transparent text-ink hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
               (click)="previousSlide()"
             >
-              <span aria-hidden="true" class="text-xl leading-none">←</span>
+              <span aria-hidden="true" class="text-xl leading-none">⤶</span>
             </button>
             <button
               type="button"
@@ -395,7 +422,7 @@
               class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-white hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
               (click)="nextSlide()"
             >
-              <span aria-hidden="true" class="text-xl leading-none">→</span>
+              <span aria-hidden="true" class="text-xl leading-none">⤷</span>
             </button>
           </div>
         </div>

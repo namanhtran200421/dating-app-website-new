@@ -44,6 +44,8 @@
 }
 
 .hero-banner__masthead {
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -102,6 +104,190 @@
 
 .hero-banner__meta span:nth-child(2) {
   color: #d81e4a;
+}
+
+.hero-banner__viewport {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-board-decor {
+  position: absolute;
+  z-index: 1;
+  inset: 3.5rem 0 5.8rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-board-note {
+  position: absolute;
+  width: 8.3rem;
+  min-height: 7.35rem;
+  padding: 1.55rem 1rem 0.85rem;
+  color: #1c1418;
+  font-family: 'Playpen Sans', system-ui, sans-serif;
+  filter: drop-shadow(4px 5px 0 rgb(28 20 24 / 14%));
+}
+
+.hero-board-note small,
+.hero-board-note strong {
+  display: block;
+}
+
+.hero-board-note small {
+  margin-bottom: 0.5rem;
+  color: rgb(28 20 24 / 58%);
+  font-size: 0.49rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-board-note strong {
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.hero-board-note--kind {
+  top: 1.35rem;
+  left: -2.35rem;
+  background: #f6d879;
+  clip-path: polygon(2% 3%, 97% 0, 100% 92%, 86% 100%, 3% 96%);
+  transform: rotate(-7deg);
+}
+
+.hero-board-note--homework {
+  right: -2.2rem;
+  bottom: 1.45rem;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 1.26rem,
+      rgb(88 122 164 / 18%) 1.3rem,
+      rgb(88 122 164 / 18%) 1.36rem
+    ),
+    #fff6da;
+  clip-path: polygon(1% 5%, 96% 0, 100% 96%, 4% 100%);
+  transform: rotate(6deg);
+}
+
+.hero-board-note__heart {
+  position: absolute;
+  right: 0.8rem;
+  bottom: 0.45rem;
+  color: #d81e4a;
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  font-size: 1.2rem;
+  transform: rotate(10deg);
+}
+
+.hero-board-note__tick {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.4rem;
+  color: #d81e4a;
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  font-size: 1rem;
+}
+
+.hero-board-pin {
+  position: absolute;
+  top: 0.45rem;
+  left: 55%;
+  width: 0.8rem;
+  aspect-ratio: 1;
+  border: 1.5px solid #1c1418;
+  border-radius: 50%;
+  background: #f27fa8;
+  box-shadow:
+    0 2px 0 #a85c73,
+    1px 3px 4px rgb(28 20 24 / 24%);
+}
+
+.hero-board-tape {
+  position: absolute;
+  top: -0.45rem;
+  left: 2.2rem;
+  width: 4.2rem;
+  height: 1.15rem;
+  background: rgb(246 201 239 / 78%);
+  transform: rotate(-5deg);
+}
+
+.hero-board-sticker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 2px solid #1c1418;
+  color: #1c1418;
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  filter: drop-shadow(3px 4px 0 #d81e4a);
+}
+
+.hero-board-sticker--star {
+  top: 0.75rem;
+  left: 48.1%;
+  width: 3.15rem;
+  aspect-ratio: 1;
+  background: #fbf2e9;
+  clip-path: polygon(
+    50% 0%,
+    61% 21%,
+    84% 11%,
+    79% 36%,
+    100% 50%,
+    79% 63%,
+    87% 88%,
+    61% 79%,
+    50% 100%,
+    38% 79%,
+    12% 88%,
+    20% 63%,
+    0 50%,
+    21% 36%,
+    15% 11%,
+    39% 21%
+  );
+  font-size: 0.72rem;
+  transform: rotate(9deg);
+}
+
+.hero-board-sticker--smile {
+  right: 0.85rem;
+  top: 43%;
+  width: 2.85rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #f6c9ef;
+  font-size: 1.25rem;
+  transform: rotate(8deg);
+}
+
+.hero-board-doodle {
+  position: absolute;
+  overflow: visible;
+  stroke: #fbf2e9;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.82;
+}
+
+.hero-board-doodle--arrow {
+  top: 5.4rem;
+  left: 45.5%;
+  width: 4.75rem;
+  transform: rotate(-18deg);
+}
+
+.hero-board-doodle--hearts {
+  bottom: 0.8rem;
+  left: 1rem;
+  width: 4.25rem;
+  stroke: #d81e4a;
+  transform: rotate(-8deg);
 }
 
 .hero-track {
@@ -1177,6 +1363,8 @@
 }
 
 .hero-banner__controls {
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -1243,6 +1431,10 @@
   .hero-banner__masthead small,
   .hero-banner__meta span:first-child,
   .hero-banner__meta span:nth-child(2) {
+    display: none;
+  }
+
+  .hero-board-decor {
     display: none;
   }
 
