@@ -1,11 +1,33 @@
-<section id="top" class="relative px-[clamp(18px,5vw,56px)] pt-[118px] pb-10">
-  <div class="max-w-[1180px] mx-auto">
-    <h1
-      data-reveal
-      class="animate-reveal font-display font-semibold text-[clamp(46px,9vw,120px)] leading-[0.98] tracking-[-2px] mb-8"
-    >
-      A fairer way to <span class="text-rose">love.</span>
-    </h1>
+<section id="top" class="hero-section relative px-[clamp(18px,5vw,56px)] pb-12 pt-[112px]">
+  <div class="mx-auto max-w-[1120px]">
+    <div class="hero-heading-row mb-7 flex items-end justify-between gap-6">
+      <h1
+        data-reveal
+        class="animate-reveal max-w-[900px] font-display text-[clamp(44px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px]"
+      >
+        A fairer way to
+        <span class="scribble-underline text-rose">
+          love.
+          <svg
+            class="scribble-underline__line"
+            viewBox="0 0 220 22"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              class="scribble-underline__stroke"
+              pathLength="1"
+              d="M4 12 C29 4 48 17 72 10 C99 2 117 17 143 9 C164 3 187 14 216 7"
+            />
+            <path
+              class="scribble-underline__stroke scribble-underline__stroke--second"
+              pathLength="1"
+              d="M15 18 C46 14 72 21 104 15 C137 10 167 20 207 13"
+            />
+          </svg>
+        </span>
+      </h1>
+    </div>
 
     <div
       data-reveal
@@ -13,13 +35,29 @@
       aria-roledescription="carousel"
       aria-label="Why Rosemarry is different"
       tabindex="0"
-      class="animate-reveal [animation-delay:60ms] overflow-hidden rounded-[32px] bg-blossom outline-none ring-rose/40 focus-visible:ring-4 sm:rounded-[40px]"
+      class="hero-banner animate-reveal [animation-delay:60ms] outline-none focus-visible:ring-4 focus-visible:ring-rose/40"
       (keydown)="onCarouselKeydown($event)"
     >
       <p class="sr-only" aria-live="polite" aria-atomic="true">
         Slide {{ activeSlide() + 1 }} of {{ slides.length }}:
-        {{ slides[activeSlide()].eyebrow }}
+        {{ slides[activeSlide()].lead }}
       </p>
+
+      <div class="hero-banner__masthead">
+        <div class="flex items-center gap-3">
+          <span class="hero-banner__mark" aria-hidden="true">R</span>
+          <span>
+            <strong>The Rosemarry mood</strong>
+            <small>Dating with better energy</small>
+          </span>
+        </div>
+
+        <div class="hero-banner__meta">
+          <span>Love note 0{{ activeSlide() + 1 }}</span>
+          <span aria-hidden="true">✦</span>
+          <span>{{ activeSlide() + 1 }} / {{ slides.length }}</span>
+        </div>
+      </div>
 
       <div
         class="touch-pan-y overflow-hidden"
@@ -29,47 +67,60 @@
         (pointerleave)="cancelPointerGesture()"
       >
         <div
-          class="flex transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          class="hero-track"
           [style.transform]="'translate3d(-' + activeSlide() * 100 + '%, 0, 0)'"
         >
-          @for (slide of slides; track slide.eyebrow; let index = $index) {
+          @for (slide of slides; track slide.lead; let index = $index) {
             <article
               role="group"
               aria-roledescription="slide"
               [attr.aria-label]="'Slide ' + (index + 1) + ' of ' + slides.length"
               [attr.aria-hidden]="index === activeSlide() ? null : 'true'"
               [attr.inert]="index === activeSlide() ? null : ''"
-              class="w-full shrink-0"
+              class="hero-slide"
+              [class.hero-slide--active]="index === activeSlide()"
             >
-              <div
-                class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)] p-[clamp(26px,3.5vw,52px)] pb-[clamp(30px,4vw,58px)]"
-              >
-                <div class="min-w-0 w-full flex-1 basis-[360px]">
-                  <p
-                    class="mb-5 font-body text-[clamp(21px,2.3vw,29px)] font-medium leading-[1.4] tracking-[-0.3px] text-ink"
-                  >
+              <div class="hero-slide__layout">
+                <div class="hero-note">
+                  <div class="hero-note__eyebrow">
+                    <span>Note 0{{ index + 1 }}</span>
+                    <span aria-hidden="true">↗</span>
+                  </div>
+
+                  <p class="hero-note__lead">
                     {{ slide.lead }}
-                    <span class="font-semibold text-rose">{{ slide.emphasis }}</span>
+                    <span>{{ slide.emphasis }}</span>
                   </p>
-                  <p
-                    class="mb-3.5 max-w-[460px] font-body text-[clamp(18px,2.1vw,26px)] font-medium leading-[1.35] tracking-[-0.4px] text-ink"
-                  >
-                    {{ slide.body }}
-                  </p>
-                  <p
-                    class="max-w-[460px] font-body text-[clamp(15px,1.7vw,19px)] font-semibold leading-[1.4] tracking-[-0.2px] text-rose"
-                  >
-                    {{ slide.offer }}
-                  </p>
+                  <p class="hero-note__body">{{ slide.body }}</p>
+
+                  <div class="hero-note__offer">
+                    <span aria-hidden="true">♥</span>
+                    <p>{{ slide.offer }}</p>
+                  </div>
+
+                  <span class="hero-note__signoff" aria-hidden="true">xoxo, Rosemarry</span>
                 </div>
 
-                <div class="min-w-0 w-full flex-1 basis-[340px]">
-                  <div
-                    class="relative w-full overflow-hidden rounded-[28px] bg-cream p-2.5 shadow-[0_30px_60px_-30px_rgba(28,20,24,0.4)] sm:p-3"
-                  >
-                    <div class="overflow-hidden rounded-[20px]">
-                      <app-image-placeholder ratio="4/3" [label]="slide.imageLabel" />
+                <div class="hero-visual">
+                  <div class="hero-polaroid">
+                    <span class="hero-polaroid__tape" aria-hidden="true"></span>
+                    <div class="hero-polaroid__label">
+                      <span>Proof of chemistry</span>
+                      <span aria-hidden="true">● REC</span>
                     </div>
+
+                    <div class="overflow-hidden rounded-[22px]">
+                      <app-image-placeholder ratio="16/10" [label]="slide.imageLabel" />
+                    </div>
+
+                    <div class="hero-polaroid__caption">
+                      <span>{{ slide.caption }}</span>
+                      <span aria-hidden="true">୨ৎ</span>
+                    </div>
+
+                    <span class="hero-polaroid__sticker" aria-hidden="true">
+                      {{ slide.sticker }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -78,15 +129,13 @@
         </div>
       </div>
 
-      <div
-        class="flex flex-col gap-5 border-t border-ink/10 bg-cream/30 px-[clamp(26px,3.5vw,52px)] py-5 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div class="flex flex-wrap gap-3">
+      <div class="hero-banner__controls">
+        <div class="hero-banner__actions flex flex-wrap gap-3">
           <a
             href="https://www.instagram.com"
             target="_blank"
             rel="noopener noreferrer"
-            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:bg-ink"
+            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-ink hover:bg-ink"
           >
             Catch us on Insta
           </a>
@@ -102,10 +151,10 @@
 
         <div class="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
           <div class="flex items-center gap-1 sm:gap-2" role="group" aria-label="Choose a slide">
-            @for (slide of slides; track slide.eyebrow; let index = $index) {
+            @for (slide of slides; track slide.lead; let index = $index) {
               <button
                 type="button"
-                class="group grid h-7 w-7 place-items-center rounded-full outline-none ring-rose/50 transition focus-visible:ring-2 sm:h-8 sm:w-8"
+                class="group grid h-8 w-8 place-items-center rounded-full outline-none ring-rose/50 transition focus-visible:ring-2"
                 [attr.aria-label]="'Go to slide ' + (index + 1)"
                 [attr.aria-current]="index === activeSlide() ? 'true' : null"
                 (click)="goToSlide(index)"

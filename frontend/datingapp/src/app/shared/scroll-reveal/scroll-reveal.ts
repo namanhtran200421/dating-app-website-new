@@ -90,7 +90,9 @@ export class ScrollReveal implements AfterViewInit, OnDestroy {
       element.style.transform = restingTransform;
     }
 
-    const stopObserving = inView(
+    let stopObserving: VoidFunction = () => undefined;
+
+    stopObserving = inView(
       element,
       () => {
         animation?.stop();
@@ -117,29 +119,7 @@ export class ScrollReveal implements AfterViewInit, OnDestroy {
               },
             );
 
-        return () => {
-          animation?.stop();
-          animation = fadeOnly
-            ? animate(
-                element,
-                { opacity: 0 },
-                {
-                  duration: 0.28,
-                  ease: 'easeOut',
-                },
-              )
-            : animate(
-                element,
-                {
-                  opacity: 0,
-                  transform: restingTransform,
-                },
-                {
-                  duration: 0.28,
-                  ease: 'easeOut',
-                },
-              );
-        };
+        stopObserving();
       },
       {
         amount: element.offsetHeight > window.innerHeight * 1.35 ? 'some' : 0.18,

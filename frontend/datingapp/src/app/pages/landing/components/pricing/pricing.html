@@ -1,214 +1,212 @@
 <section
   id="pricing"
-  class="relative bg-blossom px-[clamp(18px,5vw,56px)] pb-[clamp(70px,9vw,110px)] pt-[clamp(20px,3vw,40px)]"
+  class="relative overflow-hidden bg-blossom px-[clamp(18px,5vw,56px)] pb-[clamp(76px,9vw,118px)] pt-[clamp(40px,6vw,82px)]"
 >
-  <div class="mx-auto max-w-[1120px]">
-    <div class="rounded-[40px] bg-cream px-[clamp(22px,4vw,56px)] py-[clamp(34px,4.5vw,64px)]">
-      <div data-motion-reveal class="mb-11 w-full">
-        <div class="max-w-[820px]">
-          <h2
-            class="mb-6 font-display text-[clamp(48px,8.5vw,104px)] font-semibold leading-[0.95] tracking-[-2px] text-ink"
-          >
-            Pick your vibe :>
-          </h2>
 
-          <p
-            class="mb-8 max-w-[660px] font-body text-[clamp(20px,2.7vw,32px)] font-bold leading-[1.22] tracking-[-0.4px] text-ink"
-          >
-            Most of what you need is free. Paying extra is optional, not a necessity.
-          </p>
+
+  <div class="relative mx-auto max-w-[1180px]">
+    <header
+      data-motion-reveal
+      class="mb-[clamp(36px,5vw,58px)] grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end"
+    >
+      <div>
+        <span
+          class="mb-4 inline-flex items-center gap-2 rounded-full bg-cream/70 px-4 py-2 text-sm font-bold text-rose"
+        >
+          The membership menu
+        </span>
+        <h2
+          class="font-display text-[clamp(48px,8vw,98px)] font-semibold leading-[0.95] tracking-[-2px] text-ink"
+        >
+          Pick your pace. <span class="text-rose">Keep your standards.</span>
+        </h2>
+      </div>
+
+      <div class="max-w-[430px] lg:justify-self-end">
+        <p class="text-[clamp(17px,1.8vw,22px)] font-semibold leading-relaxed text-ink/65">
+          The core experience stays useful for free. Upgrade when you want more—not because we made
+          the app unusable without it.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="rounded-full border border-ink/10 bg-white/45 px-3 py-2 text-xs font-bold">
+            No mystery boosts
+          </span>
+          <span class="rounded-full border border-ink/10 bg-white/45 px-3 py-2 text-xs font-bold">
+            Cancel anytime
+          </span>
         </div>
       </div>
+    </header>
 
-      <div
-        data-motion-reveal="fade"
-        class="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3"
-      >
-        <article
-          data-reveal
-          class="group relative flex flex-col rounded border-[1.5px] border-ink bg-white p-[32px_28px] transition-all duration-300 hover:-translate-y-1.5 hover:bg-ink hover:shadow-[6px_6px_0_rgba(28,20,24,0.25)]"
-          style="animation-delay: 0ms"
+    <div
+      data-motion-reveal="fade"
+      class="relative rounded-[36px] border-[1.5px] border-ink bg-ink p-3 shadow-[8px_8px_0_rgba(28,20,24,0.18)] sm:p-4 lg:rounded-[44px]"
+    >
+      <span
+        aria-hidden="true"
+        class="absolute -left-[18px] top-1/2 hidden h-9 w-9 -translate-y-1/2 rounded-full border-r-[1.5px] border-ink bg-blossom lg:block"
+      ></span>
+      <span
+        aria-hidden="true"
+        class="absolute -right-[18px] top-1/2 hidden h-9 w-9 -translate-y-1/2 rounded-full border-l-[1.5px] border-ink bg-blossom lg:block"
+      ></span>
+
+      <div class="grid gap-4 lg:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)]">
+        <div
+          class="flex flex-col p-2 sm:p-3 lg:border-r lg:border-dashed lg:border-cream/25 lg:pr-7"
         >
-          <div class="mb-3.5">
-            <span
-              class="inline-block rounded-md bg-rose px-2.5 py-0.5 text-sm font-bold text-white"
-            >
-              Free
-            </span>
+          <div class="mb-5 flex items-center justify-between gap-4 px-1 text-cream">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-birdpink">
+                Choose your pass
+              </p>
+              <p class="mt-1 text-sm font-medium text-cream/55">Tap one to see the full lore.</p>
+            </div>
+            <span class="font-display text-2xl text-birdpink" aria-hidden="true">୨ৎ</span>
           </div>
 
-          <div class="mb-1.5 flex items-baseline gap-1.5">
-            <span
-              class="font-display text-[46px] font-bold leading-none tracking-[-1.5px] text-ink transition-colors duration-300 group-hover:text-white"
-            >
-              $0
-            </span>
+          <div class="flex flex-col gap-3" role="group" aria-label="Choose a membership plan">
+            @for (plan of plans; track plan.name; let index = $index) {
+              <button
+                type="button"
+                class="pricing-card-hover group w-full rounded-[24px] border p-4 text-left outline-none transition-colors focus-visible:ring-4 focus-visible:ring-birdpink/40"
+                [class.border-blossom]="index === activePlan()"
+                [class.bg-blossom]="index === activePlan()"
+                [class.text-ink]="index === activePlan()"
+                [class.border-cream/15]="index !== activePlan()"
+                [class.bg-white/5]="index !== activePlan()"
+                [class.text-cream]="index !== activePlan()"
+                [class.hover:bg-white/10]="index !== activePlan()"
+                [attr.aria-pressed]="index === activePlan()"
+                [attr.aria-controls]="'pricing-plan-details'"
+                (click)="selectPlan(index)"
+              >
+                <span class="flex items-center justify-between gap-4">
+                  <span class="flex min-w-0 items-center gap-3">
+                    <span
+                      class="grid h-9 w-9 shrink-0 place-items-center rounded-full border font-display text-xs font-bold"
+                      [class.border-ink/15]="index === activePlan()"
+                      [class.bg-cream/70]="index === activePlan()"
+                      [class.border-cream/15]="index !== activePlan()"
+                      [class.bg-white/5]="index !== activePlan()"
+                    >
+                      0{{ index + 1 }}
+                    </span>
+                    <span>
+                      <span class="block font-display text-[clamp(18px,2vw,23px)] font-semibold">
+                        {{ plan.name }}
+                      </span>
+                      <span
+                        class="mt-0.5 block text-xs font-semibold"
+                        [class.text-ink/55]="index === activePlan()"
+                        [class.text-cream/45]="index !== activePlan()"
+                      >
+                        {{ plan.shortLine }}
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="shrink-0 text-right">
+                    <span class="block font-display text-xl font-bold">{{ plan.price }}</span>
+                    <span
+                      class="block text-[10px] font-bold uppercase tracking-wider"
+                      [class.text-ink/45]="index === activePlan()"
+                      [class.text-cream/40]="index !== activePlan()"
+                    >
+                      {{ plan.cadence }}
+                    </span>
+                  </span>
+                </span>
+              </button>
+            }
           </div>
 
-          <p
-            class="mb-6 text-[13.5px] text-ink/60 transition-colors duration-300 group-hover:text-white/70"
-          >
-            No commitment, high potential.
+          <p class="mt-auto px-1 pt-6 text-xs font-medium leading-relaxed text-cream/40">
+            Prices are subject to change before launch. No jump-scare charges, promise.
           </p>
-
-          <div class="flex flex-col gap-3">
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              15 daily likes
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              5 daily rewinds for the oops moments
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              Peep 3 people who liked you every day
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              Filters for the essential
-            </div>
-          </div>
-        </article>
-
-        <article
-          data-reveal
-          class="group relative flex flex-col rounded border-[1.5px] border-ink bg-white p-[32px_28px] transition-all duration-300 hover:-translate-y-1.5 hover:bg-ink hover:shadow-[6px_6px_0_rgba(28,20,24,0.25)]"
-          style="animation-delay: 120ms"
-        >
-          <div class="mb-3.5">
-            <span
-              class="inline-block rounded-md bg-rose px-2.5 py-0.5 text-sm font-bold text-white"
-            >
-              Basic, but better
-            </span>
-          </div>
-
-          <div class="mb-1.5 flex items-baseline gap-1.5">
-            <span
-              class="font-display text-[46px] font-bold leading-none tracking-[-1.5px] text-ink transition-colors duration-300 group-hover:text-white"
-            >
-              $6.99
-            </span>
-
-            <span
-              class="text-sm text-ink/60 transition-colors duration-300 group-hover:text-white/70"
-            >
-              / mo
-            </span>
-          </div>
-
-          <p
-            class="mb-6 text-[13.5px] text-ink/60 transition-colors duration-300 group-hover:text-white/70"
-          >
-            Tiny investment, exponential return
-          </p>
-
-          <div class="flex flex-col gap-3">
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              Unlimited likes &amp; rewinds
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              2 Super Likes every week
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              3 first-message passes every week
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              See the whole fan club
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              Ads gone, filters upgraded
-            </div>
-          </div>
-        </article>
+        </div>
 
         <article
-          data-reveal
-          class="group relative flex flex-col rounded border-[1.5px] border-ink bg-white p-[32px_28px] transition-all duration-300 hover:-translate-y-1.5 hover:bg-ink hover:shadow-[6px_6px_0_rgba(28,20,24,0.25)] md:col-span-2 xl:col-span-1"
-          style="animation-delay: 240ms"
+          id="pricing-plan-details"
+          class="relative overflow-hidden rounded-[28px] bg-cream p-[clamp(24px,4vw,48px)] lg:rounded-[34px]"
+          aria-live="polite"
         >
-          <div class="mb-3.5">
-            <span
-              class="inline-block rounded-md bg-rose px-2.5 py-0.5 text-sm font-bold text-white"
-            >
-              Advance
-            </span>
-          </div>
-
-          <div class="mb-1.5 flex items-baseline gap-1.5">
-            <span
-              class="font-display text-[46px] font-bold leading-none tracking-[-1.5px] text-ink transition-colors duration-300 group-hover:text-white"
-            >
-              $11.99
-            </span>
-
-            <span
-              class="text-sm text-ink/60 transition-colors duration-300 group-hover:text-white/70"
-            >
-              / mo
-            </span>
-          </div>
-
-          <p
-            class="mb-6 text-[13.5px] text-ink/60 transition-colors duration-300 group-hover:text-white/70"
+          <span
+            aria-hidden="true"
+            class="absolute -right-10 -top-12 font-display text-[150px] leading-none text-blossom/60"
           >
-            The absolute peak of human existence
-          </p>
+            {{ activePlan() + 1 }}
+          </span>
 
-          <div class="flex flex-col gap-3">
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              Everything in Basic, obviously
+          <div class="relative">
+            <div class="flex flex-wrap items-start justify-between gap-5">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-[0.16em] text-rose">
+                  Your {{ selectedPlan.name }} pass
+                </span>
+                <h3
+                  class="mt-2 font-display text-[clamp(32px,4.5vw,56px)] font-semibold leading-none text-ink"
+                >
+                  {{ selectedPlan.headline }}
+                </h3>
+              </div>
+
+              @if (selectedPlan.badge) {
+                <span
+                  class="rotate-2 rounded-full bg-rose px-4 py-2 text-xs font-bold text-white shadow-[3px_3px_0_rgba(28,20,24,0.18)]"
+                >
+                  {{ selectedPlan.badge }}
+                </span>
+              }
+            </div>
+
+            <div class="mt-8 flex items-end gap-2 border-b border-dashed border-ink/20 pb-7">
+              <span
+                class="font-display text-[clamp(54px,8vw,88px)] font-bold leading-[0.82] tracking-[-3px] text-ink"
+              >
+                {{ selectedPlan.price }}
+              </span>
+              <span class="pb-1 text-sm font-bold text-ink/45">{{ selectedPlan.priceLabel }}</span>
+            </div>
+
+            <div class="mt-7">
+              <p class="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-rose">
+                This pass gets you
+              </p>
+              <ul class="grid gap-3 sm:grid-cols-2">
+                @for (feature of selectedPlan.features; track feature) {
+                  <li
+                    class="flex min-h-[58px] items-center gap-3 rounded-2xl border border-ink/10 bg-white/60 px-4 py-3 text-[14px] font-semibold leading-snug text-ink"
+                  >
+                    <span
+                      class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blossom font-display text-xs font-bold text-rose"
+                      aria-hidden="true"
+                    >
+                      ✓
+                    </span>
+                    {{ feature }}
+                  </li>
+                }
+              </ul>
             </div>
 
             <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
+              class="mt-8 flex flex-col gap-4 border-t border-dashed border-ink/20 pt-6 sm:flex-row sm:items-center sm:justify-between"
             >
-              10 Super Likes every week
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              5 first-message passes every week
-            </div>
-
-            <div
-              class="text-[14.5px] text-ink transition-colors duration-300 group-hover:text-cream"
-            >
-              2 weekly boosts for your 30-minute peak visibility
+              <p class="max-w-[390px] text-sm font-semibold leading-relaxed text-ink/55">
+                {{ selectedPlan.description }}
+              </p>
+              <button
+                type="button"
+                class="pricing-card-hover shrink-0 rounded-2xl border-[1.5px] border-rose bg-rose px-5 py-3.5 text-sm font-semibold text-white hover:border-ink hover:bg-ink"
+                (click)="signup.goToSignup()"
+              >
+                Get in early
+              </button>
             </div>
           </div>
         </article>
       </div>
-      <p
-  class="mt-8 text-center font-body text-xs font-medium italic tracking-[0.02em] text-ink/45"
->
-  “Prices are subject to change.”
-</p>
     </div>
   </div>
 </section>

@@ -3,18 +3,20 @@ import { SignupState } from '../../signup-state';
 import { ImagePlaceholder } from '../image-placeholder/image-placeholder';
 
 interface HeroSlide {
-  eyebrow?: string;
   lead: string;
   emphasis: string;
   body: string;
   offer: string;
   imageLabel: string;
+  caption: string;
+  sticker: string;
 }
 
 @Component({
   selector: 'app-landing-hero',
   imports: [ImagePlaceholder],
   templateUrl: './hero.html',
+  styleUrl: './hero.css',
 })
 export class Hero {
   protected readonly signup = inject(SignupState);
@@ -26,6 +28,8 @@ export class Hero {
       body: 'No expensive paywalls or cash-grabbing features.',
       offer: 'Get in early and score one month of Advanced for free. Major W.',
       imageLabel: 'Main-character moment — two people actually vibing',
+      caption: 'Less scrolling. More actual sparks.',
+      sticker: 'Actually vibing',
     },
     {
       lead: 'Meet people you actually want to know',
@@ -33,6 +37,8 @@ export class Hero {
       body: 'Better matching make every conversation exciting!',
       offer: 'Your time is important. We help you spend it well.',
       imageLabel: 'A first date that feels easy, warm and genuinely fun',
+      caption: 'Your screen time could never.',
+      sticker: 'Time well spent',
     },
   ];
 

@@ -1,36 +1,93 @@
 <main id="top" class="overflow-x-hidden bg-cream font-body text-ink">
-
-
   <section
     class="border-y border-ink/10 bg-white/45 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
     aria-labelledby="why-title"
   >
     <div class="mx-auto max-w-[1180px]">
       <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-[clamp(56px,8vw,110px)]">
-        <div>
+        <div data-motion-reveal>
           <span class="mb-4 block text-sm font-bold uppercase tracking-[0.14em] text-rose">
-            Why Rosemarry exists
+            Why Rosemarry exists ?
           </span>
           <h2
             id="why-title"
             class="font-display text-[clamp(38px,5.5vw,70px)] font-semibold leading-[1.02] tracking-[-1.5px]"
           >
-            The dating app formula needs a rewrite.
+            The dating app formula needs a
+            <span class="scribble-underline">
+              rewrite
+              <svg
+                class="scribble-underline__line"
+                viewBox="0 0 220 22"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  class="scribble-underline__stroke"
+                  pathLength="1"
+                  d="M4 12 C29 4 48 17 72 10 C99 2 117 17 143 9 C164 3 187 14 216 7"
+                />
+                <path
+                  class="scribble-underline__stroke scribble-underline__stroke--second"
+                  pathLength="1"
+                  d="M15 18 C46 14 72 21 104 15 C137 10 167 20 207 13"
+                />
+              </svg>
+            </span>
           </h2>
         </div>
 
-        <div class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/70">
+        <div
+          data-motion-reveal
+          data-motion-delay="0.08"
+          class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/70"
+        >
           <p>
-            The usual formula asks people to swipe faster, spend more, and trust a black-box
-            algorithm to decide who deserves to be seen. That might create activity, but it does not
-            always create connection.
+            The usual formula asks people to swipe faster, spend more, and trust a
+            <span class="scribble-underline scribble-underline--loose">
+              black-box algorithm
+              <svg
+                class="scribble-underline__line"
+                viewBox="0 0 220 22"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  class="scribble-underline__stroke"
+                  pathLength="1"
+                  d="M3 13 C18 6 35 17 54 11 S87 7 107 12 S143 16 163 10 S195 8 217 13"
+                />
+              </svg>
+            </span>
+            to decide who deserves to be seen. That might create activity, but it does not always
+            create connection.
           </p>
           <p>
             We believe a dating app needs to be accessible, safe and useful without hiding every
             good feature behind another payment.
           </p>
           <p class="font-semibold text-ink">
-            So we&rsquo;re building the app we wanted to use: fairer, cheaper and safer.
+            So we&rsquo;re building the app we wanted to use,
+            <span class="scribble-underline scribble-underline--finish">
+              fairer, cheaper and safer, and of course smarter :)
+              <svg
+                class="scribble-underline__line"
+                viewBox="0 0 260 24"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  class="scribble-underline__stroke"
+                  pathLength="1"
+                  d="M4 14 C37 5 56 19 91 11 C126 4 151 18 182 10 C211 3 232 14 256 8"
+                />
+                <path
+                  class="scribble-underline__stroke scribble-underline__stroke--flick"
+                  pathLength="1"
+                  d="M234 18 C246 17 253 14 258 7"
+                />
+              </svg>
+            </span>
           </p>
         </div>
       </div>
@@ -56,175 +113,269 @@
         </p>
       </header>
 
-      <div class="grid items-stretch gap-6 md:grid-cols-6 xl:grid-cols-6">
-        <article
-          class="pricing-card-hover relative flex h-full flex-col rounded-[36px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)] md:col-span-3 sm:p-4 xl:col-span-2"
+      <div
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Meet the Rosemarry founders"
+        tabindex="0"
+        class="mx-auto max-w-[1040px] outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
+        (keydown)="onFounderKeydown($event)"
+      >
+        <p class="sr-only" aria-live="polite" aria-atomic="true">
+          Showing founder page {{ activeFounderPage() + 1 }} of {{ founderPageCount }}
+        </p>
+
+        <div
+          class="founder-deck touch-pan-y"
+          (pointerdown)="onFounderPointerDown($event)"
+          (pointerup)="onFounderPointerUp($event)"
+          (pointercancel)="cancelFounderSwipe()"
         >
-          <div class="overflow-hidden rounded-[26px] bg-cream p-2.5">
-            <div class="aspect-[4/5] overflow-hidden rounded-[20px]">
-              <img
-                src="images/steve.png"
-                alt="Portrait of Founder 02"
-                class="h-full w-full object-cover"
-              />
-            </div>
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label="Founders Steve Tran and Felix Vu"
+            class="founder-deck-page"
+            [class.founder-deck-page--active]="activeFounderPage() === 0"
+            [class.founder-deck-page--behind]="activeFounderPage() !== 0"
+            [attr.aria-hidden]="activeFounderPage() === 0 ? null : 'true'"
+          >
+            <article
+              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
+            >
+              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
+                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
+                  <img
+                    src="images/steve.png"
+                    alt="Portrait of Steve Tran"
+                    draggable="false"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
+                <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose"> Meet </span>
+                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
+                  Steve Tran
+                </h3>
+                <p class="mt-1 text-sm font-bold text-rose">Co-founder · make stuff work</p>
+                <p class="mt-5 font-medium leading-[1.7] text-ink/65">I like cats.</p>
+
+                <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
+                  <span class="h-px flex-1 bg-ink/15"></span>
+                  <span class="font-display">୨ৎ</span>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
+            >
+              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
+                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
+                  <img
+                    src="images/quang.png"
+                    alt="Portrait of Felix Vu"
+                    draggable="false"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
+                <span class="text-xs font-bold uppercase tracking-[0.14em] text-birdpink">
+                  Meet
+                </span>
+                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
+                  Felix Vu
+                </h3>
+                <p class="mt-1 text-sm font-bold text-birdpink">Co-founder · vietnam steve's job</p>
+                <p class="mt-5 font-medium leading-[1.7] text-cream/65">
+                  I feel like I get scammed when using most dating apps, so I&rsquo;m making my own
+                  app.
+                </p>
+
+                <div
+                  class="mt-auto flex items-center gap-3 pt-7 text-birdpink/70"
+                  aria-hidden="true"
+                >
+                  <span class="h-px flex-1 bg-cream/15"></span>
+                  <span class="font-display">୨ৎ</span>
+                </div>
+              </div>
+            </article>
           </div>
 
-          <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-            <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose">
-              Meet founder one
-            </span>
-            <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
-              Steve Tran
-            </h3>
-            <p class="mt-1 text-sm font-bold text-rose">Co-founder · Software Engineer</p>
-            <p class="mt-5 font-medium leading-[1.7] text-ink/65">I like cats.</p>
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label="Founder Jimmy Ly"
+            class="founder-deck-page founder-deck-page--solo"
+            [class.founder-deck-page--active]="activeFounderPage() === 1"
+            [class.founder-deck-page--behind]="activeFounderPage() !== 1"
+            [attr.aria-hidden]="activeFounderPage() === 1 ? null : 'true'"
+          >
+            <article
+              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
+            >
+              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
+                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
+                  <img
+                    src="images/duy.jpg"
+                    alt="Portrait of Jimmy Ly"
+                    draggable="false"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
 
-            <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
-              <span class="h-px flex-1 bg-ink/15"></span>
-              <span class="font-display">୨ৎ</span>
-            </div>
+              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
+                <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose"> Meet </span>
+                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
+                  Jimmy Ly
+                </h3>
+                <p class="mt-1 text-sm font-bold text-rose">
+                  Co-founder · Billionaire's son (im serious)
+                </p>
+                <p class="mt-5 font-medium leading-[1.7] text-ink/65">
+                  I just cant seems to find tomboys on dating apps, so i'm making my own app.
+                </p>
+
+                <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
+                  <span class="h-px flex-1 bg-ink/15"></span>
+                  <span class="font-display">୨ৎ</span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
 
-        <article
-          class="pricing-card-hover relative flex h-full flex-col rounded-[36px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)] md:col-span-3 sm:p-4 xl:col-span-2"
+        <div
+          class="mt-3 flex flex-col gap-4 rounded-[26px] border border-ink/10 bg-cream/55 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <div class="overflow-hidden rounded-[26px] bg-cream p-2.5">
-            <div class="aspect-[4/5] overflow-hidden rounded-[20px]">
-              <img
-                src="images/quang.png"
-                alt="Portrait of Founder 02"
-                class="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-
-          <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-            <span class="text-xs font-bold uppercase tracking-[0.14em] text-birdpink">
-              Meet founder two
+          <div class="flex items-center gap-3">
+            <span class="font-display text-sm font-semibold text-ink">
+              0{{ activeFounderPage() + 1 }}
+              <span class="text-ink/35">/ 0{{ founderPageCount }}</span>
             </span>
-            <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">Felix Vu</h3>
-            <p class="mt-1 text-sm font-bold text-birdpink">Co-founder · Business / Designer</p>
-            <p class="mt-5 font-medium leading-[1.7] text-cream/65">
-              I feel like I get scammed when using most dating apps, so I&rsquo;m making my
-              own app.
-            </p>
-
-            <div class="mt-auto flex items-center gap-3 pt-7 text-birdpink/70" aria-hidden="true">
-              <span class="h-px flex-1 bg-cream/15"></span>
-              <span class="font-display">୨ৎ</span>
-            </div>
-          </div>
-        </article>
-
-        <article
-          class="pricing-card-hover relative flex h-full flex-col rounded-[36px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)] md:col-span-4 md:col-start-2 sm:p-4 xl:col-span-2 xl:col-start-auto"
-        >
-          <div class="overflow-hidden rounded-[26px] bg-cream p-2.5">
-            <div class="aspect-[4/5] overflow-hidden rounded-[20px]">
-              <img
-                src="images/duy.jpg"
-                alt="Portrait of Founder 02"
-                class="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-
-          <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-            <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose">
-              Meet founder three
+            <span class="h-px w-10 bg-ink/20"></span>
+            <span class="text-xs font-bold uppercase tracking-[0.12em] text-rose">
+              Swipe the stack
             </span>
-            <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">Jimmy Ly</h3>
-            <p class="mt-1 text-sm font-bold text-rose">Co-founder · Marketing / App Developer</p>
-            <p class="mt-5 font-medium leading-[1.7] text-ink/65">
-              I just cant seems to find tomboys on dating apps, so i'm making my own app.
-            </p>
+          </div>
 
-            <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
-              <span class="h-px flex-1 bg-ink/15"></span>
-              <span class="font-display">୨ৎ</span>
+          <div class="flex items-center justify-between gap-4 sm:justify-end">
+            <div class="flex gap-2" role="group" aria-label="Choose a founder page">
+              @for (page of founderPages; track page) {
+                <button
+                  type="button"
+                  class="grid h-8 w-8 place-items-center rounded-full outline-none ring-rose/50 focus-visible:ring-2"
+                  [attr.aria-label]="'Show founder page ' + (page + 1)"
+                  [attr.aria-current]="activeFounderPage() === page ? 'true' : null"
+                  (click)="showFounderPage(page)"
+                >
+                  <span
+                    class="h-2.5 rounded-full transition-all duration-300"
+                    [class.w-6]="activeFounderPage() === page"
+                    [class.w-2.5]="activeFounderPage() !== page"
+                    [class.bg-rose]="activeFounderPage() === page"
+                    [class.bg-ink/20]="activeFounderPage() !== page"
+                  ></span>
+                </button>
+              }
+            </div>
+
+            <div class="flex gap-2">
+              <button
+                type="button"
+                aria-label="Show previous founders"
+                class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink text-xl text-ink hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
+                (click)="previousFounderPage()"
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+              <button
+                type="button"
+                aria-label="Show next founders"
+                class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-xl text-white hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
+                (click)="nextFounderPage()"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <section
-    class="px-[clamp(18px,5vw,56px)] py-[clamp(64px,8vw,96px)]"
-    aria-labelledby="faq-title"
-  >
+  <section class="px-[clamp(18px,5vw,56px)] py-[clamp(64px,8vw,104px)]" aria-labelledby="faq-title">
     <div
-      class="mx-auto max-w-[1180px] overflow-hidden rounded-[36px] bg-ink p-[clamp(28px,5vw,62px)] text-cream"
+      data-motion-reveal="fade"
+      class="faq-shell relative mx-auto max-w-[1180px] overflow-hidden rounded-[clamp(32px,5vw,52px)] border-2 border-ink p-[clamp(24px,4.5vw,58px)] shadow-[10px_12px_0_#1c1418]"
     >
-      <header class="mb-[clamp(28px,4vw,44px)] max-w-[760px]">
-        <span class="text-sm font-bold uppercase tracking-[0.14em] text-birdpink">
-          Questions, answered
-        </span>
-        <h2
-          id="faq-title"
-          class="mt-4 font-display text-[clamp(36px,5.5vw,68px)] font-semibold leading-[1.02] tracking-[-1.5px]"
-        >
-          Frequently asked questions.
-        </h2>
-      </header>
+      <div class="relative z-10 grid gap-[clamp(36px,6vw,82px)] lg:grid-cols-[0.72fr_1.28fr]">
+        <header data-motion-reveal class="max-w-[470px] lg:sticky lg:top-28 lg:self-start">
+          <span
+            class="inline-flex -rotate-2 rounded-full border-[1.5px] border-ink bg-ink px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-birdpink"
+          >
+            Questions, answered
+          </span>
+          <h2
+            id="faq-title"
+            class="mt-6 font-display text-[clamp(40px,5.5vw,68px)] font-semibold leading-[1.02] tracking-[-1.5px]"
+          >
+            Ask us anything,
+            <span class="text-rose">please</span>
+          </h2>
+        </header>
 
-      <div class="grid gap-3">
-        <details class="group rounded-2xl border border-cream/15 bg-white/[0.04] px-6 py-5 open:bg-white/[0.06]">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[clamp(18px,2vw,22px)] font-semibold">
-            Is Rosemarry actually free to use?
-            <span class="shrink-0 text-birdpink transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 max-w-[720px] font-medium leading-[1.7] text-cream/65">
-            Yes. Core matching, messaging, and safety features stay free. Paid plans just unlock
-            extras like more likes and boosts.
-          </p>
-        </details>
+        <div data-motion-reveal="fade" data-motion-delay="0.08" class="faq-list grid gap-3.5">
+          @for (faq of faqs; track faq.question; let index = $index) {
+            <article
+              class="faq-card"
+              [class.faq-card--open]="activeFaq() === index"
+              [style.--faq-index]="index"
+            >
+              <h3>
+                <button
+                  type="button"
+                  class="faq-card__trigger"
+                  [attr.id]="'faq-trigger-' + index"
+                  [attr.aria-controls]="'faq-answer-' + index"
+                  [attr.aria-expanded]="activeFaq() === index"
+                  (click)="toggleFaq(index)"
+                >
+                  <span class="faq-card__number">0{{ index + 1 }}</span>
+                  <span class="flex-1">{{ faq.question }}</span>
+                  <span class="faq-card__icon" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                  </span>
+                </button>
+              </h3>
 
-        <details class="group rounded-2xl border border-cream/15 bg-white/[0.04] px-6 py-5 open:bg-white/[0.06]">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[clamp(18px,2vw,22px)] font-semibold">
-            When is Rosemarry launching?
-            <span class="shrink-0 text-birdpink transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 max-w-[720px] font-medium leading-[1.7] text-cream/65">
-            We&rsquo;re in early access right now. Drop your email in the signup box below and
-            we&rsquo;ll let you know the moment we&rsquo;re live.
-          </p>
-        </details>
-
-        <details class="group rounded-2xl border border-cream/15 bg-white/[0.04] px-6 py-5 open:bg-white/[0.06]">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[clamp(18px,2vw,22px)] font-semibold">
-            How is Rosemarry different from other dating apps?
-            <span class="shrink-0 text-birdpink transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 max-w-[720px] font-medium leading-[1.7] text-cream/65">
-            No hidden desirability score, no pay-to-win visibility, and no surprise paywalls —
-            just clearer pricing and safer matching.
-          </p>
-        </details>
-
-        <details class="group rounded-2xl border border-cream/15 bg-white/[0.04] px-6 py-5 open:bg-white/[0.06]">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[clamp(18px,2vw,22px)] font-semibold">
-            Is my data safe with Rosemarry?
-            <span class="shrink-0 text-birdpink transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 max-w-[720px] font-medium leading-[1.7] text-cream/65">
-            We only use what we need to help you match well, and we never sell your data to third
-            parties.
-          </p>
-        </details>
-
-        <details class="group rounded-2xl border border-cream/15 bg-white/[0.04] px-6 py-5 open:bg-white/[0.06]">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[clamp(18px,2vw,22px)] font-semibold">
-            Still have a question?
-            <span class="shrink-0 text-birdpink transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 max-w-[720px] font-medium leading-[1.7] text-cream/65">
-            <a routerLink="/contact-us" class="font-semibold text-birdpink underline underline-offset-2">Message us</a>
-            and a real person on the team will get back to you.
-          </p>
-        </details>
+              <div
+                class="faq-answer"
+                [class.faq-answer--open]="activeFaq() === index"
+                [attr.id]="'faq-answer-' + index"
+                [attr.aria-labelledby]="'faq-trigger-' + index"
+                [attr.aria-hidden]="activeFaq() !== index"
+                [attr.inert]="activeFaq() === index ? null : ''"
+              >
+                <div>
+                  <p class="faq-answer__copy">
+                    @if (faq.contact) {
+                      <a routerLink="/contact-us">Message us</a>
+                    }
+                    {{ faq.answer }}
+                  </p>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
       </div>
     </div>
   </section>

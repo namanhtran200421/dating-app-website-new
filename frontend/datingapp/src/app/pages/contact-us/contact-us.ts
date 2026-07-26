@@ -9,6 +9,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   selector: 'app-contact-us',
   imports: [ReactiveFormsModule],
   templateUrl: './contact-us.html',
+  styleUrl: './contact-us.css',
 })
 export class ContactUs {
   constructor(private preSignupService: PreSignupService) {}
