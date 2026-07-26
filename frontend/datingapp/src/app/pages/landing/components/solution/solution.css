@@ -213,7 +213,6 @@
   border: 2px solid #1c1418;
   border-radius: 50%;
   background: #fbf2e9;
-  animation: clock-breathe 2.6s ease-in-out infinite;
 }
 
 .reply-clock strong {
