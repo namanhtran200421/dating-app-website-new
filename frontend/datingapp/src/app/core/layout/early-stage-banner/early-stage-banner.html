@@ -1,37 +1,78 @@
 @if (visible()) {
-  <aside
-    class="early-stage-banner"
-    role="status"
-    aria-labelledby="early-stage-title"
-    aria-describedby="early-stage-description"
+  <div
+    class="early-stage-banner early-stage-modal"
+    [class.early-stage-modal--closing]="closing()"
+    (click)="dismiss()"
   >
-    <div class="early-stage-banner__glow" aria-hidden="true"></div>
-
-    <div class="early-stage-banner__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24">
-        <path d="m12 3 1.4 4.1L17.5 8.5l-4.1 1.4L12 14l-1.4-4.1-4.1-1.4 4.1-1.4L12 3Z"></path>
-        <path d="m18.5 14 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"></path>
-      </svg>
-    </div>
-
-    <div class="early-stage-banner__copy">
-      <span class="early-stage-banner__label">Early-stage</span>
-      <h2 id="early-stage-title">You&rsquo;re seeing the preview.</h2>
-      <p id="early-stage-description">
-        Rosemarry is still taking shape. Features, wording, and policies may evolve as we learn,
-        build, and get ready for launch.
-      </p>
-    </div>
-
-    <button
-      type="button"
-      class="early-stage-banner__close"
-      aria-label="Dismiss early-stage notice"
-      (click)="dismiss()"
+    <section
+      class="early-stage-modal__panel"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-busy]="closing()"
+      aria-labelledby="early-stage-title"
+      aria-describedby="early-stage-description"
+      (click)="$event.stopPropagation()"
     >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 6l12 12M18 6 6 18"></path>
-      </svg>
-    </button>
-  </aside>
+      <header class="early-stage-modal__bar">
+        <div>
+          <span aria-hidden="true"></span>
+          <strong>Showcase mode</strong>
+        </div>
+        <span>Rosemarry · Preview build</span>
+
+        <button
+          type="button"
+          class="early-stage-modal__close mr-2"
+          aria-label="Dismiss early-stage notice"
+          [disabled]="closing()"
+          (click)="dismiss()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="early-stage-modal__content">
+        <div class="early-stage-modal__visual" aria-hidden="true">
+          <div>
+            <span>R</span>
+            <small>still cooking</small>
+            <i>୨ৎ</i>
+          </div>
+          <span class="early-stage-modal__note">Not the final form ↗</span>
+        </div>
+
+        <div class="early-stage-modal__copy">
+          <span class="early-stage-modal__eyebrow">A quick heads-up</span>
+          <h2 id="early-stage-title">
+            The app is still in
+            <span>development.</span>
+          </h2>
+          <p id="early-stage-description">
+            This website is an early showcase of Rosemarry&rsquo;s direction, not the finished
+            product. Features, wording, pricing, and policies may evolve as we keep building and
+            learning.
+          </p>
+
+          <ul aria-label="What you can do on this showcase website">
+            <li>Explore the concept</li>
+            <li>Meet the team</li>
+            <li>Join early</li>
+          </ul>
+
+          <button
+            #primaryAction
+            type="button"
+            class="early-stage-modal__primary"
+            [disabled]="closing()"
+            (click)="dismiss()"
+          >
+            <span>Got it, show me around</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
 }
