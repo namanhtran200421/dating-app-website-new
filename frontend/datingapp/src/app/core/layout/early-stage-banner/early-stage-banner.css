@@ -151,12 +151,11 @@
   display: block;
 }
 
-.early-stage-modal__visual > div > span {
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-size: clamp(3rem, 8vw, 5rem);
-  font-weight: 650;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
+.early-stage-modal__logo {
+  width: clamp(5.5rem, 12vw, 7.5rem);
+  height: clamp(5rem, 11vw, 7rem);
+  margin: 0 auto;
+  object-fit: contain;
 }
 
 .early-stage-modal__visual small {
