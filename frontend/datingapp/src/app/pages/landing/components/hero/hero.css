@@ -33,16 +33,14 @@
 .hero-banner {
   position: relative;
   overflow: hidden;
-  border: 2px solid #1c1418;
+  border: clamp(5px, 0.7vw, 8px) solid #a85c73;
   border-radius: clamp(2rem, 4vw, 3rem);
-  background-color: #f6c9ef;
-  background-image:
-    radial-gradient(circle at 8% 20%, rgb(255 255 255 / 45%) 0 3px, transparent 4px),
-    radial-gradient(circle at 91% 78%, rgb(216 30 74 / 12%) 0 4px, transparent 5px);
-  background-size:
-    48px 48px,
-    64px 64px;
-  box-shadow: 10px 12px 0 #1c1418;
+  outline: 2px solid #1c1418;
+  background-color: #dda293;
+  box-shadow:
+    10px 12px 0 #1c1418,
+    inset 0 0 55px rgb(93 47 48 / 18%),
+    inset 0 0 0 2px rgb(251 242 233 / 22%);
 }
 
 .hero-banner__masthead {
