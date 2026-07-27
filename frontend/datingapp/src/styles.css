@@ -124,6 +124,7 @@ h6,
 
 .scribble-underline--hover .scribble-underline__stroke {
   stroke-width: 3.5;
+  stroke-dashoffset: 1;
   animation: none;
   transition: stroke-dashoffset 460ms cubic-bezier(0.22, 1, 0.36, 1);
 }
