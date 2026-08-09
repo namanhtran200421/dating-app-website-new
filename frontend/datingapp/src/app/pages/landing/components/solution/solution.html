@@ -1,69 +1,104 @@
 <section id="solution" class="bg-blossom/90 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]">
   <div class="mx-auto max-w-[1180px]">
-    <header data-motion-reveal class="mb-12 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
-      <div>
-        <span
-          class="mb-4 inline-flex rounded-full bg-white/[0.55] px-4 py-2 text-sm font-bold text-rose"
-        >
-          The Rosemarry approach
-        </span>
+    <header data-motion-reveal class="solution-header">
+      <span class="solution-header__label">The Rosemarry approach</span>
 
-        <h2
-          class="font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.95] tracking-[-2px]"
-        >
-          Better dates need a
-          <span class="text-rose">better system.</span>
-        </h2>
-      </div>
-
-      <p
-        class="max-w-[450px] text-[clamp(17px,2vw,22px)] font-semibold leading-relaxed text-ink/75"
+      <h2
+        class="font-display text-[clamp(48px,8vw,104px)] font-semibold leading-[0.95] tracking-[-2px]"
       >
-        More meaningful interactions, better conversations, better matches, and fairer pricing.
+        Chemistry needs room
+        <span class="text-rose">to grow.</span>
+      </h2>
+
+      <p>
+        Rosemarry turns dating into a shared, week-long experience – then uses what it learns to
+        make the next circle more compatible.
       </p>
     </header>
 
-    <div data-motion-reveal="fade" class="solution-grid">
-      <article class="solution-card solution-card--matching">
-        <span class="solution-card__label">Weekly circles</span>
-        <h3>Meet more than a profile.</h3>
-        <p>
-          Rosemarry places you in a small group of compatible people nearby, giving you time to
-          talk, interact and see familiar faces again.
-        </p>
-
-      </article>
-
-      <article class="solution-card solution-card--safety">
-        <span class="solution-card__label">Compatibility</span>
-        <h3>More interaction, better fit</h3>
-        <p>
-          Rosemarry learns from shared interests, prompts, activities and how people naturally
-          interact to improve future circles.
-        </p>
-
-      </article>
-
-      <article class="solution-card solution-card--conversation">
-        <span class="solution-card__label">Shared activities</span>
-        <h3>Conversation doesn’t have to start with “hey.”</h3>
-        <p>
-          Answer prompts, play small activities and react to other people in your circle. Shared
-          experiences give you something natural to talk about.
-        </p>
-      </article>
-
-      <article class="solution-card solution-card--repeated">
-        <div>
-          <span class="solution-card__label">Repeated interaction</span>
-          <h3>Attraction has time to grow.</h3>
-          <p>
-            People you genuinely connect with can appear in future circles, giving you more chances
-            to get to know each other before deciding where it goes.
-          </p>
+    <div data-motion-reveal="fade" class="solution-journey">
+      <aside class="weekly-cycle">
+        <p class="weekly-cycle__eyebrow">Your week on Rosemarry</p>
+        <div class="weekly-cycle__ring" aria-hidden="true">
+          <span class="weekly-cycle__days">7<small>days</small></span>
+          <span class="weekly-cycle__marker weekly-cycle__marker--meet">Meet</span>
+          <span class="weekly-cycle__marker weekly-cycle__marker--prompt">Prompt</span>
+          <span class="weekly-cycle__marker weekly-cycle__marker--chat">Chat</span>
+          <span class="weekly-cycle__marker weekly-cycle__marker--renew">Regroup</span>
         </div>
-      </article>
+        <h3>A circle that evolves.</h3>
+        <p>
+          Each week gives people time to become familiar. The next one builds on the connections
+          that actually formed.
+        </p>
+      </aside>
 
+      <ol class="solution-steps">
+        <li class="solution-step">
+          <span class="solution-step__number">01</span>
+          <div>
+            <span class="solution-step__label">Shape your starting point</span>
+            <h3>Tell us what matters.</h3>
+            <p>
+              Sign up and answer questions about your interests, preferences and what you are
+              looking for. Those answers help us find people with meaningful things in common.
+            </p>
+          </div>
+        </li>
+
+        <li class="solution-step">
+          <span class="solution-step__number">02</span>
+          <div>
+            <span class="solution-step__label">Meet your weekly circle</span>
+            <h3>Start small, not endless.</h3>
+            <p>
+              Rosemarry automatically brings a small group of compatible people together for one
+              week, so nobody is reduced to a split-second swipe.
+            </p>
+          </div>
+        </li>
+
+        <li class="solution-step">
+          <span class="solution-step__number">03</span>
+          <div>
+            <span class="solution-step__label">Share more than a bio</span>
+            <h3>Let personality show up.</h3>
+            <p>
+              Answer prompts, try activities and talk in the group chat. Shared moments create
+              natural conversation and show how people actually connect.
+            </p>
+          </div>
+        </li>
+
+        <li class="solution-step">
+          <span class="solution-step__number">04</span>
+          <div>
+            <span class="solution-step__label">Refresh with more context</span>
+            <h3>Make the next circle smarter.</h3>
+            <p>
+              When the week ends, the circle expires automatically. Rosemarry’s AI analyses how
+              everyone interacted and may place highly compatible people together again.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div data-motion-reveal="fade" class="choice-strip">
+      <div class="choice-strip__intro">
+        <span>Your choice, at every step</span>
+        <h3>Familiarity without pressure.</h3>
+      </div>
+
+      <div class="choice-strip__option">
+        <span aria-hidden="true">♡</span>
+        <p><strong>Match whenever you want.</strong> You never have to wait for the week to end.</p>
+      </div>
+
+      <div class="choice-strip__option">
+        <span aria-hidden="true">×</span>
+        <p><strong>Choose more space.</strong> Ask not to share a future circle with someone.</p>
+      </div>
     </div>
   </div>
 </section>

@@ -28,7 +28,7 @@ export class AboutUsPage {
     {
       question: 'How is Rosemarry different from other dating apps?',
       answer:
-        'No hidden desirability score, no pay-to-win visibility, and no surprise paywalls — just clearer pricing and safer matching.',
+        'No hidden desirability score, no pay-to-win visibility, and no surprise paywalls – just clearer pricing and safer matching.',
     },
     {
       question: 'Is my data safe with Rosemarry?',
