@@ -107,6 +107,11 @@
   font-weight: 750;
 }
 
+.weekly-cycle__marker i {
+  margin-right: 0.25rem;
+  color: #f27fa8;
+}
+
 .weekly-cycle__marker--meet {
   top: -1rem;
 }
@@ -194,6 +199,26 @@
     transform 200ms ease;
 }
 
+.solution-step__number i,
+.solution-step__number small {
+  grid-area: 1 / 1;
+}
+
+.solution-step__number i {
+  font-size: 1.25rem;
+  transform: translateY(-0.4rem);
+}
+
+.solution-step__number small {
+  align-self: end;
+  padding-bottom: 0.55rem;
+  color: currentColor;
+  font-family: 'Playpen Sans', system-ui, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
 .solution-step:hover .solution-step__number {
   background: #d81e4a;
   color: white;
@@ -270,6 +295,10 @@
   font-weight: 700;
 }
 
+.choice-strip__option > span i {
+  font-size: 1rem;
+}
+
 .choice-strip__option p {
   color: rgba(28, 20, 24, 0.72);
   font-size: 0.78rem;
@@ -308,6 +337,24 @@
 }
 
 @media (max-width: 560px) {
+  .solution-header {
+    margin-bottom: 2.75rem;
+  }
+
+  .solution-header > p {
+    margin-top: 1.1rem;
+  }
+
+  .weekly-cycle {
+    border-radius: 1.75rem;
+    padding: 1.5rem;
+  }
+
+  .weekly-cycle__ring {
+    width: min(76%, 13rem);
+    margin-block: 3rem;
+  }
+
   .solution-steps::before {
     left: 1.75rem;
   }
@@ -325,10 +372,16 @@
 
   .choice-strip {
     grid-template-columns: 1fr;
+    border-radius: 1.5rem;
+    box-shadow: 4px 5px 0 rgba(28, 20, 24, 0.16);
   }
 
   .choice-strip__intro {
     grid-column: auto;
+  }
+
+  .choice-strip__option {
+    min-height: 5.5rem;
   }
 }
 

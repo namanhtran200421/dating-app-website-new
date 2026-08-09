@@ -213,8 +213,24 @@
 }
 
 @media (max-width: 800px) {
+  .problem-grid {
+    gap: 0.85rem;
+  }
+
   .problem-card {
     grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .problem-card {
+    border-radius: 1.35rem;
+    padding: 1.4rem;
+  }
+
+  .problem-card:hover {
+    transform: none;
+    box-shadow: 4px 4px 0 #1c1418;
   }
 }
 
