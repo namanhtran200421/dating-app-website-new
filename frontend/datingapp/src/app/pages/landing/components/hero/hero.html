@@ -3,11 +3,11 @@
     <div class="hero-heading-row mb-7 flex items-end justify-center gap-6">
       <h1
         data-reveal
-        class="animate-reveal max-w-[1120px] text-center font-display text-[clamp(44px,8vw,104px)] font-semibold leading-[0.98] tracking-[-2px] lg:whitespace-nowrap"
+        class="animate-reveal max-w-[1120px] text-center font-display text-[clamp(36px,6.5vw,78px)] font-semibold leading-[1.02] tracking-[-2px] lg:whitespace-nowrap"
       >
-        A fairer way to
+        Real interactions. Real
         <span class="scribble-underline text-rose">
-          love
+          love.
           <svg
             class="scribble-underline__line"
             viewBox="0 0 220 22"
@@ -30,435 +30,176 @@
     </div>
 
     <p class="hero-intro">
-      Rosemarry is a dating app built for better matches, safer conversations and useful
-      features that stay useful on Free.
+      Get to know people through real conversations, shared activities and repeated interactions
+      &mdash; not endless swiping.
     </p>
 
     <div
       data-reveal
+      class="circle-hero animate-reveal"
       role="region"
-      aria-roledescription="carousel"
-      aria-label="Why Rosemarry is different"
-      tabindex="0"
-      class="hero-banner animate-reveal [animation-delay:60ms] outline-none focus-visible:ring-4 focus-visible:ring-rose/40"
-      (keydown)="onCarouselKeydown($event)"
+      aria-label="How Rosemarry weekly circles work"
     >
-      <p class="sr-only" aria-live="polite" aria-atomic="true">
-        Slide {{ activeSlide() + 1 }} of {{ slides.length }}:
-        {{ slides[activeSlide()].lead }}
-      </p>
+      <span class="circle-hero__grain" aria-hidden="true"></span>
+      <span class="circle-hero__doodle circle-hero__doodle--heart" aria-hidden="true">♡</span>
+      <span class="circle-hero__doodle circle-hero__doodle--spark" aria-hidden="true">✦</span>
 
-      <div class="hero-banner__masthead">
-        <div class="flex items-center gap-3">
-          <span>
-            <strong>Rosemarry · Prototype only !</strong>
-          </span>
+      <article class="circle-note">
+        <span class="circle-note__tape" aria-hidden="true">♡</span>
+        <span class="circle-note__heart" aria-hidden="true">♡</span>
+
+        <h2>
+          <span>Meet people.</span>
+          <span>See them again.</span>
+          <strong>Let things grow.</strong>
+        </h2>
+
+        <span class="circle-note__underline" aria-hidden="true"></span>
+
+        <p>
+          Rosemarry places you in a small weekly circle of compatible people nearby, so you have
+          time to actually get to know each other.
+        </p>
+
+        <div class="circle-note__callout">
+          <span aria-hidden="true">♡</span>
+          <strong>Match anytime. No need to wait for the week to end.</strong>
         </div>
 
-        <div class="hero-banner__meta">
-          <span>Love Board 0{{ activeSlide() + 1 }}</span>
-          <span aria-hidden="true">♡︎</span>
-          <span>{{ activeSlide() + 1 }} / {{ slides.length }}</span>
+        <div class="circle-note__sticker" aria-hidden="true">
+          <small>New</small>
+          <strong>circle<br />every<br />week</strong>
+          <span>✧</span>
         </div>
-      </div>
+      </article>
 
-      <div class="hero-board-decor" aria-hidden="true">
-        <div class="hero-board-note hero-board-note--kind">
-          <span class="hero-board-pin"></span>
-          <small>today&rsquo;s reminder</small>
-          <strong>Spread Joy.<br />Jolie.</strong>
-          <span class="hero-board-note__heart">♡</span>
-        </div>
+      <div class="circle-phone-wrap">
+        <span class="circle-phone-rays" aria-hidden="true"></span>
 
-        <div class="hero-board-note hero-board-note--homework">
-          <span class="hero-board-tape"></span>
-          <small>tiny homework</small>
-          <strong>Make dating<br />feel human.</strong>
-          <span class="hero-board-note__tick">✓</span>
-        </div>
-
-        <span class="hero-board-sticker hero-board-sticker--smile">☺</span>
-
-   
-
-        <svg class="hero-board-doodle hero-board-doodle--hearts" viewBox="0 0 92 62" fill="none">
-          <path d="M16 15C12 7 1 10 3 20C5 29 17 35 17 35C17 35 29 27 29 18C29 9 19 7 16 15Z" />
-          <path
-            d="M59 30C54 20 40 24 43 36C46 47 60 55 60 55C60 55 75 45 74 34C74 23 63 21 59 30Z"
-          />
-        </svg>
-      </div>
-
-      <div
-        class="hero-banner__viewport touch-pan-y overflow-hidden"
-        (pointerdown)="onPointerDown($event)"
-        (pointerup)="onPointerUp($event)"
-        (pointercancel)="cancelPointerGesture()"
-        (pointerleave)="cancelPointerGesture()"
-      >
         <div
-          class="hero-track"
-          [style.transform]="'translate3d(-' + activeSlide() * 100 + '%, 0, 0)'"
+          class="circle-phone"
+          role="img"
+          aria-label="Rosemarry Circle screen showing a weekly group, shared activities and group chat"
         >
-          @for (slide of slides; track slide.lead; let index = $index) {
-            <article
-              role="group"
-              aria-roledescription="slide"
-              [attr.aria-label]="'Slide ' + (index + 1) + ' of ' + slides.length"
-              [attr.aria-hidden]="index === activeSlide() ? null : 'true'"
-              [attr.inert]="index === activeSlide() ? null : ''"
-              class="hero-slide"
-              [class.hero-slide--active]="index === activeSlide()"
-            >
-              <div class="hero-slide__layout">
-                <div class="hero-note">
-                  <p class="hero-note__lead">
-                    {{ slide.lead }}
-                    <span>{{ slide.emphasis }}</span>
-                  </p>
-                  <p class="hero-note__body">{{ slide.body }}</p>
+          <div class="circle-phone__screen">
+            <header class="circle-appbar">
+              <strong>Circle</strong>
+              <span aria-hidden="true">!</span>
+            </header>
 
-                  <div class="hero-note__offer">
-                    <span aria-hidden="true">♥</span>
-                    <p>{{ slide.offer }}</p>
-                  </div>
-
-                  <span class="hero-note__signoff" aria-hidden="true">The Rosemarry team</span>
-                </div>
-
-                <div class="hero-visual">
-                  <div class="hero-polaroid">
-                    <span class="hero-polaroid__tape" aria-hidden="true"></span>
-                    <div class="hero-polaroid__label">
-                      <span>{{ slide.previewLabel }}</span>
-                    </div>
-
-                    <div
-                      class="hero-tablet"
-                      [class.hero-tablet--chat]="index === 1"
-                      role="img"
-                      [attr.aria-label]="slide.tabletLabel"
-                    >
-                      <span class="hero-tablet__camera" aria-hidden="true"></span>
-
-                      <div class="hero-tablet__screen">
-                        <div class="hero-tablet__appbar">
-                          <img
-                            class="hero-tablet__logo"
-                            src="images/rosemarry/logo-160.png"
-                            width="160"
-                            height="120"
-                            decoding="async"
-                            alt=""
-                            aria-hidden="true"
-                          />
-                          <strong>Rosemarry</strong>
-                        </div>
-
-                        @switch (slide.type) {
-                          @case ('discover') {
-                            <div class="hero-discover">
-                              <div class="hero-discover__toolbar">
-                                <span>
-                                  <small>Discover</small>
-                                  <strong>Made for you</strong>
-                                </span>
-                                <span class="hero-free-plan">Free · matching + chat</span>
-                                <span class="hero-filter-button" aria-hidden="true">☷</span>
-                              </div>
-
-                              <div class="hero-discover__profile">
-                                <div class="hero-discover__avatar" aria-hidden="true">
-                                  <span>A</span>
-                                  <small>✦</small>
-                                </div>
-
-                                <div class="hero-discover__details">
-                                  <span class="hero-fit-pill">92% preference fit</span>
-                                  <strong class="hero-discover__name">Avery, 27</strong>
-                                  <p>9 km away · looking for long-term</p>
-
-                                  <div class="hero-discover__interests">
-                                    <span>Books</span>
-                                    <span>Dogs</span>
-                                    <span>Sunday markets</span>
-                                  </div>
-
-                                  <div class="hero-discover__why">
-                                    <small>Why you&rsquo;re seeing Avery</small>
-                                    <strong
-                                      >Age, distance, gender, interests and goals all line
-                                      up.</strong
-                                    >
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="hero-discover__actions" aria-hidden="true">
-                                <span>×</span>
-                                <span>♡</span>
-                                <span>✦</span>
-                              </div>
-                            </div>
-                          }
-
-                          @case ('chat') {
-                            <div class="hero-conversation">
-                              <div class="hero-conversation__person">
-                                <span class="hero-conversation__avatar" aria-hidden="true">M</span>
-                                <span>
-                                  <strong>Maya</strong>
-                                  <small>active now</small>
-                                </span>
-                                <span class="hero-conversation__timer">
-                                  <small>Reply within</small>
-                                  <strong>47h 32m</strong>
-                                </span>
-                              </div>
-
-                              <div class="hero-conversation__safety">
-                                <span aria-hidden="true">✓</span>
-                                <p>
-                                  <strong>Safety checks are on</strong>
-                                  Risky links and harmful messages are screened quietly.
-                                </p>
-                              </div>
-
-                              <div class="hero-conversation__messages">
-                                <div class="hero-ai-opener">
-                                  <span aria-hidden="true">✦</span>
-                                  <p>
-                                    <small>Need an opener?</small>
-                                    <strong>Ask Maya about her dream Sunday-market find.</strong>
-                                  </p>
-                                  <span class="hero-ai-opener__use">Use</span>
-                                </div>
-
-                                <p
-                                  class="hero-conversation__bubble hero-conversation__bubble--theirs"
-                                >
-                                  Sunday markets are elite. You?
-                                </p>
-                                <p
-                                  class="hero-conversation__bubble hero-conversation__bubble--ours"
-                                >
-                                  Same. Best market snack?
-                                </p>
-                              </div>
-
-                              <div class="hero-conversation__composer" aria-hidden="true">
-                                <span>Write a message…</span>
-                                <span>➶</span>
-                              </div>
-                            </div>
-                          }
-
-                          @case ('safety') {
-                            <div class="hero-safety-centre">
-                              <div class="hero-safety-centre__heading">
-                                <span class="hero-safety-centre__shield" aria-hidden="true">✓</span>
-                                <span>
-                                  <small>Safety Centre</small>
-                                  <strong>Protection is active</strong>
-                                </span>
-                                <span class="hero-safety-centre__status">All checks on</span>
-                              </div>
-
-                              <div class="hero-safety-alert">
-                                <span class="hero-safety-alert__icon" aria-hidden="true">!</span>
-                                <span>
-                                  <small>Suspicious link paused</small>
-                                  <strong>We held a link in your chat with Jordan.</strong>
-                                  <p>You decide whether to review it or keep it hidden.</p>
-                                </span>
-                                <span class="hero-safety-alert__actions">
-                                  <strong>Keep hidden</strong>
-                                  <strong>Review</strong>
-                                </span>
-                              </div>
-
-                              <div class="hero-safety-checks">
-                                <span><strong>✓</strong> Scam signals</span>
-                                <span><strong>✓</strong> Fake profiles</span>
-                                <span><strong>✓</strong> Harmful messages</span>
-                                <span><strong>✓</strong> Odd behaviour</span>
-                              </div>
-
-                              <div class="hero-safety-centre__controls">
-                                <span>Report a concern</span>
-                                <span>Blocked accounts</span>
-                              </div>
-                            </div>
-                          }
-
-                          @case ('plans') {
-                            <div class="hero-membership">
-                              <div class="hero-membership__heading">
-                                <span>
-                                  <small>Membership</small>
-                                  <strong>Pick what feels worth it</strong>
-                                </span>
-                                <span class="hero-membership__current">Current · Free</span>
-                              </div>
-
-                              <div class="hero-membership__plans">
-                                <div class="hero-membership__plan hero-membership__plan--active">
-                                  <span>Free</span>
-                                  <strong>Dating essentials</strong>
-                                  <small>Matches · chat · safety</small>
-                                  <span class="hero-membership__selected">Selected ✓</span>
-                                </div>
-
-                                <div class="hero-membership__plan">
-                                  <span>Basic</span>
-                                  <strong>More control</strong>
-                                  <small>Useful extras, fair price</small>
-                                  <span class="hero-membership__choose">Choose</span>
-                                </div>
-
-                                <div class="hero-membership__plan hero-membership__plan--advanced">
-                                  <span>Advanced</span>
-                                  <strong>The full toolkit</strong>
-                                  <small>For intentional daters</small>
-                                  <span class="hero-membership__choose">Choose</span>
-                                </div>
-                              </div>
-
-                              <div class="hero-membership__lightweight">
-                                <span>
-                                  <small>Why pricing stays fair</small>
-                                  <strong>A lighter app costs less to run.</strong>
-                                </span>
-                                <div>
-                                  <span>Photo-first</span>
-                                  <span>Smaller images</span>
-                                  <span>Fast delivery</span>
-                                  <span>Smart AI</span>
-                                </div>
-                              </div>
-                            </div>
-                          }
-                        }
-
-                        <div class="hero-app-tabs" aria-hidden="true">
-                          <span [class.hero-app-tabs__active]="slide.type === 'chat'">
-                            <img
-                              src="images/navigation/nav-chat.svg"
-                              width="220"
-                              height="143"
-                              decoding="async"
-                              alt=""
-                            />
-                          </span>
-                          <span [class.hero-app-tabs__active]="slide.type === 'discover'">
-                            <img
-                              src="images/navigation/nav-home.svg"
-                              width="220"
-                              height="140"
-                              decoding="async"
-                              alt=""
-                            />
-                          </span>
-                          <span [class.hero-app-tabs__active]="slide.type === 'safety'">
-                            <img
-                              src="images/navigation/nav-likes.svg"
-                              width="220"
-                              height="182"
-                              decoding="async"
-                              alt=""
-                            />
-                          </span>
-                          <span [class.hero-app-tabs__active]="slide.type === 'plans'">
-                            <img
-                              src="images/navigation/nav-user.svg"
-                              width="220"
-                              height="194"
-                              decoding="async"
-                              alt=""
-                            />
-                          </span>
-                        </div>
-                      </div>
-
-                      <span class="hero-tablet__homebar" aria-hidden="true"></span>
-                    </div>
-
-                    <div class="hero-polaroid__caption">
-                      <span>{{ slide.caption }}</span>
-                      <span aria-hidden="true">୨ৎ</span>
-                    </div>
-
-                    <span class="hero-polaroid__sticker" aria-hidden="true">
-                      {{ slide.sticker }}
-                    </span>
-                  </div>
-                </div>
+            <section class="circle-summary">
+              <div class="circle-summary__pills">
+                <span>This week</span>
+                <span>☆ 92% match</span>
               </div>
-            </article>
-          }
+              <h3>The Night Owls</h3>
+              <p>Music, travel &amp; late-night talks</p>
+            </section>
+
+            <div class="circle-members">
+              <div class="circle-members__avatars" aria-hidden="true">
+                <span><img src="images/annie.png" alt="" /></span>
+                <span><img src="images/duy.jpg" alt="" /></span>
+                <span><img src="images/quang.png" alt="" /></span>
+                <span><img src="images/steve.jpg" alt="" /></span>
+                <span>+4</span>
+              </div>
+              <strong>10 members</strong>
+            </div>
+
+            <div class="circle-progress">
+              <span>New circle forms in 5 days</span>
+              <span>Day 2/7</span>
+              <i><b></b></i>
+            </div>
+
+            <div class="circle-chat">
+              <span class="circle-chat__icon" aria-hidden="true">○</span>
+              <p>
+                <strong>Open group chat</strong>
+                <span>Noah: I&rsquo;m in. I know a great coffee spot&hellip;</span>
+              </p>
+              <span class="circle-chat__unread" aria-hidden="true"></span>
+            </div>
+
+            <div class="circle-activities">
+              <div class="circle-activities__heading">
+                <h3>This week&rsquo;s activities</h3>
+                <span>2/7 done</span>
+              </div>
+
+              <article class="circle-activity">
+                <span class="circle-activity__icon" aria-hidden="true">♫</span>
+                <p>
+                  <small>Mon</small>
+                  <strong>Song of the week</strong>
+                  <span>Drop one track that matched your mood.</span>
+                </p>
+                <b>✓ Done</b>
+              </article>
+
+              <article class="circle-activity">
+                <span class="circle-activity__icon circle-activity__icon--blue" aria-hidden="true"
+                  >✦</span
+                >
+                <p>
+                  <small>Tue</small>
+                  <strong>Two truths &amp; a lie</strong>
+                  <span>Share three things. The circle guesses!</span>
+                </p>
+                <b>✓ Done</b>
+              </article>
+            </div>
+
+            <nav class="circle-tabs" aria-label="App preview navigation">
+              <span class="circle-tabs__active">
+                <img src="images/navigation/nav-circle-pink.png" alt="" aria-hidden="true" />
+                Circle
+              </span>
+              <span>
+                <img src="images/navigation/nav-home.png" alt="" aria-hidden="true" />
+                Discover
+              </span>
+              <span>
+                <img src="images/navigation/nav-likes.png" alt="" aria-hidden="true" />
+                Likes
+              </span>
+              <span>
+                <img src="images/navigation/nav-chat.png" alt="" aria-hidden="true" />
+                Chat
+              </span>
+              <span>
+                <img src="images/navigation/nav-user.png" alt="" aria-hidden="true" />
+                Me
+              </span>
+            </nav>
+          </div>
         </div>
       </div>
 
-      <div class="hero-banner__controls">
-        <div class="hero-banner__actions flex flex-wrap gap-3">
-          <a
-            href="https://www.instagram.com/rosemarry_app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="pricing-card-hover inline-flex items-center gap-2.5 rounded-2xl border-[1.5px] border-birdpink bg-birdpink px-[22px] py-3.5 text-[14.5px] font-semibold text-ink no-underline transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-white"
-          >
-            Catch us on Insta .✦ ݁˖
-          </a>
+      <p class="circle-hero__caption">
+        Small circles, real conversation.
+        <span aria-hidden="true">♡</span>
+      </p>
+    </div>
 
-          <a
-            href="#join"
-            class="pricing-card-hover inline-flex cursor-pointer items-center gap-2.5 rounded-2xl border-[1.5px] border-ink bg-ink px-[22px] py-3.5 text-[14.5px] font-semibold text-white no-underline transition-colors duration-200 hover:border-birdpink hover:bg-birdpink hover:text-ink"
-            (click)="$event.preventDefault(); signup.goToSignup()"
-          >
-            Claim the free month 𑣲⋆
-          </a>
-        </div>
+    <div class="circle-hero-actions">
+      <a
+        href="https://www.instagram.com/rosemarry_app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="circle-hero-actions__secondary"
+      >
+        Catch us on Insta ✦
+      </a>
 
-        <div class="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
-          <div class="flex items-center gap-1 sm:gap-2" role="group" aria-label="Choose a slide">
-            @for (slide of slides; track slide.lead; let index = $index) {
-              <button
-                type="button"
-                class="group grid h-8 w-8 place-items-center rounded-full outline-none ring-rose/50 transition focus-visible:ring-2"
-                [attr.aria-label]="'Go to slide ' + (index + 1)"
-                [attr.aria-current]="index === activeSlide() ? 'true' : null"
-                (click)="goToSlide(index)"
-              >
-                <span
-                  class="h-2.5 w-6 origin-center rounded-full bg-ink/25 transition-[background-color,transform] duration-300 group-hover:bg-rose/60 motion-reduce:transition-none"
-                  [class.scale-x-100]="index === activeSlide()"
-                  [class.scale-x-[0.42]]="index !== activeSlide()"
-                  [class.bg-rose]="index === activeSlide()"
-                ></span>
-              </button>
-            }
-          </div>
-
-          <div class="flex gap-2">
-            <button
-              type="button"
-              aria-label="Previous slide"
-              class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-transparent text-ink hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
-              (click)="previousSlide()"
-            >
-              <span aria-hidden="true" class="text-xl leading-none">⤶</span>
-            </button>
-            <button
-              type="button"
-              aria-label="Next slide"
-              class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-white hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/40 sm:h-12 sm:w-12"
-              (click)="nextSlide()"
-            >
-              <span aria-hidden="true" class="text-xl leading-none">⤷</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <a
+        href="#join"
+        class="circle-hero-actions__primary"
+        (click)="$event.preventDefault(); signup.goToSignup()"
+      >
+        Claim the free month →
+      </a>
     </div>
   </div>
 </section>

@@ -49,6 +49,11 @@
   background: #f27fa8;
 }
 
+.solution-card--repeated {
+  grid-column: span 7;
+  background: #f27fa8;
+}
+
 .solution-card--free {
   grid-column: 1 / -1;
   background: #fbf2e9;
