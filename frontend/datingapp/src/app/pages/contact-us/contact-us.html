@@ -222,7 +222,7 @@
               (contactForm.controls.message.hasError('required') ||
                 contactForm.controls.message.hasError('blank'))
             ) {
-              <small>Don&rsquo;t leave us on read — drop a message.</small>
+              <small>Don&rsquo;t leave us on read – drop a message.</small>
             } @else if (
               contactForm.controls.message.touched &&
               contactForm.controls.message.hasError('maxlength')
@@ -247,7 +247,7 @@
 
           @if (submissionError()) {
             <div class="contact-form__submission-error" role="alert">
-              <span aria-hidden="true">!</span>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
               <p>{{ submissionError() }}</p>
             </div>
           }

@@ -24,7 +24,7 @@
           @if (signup.showSignupButton()) {
             <button type="button" class="footer-signup__primary" (click)="signup.open()">
               Claim the free month
-              <span aria-hidden="true">→</span>
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </button>
           }
 
@@ -48,7 +48,7 @@
                   [disabled]="signup.isSubmitting() || !signup.turnstileToken()"
                 >
                   {{ signup.isSubmitting() ? 'Checking…' : 'I’m in' }}
-                  <span aria-hidden="true">→</span>
+                  <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </button>
               </div>
 
@@ -100,7 +100,7 @@
 
           @if (signup.submitted()) {
             <div class="footer-signup__success" role="status">
-              <span aria-hidden="true">✓</span>
+              <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
               <p>
                 <strong>You&rsquo;re on the list!</strong>
                 Free-month deets are heading to {{ signup.submittedEmail() }}.
@@ -188,7 +188,7 @@
       <div class="footer-legal">
         <span>© 2026 Rosemarry</span>
         <span>Real interactions. Real love.</span>
-        <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+        <a href="#top">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
       </div>
     </div>
   </div>

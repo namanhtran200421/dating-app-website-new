@@ -6,9 +6,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry – A Fairer, Safer Dating App',
+        title: 'Rosemarry – Dating Where Chemistry Has Time to Grow',
         description:
-          'Rosemarry is a fairer dating app built around compatibility, safer conversations and useful free features. Join the early-access waitlist.',
+          'Meet a small circle of compatible people each week, connect through shared activities and let real interaction shape who you meet next.',
         canonicalPath: '/',
         pageType: 'WebSite',
       },
@@ -29,8 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'about-us',
-    loadComponent: () =>
-      import('./pages/about-us-page/about-us-page').then((m) => m.AboutUsPage),
+    loadComponent: () => import('./pages/about-us-page/about-us-page').then((m) => m.AboutUsPage),
     data: {
       seo: {
         title: 'About Rosemarry – Building a Fairer Dating App',

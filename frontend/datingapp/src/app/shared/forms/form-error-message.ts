@@ -20,7 +20,7 @@ const CONTEXT_COPY: Record<
   contact: {
     invalid: 'A few details need another look before this note can fly.',
     missing: 'The Rosemarry inbox is unavailable right now. Try again in a little bit.',
-    server: 'Our inbox hit a tiny plot twist. Your message is safe here—try sending again.',
+    server: 'Our inbox hit a tiny plot twist. Your message is safe here – try sending again.',
     unknown: 'Your note stayed in drafts. Please try sending it one more time.',
   },
 };
@@ -43,7 +43,7 @@ export function getFormErrorMessage(error: HttpErrorResponse, context: FormConte
       return copy.missing;
     case 408:
     case 504:
-      return 'That took longer than expected. Nothing was sent—please try again.';
+      return 'That took longer than expected. Nothing was sent – please try again.';
     case 409:
       return context === 'signup'
         ? 'That email already made the guest list. You’re already in ♡'

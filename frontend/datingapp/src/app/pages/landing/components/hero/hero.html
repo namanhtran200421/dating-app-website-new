@@ -31,7 +31,7 @@
 
     <p class="hero-intro">
       Get to know people through real conversations, shared activities and repeated interactions
-      &mdash; not endless swiping.
+      &ndash; not endless swiping.
     </p>
 
     <div
@@ -41,12 +41,20 @@
       aria-label="How Rosemarry weekly circles work"
     >
       <span class="circle-hero__grain" aria-hidden="true"></span>
-      <span class="circle-hero__doodle circle-hero__doodle--heart" aria-hidden="true">♡</span>
-      <span class="circle-hero__doodle circle-hero__doodle--spark" aria-hidden="true">✦</span>
+      <span class="circle-hero__doodle circle-hero__doodle--heart" aria-hidden="true">
+        <i class="fa-regular fa-heart"></i>
+      </span>
+      <span class="circle-hero__doodle circle-hero__doodle--spark" aria-hidden="true">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </span>
 
       <article class="circle-note">
-        <span class="circle-note__tape" aria-hidden="true">♡</span>
-        <span class="circle-note__heart" aria-hidden="true">♡</span>
+        <span class="circle-note__tape" aria-hidden="true">
+          <i class="fa-regular fa-heart"></i>
+        </span>
+        <span class="circle-note__heart" aria-hidden="true">
+          <i class="fa-regular fa-heart"></i>
+        </span>
 
         <h2>
           <span>Meet people.</span>
@@ -62,7 +70,7 @@
         </p>
 
         <div class="circle-note__callout">
-          <span aria-hidden="true">♡</span>
+          <i class="fa-solid fa-heart" aria-hidden="true"></i>
           <strong>Match anytime. No need to wait for the week to end.</strong>
         </div>
 
@@ -84,13 +92,16 @@
           <div class="circle-phone__screen">
             <header class="circle-appbar">
               <strong>Circle</strong>
-              <span aria-hidden="true">!</span>
+              <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
             </header>
 
             <section class="circle-summary">
               <div class="circle-summary__pills">
                 <span>This week</span>
-                <span>☆ 92% match</span>
+                <span
+                  ><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> 92%
+                  match</span
+                >
               </div>
               <h3>The Night Owls</h3>
               <p>Music, travel &amp; late-night talks</p>
@@ -98,10 +109,10 @@
 
             <div class="circle-members">
               <div class="circle-members__avatars" aria-hidden="true">
-                <span><img src="images/placeholders/profile-1.svg" alt="" /></span>
-                <span><img src="images/placeholders/profile-2.svg" alt="" /></span>
-                <span><img src="images/placeholders/profile-3.svg" alt="" /></span>
-                <span><img src="images/placeholders/profile-4.svg" alt="" /></span>
+                <span><i class="fa-solid fa-person"></i></span>
+                <span><i class="fa-solid fa-person-dress"></i></span>
+                <span><i class="fa-solid fa-user"></i></span>
+                <span><i class="fa-solid fa-person-half-dress"></i></span>
                 <span>+4</span>
               </div>
               <strong>10 members</strong>
@@ -114,7 +125,9 @@
             </div>
 
             <div class="circle-chat">
-              <span class="circle-chat__icon" aria-hidden="true">○</span>
+              <span class="circle-chat__icon" aria-hidden="true">
+                <i class="fa-solid fa-comments"></i>
+              </span>
               <p>
                 <strong>Open group chat</strong>
                 <span>Noah: I&rsquo;m in. I know a great coffee spot&hellip;</span>
@@ -129,25 +142,27 @@
               </div>
 
               <article class="circle-activity">
-                <span class="circle-activity__icon" aria-hidden="true">♫</span>
+                <span class="circle-activity__icon" aria-hidden="true">
+                  <i class="fa-solid fa-music"></i>
+                </span>
                 <p>
                   <small>Mon</small>
                   <strong>Song of the week</strong>
                   <span>Drop one track that matched your mood.</span>
                 </p>
-                <b>✓ Done</b>
+                <b><i class="fa-solid fa-check" aria-hidden="true"></i> Done</b>
               </article>
 
               <article class="circle-activity">
-                <span class="circle-activity__icon circle-activity__icon--blue" aria-hidden="true"
-                  >✦</span
-                >
+                <span class="circle-activity__icon circle-activity__icon--blue" aria-hidden="true">
+                  <i class="fa-solid fa-shuffle"></i>
+                </span>
                 <p>
                   <small>Tue</small>
                   <strong>Two truths &amp; a lie</strong>
                   <span>Share three things. The circle guesses!</span>
                 </p>
-                <b>✓ Done</b>
+                <b><i class="fa-solid fa-check" aria-hidden="true"></i> Done</b>
               </article>
             </div>
 
@@ -179,7 +194,7 @@
 
       <p class="circle-hero__caption">
         Small circles, real conversation.
-        <span aria-hidden="true">♡</span>
+        <i class="fa-regular fa-heart" aria-hidden="true"></i>
       </p>
     </div>
 
@@ -190,7 +205,8 @@
         rel="noopener noreferrer"
         class="circle-hero-actions__secondary"
       >
-        Catch us on Insta ✦
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        Catch us on Insta
       </a>
 
       <a
@@ -198,7 +214,8 @@
         class="circle-hero-actions__primary"
         (click)="$event.preventDefault(); signup.goToSignup()"
       >
-        Claim the free month →
+        Claim the free month
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
     </div>
   </div>

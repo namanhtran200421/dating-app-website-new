@@ -288,7 +288,8 @@
   transform: translateY(-0.2rem);
 }
 
-.early-stage-modal__primary span:last-child {
+.early-stage-modal__primary span:last-child,
+.early-stage-modal__primary > i:last-child {
   font-size: 1.1rem;
 }
 

@@ -14,3 +14,9 @@
       radial-gradient(circle at 112% 8%, rgb(246 201 239 / 42%) 0 6rem, transparent 6.1rem), #fbf2e9;
   }
 }
+
+@media (max-width: 420px) {
+  .pricing-section {
+    background: #fbf2e9;
+  }
+}
