@@ -16,24 +16,29 @@ export class AboutUsPage {
     contact?: boolean;
   }> = [
     {
+      question: 'How do weekly Circles work?',
+      answer:
+        'Each week, Rosemarry brings together a small group of compatible people nearby. You can get to know each other through prompts, shared activities and group conversations before deciding whether there is a connection.',
+    },
+    {
+      question: 'Do I have to decide from a profile first?',
+      answer:
+        'No. Profiles provide context, but Rosemarry gives you time to interact first. If you become interested in someone, you can choose to match with them at any point during the week.',
+    },
+    {
+      question: 'Why focus on repeated interactions?',
+      answer:
+        'Attraction is not always instant. Familiarity, shared moments and repeated conversations let personality, humour and chemistry emerge in a way that a single profile impression often cannot.',
+    },
+    {
+      question: 'What happens when the week ends?',
+      answer:
+        'Your Circle ends and a new one begins. What Rosemarry learns from how the group connected helps shape future Circles, and people with strong compatibility may be brought together again.',
+    },
+    {
       question: 'Is Rosemarry actually free to use?',
       answer:
-        'Yes. Core matching, messaging, and safety features stay free. Paid plans just unlock extras like more likes and boosts.',
-    },
-    {
-      question: 'When is Rosemarry launching?',
-      answer:
-        'We’re in early access right now. Drop your email in the signup box below and we’ll let you know the moment we’re live.',
-    },
-    {
-      question: 'How is Rosemarry different from other dating apps?',
-      answer:
-        'No hidden desirability score, no pay-to-win visibility, and no surprise paywalls – just clearer pricing and safer matching.',
-    },
-    {
-      question: 'Is my data safe with Rosemarry?',
-      answer:
-        'We only use what we need to help you match well, and we never sell your data to third parties.',
+        'Yes. Weekly Circles, shared activities, group conversations and the freedom to match remain free. Paid plans offer extra insight and more control over future Circles.',
     },
     {
       question: 'Still have a question?',
@@ -42,63 +47,8 @@ export class AboutUsPage {
     },
   ];
   protected readonly activeFaq = signal<number | null>(0);
-  protected readonly founderPages = [0, 1] as const;
-  protected readonly founderPageCount = this.founderPages.length;
-  protected readonly activeFounderPage = signal(0);
-  private founderPointerStartX: number | null = null;
 
   protected toggleFaq(index: number): void {
     this.activeFaq.update((current) => (current === index ? null : index));
-  }
-
-  protected previousFounderPage(): void {
-    this.activeFounderPage.update(
-      (current) => (current - 1 + this.founderPageCount) % this.founderPageCount,
-    );
-  }
-
-  protected nextFounderPage(): void {
-    this.activeFounderPage.update((current) => (current + 1) % this.founderPageCount);
-  }
-
-  protected showFounderPage(page: number): void {
-    if (page >= 0 && page < this.founderPageCount) {
-      this.activeFounderPage.set(page);
-    }
-  }
-
-  protected onFounderKeydown(event: KeyboardEvent): void {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      this.previousFounderPage();
-    }
-
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      this.nextFounderPage();
-    }
-  }
-
-  protected onFounderPointerDown(event: PointerEvent): void {
-    this.founderPointerStartX = event.clientX;
-  }
-
-  protected onFounderPointerUp(event: PointerEvent): void {
-    if (this.founderPointerStartX === null) {
-      return;
-    }
-
-    const distance = event.clientX - this.founderPointerStartX;
-    this.founderPointerStartX = null;
-
-    if (Math.abs(distance) < 50) {
-      return;
-    }
-
-    distance > 0 ? this.previousFounderPage() : this.nextFounderPage();
-  }
-
-  protected cancelFounderSwipe(): void {
-    this.founderPointerStartX = null;
   }
 }
