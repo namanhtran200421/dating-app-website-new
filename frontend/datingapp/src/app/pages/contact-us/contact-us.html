@@ -37,7 +37,7 @@
 
         <h2 id="message-route-title">Your message has a route.</h2>
         <p class="contact-route__intro">
-          No black hole. No chatbot maze. Here&rsquo;s the actual journey.
+          Here&rsquo;s the actual journey.
         </p>
 
         <ol class="contact-route__steps">
@@ -58,22 +58,22 @@
           <li>
             <span>03</span>
             <div>
-              <strong>A human reads it</strong>
-              <p>Yes, actually. Context, details, plot twists and all.</p>
+              <strong>It gets reviewed</strong>
+              <p>We look over the details and work out what happens next.</p>
             </div>
           </li>
           <li>
             <span>04</span>
             <div>
-              <strong>We tap back</strong>
-              <p>Keep an eye on your email for the reply arc.</p>
+              <strong>We reply</strong>
+              <p>Keep an eye on your email for a response.</p>
             </div>
           </li>
         </ol>
 
         <div class="contact-route__promise">
           <span aria-hidden="true">୨ৎ</span>
-          <p><strong>Reply promise:</strong> human, helpful, and free of corporate word salad.</p>
+          <p><strong>Reply promise:</strong> clear, helpful, and free of corporate jargon.</p>
         </div>
       </aside>
 
@@ -83,11 +83,6 @@
         class="contact-letter"
         aria-labelledby="contact-form-title"
       >
-        <div class="contact-letter__meta">
-          <span>To: the Rosemarry crew</span>
-          <span>Priority: worth reading</span>
-        </div>
-
         <div class="contact-letter__heading">
           <div>
             <span>Write your note</span>
@@ -181,7 +176,7 @@
                   contactForm.controls.subject.touched && contactForm.controls.subject.invalid
                 "
               >
-                <option value="" disabled>Select a lane</option>
+                <option value="" disabled>Select one</option>
                 <option value="General question">Just a quick question</option>
                 <option value="Feedback">I have thoughts</option>
                 <option value="Partnerships">Let&rsquo;s collab</option>
@@ -211,7 +206,7 @@
             <span>Tell us more</span>
             <textarea
               formControlName="message"
-              rows="6"
+              rows="3"
               placeholder="Give us the full story..."
               [class.contact-control--error]="
                 contactForm.controls.message.touched && contactForm.controls.message.invalid
@@ -253,7 +248,6 @@
           }
 
           <div class="contact-form__footer">
-            <p>By sending this, you agree to let a real person read it.</p>
             <button type="submit" [disabled]="isSubmitting() || !turnstileToken()">
               <span>{{ isSubmitting() ? 'Checking…' : 'Send' }}</span>
               <svg

@@ -113,7 +113,7 @@ export class ContactUs {
 
           Swal.fire({
             title: 'Message delivered!',
-            text: 'We got the lore. Keep an eye on your inbox for the reply arc.',
+            text: 'We got your message. Keep an eye on your inbox for a response.',
             icon: 'success',
             iconColor: '#d81e4a',
 

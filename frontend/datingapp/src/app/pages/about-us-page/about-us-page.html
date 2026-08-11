@@ -43,51 +43,21 @@
           class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/75"
         >
           <p>
-            The usual formula asks people to swipe faster, spend more, and trust a
-            <span class="scribble-underline scribble-underline--loose">
-              black-box algorithm
-              <svg
-                class="scribble-underline__line"
-                viewBox="0 0 220 22"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  class="scribble-underline__stroke"
-                  pathLength="1"
-                  d="M3 13 C18 6 35 17 54 11 S87 7 107 12 S143 16 163 10 S195 8 217 13"
-                />
-              </svg>
-            </span>
-            to decide who deserves to be seen. <br />That might create activity, but it does not
-            always create connection.
+            The usual formula asks people to make quick decisions from a few photos, keep swiping,
+            and trust an algorithm to find the right person.
           </p>
           <p>
-            We believe a dating app needs to be accessible, safe and useful without hiding every
-            good <br />feature behind another payment.
+            That creates more choices, but not always better connections.
+          </p>
+          <p>
+            We believe attraction often needs time, familiarity and real interaction to grow.
+          </p>
+          <p>
+            So Rosemarry is built around small weekly Circles, shared conversations and repeated
+            encounters — giving people more chances to actually get to know each other.
           </p>
           <p class="font-semibold text-ink">
-            So we&rsquo;re building the app we wanted to use,
-            <span class="scribble-underline scribble-underline--finish">
-              fairer, cheaper and safer, <br />and of course smarter :)
-              <svg
-                class="scribble-underline__line"
-                viewBox="0 0 260 24"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  class="scribble-underline__stroke"
-                  pathLength="1"
-                  d="M4 14 C37 5 56 19 91 11 C126 4 151 18 182 10 C211 3 232 14 256 8"
-                />
-                <path
-                  class="scribble-underline__stroke scribble-underline__stroke--flick"
-                  pathLength="1"
-                  d="M234 18 C246 17 253 14 258 7"
-                />
-              </svg>
-            </span>
+            Less swiping. More getting to know each other.
           </p>
         </div>
       </div>
@@ -109,36 +79,15 @@
         <p
           class="mt-6 max-w-[680px] text-[clamp(18px,2vw,23px)] font-medium leading-relaxed text-ink/75"
         >
-          The faces, stories, and slightly over-caffeinated brains behind Rosemarry.
+          The faces, stories, and brains behind Rosemarry.
         </p>
       </header>
 
-      <div
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Meet the Rosemarry founders"
-        tabindex="0"
-        class="mx-auto max-w-[1040px] outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
-        (keydown)="onFounderKeydown($event)"
-      >
-        <p class="sr-only" aria-live="polite" aria-atomic="true">
-          Showing founder page {{ activeFounderPage() + 1 }} of {{ founderPageCount }}
-        </p>
-
-        <div
-          class="founder-deck touch-pan-y"
-          (pointerdown)="onFounderPointerDown($event)"
-          (pointerup)="onFounderPointerUp($event)"
-          (pointercancel)="cancelFounderSwipe()"
-        >
+      <div class="mx-auto max-w-[1040px]">
+        <div class="founder-deck">
           <div
-            role="group"
-            aria-roledescription="slide"
             aria-label="Founders Steve Tran and Felix Vu"
-            class="founder-deck-page"
-            [class.founder-deck-page--active]="activeFounderPage() === 0"
-            [class.founder-deck-page--behind]="activeFounderPage() !== 0"
-            [attr.aria-hidden]="activeFounderPage() === 0 ? null : 'true'"
+            class="founder-deck-page founder-deck-page--active"
           >
             <article
               class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
@@ -221,111 +170,6 @@
             </article>
           </div>
 
-          <div
-            role="group"
-            aria-roledescription="slide"
-            aria-label="Founder Jimmy Ly"
-            class="founder-deck-page founder-deck-page--solo"
-            [class.founder-deck-page--active]="activeFounderPage() === 1"
-            [class.founder-deck-page--behind]="activeFounderPage() !== 1"
-            [attr.aria-hidden]="activeFounderPage() === 1 ? null : 'true'"
-          >
-            <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
-            >
-              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
-                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <picture class="block h-full w-full">
-                    <source srcset="images/duy-960.avif" type="image/avif" />
-                    <img
-                      src="images/duy.jpg"
-                      width="6016"
-                      height="4016"
-                      loading="lazy"
-                      decoding="async"
-                      alt="Jimmy Ly, Rosemarry co-founder"
-                      draggable="false"
-                      class="h-full w-full object-cover"
-                    />
-                  </picture>
-                </div>
-              </div>
-
-              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-                <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose"> Meet </span>
-                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
-                  Jimmy Ly
-                </h3>
-                <p class="mt-1 text-sm font-bold text-rose">
-                  Co-founder · Billionaire's son (im serious)
-                </p>
-                <p class="mt-5 font-medium leading-[1.7] text-ink/75">
-                  I just cant seems to find tomboys on dating apps, so i'm making my own app.
-                </p>
-
-                <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
-                  <span class="h-px flex-1 bg-ink/15"></span>
-                  <span class="font-display">୨ৎ</span>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-
-        <div
-          class="mt-3 flex flex-col gap-4 rounded-[26px] border border-ink/10 bg-cream/55 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div class="flex items-center gap-3">
-            <span class="font-display text-sm font-semibold text-ink">
-              0{{ activeFounderPage() + 1 }}
-              <span class="text-ink/75">/ 0{{ founderPageCount }}</span>
-            </span>
-            <span class="h-px w-10 bg-ink/20"></span>
-            <span class="text-xs font-bold uppercase tracking-[0.12em] text-rose">
-              Swipe the stack
-            </span>
-          </div>
-
-          <div class="flex items-center justify-between gap-4 sm:justify-end">
-            <div class="flex gap-2" role="group" aria-label="Choose a founder page">
-              @for (page of founderPages; track page) {
-                <button
-                  type="button"
-                  class="grid h-8 w-8 place-items-center rounded-full outline-none ring-rose/50 focus-visible:ring-2"
-                  [attr.aria-label]="'Show founder page ' + (page + 1)"
-                  [attr.aria-current]="activeFounderPage() === page ? 'true' : null"
-                  (click)="showFounderPage(page)"
-                >
-                  <span
-                    class="h-2.5 w-6 origin-center rounded-full transition-[background-color,transform] duration-300"
-                    [class.scale-x-100]="activeFounderPage() === page"
-                    [class.scale-x-[0.42]]="activeFounderPage() !== page"
-                    [class.bg-rose]="activeFounderPage() === page"
-                    [class.bg-ink/20]="activeFounderPage() !== page"
-                  ></span>
-                </button>
-              }
-            </div>
-
-            <div class="flex gap-2">
-              <button
-                type="button"
-                aria-label="Show previous founders"
-                class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink text-xl text-ink hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
-                (click)="previousFounderPage()"
-              >
-                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-              </button>
-              <button
-                type="button"
-                aria-label="Show next founders"
-                class="pricing-card-hover grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-ink bg-ink text-xl text-white hover:border-rose hover:bg-rose focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose/30"
-                (click)="nextFounderPage()"
-              >
-                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
