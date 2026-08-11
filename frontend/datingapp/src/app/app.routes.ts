@@ -6,7 +6,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry – Dating Where Chemistry Has Time to Grow',
+        title: 'Rosemarry - Dating Built Around Real Interaction',
         description:
           'Meet a small circle of compatible people each week, connect through shared activities and let real interaction shape who you meet next.',
         canonicalPath: '/',
