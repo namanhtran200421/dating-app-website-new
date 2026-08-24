@@ -39,7 +39,7 @@
 
 .early-stage-modal__bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
   border-bottom: 1.5px solid #1c1418;
@@ -48,29 +48,11 @@
   font-family: 'Playpen Sans', system-ui, sans-serif;
 }
 
-.early-stage-modal__bar > div {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.early-stage-modal__bar > div > span {
-  width: 0.65rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #d81e4a;
-}
-
-.early-stage-modal__bar strong,
 .early-stage-modal__bar > span {
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-}
-
-.early-stage-modal__bar strong {
-  color: #d81e4a;
 }
 
 .early-stage-modal__bar > span {
@@ -145,33 +127,11 @@
   box-shadow: 8px 9px 0 #d81e4a;
 }
 
-.early-stage-modal__visual span,
-.early-stage-modal__visual small,
-.early-stage-modal__visual i {
-  display: block;
-}
-
 .early-stage-modal__logo {
   width: clamp(5.5rem, 12vw, 7.5rem);
   height: clamp(5rem, 11vw, 7rem);
   margin: 0 auto;
   object-fit: contain;
-}
-
-.early-stage-modal__visual small {
-  margin-top: 0.75rem;
-  color: #fbf2e9;
-  font-family: 'Playpen Sans', system-ui, sans-serif;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.early-stage-modal__visual i {
-  margin-top: 0.65rem;
-  font-family: 'DynaPuff', system-ui, sans-serif;
-  font-style: normal;
 }
 
 .early-stage-modal__orbit {
@@ -182,44 +142,13 @@
   border-radius: 50%;
 }
 
-.early-stage-modal__note {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: 0.6rem;
-  border: 1.5px solid #1c1418;
-  border-radius: 999px;
-  background: #fbf2e9;
-  padding: 0.65rem 0.9rem;
-  color: #1c1418;
-  font-family: 'Playpen Sans', system-ui, sans-serif;
-  font-size: 0.62rem;
-  font-weight: 800;
-  transform: rotate(4deg);
-  box-shadow: 3px 4px 0 rgb(28 20 24 / 20%);
-}
-
 .early-stage-modal__copy {
   font-family: 'Playpen Sans', system-ui, sans-serif;
 }
 
-.early-stage-modal__eyebrow {
-  display: inline-flex;
-  border: 1.5px solid #1c1418;
-  border-radius: 999px;
-  background: #fbf2e9;
-  padding: 0.45rem 0.75rem;
-  color: #d81e4a;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transform: rotate(-1.5deg);
-}
-
 .early-stage-modal h2 {
   max-width: 31rem;
-  margin-top: 1rem;
+  margin-top: 0;
   font-family: 'DynaPuff', system-ui, sans-serif;
   font-size: clamp(2.15rem, 5vw, 3.85rem);
   font-weight: 650;

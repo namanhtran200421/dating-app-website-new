@@ -76,16 +76,6 @@
   color: #f27fa8;
 }
 
-.policy-eyebrow {
-  margin: 0 0 0.25rem;
-  color: #d81e4a;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
 .policy-copy h2 {
   margin: 0;
   font-family: 'DynaPuff', system-ui, sans-serif;
@@ -260,6 +250,57 @@
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+.policy-term p + p,
+.policy-term ul + p {
+  margin-top: 0.75rem;
+}
+
+.policy-term h4 {
+  margin: 1.35rem 0 0.5rem;
+  color: #1c1418;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.policy-term-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.65rem 0 1rem;
+  padding-left: 1.15rem;
+}
+
+.policy-term-list li {
+  padding-left: 0.15rem;
+  color: rgba(28, 20, 24, 0.68);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.policy-term-list li::marker {
+  color: #d81e4a;
+}
+
+.policy-contact-details {
+  margin-top: 0.75rem;
+  color: rgba(28, 20, 24, 0.68);
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.8;
+}
+
+.policy-contact-details strong {
+  color: #1c1418;
+}
+
+.policy-contact-details a {
+  color: #d81e4a;
+  text-decoration: underline;
+  text-underline-offset: 0.15rem;
 }
 
 .policy-section.bg-ink p {

@@ -53,12 +53,13 @@ export class Pricing {
       badge: 'Advanced',
       description: 'More visibility, more discovery and more ways to start conversations.',
       features: [
-        'Everything in Free',
+        'Everything in free',
         'See who likes you',
+        'Circle history',
+        'Join a second Circle',
         '20 Discover profiles daily',
         'Advanced filters',
         'Unlimited rewinds',
-        '3 Super Likes a week',
       ],
     },
   ];

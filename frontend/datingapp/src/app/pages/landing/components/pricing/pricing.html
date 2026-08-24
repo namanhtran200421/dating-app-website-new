@@ -140,7 +140,9 @@
 
               @if (selectedPlan.badge) {
                 <span
-                  class="rotate-2 rounded-full bg-rose px-4 py-2 text-xs font-bold text-white shadow-[3px_3px_0_rgba(28,20,24,0.18)]"
+                  class="rotate-2 rounded-full px-4 py-2 text-xs font-bold text-white shadow-[3px_3px_0_rgba(28,20,24,0.18)]"
+                  [class.bg-[#99888f]]="activePlan() === 0"
+                  [class.bg-rose]="activePlan() === 1"
                 >
                   {{ selectedPlan.badge }}
                 </span>
@@ -157,8 +159,8 @@
             </div>
 
             <div class="mt-7">
-              <p class="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-rose">
-                This pass gets you
+              <p class="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-ink">
+                What you get:
               </p>
               <ul class="grid gap-3 sm:grid-cols-2">
                 @for (feature of selectedPlan.features; track feature) {
@@ -166,7 +168,9 @@
                     class="flex min-h-[58px] items-center gap-3 rounded-2xl border border-ink/10 bg-white/60 px-4 py-3 text-[14px] font-semibold leading-snug text-ink"
                   >
                     <span
-                      class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blossom font-display text-xs font-bold text-rose"
+                      class="grid h-7 w-7 shrink-0 place-items-center rounded-full font-display text-xs font-bold text-white"
+                      [class.bg-[#99888f]]="activePlan() === 0"
+                      [class.bg-rose]="activePlan() === 1"
                       aria-hidden="true"
                     >
                       <i class="fa-solid fa-check"></i>
