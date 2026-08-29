@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, input, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SignupState } from '../../../pages/landing/signup-state';
 
@@ -14,6 +14,7 @@ export class Nav {
   protected readonly signup = inject(SignupState);
   protected readonly scrolled = signal(false);
   protected readonly menuOpen = signal(false);
+  readonly darkBackground = input(false);
 
   @HostListener('window:scroll')
   onScroll(): void {

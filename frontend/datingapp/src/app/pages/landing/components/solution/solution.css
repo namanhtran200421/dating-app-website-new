@@ -199,24 +199,8 @@
     transform 200ms ease;
 }
 
-.solution-step__number i,
-.solution-step__number small {
-  grid-area: 1 / 1;
-}
-
 .solution-step__number i {
   font-size: 1.25rem;
-  transform: translateY(-0.4rem);
-}
-
-.solution-step__number small {
-  align-self: end;
-  padding-bottom: 0.55rem;
-  color: currentColor;
-  font-family: 'Playpen Sans', system-ui, sans-serif;
-  font-size: 0.55rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
 }
 
 .solution-step:hover .solution-step__number {
