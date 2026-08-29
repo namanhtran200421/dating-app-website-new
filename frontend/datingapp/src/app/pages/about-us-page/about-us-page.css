@@ -199,9 +199,26 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .founder-deck-page > .founder-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 32rem);
+  }
+
   .founder-deck-page--solo {
     grid-template-columns: minmax(0, 32rem);
     justify-content: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .founder-deck-page {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .founder-deck-page > .founder-card:last-child:nth-child(odd) {
+    grid-column: auto;
+    width: auto;
   }
 }
 
