@@ -1,4 +1,4 @@
-<app-nav />
+<app-nav [darkBackground]="isDarkHeroPage" />
 
 <main appScrollReveal class="min-h-screen">
   <router-outlet (activate)="onRouteActivate()" />

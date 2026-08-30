@@ -17,6 +17,7 @@ export class App {
   private readonly seo = inject(SeoService);
 
   protected isHomePage = true;
+  protected isDarkHeroPage = false;
 
   constructor() {
     this.seo.connect();
@@ -25,5 +26,6 @@ export class App {
   protected onRouteActivate(): void {
     const [path] = this.router.url.split(/[?#]/);
     this.isHomePage = path === '/';
+    this.isDarkHeroPage = path === '/blog';
   }
 }

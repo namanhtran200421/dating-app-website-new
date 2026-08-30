@@ -6,6 +6,24 @@
   color: #d81e4a;
 }
 
+.nav--over-dark .nav-brand__name {
+  color: #fbf2e9;
+}
+
+.nav--over-dark .nav-desktop-link {
+  color: rgb(251 242 233 / 82%);
+}
+
+.nav--over-dark .nav-desktop-link:hover,
+.nav--over-dark .nav-desktop-link.nav-link--active {
+  color: #f27fa8;
+}
+
+.nav--over-dark .nav-menu-button {
+  background: #fbf2e9;
+  color: #1c1418;
+}
+
 .nav-link--active .scribble-underline__stroke {
   stroke-dashoffset: 0;
 }

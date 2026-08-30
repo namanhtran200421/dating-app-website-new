@@ -12,6 +12,11 @@
   font-family: 'Playpen Sans', system-ui, sans-serif;
 }
 
+.footer--scalloped {
+  margin-top: -2.8rem;
+  background: transparent;
+}
+
 .footer__scallop {
   height: 2.8rem;
   background: #1c1418;

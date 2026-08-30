@@ -6,11 +6,50 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry - Dating Built Around Real Interaction',
+        title: 'Rosemarry | A New Kind of Dating App',
         description:
-          'Meet a small circle of compatible people each week, connect through shared activities and let real interaction shape who you meet next.',
+          'Rosemarry is a dating app built around weekly Circles, shared activities and real conversation. Get to know compatible people before deciding who you want to match with.',
         canonicalPath: '/',
         pageType: 'WebSite',
+      },
+    },
+  },
+  {
+    path: 'circle',
+    loadComponent: () => import('./pages/circle/circle').then((m) => m.CirclePage),
+    data: {
+      seo: {
+        title: 'Circle | Meet People Before You Decide | Rosemarry',
+        description:
+          'Meet compatible people in a small weekly Circle through conversation, prompts and shared activities before deciding who you want to match with.',
+        canonicalPath: '/circle',
+        pageType: 'WebPage',
+      },
+    },
+  },
+  {
+    path: 'how-it-works',
+    loadComponent: () => import('./pages/how-it-works/how-it-works').then((m) => m.HowItWorksPage),
+    data: {
+      seo: {
+        title: 'How Rosemarry Works | The Rosemarry Approach',
+        description:
+          'See how Rosemarry uses six-day Circles, shared activities and repeated interaction to help compatible people get to know each other.',
+        canonicalPath: '/how-it-works',
+        pageType: 'WebPage',
+      },
+    },
+  },
+  {
+    path: 'blog',
+    loadComponent: () => import('./pages/blog/blog').then((m) => m.BlogPage),
+    data: {
+      seo: {
+        title: 'Rosemarry Blog | A More Human Way to Date',
+        description:
+          'Read about endless swiping, dating app fatigue and how attraction can grow through familiarity and real interaction.',
+        canonicalPath: '/blog',
+        pageType: 'WebPage',
       },
     },
   },
