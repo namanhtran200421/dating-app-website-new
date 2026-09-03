@@ -39,15 +39,6 @@
       <span class="scribble-underline scribble-underline--hover">Circle</span>
     </a>
     <a
-      routerLink="/how-it-works"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">How it works</span>
-    </a>
-    <a
       routerLink="/blog"
       routerLinkActive="nav-link--active"
       ariaCurrentWhenActive="page"
@@ -208,17 +199,6 @@
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
       <span class="nav-mobile-link__label">Circle</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      routerLink="/how-it-works"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">How it works</span>
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
     <a

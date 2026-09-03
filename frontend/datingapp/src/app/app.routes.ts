@@ -28,19 +28,6 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'how-it-works',
-    loadComponent: () => import('./pages/how-it-works/how-it-works').then((m) => m.HowItWorksPage),
-    data: {
-      seo: {
-        title: 'How Rosemarry Works | The Rosemarry Approach',
-        description:
-          'See how Rosemarry uses six-day Circles, shared activities and repeated interaction to help compatible people get to know each other.',
-        canonicalPath: '/how-it-works',
-        pageType: 'WebPage',
-      },
-    },
-  },
-  {
     path: 'blog',
     loadComponent: () => import('./pages/blog/blog').then((m) => m.BlogPage),
     data: {
