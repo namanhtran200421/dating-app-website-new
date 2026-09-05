@@ -4,6 +4,11 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/how-it-works",
+      "destination": "/circle",
+      "permanent": true
+    },
+    {
       "source": "/policy-page",
       "destination": "/privacy-and-terms",
       "permanent": true

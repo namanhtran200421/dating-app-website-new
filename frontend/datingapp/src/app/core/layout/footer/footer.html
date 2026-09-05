@@ -23,7 +23,7 @@
 
           @if (signup.showSignupButton()) {
             <button type="button" class="footer-signup__primary" (click)="signup.open()">
-              Claim the free month
+              Join early access
               <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </button>
           }
@@ -34,7 +34,7 @@
               (ngSubmit)="signup.submit()"
               class="footer-signup__form"
             >
-              <label for="rm-email-input">Enter your email to receive the free month!</label>
+              <label for="rm-email-input">Your email for early-access updates</label>
               <div>
                 <input
                   id="rm-email-input"
@@ -103,7 +103,7 @@
               <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
               <p>
                 <strong>You&rsquo;re on the list!</strong>
-                Free-month deets are heading to {{ signup.submittedEmail() }}.
+                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in development.
               </p>
             </div>
           }
@@ -155,7 +155,7 @@
             <a
               class="footer-social-orbit__link footer-social-orbit__link--message"
               routerLink="/contact-us"
-              aria-label="Message Rosemarry"
+              aria-label="Message us at Rosemarry"
               title="Message us"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -188,6 +188,7 @@
       <div class="footer-legal">
         <span>© 2026 Rosemarry</span>
         <span>Good things take time</span>
+        <a routerLink="/press">Press kit</a>
         <a href="#top">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
       </div>
     </div>

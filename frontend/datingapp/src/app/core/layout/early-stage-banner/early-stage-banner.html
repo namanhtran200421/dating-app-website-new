@@ -1,78 +1,8 @@
 @if (visible()) {
-  <div
-    class="early-stage-banner early-stage-modal"
-    [class.early-stage-modal--closing]="closing()"
-    (click)="dismiss()"
-  >
-    <section
-      class="early-stage-modal__panel"
-      role="dialog"
-      aria-modal="true"
-      [attr.aria-busy]="closing()"
-      aria-labelledby="early-stage-title"
-      aria-describedby="early-stage-description"
-      (click)="$event.stopPropagation()"
-    >
-      <header class="early-stage-modal__bar">
-        <span>Rosemarry · Preview build</span>
-
-        <button
-          type="button"
-          class="early-stage-modal__close mr-2"
-          aria-label="Dismiss early-stage notice"
-          [disabled]="closing()"
-          (click)="dismiss()"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 6l12 12M18 6 6 18"></path>
-          </svg>
-        </button>
-      </header>
-
-      <div class="early-stage-modal__content">
-        <div class="early-stage-modal__visual" aria-hidden="true">
-          <div>
-            <img
-              class="early-stage-modal__logo"
-              src="images/rosemarry/logo-160.png"
-              width="160"
-              height="120"
-              loading="eager"
-              decoding="async"
-              alt=""
-            />
-          </div>
-        </div>
-
-        <div class="early-stage-modal__copy">
-          <h2 id="early-stage-title">
-            The app is still in
-            <span>development.</span>
-          </h2>
-          <p id="early-stage-description">
-            This website is an early showcase of Rosemarry&rsquo;s direction, not the finished
-            product. Features, wording, pricing, and policies may evolve as we keep building and
-            learning.
-          </p>
-
-          <ul aria-label="What you can do on this showcase website">
-            <li>Explore the concept</li>
-            <li>Meet the team</li>
-            <li>Join early</li>
-          </ul>
-
-          <button
-            #primaryAction
-            type="button"
-            class="early-stage-modal__primary"
-            [disabled]="closing()"
-            (click)="dismiss()"
-          >
-            <span>Got it, show me around</span>
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </button>
-        </div>
-      </div>
-    </section>
-  </div>
+  <aside class="early-stage-banner" aria-label="Development status">
+    <p><strong>Still growing.</strong> Rosemarry is in development and is not yet available to download. Launch timing and locations have not been announced.</p>
+    <button type="button" aria-label="Dismiss early-stage notice" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </aside>
 }

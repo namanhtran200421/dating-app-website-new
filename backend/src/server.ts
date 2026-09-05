@@ -9,6 +9,7 @@ mongoose.set("sanitizeFilter", true);
 import preSignupRouter from "./routes/preSignupRoute.js";
 import contactRouter from "./routes/contactRoute.js";
 import helmet from "helmet";
+import { analyticsRouter } from './analytics/analytics.js';
 const app = express();
 
 app.disable("x-powered-by");
@@ -55,6 +56,7 @@ const emailLimit = rateLimit({
 app.use("/api/pre-signups", formLimit, preSignupRouter);
 
 app.use("/api/contact", emailLimit, contactRouter);
+app.use('/api/analytics', analyticsRouter);
 
 app.get("/api/health", function (req: Request, res: Response): void {
   res.status(200).json({
