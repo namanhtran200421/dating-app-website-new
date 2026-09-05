@@ -8,7 +8,7 @@ interface RouteSeoData {
   title: string;
   description: string;
   canonicalPath: string;
-  pageType: 'WebSite' | 'WebPage' | 'AboutPage' | 'ContactPage';
+  pageType: 'WebPage' | 'AboutPage' | 'ContactPage';
   noIndex?: boolean;
 }
 
@@ -111,6 +111,9 @@ export class SeoService {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         name: 'Rosemarry',
+        alternateName: 'Rosemarry Dating App',
+        description:
+          'Rosemarry is a dating app built around weekly Circles, shared activities and real conversation.',
         url: `${SITE_URL}/`,
         logo: {
           '@type': 'ImageObject',
@@ -125,6 +128,9 @@ export class SeoService {
         '@id': `${SITE_URL}/#website`,
         url: `${SITE_URL}/`,
         name: 'Rosemarry',
+        alternateName: ['Rosemarry Dating App', 'rosemarry.app'],
+        description:
+          'The official Rosemarry dating app website. Discover weekly Circles, shared activities and a more human way to meet compatible people.',
         publisher: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'en-AU',
       },

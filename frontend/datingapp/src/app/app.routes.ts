@@ -6,11 +6,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry | A New Kind of Dating App',
+        title: 'Rosemarry Dating App | Weekly Circles, Real Connections',
         description:
           'Rosemarry is a dating app built around weekly Circles, shared activities and real conversation. Get to know compatible people before deciding who you want to match with.',
         canonicalPath: '/',
-        pageType: 'WebSite',
+        pageType: 'WebPage',
       },
     },
   },
