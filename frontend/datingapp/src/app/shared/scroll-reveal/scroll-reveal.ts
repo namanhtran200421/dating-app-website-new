@@ -120,7 +120,7 @@ export class ScrollReveal implements AfterViewInit, OnDestroy {
       },
       {
         rootMargin: '0px 0px -6% 0px',
-        threshold: 0.12,
+        threshold: 0,
       },
     );
 
