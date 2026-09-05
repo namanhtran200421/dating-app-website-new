@@ -21,7 +21,7 @@
 }
 
 .facts-kicker {
-  color: #d81e4a;
+  color: #a81739;
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -65,7 +65,7 @@
 }
 
 .facts-grid article > span {
-  color: #d81e4a;
+  color: #a81739;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.13em;
@@ -91,7 +91,7 @@
 .facts-grid a {
   display: inline-block;
   margin-top: 1.15rem;
-  color: #d81e4a;
+  color: #a81739;
   font-size: 0.86rem;
   font-weight: 750;
   text-decoration: underline;

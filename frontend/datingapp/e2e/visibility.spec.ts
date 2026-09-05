@@ -7,6 +7,7 @@ test('journal navigation updates metadata and removes article tags on the homepa
   await page.locator('.blog-article h2 a').first().click();
   await expect(page).toHaveURL(/\/blog\/dating-without-swiping$/);
   await expect(page.locator('h1')).toHaveText('Dating without swiping: what to look for');
+  await expect(page.locator('time')).toHaveText('5 September 2026');
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
   await page.getByRole('navigation', { name: 'Related articles' }).getByRole('link', { name: 'Can attraction grow over time?' }).click();
   await expect(page.locator('h1')).toHaveText('Can attraction grow over time?');

@@ -62,7 +62,11 @@ export class MeasurementService {
     this.track('page_view');
   }
 
-  private path(): string { return this.router.url.split(/[?#]/)[0].replace(/\/$/, '') || '/'; }
+  private path(): string {
+    // During hydration the router may still report '/' for a direct article visit.
+    const url = this.router.navigated ? this.router.url : this.document.defaultView?.location.pathname || '/';
+    return url.split(/[?#]/)[0].replace(/\/$/, '') || '/';
+  }
 
   track(event: MeasurementEvent, placement: SignupPlacement = 'footer'): void {
     if (!this.connected) return;

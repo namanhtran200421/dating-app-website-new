@@ -94,3 +94,11 @@ Track four outcomes separately: discovery, organic position, factual accuracy an
 - IndexNow protocol: https://www.indexnow.org/documentation
 - Brave URL submission: https://search.brave.com/submit-url
 - Vercel bot management: https://vercel.com/docs/bot-management
+
+## Expanded implementation verification (5 September 2026)
+
+The expanded build contains 11 indexable pages, including four individual journal articles. All pass canonical, title, description, heading, structured-data, internal-link and asset checks. Frontend unit tests (15), browser tests (5) and backend validation tests (2) pass locally. Browser tests cover direct article navigation, metadata changes, readable mobile HTML without JavaScript, registration success/failure measurement and HTTP 404 responses. Test signups use mocks.
+
+The initial raw bundle decreased from 546.29 kB to 484.53 kB. A same-machine mobile Lighthouse comparison against the uncompressed local preview changed performance from 43 to 58, accessibility from 96 to 100, LCP from 10.4 to 7.7 seconds, total blocking time from 600 to 170 ms and total network transfer from 1,724 to 1,083 KiB. CLS remained zero; SEO and best practices scored 100. These are lab results, not production Core Web Vitals or ranking evidence. Further performance work should use the deployed, compressed site and real-user data. Both Lighthouse reports were written successfully; its Windows temporary-browser cleanup then returned EPERM.
+
+The new conversion collector needs the backend release on Render and its existing MongoDB configuration. No production database/report access was available during local verification. Live publication and indexing receipts must be recorded separately from these local checks.

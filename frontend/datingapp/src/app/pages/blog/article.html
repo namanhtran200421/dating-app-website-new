@@ -12,7 +12,7 @@
       <p class="article-byline">
         By <a routerLink="/about-us">Rosemarry editorial team</a>
         <span aria-hidden="true"> · </span>
-        <time [attr.datetime]="article().published">{{ article().published | date: 'd MMMM y' : 'UTC' }}</time>
+        <time [attr.datetime]="article().published">{{ (article().published + 'T00:00:00Z') | date: 'd MMMM y' : 'UTC' }}</time>
       </p>
     </div>
   </header>

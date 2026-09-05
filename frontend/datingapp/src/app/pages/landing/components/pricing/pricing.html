@@ -9,7 +9,7 @@
     >
       <div>
         <span
-          class="mb-4 inline-flex items-center gap-2 rounded-full bg-blossom px-4 py-2 text-sm font-bold text-rose"
+          class="mb-4 inline-flex items-center gap-2 rounded-full bg-blossom px-4 py-2 text-sm font-bold text-[#a81739]"
         >
           Membership plans
         </span>
@@ -141,7 +141,7 @@
               @if (selectedPlan.badge) {
                 <span
                   class="rotate-2 rounded-full px-4 py-2 text-xs font-bold text-white shadow-[3px_3px_0_rgba(28,20,24,0.18)]"
-                  [class.bg-[#99888f]]="activePlan() === 0"
+                  [class.bg-[#786771]]="activePlan() === 0"
                   [class.bg-rose]="activePlan() === 1"
                 >
                   {{ selectedPlan.badge }}
@@ -169,7 +169,7 @@
                   >
                     <span
                       class="grid h-7 w-7 shrink-0 place-items-center rounded-full font-display text-xs font-bold text-white"
-                      [class.bg-[#99888f]]="activePlan() === 0"
+                      [class.bg-[#786771]]="activePlan() === 0"
                       [class.bg-rose]="activePlan() === 1"
                       aria-hidden="true"
                     >
