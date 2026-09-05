@@ -3,13 +3,15 @@ import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, startWith } from 'rxjs';
+import type { ArticleSummary } from '../../pages/blog/article-catalog';
 
 interface RouteSeoData {
   title: string;
   description: string;
   canonicalPath: string;
-  pageType: 'WebSite' | 'WebPage' | 'AboutPage' | 'ContactPage';
+  pageType: 'WebPage' | 'AboutPage' | 'ContactPage';
   noIndex?: boolean;
+  article?: ArticleSummary;
 }
 
 const SITE_URL = 'https://www.rosemarry.app';
@@ -54,7 +56,14 @@ export class SeoService {
     this.updateMeta('name', 'description', seo.description);
     this.updateMeta('name', 'robots', robots);
     this.updateMeta('property', 'og:site_name', 'Rosemarry');
-    this.updateMeta('property', 'og:type', 'website');
+    this.updateMeta('property', 'og:type', seo.article ? 'article' : 'website');
+    if (seo.article) {
+      this.updateMeta('property', 'article:published_time', `${seo.article.published}T00:00:00+09:30`);
+      this.updateMeta('property', 'article:modified_time', `${seo.article.modified}T00:00:00+09:30`);
+    } else {
+      this.meta.removeTag('property="article:published_time"');
+      this.meta.removeTag('property="article:modified_time"');
+    }
     this.updateMeta('property', 'og:locale', 'en_AU');
     this.updateMeta('property', 'og:title', seo.title);
     this.updateMeta('property', 'og:description', seo.description);
@@ -106,18 +115,27 @@ export class SeoService {
       inLanguage: 'en-AU',
     };
 
-    const graph = [
+    const graph: Record<string, unknown>[] = [
       {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         name: 'Rosemarry',
+        alternateName: 'Rosemarry Dating App',
         url: `${SITE_URL}/`,
+        description:
+          'An early-stage dating app built around weekly Circles, shared activities and real conversation.',
+        email: 'support@rosemarry.app',
         logo: {
           '@type': 'ImageObject',
           url: `${SITE_URL}/images/rosemarry/logo-160.png`,
           width: 160,
           height: 120,
         },
+        founder: [
+          { '@type': 'Person', name: 'Steve Tran' },
+          { '@type': 'Person', name: 'Felix Vu' },
+          { '@type': 'Person', name: 'Samuel Nicholas' },
+        ],
         sameAs: ['https://www.instagram.com/rosemarry_app/'],
       },
       {
@@ -125,11 +143,97 @@ export class SeoService {
         '@id': `${SITE_URL}/#website`,
         url: `${SITE_URL}/`,
         name: 'Rosemarry',
+        alternateName: ['Rosemarry Dating App', 'rosemarry.app'],
+        description: 'The official website for Rosemarry, a dating app in development around weekly Circles, shared activities and real conversation.',
         publisher: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'en-AU',
       },
       page,
     ];
+
+    if (seo.article) {
+      graph.push({
+        '@type': 'BlogPosting',
+        '@id': `${canonicalUrl}#article`,
+        headline: seo.article.title,
+        description: seo.description,
+        url: canonicalUrl,
+        mainEntityOfPage: { '@id': `${canonicalUrl}#webpage` },
+        image: [SOCIAL_IMAGE_URL],
+        datePublished: `${seo.article.published}T00:00:00+09:30`,
+        dateModified: `${seo.article.modified}T00:00:00+09:30`,
+        author: { '@type': 'Organization', name: 'Rosemarry editorial team', url: `${SITE_URL}/about-us` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        articleSection: seo.article.topic,
+        inLanguage: 'en-AU',
+      });
+      graph.push({
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumbs`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Journal', item: `${SITE_URL}/blog` },
+          { '@type': 'ListItem', position: 3, name: seo.article.title, item: canonicalUrl },
+        ],
+      });
+    }
+
+    if (canonicalUrl === `${SITE_URL}/`) {
+      graph.push({
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/#frequently-asked-questions`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'What is Rosemarry?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Rosemarry is an early-stage dating app built around small weekly Circles. It gives compatible people time to talk, try shared activities and get familiar before deciding whether to match.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How do weekly Circles work?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'A Circle brings a small group of compatible people together for six days of group chat, prompts and activities. Members can match at any time. A new Circle begins after the current one ends.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is Rosemarry available yet?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. As of 5 September 2026, Rosemarry is still in development and is not available to download. Launch timing and locations have not been announced.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is free, and what costs money?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'The current plan keeps weekly Circles, discovery, matching and messaging free. An optional Advanced plan is intended to add visibility, discovery and control features. Features and prices may change before launch.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Who is building Rosemarry?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Rosemarry is being built by co-founders Steve Tran, Felix Vu and Samuel Nicholas.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How are privacy and safety handled?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Rosemarry is intended for adults aged 18 and over. Planned safeguards include identity checks, reporting, blocking, moderation and controls over future Circles.',
+            },
+          },
+        ],
+      });
+    }
 
     const script = this.document.createElement('script');
     script.id = 'rosemarry-structured-data';

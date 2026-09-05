@@ -1,9 +1,10 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PreSignupService } from '../../services/pre-signup.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { getFormErrorMessage } from '../../shared/forms/form-error-message';
+import { MeasurementService, SignupPlacement } from '../../core/analytics/measurement.service';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -11,6 +12,8 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   providedIn: 'root',
 })
 export class SignupState {
+  private readonly measurement = inject(MeasurementService);
+  private placement: SignupPlacement = 'footer';
   constructor(private readonly preSignupService: PreSignupService) {}
 
   public readonly preSignForm = new FormGroup({
@@ -38,15 +41,19 @@ export class SignupState {
   readonly showSignupButton = computed(() => !this.signupOpen() && !this.submitted());
   readonly showSignupForm = computed(() => this.signupOpen() && !this.submitted());
 
-  open(): void {
+  open(placement: SignupPlacement = 'footer'): void {
+    if (!this.signupOpen()) {
+      this.placement = placement;
+      this.measurement.track('signup_start', placement);
+    }
     this.signupOpen.set(true);
     queueMicrotask(() => document.getElementById('rm-email-input')?.focus());
   }
 
-  goToSignup(): void {
+  goToSignup(placement: SignupPlacement = 'hero'): void {
     const target = document.getElementById('join');
     target?.scrollIntoView({ behavior: 'smooth' });
-    this.signupOpen.set(true);
+    this.open(placement);
     setTimeout(() => document.getElementById('rm-email-input')?.focus(), 650);
   }
 
@@ -64,6 +71,7 @@ export class SignupState {
   }
 
   public submit(): void {
+    if (this.isSubmitting() || this.submitted()) return;
     this.emailError.set(false);
     this.duplicateEmailError.set(false);
     this.securityError.set(false);
@@ -101,6 +109,7 @@ export class SignupState {
           this.emailError.set(false);
           this.duplicateEmailError.set(false);
           this.submitted.set(true);
+          this.measurement.track('signup_success', this.placement);
         },
         error: (error: HttpErrorResponse) => {
           console.error('Pre-signup failed:', error);

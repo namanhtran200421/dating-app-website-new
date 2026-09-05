@@ -19,7 +19,7 @@
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      alt="Rosemarry"
+      alt="Rosemarry logo"
       class="h-9 w-auto block"
     />
     <span
@@ -69,6 +69,15 @@
           />
         </svg>
       </span>
+    </a>
+    <a
+      routerLink="/press"
+      routerLinkActive="nav-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
+    >
+      <span class="scribble-underline scribble-underline--hover">Press</span>
     </a>
     <a
       routerLink="/contact-us"
@@ -232,6 +241,17 @@
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
       <span class="nav-mobile-link__label">Message us</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/press"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Press kit</span>
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
     <a

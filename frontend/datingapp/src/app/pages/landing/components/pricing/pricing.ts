@@ -26,7 +26,7 @@ export class Pricing {
     {
       name: 'Free',
       shortLine: 'No commitment',
-      headline: 'Start swiping and see where it goes.',
+      headline: 'Start connecting without the pressure.',
       price: '$0',
       cadence: 'forever',
       priceLabel: 'forever',

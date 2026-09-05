@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { articles } from './pages/blog/article-catalog';
 
 export const routes: Routes = [
   {
@@ -6,11 +7,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry | A New Kind of Dating App',
+        title: 'Rosemarry | A Dating App Built Around Weekly Circles',
         description:
-          'Rosemarry is a dating app built around weekly Circles, shared activities and real conversation. Get to know compatible people before deciding who you want to match with.',
+          'Rosemarry is an early-stage dating app built around weekly Circles, shared activities and real conversation. The app is still in development.',
         canonicalPath: '/',
-        pageType: 'WebSite',
+        pageType: 'WebPage',
       },
     },
   },
@@ -19,7 +20,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/circle/circle').then((m) => m.CirclePage),
     data: {
       seo: {
-        title: 'Circle | Meet People Before You Decide | Rosemarry',
+        title: 'Weekly Circles | How Rosemarry Works',
         description:
           'Meet compatible people in a small weekly Circle through conversation, prompts and shared activities before deciding who you want to match with.',
         canonicalPath: '/circle',
@@ -27,12 +28,26 @@ export const routes: Routes = [
       },
     },
   },
+  ...articles.map((article) => ({
+    path: `blog/${article.slug}`,
+    loadComponent: () => import('./pages/blog/article').then((m) => m.ArticlePage),
+    data: {
+      article,
+      seo: {
+        title: `${article.title} | Rosemarry`,
+        description: article.description,
+        canonicalPath: `/blog/${article.slug}`,
+        pageType: 'WebPage',
+        article,
+      },
+    },
+  })),
   {
     path: 'blog',
     loadComponent: () => import('./pages/blog/blog').then((m) => m.BlogPage),
     data: {
       seo: {
-        title: 'Rosemarry Blog | A More Human Way to Date',
+        title: 'Dating Blog | Rosemarry',
         description:
           'Read about endless swiping, dating app fatigue and how attraction can grow through familiarity and real interaction.',
         canonicalPath: '/blog',
@@ -45,7 +60,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact-us/contact-us').then((m) => m.ContactUs),
     data: {
       seo: {
-        title: 'Contact Rosemarry – Support, Feedback & Partnerships',
+        title: 'Contact Rosemarry | Support, Press & Partnerships',
         description:
           'Contact the Rosemarry team about support, product feedback, partnerships or press.',
         canonicalPath: '/contact-us',
@@ -58,10 +73,23 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about-us-page/about-us-page').then((m) => m.AboutUsPage),
     data: {
       seo: {
-        title: 'About Rosemarry – Building a Fairer Dating App',
+        title: 'About Rosemarry | Founders and Mission',
         description:
           'Meet the people building Rosemarry and learn why we are creating a fairer, safer and more useful dating app.',
         canonicalPath: '/about-us',
+        pageType: 'AboutPage',
+      },
+    },
+  },
+  {
+    path: 'press',
+    loadComponent: () => import('./pages/press/press').then((m) => m.PressPage),
+    data: {
+      seo: {
+        title: 'Press Kit | Rosemarry',
+        description:
+          'Official Rosemarry facts, dating app status, founders, brand assets and press contact details.',
+        canonicalPath: '/press',
         pageType: 'AboutPage',
       },
     },
@@ -71,7 +99,7 @@ export const routes: Routes = [
     loadComponent: () => import('./policie-page/policie-page').then((m) => m.PoliciePage),
     data: {
       seo: {
-        title: 'Privacy Policy & Terms – Rosemarry',
+        title: 'Privacy, Safety & Terms | Rosemarry',
         description:
           'Read Rosemarry’s privacy policy, safety commitments and website terms of use.',
         canonicalPath: '/privacy-and-terms',
@@ -84,6 +112,7 @@ export const routes: Routes = [
     redirectTo: 'privacy-and-terms',
     pathMatch: 'full',
   },
+  { path: 'how-it-works', redirectTo: 'circle', pathMatch: 'full' },
   {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
