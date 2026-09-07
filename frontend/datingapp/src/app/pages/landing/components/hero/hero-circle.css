@@ -101,13 +101,6 @@
   font-size: 3rem;
   transform: rotate(12deg);
 }
-.circle-hero__doodle--spark {
-  top: 1.5rem;
-  right: 45%;
-  font-size: 1.8rem;
-  transform: rotate(-12deg);
-}
-
 .circle-note {
   position: relative;
   z-index: 2;
@@ -738,8 +731,7 @@
     border-radius: 2rem;
     padding: 1.5rem 0.65rem 0.45rem;
   }
-  .circle-phone-rays,
-  .circle-hero__doodle--spark {
+  .circle-phone-rays {
     display: none;
   }
   .circle-summary {
