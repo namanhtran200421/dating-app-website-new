@@ -51,7 +51,7 @@
 
 .problem-card__eyebrow {
   margin-bottom: 0.75rem;
-  color: #d81e4a;
+  color: #a81739;
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.13em;
@@ -96,7 +96,7 @@
 }
 
 .fake-paywall strong {
-  color: #d81e4a;
+  color: #a81739;
 }
 
 .signal-row {
@@ -247,4 +247,8 @@
   .safety-signal__pulse::after {
     animation: none;
   }
+}
+
+.problem-card--safety .problem-card__eyebrow {
+  color: #f6c9ef;
 }

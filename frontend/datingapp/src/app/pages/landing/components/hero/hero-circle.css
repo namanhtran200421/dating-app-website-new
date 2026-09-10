@@ -2,6 +2,20 @@
   display: block;
 }
 
+.hero-brand-label {
+  width: fit-content;
+  margin: 0 auto 1rem;
+  border: 1.5px solid rgb(216 30 74 / 32%);
+  border-radius: 999px;
+  background: rgb(246 201 239 / 58%);
+  padding: 0.5rem 0.9rem;
+  color: #d81e4a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
 .hero-intro {
   width: min(100%, 46rem);
   margin: -0.8rem auto 2rem;

@@ -1,59 +1,31 @@
-# Datingapp
+# Rosemarry website
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.4.
+Angular marketing website, prerendered for search engines and deployed through the Vercel Git integration.
 
-## Development server
+## Develop and build
 
-To start a local development server, run:
+Use Node 24 and install dependencies with `npm ci`. Start with `npm start`; this generates the icon styles before Angular starts. Build with `npm run build`, which generates only the icons used by the templates, prerenders the public routes and regenerates the sitemap from indexable output. Deploy output is `dist/datingapp/browser`.
 
-```bash
-ng serve
-```
+Do not invoke `ng build` directly: the wrapper scripts generate required assets and the sitemap. Self-hosted fonts are checked in under `public/fonts` with licenses. `scripts/prepare-fonts.py` documents one-off regeneration; fontTools with Brotli support is required only to regenerate them.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Verify
 
 ```bash
-ng generate component component-name
+npm run build
+npm run check:seo
+npm test -- --watch=false
+npx playwright install chromium
+npm run test:e2e
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+`npm run preview` serves the production build on http://127.0.0.1:4173. Playwright starts it automatically when needed. Signup tests mock Turnstile and the API; they create no real registrations. The GitHub workflow also runs backend tests.
 
-```bash
-ng generate --help
-```
+After deployment run `npm run check:live`, then `npm run indexnow -- --check`. Submit with `npm run indexnow` only after the production key and updated pages are public. HTTP receipt is not an indexing guarantee.
 
-## Building
+## Content and measurement
 
-To build the project run:
+Journal summaries and full articles live in `src/app/pages/blog/article-catalog.ts` and `article-content.ts`. Add each new public article path to the backend analytics allowlist too. Change modification dates only for substantive updates.
 
-```bash
-ng build
-```
+First-party measurement sends only fixed aggregate dimensions to the existing backend; it respects Do Not Track and Global Privacy Control and never sends emails, full query strings or visitor identifiers. The backend must deploy the analytics endpoint before counts can accumulate. Its private report command requires `MONGO_URI`; Google reports require an authorized `GOOGLE_ACCESS_TOKEN`. Never commit credentials.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See [search visibility runbook](../../docs/search-visibility-runbook.md) and [content and promotion plan](../../docs/visibility-content-and-promotion.md) for authenticated indexing tasks, profile copy, social drafts and measurement definitions.

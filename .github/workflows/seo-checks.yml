@@ -1,0 +1,40 @@
+name: Website verification
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            frontend/datingapp/package-lock.json
+            backend/package-lock.json
+      - run: npm ci
+        working-directory: frontend/datingapp
+      - run: npm run build
+        working-directory: frontend/datingapp
+      - run: npm run check:seo
+        working-directory: frontend/datingapp
+      - run: npm test -- --watch=false
+        working-directory: frontend/datingapp
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend/datingapp
+      - run: npm run test:e2e
+        working-directory: frontend/datingapp
+      - run: npm ci
+        working-directory: backend
+      - run: npm test
+        working-directory: backend

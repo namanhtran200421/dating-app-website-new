@@ -19,7 +19,7 @@
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      alt="Rosemarry"
+      alt="Rosemarry logo"
       class="h-9 w-auto block"
     />
     <span
@@ -38,29 +38,6 @@
     >
       <span class="scribble-underline scribble-underline--hover">
         Circle ⭑.ᐟ
-        <svg
-          class="scribble-underline__line"
-          viewBox="0 0 120 14"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            class="scribble-underline__stroke"
-            pathLength="1"
-            d="M3 8 C18 2 31 12 46 7 C62 2 76 11 91 6 C101 3 110 7 117 5"
-          />
-        </svg>
-      </span>
-    </a>
-    <a
-      routerLink="/how-it-works"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">
-        How it works ⭑.ᐟ
         <svg
           class="scribble-underline__line"
           viewBox="0 0 120 14"
@@ -120,6 +97,15 @@
           />
         </svg>
       </span>
+    </a>
+    <a
+      routerLink="/press"
+      routerLinkActive="nav-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
+    >
+      <span class="scribble-underline scribble-underline--hover">Press</span>
     </a>
     <a
       routerLink="/contact-us"
@@ -253,17 +239,6 @@
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
     <a
-      routerLink="/how-it-works"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">How it works </span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
       routerLink="/blog"
       routerLinkActive="nav-mobile-link--active"
       ariaCurrentWhenActive="page"
@@ -282,7 +257,7 @@
       (click)="closeMenu()"
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
-      <span class="nav-mobile-link__label">Our story </span>
+      <span class="nav-mobile-link__label">Our story</span>
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
     <a
@@ -294,6 +269,17 @@
       class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
       <span class="nav-mobile-link__label">Message us</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/press"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Press kit</span>
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
     <a
