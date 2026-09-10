@@ -7,13 +7,35 @@
     <meta name="theme-color" content="#fbf2e9" />
     <title>Page Not Found – Rosemarry</title>
     <link rel="icon" href="/rosemarry-favicon-transparent.ico?v=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Playpen+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/playpen-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/dynapuff-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <style>
+      @font-face {
+        font-family: 'Playpen Sans';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url('/fonts/playpen-sans-latin.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'DynaPuff';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url('/fonts/dynapuff-latin.woff2') format('woff2');
+      }
       * {
         box-sizing: border-box;
       }

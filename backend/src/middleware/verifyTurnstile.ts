@@ -72,8 +72,10 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
 
       const verification =
         (await verificationResponse.json()) as TurnstileVerification;
-      const usingLocalTestKey =
-        process.env.NODE_ENV !== "production" && secret === TEST_SECRET;
+      const isLocalEnvironment =
+        process.env.NODE_ENV === "development" ||
+        process.env.NODE_ENV === "test";
+      const usingLocalTestKey = isLocalEnvironment && secret === TEST_SECRET;
       const expectedHostname =
         process.env.TURNSTILE_EXPECTED_HOSTNAME?.trim() || "www.rosemarry.app";
       const hostnameMatches =
@@ -93,8 +95,8 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
 
       delete req.body.turnstileToken;
       next();
-    } catch (error) {
-      console.error("Turnstile verification request failed:", error);
+    } catch {
+      console.error("Turnstile verification request failed.");
       res.status(503).json({
         success: false,
         message: "Security verification is temporarily unavailable.",

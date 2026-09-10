@@ -1,6 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Observable, Subject, of, throwError } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { vi } from 'vitest';
 import { MeasurementService } from '../../core/analytics/measurement.service';
 
@@ -45,26 +44,7 @@ describe('SignupState', () => {
     signup.submit();
 
     expect(signup.emailError()).toBe(true);
-    expect(signup.duplicateEmailError()).toBe(false);
     expect(service.calls).toBe(0);
-  });
-
-  it('shows the duplicate error when the backend reports an existing email', () => {
-    service.response = throwError(
-      () =>
-        new HttpErrorResponse({
-          status: 400,
-          error: { message: 'This email has already been registered' },
-        }),
-    );
-    signup.preSignForm.controls.email.setValue('already@rosemarry.test');
-    signup.setTurnstileToken('valid-test-token');
-
-    signup.submit();
-
-    expect(signup.emailError()).toBe(false);
-    expect(signup.duplicateEmailError()).toBe(true);
-    expect(track).not.toHaveBeenCalledWith('signup_success', expect.anything());
   });
 
   it('counts a conversion only after success and ignores duplicate in-flight submits', () => {

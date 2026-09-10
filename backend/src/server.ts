@@ -1,80 +1,40 @@
-import cors from "cors";
-import express, { type Request, type Response } from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
-import { rateLimit } from "express-rate-limit";
+
+import { createApp } from "./app.js";
+import { validateRetentionConfiguration } from "./config/retention.js";
+import { ContactMessageSchema } from "./models/contactModel.js";
+import { PreSignSchema } from "./models/subscripeModel.js";
+
 mongoose.set("sanitizeFilter", true);
 
+// Fail secure when a hosting platform does not set NODE_ENV explicitly.
+const nodeEnv = process.env.NODE_ENV ?? "production";
+const port = Number(process.env.PORT ?? 3000);
+const mongo = process.env.MONGO_URI?.trim();
 
-import preSignupRouter from "./routes/preSignupRoute.js";
-import contactRouter from "./routes/contactRoute.js";
-import helmet from "helmet";
-import { analyticsRouter } from './analytics/analytics.js';
-const app = express();
+if (!Number.isInteger(port) || port < 1 || port > 65_535) {
+  throw new Error("PORT must be a valid TCP port.");
+}
 
-app.disable("x-powered-by");
-app.use(helmet());
+if (!mongo) {
+  throw new Error("MONGO_URI is required.");
+}
+const mongoUri = mongo;
 
-
-const allowedOrigins = [
-  "http://localhost:4200",
-  "https://www.rosemarry.app",
-];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  }),
-);
-
-app.use(express.json({limit:"32kb"}));
-
-// 100 reqs per 15 mins
-const formLimit = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 100,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-  message: {
-    message: "Too many requests. Please try again later.",
-  },
-});
-
-// 100 reqs per 15 mins
-const emailLimit = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 50,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-  message: {
-    message: "Too many requests. Please try again later.",
-  },
-});
-
-app.use("/api/pre-signups", formLimit, preSignupRouter);
-
-app.use("/api/contact", emailLimit, contactRouter);
-app.use('/api/analytics', analyticsRouter);
-
-app.get("/api/health", function (req: Request, res: Response): void {
-  res.status(200).json({
-    message: "Backend is running",
-  });
-});
-
-const port = Number(process.env.PORT);
-const mongo = String(process.env.MONGO_URI);
+validateRetentionConfiguration();
 
 async function startServer(): Promise<void> {
-  await mongoose.connect(mongo);
+  await mongoose.connect(mongoUri);
+  await Promise.all([ContactMessageSchema.init(), PreSignSchema.init()]);
 
-  console.log("Connected to database");
+  const app = createApp({ nodeEnv });
+
+  console.log("Connected to required services");
 
   app.listen(port, function (error?: Error): void {
     if (error) {
-      console.error("Error occurred:", error);
+      console.error("HTTP server failed to start.");
       return;
     }
 
@@ -82,7 +42,7 @@ async function startServer(): Promise<void> {
   });
 }
 
-startServer().catch(function (error: unknown): void {
-  console.error("Failed to start server:", error);
+startServer().catch(function (): void {
+  console.error("Failed to start required services.");
   process.exit(1);
 });

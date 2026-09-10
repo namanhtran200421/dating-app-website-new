@@ -78,12 +78,6 @@
                 </span>
               }
 
-              @if (signup.duplicateEmailError()) {
-                <span class="footer-signup__error" role="alert">
-                  That email already made the guest list. You&rsquo;re already in ♡
-                </span>
-              }
-
               @if (signup.securityError()) {
                 <span class="footer-signup__error" role="alert">
                   The security check needs another go. Refresh it and try again.
@@ -95,6 +89,13 @@
                   {{ signup.submissionError() }}
                 </span>
               }
+
+              <p class="footer-signup__privacy">
+                See how we handle your email in our
+                <a routerLink="/privacy-and-terms" fragment="information-we-collect"
+                  >privacy policy</a
+                >.
+              </p>
             </form>
           }
 
@@ -103,7 +104,8 @@
               <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
               <p>
                 <strong>You&rsquo;re on the list!</strong>
-                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in development.
+                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in
+                development.
               </p>
             </div>
           }

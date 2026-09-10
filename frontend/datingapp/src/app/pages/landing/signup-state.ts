@@ -30,7 +30,6 @@ export class SignupState {
   public readonly submitted = signal(false);
   readonly signupOpen = signal(false);
   public readonly emailError = signal(false);
-  public readonly duplicateEmailError = signal(false);
   public readonly securityError = signal(false);
   public readonly submissionError = signal('');
   public readonly isSubmitting = signal(false);
@@ -73,7 +72,6 @@ export class SignupState {
   public submit(): void {
     if (this.isSubmitting() || this.submitted()) return;
     this.emailError.set(false);
-    this.duplicateEmailError.set(false);
     this.securityError.set(false);
     this.submissionError.set('');
     this.preSignForm.markAllAsTouched();
@@ -107,17 +105,11 @@ export class SignupState {
           this.submittedEmail.set(email);
           this.preSignForm.reset();
           this.emailError.set(false);
-          this.duplicateEmailError.set(false);
           this.submitted.set(true);
           this.measurement.track('signup_success', this.placement);
         },
         error: (error: HttpErrorResponse) => {
           console.error('Pre-signup failed:', error);
-
-          if (error.error?.message === 'This email has already been registered') {
-            this.duplicateEmailError.set(true);
-            return;
-          }
 
           if (error.status === 403 || error.status === 503) {
             if (error.status === 403) {

@@ -11,6 +11,7 @@ export interface ContactMessage {
   subject: string;
   message: string;
   createdAt: Date;
+  expiresAt: Date;
 }
 
 const contactMessageSchema = new Schema<ContactMessage>(
@@ -49,6 +50,11 @@ const contactMessageSchema = new Schema<ContactMessage>(
       trim: true,
       minLength: 1,
       maxlength: 5000,
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      expires: 0,
     },
   },
   { timestamps: true, strict: "throw" },

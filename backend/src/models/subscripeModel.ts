@@ -1,26 +1,31 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from "mongoose";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export interface PreSignup{
-    email:string;
-    createdAt: Date;
-    updateAt: Date;
+export interface PreSignup {
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+  expiresAt: Date;
 }
 
-const preSignupSchema = new Schema<PreSignup>({
-    email:{
-        type:String, 
-        required: true, 
-        unique: true, 
-        trim:true, 
-        maxlength:254,
-        match:EMAIL_PATTERN
-    }, 
-
-}, { timestamps: true,
-    strict:'throw'
-}
+const preSignupSchema = new Schema<PreSignup>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      maxlength: 254,
+      match: EMAIL_PATTERN,
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      expires: 0,
+    },
+  },
+  { timestamps: true, strict: "throw" },
 );
 
-export const PreSignSchema = model<PreSignup> ("PreSignup", preSignupSchema)
+export const PreSignSchema = model<PreSignup>("PreSignup", preSignupSchema);
