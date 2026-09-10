@@ -1,0 +1,20 @@
+# OS / editor cruft
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Secrets & environment (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies & build output
+node_modules/
+dist/
+out-tsc/
+
+# Logs
+*.log
+npm-debug.log*

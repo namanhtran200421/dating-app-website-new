@@ -52,6 +52,11 @@ export const analyticsRouter = Router();
 
 analyticsRouter.post("/", async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
+  // The Origin check below stops naive cross-site requests from real browsers,
+  // but Origin is a request header that non-browser clients (curl, scripts) can
+  // set to anything. It is not a security boundary. The real safeguards against
+  // aggregate pollution are the per-IP rate limit and the strict enum schema
+  // below, which cap how much and what kind of data any caller can write.
   const isLocalEnvironment =
     process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
   if (

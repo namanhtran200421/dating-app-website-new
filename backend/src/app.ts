@@ -26,6 +26,22 @@ export interface AppOptions {
   trustedProxyHops?: number | false;
 }
 
+// Allow the number of trusted proxy hops to be corrected via configuration
+// without a code change, since the real hop count depends on the deployment
+// (Render + Cloudflare). Rate-limit keying no longer depends on this value
+// (see resolveClientKey), but req.ip and other proxy-aware behaviour still do.
+function parseTrustedProxyHops(raw: string | undefined): number | undefined {
+  const value = raw?.trim();
+  if (!value) {
+    return undefined;
+  }
+  const hops = Number(value);
+  if (!Number.isInteger(hops) || hops < 0 || hops > 10) {
+    throw new Error("TRUSTED_PROXY_HOPS must be an integer from 0 to 10.");
+  }
+  return hops;
+}
+
 // Cloudflare fronts the Render origin (every response carries a `cf-ray`
 // header), so the request reaches Express through more than one proxy and a
 // hardcoded `trust proxy` hop count cannot be relied on to identify the caller.
@@ -69,7 +85,9 @@ export function createApp(options: AppOptions = {}) {
   // This makes req.ip, and therefore the rate-limit key, represent the client.
   app.set(
     "trust proxy",
-    options.trustedProxyHops ?? (isDevelopment ? false : 1),
+    options.trustedProxyHops ??
+      parseTrustedProxyHops(process.env.TRUSTED_PROXY_HOPS) ??
+      (isDevelopment ? false : 1),
   );
   app.disable("x-powered-by");
   app.use(helmet());

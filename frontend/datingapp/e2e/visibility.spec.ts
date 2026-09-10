@@ -1,11 +1,19 @@
 import { test, expect } from '@playwright/test';
 
+async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
+  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await expect(dialog).toBeHidden();
+}
+
 test('journal navigation updates metadata and removes article tags on the homepage', async ({
   page,
 }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/blog');
+  await dismissDevelopmentNotice(page);
   await page.locator('.blog-article h2 a').first().click();
   await expect(page).toHaveURL(/\/blog\/dating-without-swiping$/);
   await expect(page.locator('h1')).toHaveText('Dating without swiping: what to look for');
@@ -40,11 +48,54 @@ test('article is readable on mobile and with JavaScript disabled', async ({ brow
   await expect(
     page.getByRole('heading', { name: 'What choice-overload research found' }),
   ).toBeVisible();
-  await expect(page.locator('[role="dialog"]')).toHaveCount(0);
+  await expect(page.getByRole('dialog', { name: 'Still growing.' })).toBeHidden();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
   await context.close();
+});
+
+test('development notice opens as a modal and stays dismissed for the session', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  const action = dialog.getByRole('button', { name: 'Got it' });
+
+  await expect(dialog).toBeVisible();
+  await expect(action).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+
+  await page.keyboard.press('Tab');
+  expect(
+    await page.evaluate(() => document.querySelector('dialog')?.contains(document.activeElement)),
+  ).toBe(true);
+  await page.keyboard.press('Escape');
+
+  await expect(dialog).toBeHidden();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+  await page.reload();
+  await expect(dialog).toBeHidden();
+});
+
+test('development notice remains visible when the native dialog API is unavailable', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    HTMLDialogElement.prototype.showModal = () => {
+      throw new Error('Dialog API unavailable');
+    };
+  });
+  await page.goto('/');
+
+  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveCSS('position', 'fixed');
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+
+  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await expect(dialog).toBeHidden();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
 });
 
 test('the enforced security policy works across every public page', async ({ page }) => {
@@ -83,6 +134,7 @@ test('the enforced security policy works across every public page', async ({ pag
     expect(response?.status(), `${path} should load`).toBe(200);
     expect(response?.headers()['content-security-policy']).toContain("script-src 'self'");
     await expect(page.locator('main')).toBeAttached();
+    if (path === '/') await dismissDevelopmentNotice(page);
   }
 
   expect(cspViolations).toEqual([]);
@@ -143,6 +195,7 @@ for (const successful of [true, false]) {
     await page.goto(
       'https://www.rosemarry.app/blog/dating-without-swiping?utm_source=instagram&email=private@example.com',
     );
+    await dismissDevelopmentNotice(page);
     await page.locator('.article-signup').getByRole('link', { name: 'Join early access' }).click();
     await page.getByLabel('Your email for early-access updates').fill('reader@example.com');
     await expect(page.locator('.footer-signup__form button[type="submit"]')).toBeEnabled();

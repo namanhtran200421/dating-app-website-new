@@ -96,6 +96,28 @@ test("rate limiting keys requests by forwarded client IP", async () => {
   assert.equal(remaining(anotherClient), remaining(first));
 });
 
+test("rate limiting keys requests by Cloudflare's CF-Connecting-IP", async () => {
+  // Behind Cloudflare, the real client is on CF-Connecting-IP. It must take
+  // precedence over the forwarded chain so that limits track the true caller
+  // and cannot be evaded by rotating a spoofed X-Forwarded-For value.
+  const app = createApp({ nodeEnv: "production", trustedProxyHops: 1 });
+  const submit = (cfIp: string, forwardedFor: string) =>
+    request(app)
+      .post("/api/pre-signups")
+      .set("CF-Connecting-IP", cfIp)
+      .set("X-Forwarded-For", forwardedFor)
+      .send({});
+
+  // Same CF-Connecting-IP but different X-Forwarded-For => one shared bucket.
+  const first = await submit("198.51.100.5", "203.0.113.1");
+  const second = await submit("198.51.100.5", "203.0.113.99");
+  // Different CF-Connecting-IP but identical X-Forwarded-For => separate bucket.
+  const otherClient = await submit("198.51.100.6", "203.0.113.1");
+
+  assert.equal(remaining(second), remaining(first) - 1);
+  assert.equal(remaining(otherClient), remaining(first));
+});
+
 test("malformed and oversized JSON receive generic JSON errors", async () => {
   const app = createApp({ nodeEnv: "production" });
 
