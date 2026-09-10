@@ -5,7 +5,7 @@ import express, {
   type Response,
 } from "express";
 import helmet from "helmet";
-import { rateLimit } from "express-rate-limit";
+import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 
 import { analyticsRouter } from "./analytics/analytics.js";
 import contactRouter from "./routes/contactRoute.js";
@@ -26,11 +26,27 @@ export interface AppOptions {
   trustedProxyHops?: number | false;
 }
 
+// Cloudflare fronts the Render origin (every response carries a `cf-ray`
+// header), so the request reaches Express through more than one proxy and a
+// hardcoded `trust proxy` hop count cannot be relied on to identify the caller.
+// Cloudflare stamps the real client address on the `CF-Connecting-IP` request
+// header, and the origin is only reachable through Cloudflare's edge, so that
+// header is the trustworthy rate-limit key. Fall back to `req.ip` (governed by
+// `trust proxy`) when the header is absent, e.g. local development and tests.
+// `ipKeyGenerator` normalises the value (grouping IPv6 addresses by subnet).
+function resolveClientKey(req: Request): string {
+  const cfConnectingIp = req.get("cf-connecting-ip")?.trim();
+  const clientIp =
+    cfConnectingIp && cfConnectingIp.length > 0 ? cfConnectingIp : req.ip;
+  return ipKeyGenerator(clientIp ?? "unknown");
+}
+
 function createLimiter(identifier: string, limit: number, windowMs: number) {
   return rateLimit({
     identifier,
     windowMs,
     limit,
+    keyGenerator: resolveClientKey,
     standardHeaders: "draft-8",
     legacyHeaders: false,
     passOnStoreError: false,
