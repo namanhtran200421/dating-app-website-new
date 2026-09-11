@@ -60,6 +60,10 @@ test('desktop navigation yields while reading and returns on upward intent', asy
   await page.goto('/');
   await dismissDevelopmentNotice(page);
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  await expect(page.locator('.nav-desktop__primary')).toHaveCSS(
+    'background-color',
+    'rgba(0, 0, 0, 0)',
+  );
 
   await page.evaluate(() => window.scrollTo(0, 720));
   await expect(navigation).toHaveClass(/site-nav--hidden/);
