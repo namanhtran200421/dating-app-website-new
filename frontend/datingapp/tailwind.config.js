@@ -15,15 +15,6 @@ module.exports = {
         display: ['"DynaPuff"', 'system-ui', 'sans-serif'],
         body: ['"Playpen Sans"', 'system-ui', 'sans-serif'],
       },
-      keyframes: {
-        reveal: {
-          '0%': { opacity: 0, transform: 'translateY(24px)' },
-          '100%': { opacity: 1, transform: 'none' },
-        },
-      },
-      animation: {
-        reveal: 'reveal 0.7s cubic-bezier(0.2,0.7,0.2,1) both',
-      },
     },
   },
   plugins: [],

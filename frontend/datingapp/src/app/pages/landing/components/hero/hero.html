@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-[1120px]">
     <div class="hero-heading-row mb-7 flex items-end justify-center gap-6">
       <h1
-        data-reveal
-        class="animate-reveal max-w-[1120px] text-center font-display text-[clamp(36px,6.5vw,78px)] font-semibold leading-[1.02] tracking-[-2px] lg:whitespace-nowrap"
+        data-motion-reveal
+        class="max-w-[1120px] text-center font-display text-[clamp(36px,6.5vw,78px)] font-semibold leading-[1.02] tracking-[-2px] lg:whitespace-nowrap"
       >
         Good things take
         <span class="scribble-underline text-rose">
@@ -29,19 +29,19 @@
       </h1>
     </div>
 
-    <p class="hero-intro">
+    <p data-motion-reveal="fade" data-motion-delay="0.06" class="hero-intro">
       Rosemarry is an early-stage dating app where you get to know people through real
-      conversations, shared activities and repeated interactions &mdash; not endless swiping. It is
+      conversations, shared activities and repeated interactions – not endless swiping. It is
       currently in development and is not yet available to download.
     </p>
 
     <div
-      data-reveal
-      class="circle-hero animate-reveal"
+      data-motion-reveal
+      data-motion-delay="0.1"
+      class="circle-hero"
       role="region"
       aria-label="How Rosemarry weekly circles work"
     >
-      <span class="circle-hero__grain" aria-hidden="true"></span>
       <span class="circle-hero__doodle circle-hero__doodle--heart" aria-hidden="true">
         <i class="fa-regular fa-heart"></i>
       </span>
@@ -199,7 +199,7 @@
       </p>
     </div>
 
-    <div class="circle-hero-actions">
+    <div data-motion-reveal="fade" data-motion-delay="0.14" class="circle-hero-actions">
       <a
         href="https://www.instagram.com/rosemarry_app/"
         target="_blank"

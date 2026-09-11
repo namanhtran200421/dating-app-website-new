@@ -55,6 +55,62 @@ test('article is readable on mobile and with JavaScript disabled', async ({ brow
   await context.close();
 });
 
+test('desktop navigation yields while reading and returns on upward intent', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await dismissDevelopmentNotice(page);
+  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+
+  await page.evaluate(() => window.scrollTo(0, 720));
+  await expect(navigation).toHaveClass(/site-nav--hidden/);
+
+  await page.evaluate(() => window.scrollBy(0, -80));
+  await expect(navigation).not.toHaveClass(/site-nav--hidden/);
+});
+
+test('desktop editorial cards keep a compact rhythm without an attached journal divider', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+
+  await page.goto('/');
+  await dismissDevelopmentNotice(page);
+  const problemCard = await page.locator('.problem-card--paywall').boundingBox();
+  expect(problemCard?.height).toBeLessThan(240);
+
+  await page.goto('/circle');
+  const featureCardHeights = await page
+    .locator('.feature-card')
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().height));
+  expect(featureCardHeights).toHaveLength(3);
+  expect(Math.max(...featureCardHeights)).toBeLessThan(340);
+
+  await page.goto('/blog');
+  const articleAfterPink = page.locator('.blog-article--pink + .blog-article');
+  await expect(articleAfterPink).toHaveCSS('border-top-width', '0px');
+});
+
+test('every public page uses the shared section reveal contract', async ({ page }) => {
+  for (const path of [
+    '/',
+    '/circle',
+    '/blog',
+    '/about-us',
+    '/press',
+    '/contact-us',
+    '/privacy-and-terms',
+    '/blog/dating-without-swiping',
+  ]) {
+    await page.goto(path);
+    if (path === '/') await dismissDevelopmentNotice(page);
+    expect(await page.locator('main [data-motion-reveal]').count(), path).toBeGreaterThan(0);
+    await expect(page.locator('main [data-reveal]')).toHaveCount(0);
+  }
+
+  await page.goto('/');
+  await expect(page.locator('app-footer [data-motion-reveal]').first()).toHaveCSS('opacity', '0');
+});
+
 test('development notice opens as a modal and stays dismissed for the session', async ({
   page,
 }) => {
