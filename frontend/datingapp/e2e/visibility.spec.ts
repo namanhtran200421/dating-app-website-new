@@ -202,10 +202,9 @@ test('the enforced security policy works across every public page', async ({ pag
 });
 
 for (const successful of [true, false]) {
-  test(`signup ${successful ? 'success records one conversion' : 'failure records no conversion'}`, async ({
+  test(`signup ${successful ? 'success shows confirmation' : 'failure shows an error'}`, async ({
     page,
   }) => {
-    const events: Record<string, string>[] = [];
     const cspViolations: string[] = [];
     let registrations = 0;
     page.on('console', (message) => {
@@ -236,21 +235,16 @@ for (const successful of [true, false]) {
         await route.fulfill({ status: 204, headers });
         return;
       }
-      if (route.request().url().endsWith('/analytics')) {
-        events.push(route.request().postDataJSON());
-        await route.fulfill({ status: 204, headers });
-      } else {
-        registrations++;
-        await route.fulfill({
-          status: successful ? 202 : 503,
-          headers,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            success: successful,
-            message: successful ? 'Signup request accepted.' : 'Temporarily unavailable',
-          }),
-        });
-      }
+      registrations++;
+      await route.fulfill({
+        status: successful ? 202 : 503,
+        headers,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: successful,
+          message: successful ? 'Signup request accepted.' : 'Temporarily unavailable',
+        }),
+      });
     });
     await page.goto(
       'https://www.rosemarry.app/blog/dating-without-swiping?utm_source=instagram&email=private@example.com',
@@ -264,22 +258,10 @@ for (const successful of [true, false]) {
       await expect(page.locator('.footer-signup__success')).toContainText(
         'We saved reader@example.com',
       );
-      await expect
-        .poll(() => events.filter((event) => event['event'] === 'signup_success').length)
-        .toBe(1);
     } else {
       await expect(page.locator('.footer-signup__error')).toBeVisible();
-      expect(events.filter((event) => event['event'] === 'signup_success')).toHaveLength(0);
     }
     expect(registrations).toBe(1);
-    expect(events.filter((event) => event['event'] === 'visit')).toHaveLength(1);
-    expect(events.filter((event) => event['event'] === 'page_view')).toHaveLength(1);
-    expect(events.find((event) => event['event'] === 'signup_start')).toMatchObject({
-      source: 'social',
-      placement: 'article',
-      landing: '/blog/dating-without-swiping',
-    });
-    expect(JSON.stringify(events)).not.toMatch(/@|utm_|private|reader/);
     expect(cspViolations).toEqual([]);
   });
 }

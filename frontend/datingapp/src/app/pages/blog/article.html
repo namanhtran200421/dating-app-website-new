@@ -44,7 +44,7 @@
       <div class="story-actions">
         <a routerLink="/circle" class="story-text-link">How Circles work</a>
         <a [routerLink]="['/blog', article().slug]" fragment="join" class="story-button story-button--dark"
-          (click)="$event.preventDefault(); signup.goToSignup('article')">Join early access <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          (click)="$event.preventDefault(); signup.goToSignup()">Join early access <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </aside>
     <aside data-motion-reveal="fade" class="article-editorial">

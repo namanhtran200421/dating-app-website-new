@@ -7,7 +7,6 @@ import express, {
 import helmet from "helmet";
 import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 
-import { analyticsRouter } from "./analytics/analytics.js";
 import contactRouter from "./routes/contactRoute.js";
 import preSignupRouter from "./routes/preSignupRoute.js";
 
@@ -109,11 +108,6 @@ export function createApp(options: AppOptions = {}) {
     "/api/contact",
     createLimiter("contact", 50, 15 * 60 * 1000),
     contactRouter,
-  );
-  app.use(
-    "/api/analytics",
-    createLimiter("analytics", 60, 60 * 1000),
-    analyticsRouter,
   );
 
   app.get("/api/health", function (_req: Request, res: Response): void {

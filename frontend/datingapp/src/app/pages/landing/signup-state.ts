@@ -1,10 +1,9 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PreSignupService } from '../../services/pre-signup.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { getFormErrorMessage } from '../../shared/forms/form-error-message';
-import { MeasurementService, SignupPlacement } from '../../core/analytics/measurement.service';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -12,8 +11,6 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   providedIn: 'root',
 })
 export class SignupState {
-  private readonly measurement = inject(MeasurementService);
-  private placement: SignupPlacement = 'footer';
   constructor(private readonly preSignupService: PreSignupService) {}
 
   public readonly preSignForm = new FormGroup({
@@ -40,19 +37,15 @@ export class SignupState {
   readonly showSignupButton = computed(() => !this.signupOpen() && !this.submitted());
   readonly showSignupForm = computed(() => this.signupOpen() && !this.submitted());
 
-  open(placement: SignupPlacement = 'footer'): void {
-    if (!this.signupOpen()) {
-      this.placement = placement;
-      this.measurement.track('signup_start', placement);
-    }
+  open(): void {
     this.signupOpen.set(true);
     queueMicrotask(() => document.getElementById('rm-email-input')?.focus());
   }
 
-  goToSignup(placement: SignupPlacement = 'hero'): void {
+  goToSignup(): void {
     const target = document.getElementById('join');
     target?.scrollIntoView({ behavior: 'smooth' });
-    this.open(placement);
+    this.open();
     setTimeout(() => document.getElementById('rm-email-input')?.focus(), 650);
   }
 
@@ -106,7 +99,6 @@ export class SignupState {
           this.preSignForm.reset();
           this.emailError.set(false);
           this.submitted.set(true);
-          this.measurement.track('signup_success', this.placement);
         },
         error: (error: HttpErrorResponse) => {
           console.error('Pre-signup failed:', error);

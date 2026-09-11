@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build && node --test dist/app.test.js dist/analytics/analytics.test.js",
+    "test": "npm run build && node --test dist/app.test.js",
     "dev": "NODE_ENV=development tsx watch src/server.ts",
     "build": "tsc",
-    "analytics:report": "tsx src/analytics/report.ts",
     "retention:backfill": "tsx src/scripts/backfillRetention.ts",
     "start": "node dist/server.js"
   },
