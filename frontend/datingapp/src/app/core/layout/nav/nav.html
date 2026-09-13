@@ -1,276 +1,53 @@
 <nav
-  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 border-b px-[clamp(14px,4vw,44px)] py-3 font-body transition-colors duration-300"
-  [class.bg-cream/90]="scrolled() || menuOpen()"
-  [class.backdrop-blur-md]="scrolled() || menuOpen()"
-  [class.border-ink/10]="scrolled() || menuOpen()"
-  [class.border-transparent]="!scrolled() && !menuOpen()"
-  [class.nav--over-dark]="darkBackground() && !scrolled() && !menuOpen()"
+  class="site-nav"
+  [class.site-nav--scrolled]="scrolled() || menuOpen()"
+  [class.site-nav--dark]="darkBackground() && !scrolled() && !menuOpen()"
 >
-  <a
-    routerLink="/"
-    fragment="top"
-    (click)="closeMenu()"
-    class="flex min-w-0 items-center gap-2 no-underline"
-  >
-    <img
-      src="images/rosemarry/logo-160.png"
-      width="160"
-      height="120"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      alt="Rosemarry logo"
-      class="h-9 w-auto block"
-    />
-    <span
-      class="nav-brand__name font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink"
-      >Rosemarry</span
-    >
+  <a routerLink="/" fragment="top" (click)="closeMenu()" class="site-nav__brand">
+    <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="48" height="37" />
+    <span>Rosemarry</span>
   </a>
 
-  <div class="hidden items-center gap-1 xl:flex">
-    <a
-      routerLink="/circle"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">Circle</span>
-    </a>
-    <a
-      routerLink="/blog"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">Blog</span>
-    </a>
-    <a
-      routerLink="/about-us"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">
-        Our story .✦ ݁˖
-        <svg
-          class="scribble-underline__line"
-          viewBox="0 0 120 14"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            class="scribble-underline__stroke"
-            pathLength="1"
-            d="M3 8 C18 2 31 12 46 7 C62 2 76 11 91 6 C101 3 110 7 117 5"
-          />
-        </svg>
-      </span>
-    </a>
-    <a
-      routerLink="/press"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">Press</span>
-    </a>
-    <a
-      routerLink="/contact-us"
-      routerLinkActive="nav-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">
-        Message us ⭑.ᐟ
-        <svg
-          class="scribble-underline__line"
-          viewBox="0 0 120 14"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            class="scribble-underline__stroke"
-            pathLength="1"
-            d="M3 7 C15 11 27 3 41 7 C55 12 68 3 82 7 C95 11 105 4 117 8"
-          />
-        </svg>
-      </span>
-    </a>
-    <a
-      href="#join"
-      (click)="$event.preventDefault(); signup.goToSignup()"
-      class="nav-desktop-link scribble-hover-trigger relative inline-flex items-center px-2 py-2.5 text-sm font-semibold text-ink/75 no-underline transition-colors duration-200 hover:text-rose"
-    >
-      <span class="scribble-underline scribble-underline--hover">
-        Get in early ݁✮⋆˙
-        <svg
-          class="scribble-underline__line"
-          viewBox="0 0 120 14"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            class="scribble-underline__stroke"
-            pathLength="1"
-            d="M3 8 C20 3 30 11 47 6 C64 2 76 12 91 7 C101 4 109 8 117 5"
-          />
-        </svg>
-      </span>
-    </a>
-    <a
-      class="pricing-card-hover inline-flex border rounded-2xl items-center gap-2 px-[18px] py-2.5 bg-birdpink text-ink text-sm font-semibold no-underline shadow-[0_8px_20px_-10px_rgba(236,92,141,0.9)] hover:brightness-[1.06]"
-      href="https://www.instagram.com/rosemarry_app/"
-      target="_blank"
-      rel="noopener"
-    >
-      <svg
-        width="17"
-        height="17"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-      </svg>
-      Catch us on Insta
-    </a>
+  <div class="site-nav__links">
+    <a routerLink="/" fragment="problem">Why Rosemarry</a>
+    <a routerLink="/" fragment="how-it-works">How it works</a>
+    <a routerLink="/" fragment="inside-circle">Inside a Circle</a>
+    <a routerLink="/about-us" routerLinkActive="is-active">Our story</a>
+    <button type="button" (click)="signup.goToSignup()">
+      Join early <span aria-hidden="true">→</span>
+    </button>
   </div>
 
   <button
     type="button"
-    class="nav-menu-button pricing-card-hover inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-white shadow-[0_10px_24px_-14px_rgba(28,20,24,0.85)] transition-[background-color,transform] duration-200 hover:-translate-y-0.5 xl:hidden"
-    [class.bg-ink]="!menuOpen()"
-    [class.bg-birdpink]="menuOpen()"
+    class="site-nav__menu"
     aria-label="Toggle navigation menu"
     aria-controls="mobile-navigation"
     [attr.aria-expanded]="menuOpen()"
     (click)="toggleMenu()"
   >
     @if (menuOpen()) {
-      <svg
-        aria-hidden="true"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      >
-        <path d="M6 6l12 12M18 6 6 18"></path>
-      </svg>
+      <span aria-hidden="true">×</span>
     } @else {
-      <svg
-        aria-hidden="true"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      >
-        <path d="M4 7h16M4 12h16M4 17h16"></path>
-      </svg>
+      <span aria-hidden="true">☰</span>
     }
   </button>
 
   <div
     id="mobile-navigation"
-    class="absolute inset-x-3 top-full mt-2 flex origin-top flex-col gap-2 rounded-[28px] border border-rose/15 bg-blossom p-3 shadow-[0_24px_50px_-24px_rgba(28,20,24,0.45)] transition-[opacity,transform] duration-200 ease-out xl:hidden"
-    [class.pointer-events-none]="!menuOpen()"
-    [class.-translate-y-1]="!menuOpen()"
-    [class.scale-[0.985]]="!menuOpen()"
-    [class.opacity-0]="!menuOpen()"
-    [class.translate-y-0]="menuOpen()"
-    [class.scale-100]="menuOpen()"
-    [class.opacity-100]="menuOpen()"
+    class="site-nav__mobile"
+    [class.site-nav__mobile--open]="menuOpen()"
     [attr.aria-hidden]="!menuOpen()"
     [attr.inert]="menuOpen() ? null : ''"
   >
-    <a
-      routerLink="/circle"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    <a routerLink="/" fragment="problem" (click)="closeMenu()">Why Rosemarry <span>→</span></a>
+    <a routerLink="/" fragment="how-it-works" (click)="closeMenu()">How it works <span>→</span></a>
+    <a routerLink="/" fragment="inside-circle" (click)="closeMenu()"
+      >Inside a Circle <span>→</span></a
     >
-      <span class="nav-mobile-link__label">Circle</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      routerLink="/blog"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">Blog</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      routerLink="/about-us"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">Our story</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      routerLink="/contact-us"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">Message us</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      routerLink="/press"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
-    >
-      <span class="nav-mobile-link__label">Press kit</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      href="#join"
-      (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-rose"
-    >
-      Get in early
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-    <a
-      href="https://www.instagram.com/rosemarry_app/"
-      target="_blank"
-      rel="noopener"
-      (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-[filter] hover:brightness-105"
-    >
-      Catch us on Insta
-      <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-    </a>
+    <a routerLink="/about-us" (click)="closeMenu()">Our story <span>→</span></a>
+    <button type="button" (click)="closeMenu(); signup.goToSignup()">
+      Join early access <span>→</span>
+    </button>
   </div>
 </nav>

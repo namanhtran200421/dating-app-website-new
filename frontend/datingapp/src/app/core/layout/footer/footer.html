@@ -1,196 +1,97 @@
-<footer id="join" class="footer" [class.footer--scalloped]="showScallop()">
-  @if (showScallop()) {
-    <div class="footer__scallop" aria-hidden="true"></div>
-  }
+<footer id="join" class="footer">
+  <section class="footer-cta" aria-labelledby="footer-invite-title">
+    <div class="footer-cta__inner">
+      <span class="footer-sticker">Early access</span>
+      <h2 id="footer-invite-title">Ready to meet people differently?</h2>
+      <p>Join early, help shape Rosemarry and get one month of Advanced when we launch.</p>
 
-  <div class="footer__body">
-    <div class="mx-auto max-w-[1120px] px-[clamp(18px,5vw,56px)]">
-      <section data-motion-reveal class="footer-postcard" aria-labelledby="footer-invite-title">
-        <div class="footer-postcard__copy">
-          <h2 id="footer-invite-title">
-            Make room for something
-            <span class="text-rose"> real </span>
-          </h2>
-          <p>
-            Join early, help shape Rosemarry, and get one month of Advanced on us when we launch.
-          </p>
-        </div>
-
-        <div class="footer-signup">
-          <div>
-            <h3>Save me a spot!</h3>
-          </div>
-
-          @if (signup.showSignupButton()) {
-            <button type="button" class="footer-signup__primary" (click)="signup.open()">
-              Join early access
-              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-            </button>
-          }
-
-          @if (signup.showSignupForm()) {
-            <form
-              [formGroup]="signup.preSignForm"
-              (ngSubmit)="signup.submit()"
-              class="footer-signup__form"
-            >
-              <label for="rm-email-input">Your email for early-access updates</label>
-              <div>
-                <input
-                  id="rm-email-input"
-                  type="email"
-                  formControlName="email"
-                  placeholder="yourname@internet.com"
-                  autocomplete="email"
-                />
-                <button
-                  type="submit"
-                  [disabled]="signup.isSubmitting() || !signup.turnstileToken()"
-                >
-                  {{ signup.isSubmitting() ? 'Checking…' : 'I’m in' }}
-                  <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                </button>
-              </div>
-
-              <app-turnstile-widget
-                class="footer-signup__turnstile"
-                action="pre_signup"
-                [resetVersion]="signup.turnstileResetVersion()"
-                (tokenChange)="signup.setTurnstileToken($event)"
-                (verificationError)="signup.markTurnstileError()"
+      <div class="footer-signup">
+        @if (signup.showSignupButton()) {
+          <button type="button" class="footer-signup__primary" (click)="signup.open()">
+            Save me a spot <span aria-hidden="true">→</span>
+          </button>
+        }
+        @if (signup.showSignupForm()) {
+          <form
+            [formGroup]="signup.preSignForm"
+            (ngSubmit)="signup.submit()"
+            class="footer-signup__form"
+          >
+            <label for="rm-email-input">Your email for early-access updates</label>
+            <div class="footer-signup__row">
+              <input
+                id="rm-email-input"
+                type="email"
+                formControlName="email"
+                placeholder="Your email address"
+                autocomplete="email"
               />
-
-              @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
-                <span class="footer-signup__error" role="alert">
-                  Drop your email so we know where to send the invite.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
-              ) {
-                <span class="footer-signup__error" role="alert">
-                  That email is not emailing. Check the spelling and try again.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
-              ) {
-                <span class="footer-signup__error" role="alert">
-                  That email is unusually long. Keep it under 254 characters.
-                </span>
-              }
-
-              @if (signup.duplicateEmailError()) {
-                <span class="footer-signup__error" role="alert">
-                  That email already made the guest list. You&rsquo;re already in ♡
-                </span>
-              }
-
-              @if (signup.securityError()) {
-                <span class="footer-signup__error" role="alert">
-                  The security check needs another go. Refresh it and try again.
-                </span>
-              }
-
-              @if (signup.submissionError()) {
-                <span class="footer-signup__error" role="alert">
-                  {{ signup.submissionError() }}
-                </span>
-              }
-            </form>
-          }
-
-          @if (signup.submitted()) {
-            <div class="footer-signup__success" role="status">
-              <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
-              <p>
-                <strong>You&rsquo;re on the list!</strong>
-                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in development.
-              </p>
+              <button type="submit" [disabled]="signup.isSubmitting() || !signup.turnstileToken()">
+                {{ signup.isSubmitting() ? 'Checking…' : 'Save me a spot' }}
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
-          }
-        </div>
-      </section>
-
-      <div data-motion-reveal="fade" data-motion-delay="0.08" class="footer-directory">
-        <div class="footer-directory__brand">
-          <nav class="footer-social-orbit" aria-label="Footer navigation">
-            <svg
-              class="footer-social-orbit__paths"
-              viewBox="0 0 520 185"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path d="M132 47 C174 38 192 71 220 80" />
-              <path d="M300 92 C339 99 355 127 390 132" />
-              <circle cx="174" cy="49" r="3" />
-              <circle cx="346" cy="113" r="3" />
-            </svg>
-
-            <a
-              class="footer-social-orbit__link footer-social-orbit__link--policy"
-              routerLink="/privacy-and-terms"
-              aria-label="Policies"
-              title="Policies"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 3.5h9l3 3V20H6V3.5Z" />
-                <path d="M15 3.5V7h3M9 11h6M9 14.5h6" />
-                <path d="m9.2 18 1.5 1.5 3-3" />
-              </svg>
-              <span>Policies</span>
-            </a>
-
-            <a
-              class="footer-social-orbit__link footer-social-orbit__link--story"
-              routerLink="/about-us"
-              aria-label="Read our story"
-              title="Our story"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 4.5h10.5A3.5 3.5 0 0 1 19 8v11.5H8.5A3.5 3.5 0 0 1 5 16V4.5Z" />
-                <path d="M8.5 7.5h7M8.5 11h7M8.5 14.5h4" />
-              </svg>
-              <span>Our story</span>
-            </a>
-
-            <a
-              class="footer-social-orbit__link footer-social-orbit__link--message"
-              routerLink="/contact-us"
-              aria-label="Message us at Rosemarry"
-              title="Message us"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m3.5 11 16-7-5.7 16-2.7-6.3L3.5 11Z" />
-                <path d="m11.1 13.7 3.6-4.2" />
-              </svg>
-              <span>Message us</span>
-            </a>
-
-            <span
-              class="footer-social-orbit__spark footer-social-orbit__spark--one"
-              aria-hidden="true"
-              >✦</span
-            >
-            <span
-              class="footer-social-orbit__spark footer-social-orbit__spark--two"
-              aria-hidden="true"
-              >✧</span
-            >
-          </nav>
-        </div>
-      </div>
-
-      <div class="footer-wordmark mb-4" aria-hidden="true">
-        <span> </span>
-        <strong>Rosemarry</strong>
-        <span></span>
-      </div>
-
-      <div class="footer-legal">
-        <span>© 2026 Rosemarry</span>
-        <span>Good things take time</span>
-        <a routerLink="/press">Press kit</a>
-        <a href="#top">Back to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
+            @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
+              <span class="footer-signup__error" role="alert"
+                >Drop your email so we know where to send the invite.</span
+              >
+            } @else if (
+              signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
+            ) {
+              <span class="footer-signup__error" role="alert"
+                >That email does not look quite right. Check it and try again.</span
+              >
+            } @else if (
+              signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
+            ) {
+              <span class="footer-signup__error" role="alert"
+                >Please keep your email under 254 characters.</span
+              >
+            }
+            @if (signup.duplicateEmailError()) {
+              <span class="footer-signup__error" role="alert"
+                >That email is already on the list. You’re in!</span
+              >
+            }
+            @if (signup.securityError()) {
+              <span class="footer-signup__error" role="alert"
+                >The security check needs another go. Refresh it and try again.</span
+              >
+            }
+            @if (signup.submissionError()) {
+              <span class="footer-signup__error" role="alert">{{ signup.submissionError() }}</span>
+            }
+            <app-turnstile-widget
+              class="footer-signup__turnstile"
+              action="pre_signup"
+              [resetVersion]="signup.turnstileResetVersion()"
+              (tokenChange)="signup.setTurnstileToken($event)"
+              (verificationError)="signup.markTurnstileError()"
+            />
+          </form>
+        }
+        @if (signup.submitted()) {
+          <div class="footer-signup__success" role="status">
+            <span aria-hidden="true">✓</span>
+            <p>
+              <strong>You’re on the list!</strong> We saved {{ signup.submittedEmail() }} for
+              early-access updates.
+            </p>
+          </div>
+        }
       </div>
     </div>
+  </section>
+
+  <div class="footer-bar">
+    <a routerLink="/" class="footer-brand">
+      <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="38" height="29" />
+      <span>Rosemarry</span>
+    </a>
+    <span>Good things take time · © 2026 Rosemarry</span>
+    <nav aria-label="Footer navigation">
+      <a href="https://www.instagram.com/rosemarry_app/" target="_blank" rel="noopener">Instagram</a
+      ><a routerLink="/privacy-and-terms">Privacy + Terms</a><a routerLink="/contact-us">Contact</a>
+    </nav>
   </div>
 </footer>
