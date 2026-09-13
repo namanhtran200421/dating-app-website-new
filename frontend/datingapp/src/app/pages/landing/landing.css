@@ -29,15 +29,15 @@
 }
 
 .hero {
-  width: calc(100% - 26px);
-  min-height: min(874px, calc(100vh - 26px));
-  margin: 13px auto 0;
-  border: 3px solid var(--ink);
-  border-radius: 38px;
+  width: 100%;
+  min-height: min(874px, 100vh);
+  margin: 0;
+  border: 0;
+  border-bottom: 3px solid var(--ink);
+  border-radius: 0;
   padding-top: clamp(148px, 12vw, 174px);
   padding-bottom: clamp(54px, 6vw, 76px);
-  background-image: radial-gradient(rgb(32 33 49 / 11%) 0.7px, transparent 0.7px);
-  background-size: 9px 9px;
+  background: white;
 }
 .hero .shell {
   width: min(100% - 128px, 1280px);
@@ -145,23 +145,20 @@
   color: var(--ink);
   font: 800 13px/1 var(--font-body);
   text-decoration: none;
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: var(--rm-pop-shadow);
   cursor: pointer;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease;
+  transition: var(--rm-hover-transition);
 }
 .button:hover {
-  transform: translate(-2px, -3px) rotate(-1deg);
-  box-shadow: 6px 7px 0 var(--ink);
+  box-shadow: var(--rm-pop-shadow-hover);
+  translate: var(--rm-pop-lift);
 }
 .button:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: var(--rm-pop-shadow-active);
+  translate: var(--rm-pop-press);
 }
 .button:focus-visible {
-  outline: 3px solid var(--purple);
+  outline: var(--rm-focus-ring);
   outline-offset: 4px;
 }
 .button--pink {
@@ -267,44 +264,14 @@
   box-shadow: 8px 9px 0 var(--mint);
   transform: rotate(-7deg);
 }
+/* Sticker wiggle on top of each card's resting tilt; hovered card comes to the front. */
 .photo-card {
-  transition:
-    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 260ms ease;
-}
-.photo-card img {
-  transition:
-    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 260ms ease;
+  transition: var(--rm-hover-transition);
 }
 .photo-card:hover {
   z-index: 6;
-}
-.photo-card:hover img {
-  filter: saturate(1.08) contrast(1.04);
-  transform: scale(1.07);
-}
-.photo-card--one:hover img {
-  transform: scale(1.84);
-}
-.photo-card--one:hover img {
-  transform: scale(1.46);
-}
-.photo-card--one:hover {
-  box-shadow: 10px 12px 0 var(--purple);
-  transform: translateY(-10px) rotate(-3deg) scale(1.03);
-}
-.photo-card--two:hover {
-  box-shadow: 13px 14px 0 var(--yellow);
-  transform: translateY(-10px) rotate(2deg) scale(1.03);
-}
-.photo-card--three:hover {
-  box-shadow: 12px 13px 0 var(--pink);
-  transform: translateY(-10px) rotate(1deg) scale(1.03);
-}
-.photo-card--four:hover {
-  box-shadow: 11px 12px 0 var(--mint);
-  transform: translateY(-10px) rotate(-5deg) scale(1.03);
+  rotate: calc(var(--rm-sticker-tilt) * var(--rm-motion));
+  scale: calc(1 + var(--rm-sticker-grow) * var(--rm-motion));
 }
 .hero-visual__accent {
   position: absolute;
@@ -591,8 +558,12 @@
 }
 .problem-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.14fr 0.86fr;
   gap: 44px;
+  align-items: start;
+}
+.problem-grid > :nth-child(2) {
+  margin-top: 72px;
 }
 .outlined-card {
   position: relative;
@@ -602,21 +573,13 @@
   background: #dedee5;
   padding: 0;
   box-shadow: 5px 6px 0 var(--ink);
-  transition:
-    transform 200ms ease,
-    box-shadow 200ms ease;
 }
 .outlined-card--pink {
   background: #f2bfd1;
   box-shadow: 6px 7px 0 var(--pink);
 }
-.outlined-card:hover {
-  transform: translateY(-7px) rotate(-0.4deg);
-  box-shadow: 9px 13px 0 var(--ink);
-}
-.outlined-card--pink:hover {
-  box-shadow: 10px 14px 0 var(--pink);
-  transform: translateY(-7px) rotate(0.4deg);
+.outlined-card--pink {
+  --rm-sticker-tilt: 1deg;
 }
 .outlined-card > span {
   transform: translateY(-18%);
@@ -646,112 +609,6 @@
   font-size: 12px;
   font-weight: 600;
   line-height: 1.45;
-}
-
-.steps {
-  background-image: radial-gradient(rgb(32 33 49 / 10%) 0.7px, transparent 0.7px);
-  background-size: 9px 9px;
-}
-.center-heading {
-  margin-bottom: 64px;
-  text-align: center;
-}
-.center-heading .sticker {
-  margin-inline: auto;
-}
-.center-heading p {
-  margin-top: 12px;
-  color: rgb(32 33 49 / 58%);
-  font-weight: 600;
-}
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.step-card {
-  position: relative;
-  height: clamp(330px, 29vw, 375px);
-  border-radius: 20px;
-  background: #dedee5;
-  text-align: center;
-  box-shadow: 6px 7px 0 var(--ink);
-  transition:
-    transform 200ms ease,
-    box-shadow 200ms ease;
-}
-.step-card--yellow {
-  box-shadow: 6px 7px 0 var(--yellow);
-}
-.step-card--pink {
-  box-shadow: 6px 7px 0 var(--pink);
-}
-.step-card--mint {
-  box-shadow: 6px 7px 0 var(--mint);
-}
-.step-number {
-  position: absolute !important;
-  z-index: 3 !important;
-  top: 8px;
-  left: 8px;
-  display: grid;
-  width: 50px;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  background: white;
-  font: 800 18px/1 var(--font-display);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.step-number--yellow {
-  background: var(--yellow);
-}
-.step-number--pink {
-  background: var(--pink);
-}
-.step-number--mint {
-  background: var(--mint);
-}
-.step-card > .step-card__image-label {
-  transform: translateY(-22%);
-}
-.step-card__caption {
-  position: absolute;
-  z-index: 2;
-  right: 10px;
-  bottom: 10px;
-  left: 10px;
-  display: grid;
-  min-height: 124px;
-  place-content: center;
-  border: 2px solid var(--ink);
-  border-radius: 13px;
-  background: rgb(255 255 255 / 96%);
-  padding: 15px 10px;
-}
-.step-card:hover {
-  transform: translateY(-7px) rotate(-1deg);
-}
-.step-card:nth-child(even):hover {
-  transform: translateY(-7px) rotate(1deg);
-}
-.step-card__caption h3 {
-  margin: 0 0 14px;
-  font-family: var(--font-display);
-  font-size: clamp(16px, 1.7vw, 22px);
-  line-height: 1;
-}
-.step-card__caption p {
-  margin: 0 auto;
-  max-width: 190px;
-  color: rgb(32 33 49 / 57%);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.35;
 }
 
 .quote-band {
@@ -806,27 +663,41 @@
 }
 .outcome-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(260px, auto));
   gap: clamp(22px, 3vw, 42px);
+  align-items: stretch;
 }
 .phase-card {
   position: relative;
-  aspect-ratio: 0.8;
-  min-height: 0;
+  min-height: 260px;
   border-radius: 18px;
   background: var(--paper);
   color: var(--ink);
   box-shadow: 6px 7px 0 var(--purple);
-  transition: transform 200ms ease;
 }
-.phase-card:hover {
-  transform: translateY(-8px) rotate(-1deg);
+.phase-card:nth-child(1) {
+  grid-column: 1 / span 7;
+  grid-row: 1 / span 2;
+  min-height: 602px;
+}
+.phase-card:nth-child(2),
+.phase-card:nth-child(3) {
+  grid-column: 8 / span 5;
+}
+.phase-card:nth-child(2) {
+  grid-row: 1;
+}
+.phase-card:nth-child(3) {
+  grid-row: 2;
+  width: calc(100% - 38px);
+  margin-left: 38px;
 }
 .phase-card--yellow {
   box-shadow: 6px 7px 0 var(--yellow);
 }
-.phase-card--yellow:hover {
-  transform: translateY(-8px) rotate(1deg);
+.phase-card--yellow {
+  --rm-sticker-tilt: 1deg;
 }
 .phase-card--pink {
   box-shadow: 6px 7px 0 var(--pink);
@@ -852,7 +723,6 @@
   font-family: var(--font-display);
   font-size: clamp(19px, 2vw, 26px);
   line-height: 1.08;
-  white-space: nowrap;
 }
 .phase-card__caption p {
   margin: 0;
@@ -863,8 +733,7 @@
 }
 
 .inside {
-  background-image: radial-gradient(rgb(32 33 49 / 10%) 0.7px, transparent 0.7px);
-  background-size: 9px 9px;
+  background: var(--paper);
 }
 .inside-layout {
   display: grid;
@@ -948,13 +817,11 @@
   background: white;
   padding: 13px 16px;
   box-shadow: 3px 3px 0 rgb(32 33 49 / 16%);
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
+  transition: var(--rm-hover-transition);
 }
 .choice-copy li:hover {
-  transform: translateX(7px);
-  box-shadow: -5px 5px 0 var(--pink);
+  background: var(--rm-row-tint);
+  translate: var(--rm-row-shift);
 }
 .choice-copy li i {
   display: grid;
@@ -1013,15 +880,21 @@
   .match-bubble {
     right: 8px;
   }
-  .steps-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 54px 32px;
-  }
-  .steps-grid::before {
-    display: none;
-  }
   .outcome-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
     gap: 20px;
+  }
+  .phase-card:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+    width: auto;
+    min-height: 390px;
+    margin-left: 0;
+  }
+  .phase-card:first-child {
+    grid-column: 1 / -1;
+    width: min(72%, 560px);
   }
 }
 
@@ -1033,10 +906,7 @@
     padding: 72px 0;
   }
   .hero {
-    width: calc(100% - 12px);
-    margin-top: 6px;
-    border-width: 2px;
-    border-radius: 24px;
+    border-bottom-width: 2px;
     padding-top: 120px;
     padding-bottom: 42px;
   }
@@ -1102,6 +972,9 @@
   .outcome-grid {
     grid-template-columns: 1fr;
   }
+  .problem-grid > :nth-child(2) {
+    margin-top: 0;
+  }
   .outlined-card > p {
     min-height: 0;
   }
@@ -1121,6 +994,10 @@
   .phase-card {
     width: min(100%, 390px);
     margin-inline: auto;
+  }
+  .phase-card:first-child {
+    grid-column: auto;
+    width: min(100%, 390px);
   }
   .inside-layout {
     grid-template-columns: repeat(2, 1fr);
@@ -1154,26 +1031,6 @@
   .button {
     width: 100%;
   }
-  .steps-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 46px 16px;
-  }
-  .step-image {
-    border-radius: 14px;
-  }
-  .step-card {
-    height: 290px;
-  }
-  .step-card__caption {
-    min-height: 112px;
-    padding-inline: 8px;
-  }
-  .step-card__caption h3 {
-    font-size: 15px;
-  }
-  .step-card__caption p {
-    font-size: 10px;
-  }
   .quote-band blockquote {
     font-size: 43px;
   }
@@ -1196,27 +1053,5 @@
     max-width: none;
     padding: 8px 9px 6px;
     font-size: 9px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .button,
-  .photo-card,
-  .photo-card img,
-  .outlined-card,
-  .step-image,
-  .phase-card,
-  .choice-copy li {
-    transition: none;
-  }
-  .button:hover,
-  .outlined-card:hover,
-  .outlined-card--pink:hover,
-  .steps-grid li:hover .step-image,
-  .steps-grid li:nth-child(even):hover .step-image,
-  .phase-card:hover,
-  .phase-card--yellow:hover,
-  .choice-copy li:hover {
-    transform: none;
   }
 }

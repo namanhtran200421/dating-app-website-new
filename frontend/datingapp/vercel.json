@@ -5,7 +5,12 @@
   "redirects": [
     {
       "source": "/how-it-works",
-      "destination": "/circle",
+      "destination": "/#how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/circle",
+      "destination": "/#how-it-works",
       "permanent": true
     },
     {

@@ -1,24 +1,88 @@
 <div id="top" class="story-page story-page--blog">
-  <section class="blog-hero" aria-labelledby="blog-title">
-    <div data-motion-reveal class="story-shell">
-      <span class="story-kicker">The Rosemarry journal</span>
-      <h1 id="blog-title">Dating, with room<br /><span>to get to know someone.</span></h1>
-      <p class="story-lead">Practical ideas about conversation, dating habits and giving a connection time. From the team building Rosemarry.</p>
+  <section class="journal-masthead" aria-labelledby="blog-title">
+    <div class="story-shell journal-masthead__grid">
+      <header data-motion-reveal class="journal-masthead__copy">
+        <h1 id="blog-title">Notes on dating<br /><span>at a human pace.</span></h1>
+        <p class="story-lead">
+          Essays, practical guides and small observations about conversation, attraction and making
+          room to actually know someone.
+        </p>
+        <div class="journal-edition" aria-label="Journal edition information">
+          <span>Issue 01</span><span>{{ articles.length }} stories</span><span>Spring 2026</span>
+        </div>
+      </header>
+
+      @for (article of articles; track article.slug; let i = $index) {
+        @if (i === 0) {
+          <a
+            data-motion-reveal="fade"
+            class="journal-feature rm-sticker"
+            [routerLink]="['/blog', article.slug]"
+          >
+            <div class="journal-feature__cover" aria-hidden="true">
+              <span class="journal-feature__badge">Featured read</span>
+              <div class="journal-feature__masthead">
+                <img src="/images/rosemarry/rose-hand-logo.png" alt="" />
+                <span>Rosemarry<br />Journal</span>
+              </div>
+              <p>Notes for<br />slower dating.</p>
+              <span class="journal-feature__issue">Issue 01 · 2026</span>
+              <span class="journal-feature__shape journal-feature__shape--circle"></span>
+              <span class="journal-feature__shape journal-feature__shape--paper"></span>
+            </div>
+            <div class="journal-feature__copy">
+              <p class="journal-topic">{{ article.topic }}</p>
+              <h2>{{ article.title }}</h2>
+              <p>{{ article.description }}</p>
+              <footer>
+                <time [attr.datetime]="article.published">{{
+                  article.published | date: 'd MMMM y' : 'UTC'
+                }}</time>
+                <span>Read the story <span aria-hidden="true">→</span></span>
+              </footer>
+            </div>
+          </a>
+        }
+      }
     </div>
   </section>
-  <section class="blog-feed story-shell" aria-label="Journal articles">
-    @for (article of articles; track article.slug; let i = $index) {
-      <article data-motion-reveal="fade" class="blog-article" [class.blog-article--pink]="i === 1" [id]="article.legacyId || article.slug">
-        <header>
-          <span class="blog-article__topic">{{ article.topic }}</span>
-          <h2><a [routerLink]="['/blog', article.slug]">{{ article.title }}</a></h2>
-          <p class="blog-article__dek">By the Rosemarry editorial team<br /><time [attr.datetime]="article.modified">{{ article.modified | date: 'd MMMM y' : 'UTC' }}</time></p>
-        </header>
-        <div class="blog-article__body">
-          <p>{{ article.description }}</p>
-          <a [routerLink]="['/blog', article.slug]" class="article-link">Read: {{ article.title }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+
+  <section class="journal-shelf" aria-labelledby="latest-stories-title">
+    <div class="story-shell">
+      <header data-motion-reveal class="journal-shelf__header">
+        <div>
+          <h2 id="latest-stories-title">Latest stories</h2>
         </div>
-      </article>
-    }
+        <p>Thoughtful reading for people who are done treating dating like a speed round.</p>
+      </header>
+
+      <div class="journal-post-list" aria-label="Journal articles">
+        @for (article of articles; track article.slug; let i = $index) {
+          @if (i > 0) {
+            <a
+              data-motion-reveal="fade"
+              class="journal-post"
+              [id]="article.legacyId || article.slug"
+              [routerLink]="['/blog', article.slug]"
+            >
+              <div class="journal-post__number rm-icon-wiggle" aria-hidden="true">0{{ i + 1 }}</div>
+              <div class="journal-post__copy">
+                <p class="journal-topic">{{ article.topic }}</p>
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.description }}</p>
+              </div>
+              <div class="journal-post__meta">
+                <time [attr.datetime]="article.published">{{
+                  article.published | date: 'd MMM y' : 'UTC'
+                }}</time>
+                <span class="journal-post__read"
+                  >Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i
+                ></span>
+              </div>
+            </a>
+          }
+        }
+      </div>
+    </div>
   </section>
 </div>

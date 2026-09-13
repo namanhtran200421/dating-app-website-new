@@ -72,26 +72,29 @@ test('desktop navigation yields while reading and returns on upward intent', asy
   await expect(navigation).not.toHaveClass(/site-nav--hidden/);
 });
 
-test('desktop editorial cards keep a compact rhythm without an attached journal divider', async ({
-  page,
-}) => {
+test('desktop editorial cards keep an asymmetric scrapbook rhythm', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   await page.goto('/');
   await dismissDevelopmentNotice(page);
-  const problemCard = await page.locator('.problem-card--paywall').boundingBox();
-  expect(problemCard?.height).toBeLessThan(240);
+  const problemCards = await page
+    .locator('.outlined-card')
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
+  expect(problemCards).toHaveLength(2);
+  expect(problemCards[0].width).toBeGreaterThan(problemCards[1].width);
+  expect(problemCards[1].y).toBeGreaterThan(problemCards[0].y);
 
   await page.goto('/circle');
-  const featureCardHeights = await page
+  const featureCards = await page
     .locator('.feature-card')
-    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().height));
-  expect(featureCardHeights).toHaveLength(3);
-  expect(Math.max(...featureCardHeights)).toBeLessThan(340);
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
+  expect(featureCards).toHaveLength(3);
+  expect(featureCards[0].width).toBeGreaterThan(featureCards[1].width);
+  expect(featureCards[1].y).toBeGreaterThan(featureCards[0].y);
 
   await page.goto('/blog');
   const articleAfterPink = page.locator('.blog-article--pink + .blog-article');
-  await expect(articleAfterPink).toHaveCSS('border-top-width', '0px');
+  await expect(articleAfterPink).toHaveCSS('border-top-width', '2px');
 });
 
 test('every public page uses the shared section reveal contract', async ({ page }) => {

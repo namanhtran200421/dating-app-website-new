@@ -4,5 +4,7 @@
   <router-outlet (activate)="onRouteActivate()" />
 </main>
 
-<app-early-stage-banner />
-<app-footer appScrollReveal [showScallop]="!isHomePage" />
+@if (isHomePage) {
+  <app-early-stage-banner />
+}
+<app-footer appScrollReveal />

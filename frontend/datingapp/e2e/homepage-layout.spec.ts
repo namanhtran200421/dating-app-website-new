@@ -1,5 +1,12 @@
 import { expect, test } from '@playwright/test';
 
+async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
+  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await expect(dialog).toBeHidden();
+}
+
 for (const viewport of [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
@@ -9,6 +16,7 @@ for (const viewport of [
     page.on('pageerror', (error) => errors.push(error.message));
     await page.setViewportSize(viewport);
     await page.goto('/');
+    await dismissDevelopmentNotice(page);
 
     for (const selector of [
       '#problem',
@@ -38,14 +46,15 @@ for (const viewport of [
     }
     if (viewport.name === 'desktop') {
       const candidCard = page.locator('.photo-card--one');
-      const transformBeforeHover = await candidCard.evaluate(
-        (element) => getComputedStyle(element).transform,
-      );
+      // Hover movement uses the individual rotate/scale properties on top of the resting tilt.
+      const readMotion = (element: Element) => {
+        const style = getComputedStyle(element);
+        return `${style.transform} ${style.rotate} ${style.scale} ${style.translate}`;
+      };
+      const transformBeforeHover = await candidCard.evaluate(readMotion);
       await candidCard.hover();
       await page.waitForTimeout(350);
-      const transformAfterHover = await candidCard.evaluate(
-        (element) => getComputedStyle(element).transform,
-      );
+      const transformAfterHover = await candidCard.evaluate(readMotion);
       expect(transformAfterHover).not.toBe(transformBeforeHover);
     }
     await expect(page.locator('.hero')).not.toContainText(/Pre-launch|18\+|Built in Adelaide/i);
@@ -71,9 +80,7 @@ for (const viewport of [
     ).toBeVisible();
     await expect(page.locator('.phase-card')).toHaveCount(3);
     await expect(page.locator('.inside-photo')).toHaveCount(4);
-    await expect(
-      page.getByRole('heading', { name: 'Familiarity without pressure.' }),
-    ).toBeVisible();
+
 
     const footerCta = page.locator('.footer-cta');
     const heightBeforeSignup = (await footerCta.boundingBox())?.height;
@@ -109,6 +116,7 @@ test('hero photos still react to mouse hover on a touch-capable device', async (
   });
   const page = await context.newPage();
   await page.goto('/');
+  await dismissDevelopmentNotice(page);
 
   const card = page.locator('.photo-card--one');
   const image = card.locator('img');

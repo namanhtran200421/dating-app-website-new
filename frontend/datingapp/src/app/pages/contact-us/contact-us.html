@@ -30,7 +30,11 @@
     </header>
 
     <div class="contact-board">
-      <aside data-motion-reveal class="contact-route" aria-labelledby="message-route-title">
+      <aside
+        data-motion-reveal
+        class="contact-route rm-sticker"
+        aria-labelledby="message-route-title"
+      >
         <div class="contact-route__top">
           <span>After you hit send</span>
         </div>
@@ -78,7 +82,7 @@
       <section
         data-motion-reveal
         data-motion-delay="0.08"
-        class="contact-letter"
+        class="contact-letter rm-sticker"
         aria-labelledby="contact-form-title"
       >
         <div class="contact-letter__heading">
@@ -204,6 +208,7 @@
           <label class="contact-field">
             <span>Tell us more</span>
             <textarea
+              class="resize-none"
               formControlName="message"
               rows="3"
               placeholder="Give us the full story..."

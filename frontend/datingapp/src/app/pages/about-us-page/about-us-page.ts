@@ -1,6 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SignupState } from '../landing/signup-state';
 
 @Component({
   selector: 'app-about-us-page',
@@ -9,7 +8,6 @@ import { SignupState } from '../landing/signup-state';
   styleUrl: './about-us-page.css',
 })
 export class AboutUsPage {
-  protected readonly signup = inject(SignupState);
   protected readonly faqs: ReadonlyArray<{
     question: string;
     answer: string;

@@ -15,19 +15,6 @@ export const routes: Routes = [
       },
     },
   },
-  {
-    path: 'circle',
-    loadComponent: () => import('./pages/circle/circle').then((m) => m.CirclePage),
-    data: {
-      seo: {
-        title: 'Weekly Circles | How Rosemarry Works',
-        description:
-          'Meet compatible people in a small weekly Circle through conversation, prompts and shared activities before deciding who you want to match with.',
-        canonicalPath: '/circle',
-        pageType: 'WebPage',
-      },
-    },
-  },
   ...articles.map((article) => ({
     path: `blog/${article.slug}`,
     loadComponent: () => import('./pages/blog/article').then((m) => m.ArticlePage),
@@ -112,7 +99,8 @@ export const routes: Routes = [
     redirectTo: 'privacy-and-terms',
     pathMatch: 'full',
   },
-  { path: 'how-it-works', redirectTo: 'circle', pathMatch: 'full' },
+  { path: 'circle', redirectTo: '', pathMatch: 'full' },
+  { path: 'how-it-works', redirectTo: '', pathMatch: 'full' },
   {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),

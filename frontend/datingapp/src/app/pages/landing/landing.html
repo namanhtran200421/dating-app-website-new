@@ -14,7 +14,7 @@
           feels right.
         </p>
         <div class="hero-actions">
-          <button type="button" class="button button--pink" (click)="signup.goToSignup('hero')">
+          <button type="button" class="button button--pink" (click)="signup.goToSignup()">
             Join early access <span aria-hidden="true">→</span>
           </button>
           <a class="button button--paper" href="#how-it-works">See how it works ↓</a>
@@ -69,7 +69,7 @@
         </p>
       </header>
       <div class="problem-grid">
-        <article class="outlined-card visual-placeholder" data-motion-reveal="fade">
+        <article class="outlined-card visual-placeholder rm-sticker" data-motion-reveal="fade">
           <span>Full-bleed photo background<br />Profile cards / lonely swiping</span>
           <div class="outlined-card__caption">
             <span class="micro-label">The usual way</span>
@@ -78,7 +78,7 @@
           </div>
         </article>
         <article
-          class="outlined-card outlined-card--pink visual-placeholder"
+          class="outlined-card outlined-card--pink visual-placeholder rm-sticker"
           data-motion-reveal="fade"
         >
           <span>Full-bleed photo background<br />People talking in a Circle</span>
@@ -94,73 +94,135 @@
 
   <section id="how-it-works" class="steps section-pad" aria-labelledby="steps-title">
     <div class="shell">
-      <header class="center-heading" data-motion-reveal>
-        <span class="sticker sticker--yellow">How it works</span>
-        <h2 id="steps-title">One week. Four simple steps.</h2>
-        <p>Meet, talk and match at your own pace.</p>
+      <header class="steps-heading" data-motion-reveal>
+        <div>
+          <span class="sticker sticker--yellow">How it works</span>
+          <h2 id="steps-title">One week.<br />Four simple steps.</h2>
+        </div>
+        <p>
+          A slower, smaller way to meet—shown in one product walkthrough and four clear moments.
+        </p>
       </header>
-      <ol class="steps-grid">
-        <li class="step-card visual-placeholder" data-motion-reveal="fade">
-          <span class="step-number">1</span>
-          <span class="step-card__image-label"
-            >Full photo background<br />Profile + interest stickers</span
-          >
-          <div class="step-card__caption">
-            <h3>Tell us about you</h3>
-            <p>Interests, preferences and location.</p>
-          </div>
-        </li>
-        <li
-          class="step-card step-card--yellow visual-placeholder"
-          data-motion-reveal="fade"
-          data-motion-delay="0.05"
-        >
-          <span class="step-number step-number--yellow">2</span>
-          <span class="step-card__image-label"
-            >Full photo background<br />People + Circle app UI</span
-          >
-          <div class="step-card__caption">
-            <h3>Meet your Circle</h3>
-            <p>10 compatible people. One week.</p>
-          </div>
-        </li>
-        <li
-          class="step-card step-card--pink visual-placeholder"
-          data-motion-reveal="fade"
-          data-motion-delay="0.1"
-        >
-          <span class="step-number step-number--pink">3</span>
-          <span class="step-card__image-label"
-            >Full photo background<br />Chat + activity overlay</span
-          >
-          <div class="step-card__caption">
-            <h3>Talk and do things</h3>
-            <p>Prompts, activities and group chat.</p>
-          </div>
-        </li>
-        <li
-          class="step-card step-card--mint visual-placeholder"
-          data-motion-reveal="fade"
-          data-motion-delay="0.15"
-        >
-          <span class="step-number step-number--mint">4</span>
-          <span class="step-card__image-label"
-            >Full photo background<br />Match + returning face</span
-          >
-          <div class="step-card__caption">
-            <h3>Match or meet again</h3>
-            <p>Like anytime. Strong connections may return.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
 
-  <section class="quote-band" aria-label="Rosemarry philosophy">
-    <div class="shell quote-band__inner">
-      <span class="quote-shape quote-shape--square" aria-hidden="true"></span>
-      <blockquote>“Good things<br />take time.”</blockquote>
-      <span class="quote-shape quote-shape--circle" aria-hidden="true"></span>
+      <div class="steps-layout">
+        <figure class="steps-demo" data-motion-reveal="fade">
+          <div class="steps-demo__stage">
+            <span class="steps-demo__ring" aria-hidden="true"></span>
+            <span class="steps-demo__blob" aria-hidden="true"></span>
+
+            <div class="phone">
+              <span class="phone__key phone__key--action" aria-hidden="true"></span>
+              <span class="phone__key phone__key--volume" aria-hidden="true"></span>
+              <span class="phone__key phone__key--power" aria-hidden="true"></span>
+
+              <div class="phone__screen">
+                <span class="phone__island" aria-hidden="true"></span>
+
+                <!--
+                  Demo video slot: replace .phone__placeholder with
+                  <video class="phone__video" src="/videos/rosemarry-demo.mp4" poster="…"
+                    autoplay muted loop playsinline></video>
+                  Record in portrait (9:19.5, e.g. 1080×2340) so it fills the screen edge to edge.
+                -->
+                <div
+                  class="phone__placeholder"
+                  role="img"
+                  aria-label="Preview of the Rosemarry app. The product demo video is still in production."
+                >
+                  <div class="phone__statusbar" aria-hidden="true">
+                    <span>9:41</span>
+                    <span class="phone__signal"><i></i><i></i><i></i></span>
+                  </div>
+                  <div class="phone__app" aria-hidden="true">
+                    <div class="steps-demo__phone-header">
+                      <img src="/images/rosemarry/rose-hand-logo.png" alt="" />
+                      <span>Your Circle</span>
+                      <b>Day 3</b>
+                    </div>
+                    <div class="steps-demo__people">
+                      <img src="/images/placeholders/profile-1.svg" alt="" />
+                      <img src="/images/placeholders/profile-2.svg" alt="" />
+                      <img src="/images/placeholders/profile-3.svg" alt="" />
+                      <img src="/images/placeholders/profile-4.svg" alt="" />
+                    </div>
+                    <div class="steps-demo__prompt">
+                      <small>Today&rsquo;s prompt</small>
+                      <strong>What&rsquo;s a tiny thing that made your week?</strong>
+                    </div>
+                    <div class="steps-demo__messages">
+                      <span>Fresh bread on my walk home 🍞</span>
+                      <span>A dog remembered me at the park.</span>
+                      <span>Same! Mine waits by the bakery.</span>
+                    </div>
+                  </div>
+                  <span class="steps-demo__play" aria-hidden="true">
+                    <i class="fa-solid fa-play"></i>
+                  </span>
+                </div>
+
+                <span class="phone__home" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <span class="steps-demo__status">Demo video in production</span>
+          </div>
+          <figcaption>
+            <span>Product walkthrough</span>
+            <p>A short screen recording of a week in a Circle will play here.</p>
+          </figcaption>
+        </figure>
+
+        <ol class="steps-timeline" aria-label="The four steps">
+          <li class="step-summary" data-motion-reveal="fade">
+            <span class="step-summary__icon" aria-hidden="true"
+              ><i class="fa-solid fa-sliders"></i
+            ></span>
+            <div>
+              <h3>Tell us what matters.</h3>
+              <p>
+                Share your interests, preferences and location so we can find people with something
+                meaningful in common.
+              </p>
+            </div>
+          </li>
+          <li class="step-summary" data-motion-reveal="fade" data-motion-delay="0.04">
+            <span class="step-summary__icon step-summary__icon--yellow" aria-hidden="true"
+              ><i class="fa-solid fa-user-group"></i
+            ></span>
+            <div>
+              <h3>Start small, not endless.</h3>
+              <p>
+                Rosemarry brings a small group of compatible people together for one week—no
+                split-second swiping required.
+              </p>
+            </div>
+          </li>
+          <li class="step-summary" data-motion-reveal="fade" data-motion-delay="0.08">
+            <span class="step-summary__icon step-summary__icon--pink" aria-hidden="true"
+              ><i class="fa-solid fa-comments"></i
+            ></span>
+            <div>
+              <h3>Let personality show up.</h3>
+              <p>
+                Try prompts, activities and group chat. Shared moments make conversation feel more
+                natural.
+              </p>
+            </div>
+          </li>
+          <li class="step-summary" data-motion-reveal="fade" data-motion-delay="0.12">
+            <span class="step-summary__icon step-summary__icon--mint" aria-hidden="true"
+              ><i class="fa-solid fa-rotate"></i
+            ></span>
+            <div>
+              <h3>Match—or meet again.</h3>
+              <p>
+                Like someone anytime. When the week ends, strong connections may return in a future
+                Circle.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -174,21 +236,30 @@
         <p>Rosemarry changes what dating feels like—not just where you meet.</p>
       </header>
       <div class="outcome-grid">
-        <article class="phase-card phase-card--purple visual-placeholder" data-motion-reveal="fade">
+        <article
+          class="phase-card phase-card--purple visual-placeholder rm-sticker"
+          data-motion-reveal="fade"
+        >
           <span>People photo<br />Familiar faces</span>
           <div class="phase-card__caption">
             <h3>Familiar faces</h3>
             <p>You are not starting from zero every day.</p>
           </div>
         </article>
-        <article class="phase-card phase-card--yellow visual-placeholder" data-motion-reveal="fade">
+        <article
+          class="phase-card phase-card--yellow visual-placeholder rm-sticker"
+          data-motion-reveal="fade"
+        >
           <span>People photo<br />Natural conversation</span>
           <div class="phase-card__caption">
             <h3>Easier conversations</h3>
             <p>Shared moments give you something real to discuss.</p>
           </div>
         </article>
-        <article class="phase-card phase-card--pink visual-placeholder" data-motion-reveal="fade">
+        <article
+          class="phase-card phase-card--pink visual-placeholder rm-sticker"
+          data-motion-reveal="fade"
+        >
           <span>People photo<br />Connection moment</span>
           <div class="phase-card__caption">
             <h3>Matches with context</h3>
@@ -209,56 +280,20 @@
         <p>Real faces and honest moments help you recognise the kind of dating you want.</p>
       </header>
       <div class="inside-layout" data-motion-reveal="fade">
-        <div class="inside-photo inside-photo--portrait-one visual-placeholder">
+        <div class="inside-photo inside-photo--portrait-one visual-placeholder rm-sticker">
           <span>People photo<br />Portrait 01</span><b>&ldquo;Personality matters.&rdquo;</b>
         </div>
-        <div class="inside-photo inside-photo--portrait-two visual-placeholder">
+        <div class="inside-photo inside-photo--portrait-two visual-placeholder rm-sticker">
           <span>People photo<br />Portrait 02</span><b>&ldquo;I hate cold openers.&rdquo;</b>
         </div>
-        <div class="inside-photo inside-photo--wide-one visual-placeholder">
+        <div class="inside-photo inside-photo--wide-one visual-placeholder rm-sticker">
           <span>People photo 03<br />Two friends talking</span
           ><b>&ldquo;I&rsquo;d rather know fewer people better.&rdquo;</b>
         </div>
-        <div class="inside-photo inside-photo--wide-two visual-placeholder">
+        <div class="inside-photo inside-photo--wide-two visual-placeholder rm-sticker">
           <span>People photo 04<br />Candid connection</span
           ><b>&ldquo;I&rsquo;m open to attraction growing.&rdquo;</b>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="choice section-pad" aria-labelledby="choice-title">
-    <div class="shell choice-grid">
-      <div class="choice-phone" data-motion-reveal="fade">
-        <div class="visual-placeholder">
-          <span>App screen + photo<br />choice / safety controls</span>
-        </div>
-      </div>
-      <div class="choice-copy" data-motion-reveal>
-        <span class="sticker sticker--yellow">Your choice, every step</span>
-        <h2 id="choice-title">Familiarity<br />without pressure.</h2>
-        <ul>
-          <li>
-            <i>✓</i>
-            <p>
-              <strong>Like anytime</strong><span>You do not need to wait for the week to end.</span>
-            </p>
-          </li>
-          <li>
-            <i>✓</i>
-            <p>
-              <strong>Choose more space</strong
-              ><span>Avoid sharing a future Circle with someone.</span>
-            </p>
-          </li>
-          <li>
-            <i>✓</i>
-            <p>
-              <strong>Safety built in</strong
-              ><span>Identity checks, reporting, blocking and moderation.</span>
-            </p>
-          </li>
-        </ul>
       </div>
     </div>
   </section>

@@ -1,13 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  OnDestroy,
-  ViewChild,
-  afterNextRender,
-  inject,
-} from '@angular/core';
+import { Component, DestroyRef, ElementRef, afterNextRender, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 const DISMISSED_KEY = 'rosemarry-early-stage-dismissed';
 
@@ -17,19 +10,16 @@ const DISMISSED_KEY = 'rosemarry-early-stage-dismissed';
   templateUrl: './early-stage-banner.html',
   styleUrl: './early-stage-banner.css',
 })
-export class EarlyStageBanner implements OnDestroy {
-  @ViewChild('noticeDialog', { static: true })
-  private readonly noticeDialog!: ElementRef<HTMLDialogElement>;
-
-  @ViewChild('primaryAction', { static: true })
-  private readonly primaryAction!: ElementRef<HTMLButtonElement>;
-
+export class EarlyStageBanner {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   private previousFocus: HTMLElement | null = null;
   private previousBodyOverflow = '';
   private scrollLocked = false;
-  private openFrame: number | null = null;
+  /** True from the first frame on the landing page until the visitor dismisses the notice. */
+  private shouldBeOpen = false;
 
   constructor() {
     afterNextRender(() => {
@@ -38,26 +28,41 @@ export class EarlyStageBanner implements OnDestroy {
 
       // Angular's development hydration can reconcile server-rendered attributes after
       // afterNextRender callbacks. Open on the following frame, once reconciliation is complete.
-      this.openFrame = view.requestAnimationFrame(() => {
-        this.openFrame = null;
-        if (this.destroyRef.destroyed || this.wasDismissed()) return;
-        this.open();
+      const openFrame = view.requestAnimationFrame(() => {
+        if (!this.isLandingPage() || this.wasDismissed()) return;
+        this.previousFocus =
+          this.document.activeElement instanceof HTMLElement ? this.document.activeElement : null;
+        this.shouldBeOpen = true;
+        this.syncDialog();
+      });
+
+      // The dev server's hot reload re-renders this view in place right after bootstrap, which
+      // swaps the <dialog> node. Without re-syncing, the opened dialog is removed (invisible)
+      // while the scroll lock it set stays on. Re-sync whenever the node changes instead.
+      const observer = new MutationObserver(() => this.syncDialog());
+      observer.observe(this.host.nativeElement, { childList: true });
+
+      this.destroyRef.onDestroy(() => {
+        view.cancelAnimationFrame(openFrame);
+        observer.disconnect();
+        this.setScrollLock(false);
       });
     });
   }
 
   protected dismiss(): void {
+    this.shouldBeOpen = false;
     this.rememberDismissal();
-    const dialog = this.noticeDialog.nativeElement;
+    const dialog = this.currentDialog();
 
-    if (dialog.open && typeof dialog.close === 'function') {
+    if (dialog?.open && typeof dialog.close === 'function') {
       dialog.close();
     } else {
-      dialog.removeAttribute('open');
+      dialog?.removeAttribute('open');
     }
 
-    dialog.classList.remove('early-stage-dialog--fallback');
-    this.releaseModalState();
+    dialog?.classList.remove('early-stage-dialog--fallback');
+    this.release();
   }
 
   protected handleCancel(event: Event): void {
@@ -72,9 +77,8 @@ export class EarlyStageBanner implements OnDestroy {
   protected handleKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Tab') return;
 
-    const controls = Array.from(
-      this.noticeDialog.nativeElement.querySelectorAll<HTMLElement>('button:not([disabled])'),
-    );
+    const dialog = event.currentTarget as HTMLDialogElement;
+    const controls = Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled])'));
     if (controls.length === 0) return;
 
     const first = controls[0];
@@ -91,22 +95,19 @@ export class EarlyStageBanner implements OnDestroy {
   }
 
   protected handleClose(): void {
+    this.shouldBeOpen = false;
     this.rememberDismissal();
-    this.releaseModalState();
+    this.release();
   }
 
-  ngOnDestroy(): void {
-    if (this.openFrame !== null) {
-      this.document.defaultView?.cancelAnimationFrame(this.openFrame);
-      this.openFrame = null;
-    }
-    this.releaseModalState(false);
+  /** Make the live <dialog> match `shouldBeOpen`, and lock scrolling only while it is open. */
+  private syncDialog(): void {
+    const dialog = this.currentDialog();
+    if (dialog && this.shouldBeOpen && !dialog.open) this.showDialog(dialog);
+    this.setScrollLock(Boolean(dialog?.open));
   }
 
-  private open(): void {
-    const dialog = this.noticeDialog.nativeElement;
-    this.previousFocus =
-      this.document.activeElement instanceof HTMLElement ? this.document.activeElement : null;
+  private showDialog(dialog: HTMLDialogElement): void {
     dialog.classList.remove('early-stage-dialog--fallback');
 
     try {
@@ -118,26 +119,40 @@ export class EarlyStageBanner implements OnDestroy {
       dialog.setAttribute('open', '');
     }
 
-    if (!dialog.open) return;
-
-    this.previousBodyOverflow = this.document.body.style.overflow;
-    this.document.body.style.overflow = 'hidden';
-    this.scrollLocked = true;
-    queueMicrotask(() => this.primaryAction.nativeElement.focus());
+    queueMicrotask(() =>
+      dialog.querySelector<HTMLButtonElement>('.early-stage-card__action')?.focus(),
+    );
   }
 
-  private releaseModalState(restoreFocus = true): void {
-    if (!this.scrollLocked) return;
-    this.document.body.style.overflow = this.previousBodyOverflow;
-    this.scrollLocked = false;
+  /** Only finds the dialog currently attached to this component, never a replaced one. */
+  private currentDialog(): HTMLDialogElement | null {
+    return this.host.nativeElement.querySelector('dialog');
+  }
 
+  private setScrollLock(locked: boolean): void {
+    if (locked === this.scrollLocked) return;
+
+    if (locked) {
+      this.previousBodyOverflow = this.document.body.style.overflow;
+      this.document.body.style.overflow = 'hidden';
+    } else {
+      this.document.body.style.overflow = this.previousBodyOverflow;
+    }
+
+    this.scrollLocked = locked;
+  }
+
+  private release(): void {
+    this.setScrollLock(false);
+
+    const previousFocus = this.previousFocus;
+    this.previousFocus = null;
     if (
-      restoreFocus &&
-      this.previousFocus &&
-      this.previousFocus !== this.document.body &&
-      this.document.contains(this.previousFocus)
+      previousFocus &&
+      previousFocus !== this.document.body &&
+      this.document.contains(previousFocus)
     ) {
-      this.previousFocus.focus();
+      previousFocus.focus();
     }
   }
 
@@ -147,6 +162,11 @@ export class EarlyStageBanner implements OnDestroy {
     } catch {
       return false;
     }
+  }
+
+  private isLandingPage(): boolean {
+    const [path] = this.router.url.split(/[?#]/);
+    return path === '/';
   }
 
   private rememberDismissal(): void {

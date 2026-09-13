@@ -59,7 +59,7 @@
             @for (plan of plans; track plan.name; let index = $index) {
               <button
                 type="button"
-                class="pricing-card-hover group w-full rounded-[24px] border p-4 text-left outline-none transition-colors focus-visible:ring-4 focus-visible:ring-birdpink/40"
+                class="rm-sticker group w-full rounded-[24px] border p-4 text-left outline-none transition-colors focus-visible:ring-4 focus-visible:ring-birdpink/40"
                 [class.border-blossom]="index === activePlan()"
                 [class.bg-blossom]="index === activePlan()"
                 [class.text-ink]="index === activePlan()"
@@ -189,7 +189,7 @@
               </p>
               <button
                 type="button"
-                class="pricing-card-hover shrink-0 rounded-2xl border-[1.5px] border-rose bg-rose px-5 py-3.5 text-sm font-semibold text-white hover:border-ink hover:bg-ink"
+                class="rm-sticker shrink-0 rounded-2xl border-[1.5px] border-rose bg-rose px-5 py-3.5 text-sm font-semibold text-white hover:border-ink hover:bg-ink"
                 (click)="signup.goToSignup()"
               >
                 Get in early

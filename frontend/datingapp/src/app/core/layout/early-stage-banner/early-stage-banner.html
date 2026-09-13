@@ -1,5 +1,4 @@
 <dialog
-  #noticeDialog
   class="early-stage-dialog"
   aria-labelledby="early-stage-title"
   aria-describedby="early-stage-description"
@@ -18,20 +17,18 @@
       <span aria-hidden="true">&times;</span>
     </button>
 
+    <div class="early-stage-card__brand" aria-label="Rosemarry">
+      <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="58" height="44" />
+      <span>Rosemarry</span>
+    </div>
     <p class="early-stage-card__eyebrow">A quick heads-up</p>
-    <h2 id="early-stage-title">Still growing.</h2>
+    <h2 id="early-stage-title">We&rsquo;re still in development.</h2>
     <p id="early-stage-description" class="early-stage-card__description">
       Rosemarry is in development and is not yet available to download. Launch timing and locations
       have not been announced.
     </p>
-    <button
-      #primaryAction
-      class="early-stage-card__action"
-      type="button"
-      autofocus
-      (click)="dismiss()"
-    >
-      Got it
+    <button class="early-stage-card__action" type="button" autofocus (click)="dismiss()">
+      Got it — keep exploring
     </button>
   </section>
 </dialog>

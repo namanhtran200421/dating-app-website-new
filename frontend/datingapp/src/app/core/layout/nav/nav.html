@@ -15,14 +15,7 @@
 
   <div class="nav-desktop hidden items-center xl:flex">
     <div class="nav-desktop__primary">
-      <a
-        routerLink="/circle"
-        routerLinkActive="nav-link--active"
-        ariaCurrentWhenActive="page"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-desktop-link"
-        (click)="closeMenu()"
-      >
+      <a routerLink="/" fragment="how-it-works" class="nav-desktop-link" (click)="closeMenu()">
         <span>How it works</span>
       </a>
       <a
@@ -91,7 +84,7 @@
               ><i class="fa-regular fa-heart"></i
             ></span>
             <span><strong>Our story</strong><small>Meet the people building it</small></span>
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
           </a>
           <a
             routerLink="/press"
@@ -105,7 +98,7 @@
               ><i class="fa-regular fa-newspaper"></i
             ></span>
             <span><strong>Press kit</strong><small>Facts, founders and brand assets</small></span>
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
           </a>
           <a
             routerLink="/contact-us"
@@ -119,7 +112,7 @@
               ><i class="fa-regular fa-paper-plane"></i
             ></span>
             <span><strong>Message us</strong><small>Support, feedback or partnerships</small></span>
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -138,14 +131,10 @@
       >
         <i class="fa-brands fa-instagram" aria-hidden="true"></i>
       </a>
-      <a
-        class="nav-join"
-        href="#join"
-        (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
-      >
+      <button type="button" class="nav-join" (click)="closeMenu(); signup.goToSignup()">
         <span>Join early access</span>
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-      </a>
+        <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 
@@ -172,15 +161,13 @@
     [attr.inert]="menuOpen() ? null : ''"
   >
     <a
-      routerLink="/circle"
-      routerLinkActive="nav-mobile-link--active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
+      routerLink="/"
+      fragment="how-it-works"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+      class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
-      <span class="nav-mobile-link__label">Circle </span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <span class="nav-mobile-link__label">How it works</span>
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
     </a>
     <a
       routerLink="/blog"
@@ -188,10 +175,10 @@
       ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+      class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
       <span class="nav-mobile-link__label">Blog</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
     </a>
     <a
       routerLink="/about-us"
@@ -199,10 +186,10 @@
       ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+      class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
       <span class="nav-mobile-link__label">Our story</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
     </a>
     <a
       routerLink="/contact-us"
@@ -210,10 +197,10 @@
       ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+      class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
       <span class="nav-mobile-link__label">Message us</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
     </a>
     <a
       routerLink="/press"
@@ -221,25 +208,25 @@
       ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+      class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
       <span class="nav-mobile-link__label">Press kit</span>
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
     </a>
-    <a
-      href="#join"
-      (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-rose"
+    <button
+      type="button"
+      (click)="closeMenu(); signup.goToSignup()"
+      class="rm-pop flex items-center justify-between rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-white no-underline"
     >
-      Get in early
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
+      Join early access
+      <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
+    </button>
     <a
       href="https://www.instagram.com/rosemarry_app/"
       target="_blank"
       rel="noopener"
       (click)="closeMenu()"
-      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-[filter] hover:brightness-105"
+      class="rm-row flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
       Catch us on Insta
       <i class="fa-brands fa-instagram" aria-hidden="true"></i>

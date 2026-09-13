@@ -1,65 +1,48 @@
-<div id="top" class="overflow-x-hidden bg-cream/90 font-body text-ink">
-  <section
-    class="border-y border-ink/10 bg-white/45 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
-    aria-labelledby="why-title"
-  >
-    <div class="mx-auto max-w-[1180px]">
-      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-[clamp(56px,8vw,110px)]">
-        <div data-motion-reveal>
-          <span class="mb-4 block text-sm font-bold uppercase tracking-[0.14em] text-rose">
-            Why Rosemarry exists ?
-          </span>
-          <h1
-            id="why-title"
-            class="font-display text-[clamp(38px,5.5vw,70px)] font-semibold leading-[1.02] tracking-[-1.5px]"
-          >
-            The dating app <br />formula needs a
-            <span class="scribble-underline">
-              rewrite
-              <svg
-                class="scribble-underline__line"
-                viewBox="0 0 220 22"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  class="scribble-underline__stroke"
-                  pathLength="1"
-                  d="M4 12 C29 4 48 17 72 10 C99 2 117 17 143 9 C164 3 187 14 216 7"
-                />
-                <path
-                  class="scribble-underline__stroke scribble-underline__stroke--second"
-                  pathLength="1"
-                  d="M15 18 C46 14 72 21 104 15 C137 10 167 20 207 13"
-                />
-              </svg>
-            </span>
-          </h1>
-        </div>
+<div id="top" class="about-page overflow-x-hidden bg-cream/90 font-body text-ink">
+  <section class="about-hero" aria-labelledby="why-title">
+    <div class="about-shell about-hero__grid">
+      <header data-motion-reveal class="about-hero__headline">
+        <span class="about-hero__label">Our story · written in Melbourne</span>
+        <h1 id="why-title">The dating app formula needs a <em>rewrite.</em></h1>
+        <p>
+          Rosemarry started with a simple frustration: more profiles were not creating better
+          connections.
+        </p>
+        <span class="about-hero__margin-note" aria-hidden="true">So we changed the pace ↗</span>
+      </header>
 
-        <div
-          data-motion-reveal
-          data-motion-delay="0.08"
-          class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/75"
-        >
+      <div data-motion-reveal="fade" data-motion-delay="0.08" class="about-hero__composition">
+        <article class="about-letter rm-sticker">
+          <span class="about-letter__tape" aria-hidden="true"></span>
+          <p class="about-letter__salutation">Dear dating apps,</p>
           <p>
             The usual formula asks people to make quick decisions from a few photos, keep swiping,
             and trust an algorithm to find the right person.
           </p>
           <p>That creates more choices, but not always better connections.</p>
-          <p>We believe attraction often needs time, familiarity and real interaction to grow.</p>
           <p>
-            So Rosemarry is built around small weekly Circles, shared conversations and repeated
-            encounters – giving people more chances to actually get to know each other.
+            We believe attraction often needs time, familiarity and real interaction to grow. So
+            Rosemarry is built around small weekly Circles, shared conversations and repeated
+            encounters.
           </p>
-          <p class="font-semibold text-ink">Less swiping. More getting to know each other.</p>
-        </div>
+          <strong>Less swiping. More getting to know each other.</strong>
+          <span class="about-letter__signoff">— The Rosemarry team</span>
+        </article>
+
+        <aside class="about-principles rm-sticker" aria-label="The Rosemarry rewrite">
+          <div class="about-principles__heading"><span>Our rewrite</span><span>✦</span></div>
+          <ol>
+            <li><span>01</span><strong>Smaller weekly Circles</strong></li>
+            <li><span>02</span><strong>Shared things to talk about</strong></li>
+            <li><span>03</span><strong>Time before the match</strong></li>
+          </ol>
+        </aside>
       </div>
     </div>
   </section>
 
   <section
-    class="bg-blossom/90 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
+    class="about-founders bg-blossom/90 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
     aria-labelledby="founders-title"
   >
     <div class="mx-auto max-w-[1180px]">
@@ -84,7 +67,7 @@
             class="founder-deck-page founder-deck-page--active"
           >
             <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
+              class="founder-card rm-sticker relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
@@ -120,7 +103,7 @@
             </article>
 
             <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
+              class="founder-card rm-sticker relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
@@ -163,7 +146,7 @@
               </div>
             </article>
             <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
+              class="founder-card rm-sticker relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
             >
               <div class="overflow-hidden rounded-[24px] bg-cream p-2">
                 <div

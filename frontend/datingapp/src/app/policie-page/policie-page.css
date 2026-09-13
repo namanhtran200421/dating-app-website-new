@@ -2,6 +2,17 @@
   display: block;
 }
 
+.policy-hero {
+  border: 2px solid #202131;
+  box-shadow: 8px 9px 0 #ed77a8;
+}
+
+.policy-index {
+  border: 2px solid #202131;
+  background: #fff;
+  box-shadow: 6px 7px 0 #8d6cff;
+}
+
 .policy-index a {
   display: flex;
   align-items: center;
@@ -12,16 +23,13 @@
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
-  transition:
-    color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms ease;
+  transition: var(--rm-hover-transition);
 }
 
 .policy-index a:hover {
   color: #d81e4a;
-  background: rgba(246, 201, 239, 0.38);
-  transform: translateX(0.2rem);
+  background: var(--rm-row-tint);
+  translate: var(--rm-row-shift);
 }
 
 .policy-index a span {
@@ -32,22 +40,23 @@
 
 .policy-section {
   scroll-margin-top: 7rem;
-  border-width: 1px;
+  border-width: 2px;
+  border-color: #202131;
   border-radius: 2.25rem;
   padding: clamp(1.5rem, 4vw, 3rem);
-  box-shadow: 0 28px 70px -54px rgba(28, 20, 24, 0.5);
+  box-shadow: 6px 7px 0 #ed77a8;
   outline: none;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease;
+  transition: var(--rm-hover-transition);
 }
+
+/* Long reading sections stay still; the cards inside them carry the sticker wiggle. */
 
 .policy-section:target,
 .policy-section:focus-visible {
   border-color: rgba(216, 30, 74, 0.45);
   box-shadow:
     0 0 0 4px rgba(216, 30, 74, 0.08),
-    0 28px 70px -54px rgba(28, 20, 24, 0.5);
+    8px 9px 0 #ed77a8;
 }
 
 .policy-section-heading {
@@ -103,6 +112,21 @@
   margin-top: 1rem;
 }
 
+.policy-contact-details a {
+  color: #d81e4a;
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25rem;
+  transition: var(--rm-hover-transition);
+}
+
+.policy-contact-details a:hover {
+  color: var(--rm-link-hover);
+  text-decoration-color: var(--rm-link-underline);
+  text-decoration-thickness: 3px;
+}
+
 .policy-icon {
   display: inline-flex;
   width: 2.5rem;
@@ -133,10 +157,11 @@
 }
 
 .policy-detail-card {
-  border: 1px solid rgba(28, 20, 24, 0.09);
+  border: 1.5px solid #202131;
   border-radius: 1.25rem;
   background: rgba(251, 242, 233, 0.58);
   padding: 1.25rem;
+  box-shadow: 3px 4px 0 #8d6cff;
 }
 
 .policy-detail-card ul {
@@ -177,6 +202,7 @@
   font-size: 0.84375rem;
   font-weight: 500;
   line-height: 1.72;
+  box-shadow: 3px 4px 0 #ffc53d;
 }
 
 .policy-note strong {
@@ -234,9 +260,46 @@
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
   gap: 1rem;
-  border: 1px solid rgba(28, 20, 24, 0.09);
+  border: 1.5px solid #202131;
   border-radius: 1.25rem;
   padding: 1.15rem;
+  background: #fff;
+  box-shadow: 3px 4px 0 #47d8ad;
+}
+
+.policy-principles > * {
+  border: 1.5px solid #202131;
+  box-shadow: 3px 4px 0 #8d6cff;
+}
+
+.policy-principles > :nth-child(2) {
+  --rm-sticker-tilt: 1deg;
+
+  box-shadow: 3px 4px 0 #ffc53d;
+}
+
+.policy-principles > :nth-child(3) {
+  box-shadow: 3px 4px 0 #47d8ad;
+}
+
+@media (min-width: 640px) {
+  .policy-principles {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .policy-principles > :nth-child(1) {
+    grid-column: 1 / span 7;
+  }
+
+  .policy-principles > :nth-child(2) {
+    grid-column: 8 / span 5;
+    margin-top: 2rem;
+  }
+
+  .policy-principles > :nth-child(3) {
+    grid-column: 3 / span 8;
+  }
 }
 
 .policy-term > span {
@@ -314,15 +377,5 @@
 
   .policy-section-heading {
     align-items: flex-start;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .policy-index a {
-    transition: none;
-  }
-
-  .policy-index a:hover {
-    transform: none;
   }
 }
