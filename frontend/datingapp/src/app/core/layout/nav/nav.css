@@ -13,12 +13,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  border: 0;
   border-bottom: 2px solid var(--rm-ink);
-  background: rgb(255 255 255 / 96%);
+  border-radius: 0;
+  background: rgb(251 248 239 / 94%);
   padding: 10px clamp(20px, 5vw, 72px);
   color: var(--rm-ink);
-  box-shadow: 0 5px 0 var(--rm-pink);
-  backdrop-filter: none;
+  box-shadow: none;
+  backdrop-filter: blur(12px);
   transition:
     min-height 180ms ease,
     box-shadow 180ms ease;
@@ -64,18 +66,6 @@
 
 @media (min-width: 1280px) {
   .site-nav {
-    top: 1rem;
-    right: 0;
-    left: 0;
-    width: min(calc(100% - 8rem), 80rem);
-    min-height: 4.25rem;
-    border: 2px solid var(--rm-ink);
-    border-radius: 1.15rem;
-    margin-inline: auto;
-    background: white;
-    padding: 0.5rem 0.6rem 0.5rem 0.75rem;
-    box-shadow: 6px 7px 0 var(--rm-pink);
-    backdrop-filter: none;
     transition:
       opacity 220ms ease,
       transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -88,11 +78,11 @@
   .site-nav.site-nav--hidden {
     pointer-events: none;
     opacity: 0;
-    transform: translate3d(0, calc(-100% - 1.5rem), 0);
+    transform: translate3d(0, -100%, 0);
   }
 
   .site-nav.bg-cream\/90 {
-    background: white;
+    background: rgb(251 248 239 / 94%);
   }
 
   .site-nav > a {

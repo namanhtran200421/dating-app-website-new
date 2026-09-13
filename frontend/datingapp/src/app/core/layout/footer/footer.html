@@ -4,125 +4,84 @@
       <div class="footer-signup-panel__copy">
         <span class="footer-sticker">Early access</span>
         <h2 id="footer-signup-title">Get in before the first Circle.</h2>
-        <p>Leave your email and we&rsquo;ll let you know the moment Rosemarry launches.</p>
-
-        <div class="footer-signup">
-          @if (signup.showSignupButton()) {
-            <div class="footer-signup__intro">
-              <button type="button" class="footer-signup__primary" (click)="signup.open()">
-                Join the early list <span class="rm-arrow" aria-hidden="true">→</span>
-              </button>
-              <p>Just your email. Nothing else.</p>
-            </div>
-          }
-
-          @if (signup.showSignupForm()) {
-            <form
-              [formGroup]="signup.preSignForm"
-              (ngSubmit)="signup.submit()"
-              class="footer-signup__form"
-              novalidate
-            >
-              <label for="rm-email-input">Your email for early-access updates</label>
-              <div class="footer-signup__row">
-                <input
-                  id="rm-email-input"
-                  type="email"
-                  formControlName="email"
-                  placeholder="you@example.com"
-                  autocomplete="email"
-                  [attr.aria-invalid]="signup.emailError() ? 'true' : null"
-                  [attr.aria-describedby]="signup.emailError() ? 'rm-email-error' : null"
-                />
-                <button type="submit" [disabled]="signup.isSubmitting()">
-                  {{ signup.isSubmitting() ? 'Joining…' : 'Join the list' }}
-                </button>
-              </div>
-
-              @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
-                <span id="rm-email-error" class="footer-signup__error" role="alert">
-                  Drop your email so we know where to send the invite.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
-              ) {
-                <span id="rm-email-error" class="footer-signup__error" role="alert">
-                  That email does not look quite right. Check it and try again.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
-              ) {
-                <span id="rm-email-error" class="footer-signup__error" role="alert">
-                  Please keep your email under 254 characters.
-                </span>
-              }
-
-              @if (signup.securityError()) {
-                <span class="footer-signup__error" role="alert">
-                  The security check needs another go. Refresh it and try again.
-                </span>
-              }
-
-              @if (signup.submissionError()) {
-                <span class="footer-signup__error" role="alert">
-                  {{ signup.submissionError() }}
-                </span>
-              }
-
-              <app-turnstile-widget
-                class="footer-signup__turnstile"
-                action="pre_signup"
-                [resetVersion]="signup.turnstileResetVersion()"
-                (tokenChange)="signup.setTurnstileToken($event)"
-                (verificationError)="signup.markTurnstileError()"
-              />
-            </form>
-          }
-
-          @if (signup.submitted()) {
-            <div class="footer-signup__success" role="status">
-              <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
-              <p>
-                <strong>You&rsquo;re on the list.</strong>
-                We saved {{ signup.submittedEmail() }} for early-access updates.
-              </p>
-            </div>
-          }
-        </div>
       </div>
 
-      <aside class="footer-ticket rm-sticker" aria-label="What you get on the early list">
-        <div class="footer-ticket__head">
-          <span>Early list</span>
-          <span aria-hidden="true">Admit one</span>
-        </div>
-
-        <ul class="footer-ticket__perks">
-          <li>
-            <span class="footer-ticket__icon footer-ticket__icon--mint" aria-hidden="true">
-              <i class="fa-solid fa-envelope-open-text"></i>
-            </span>
-            <div>
-              <strong>Only the important updates</strong>
-              <p>No app yet, and no noisy newsletter either.</p>
+      <div class="footer-signup">
+        @if (!signup.submitted()) {
+          <form
+            [formGroup]="signup.preSignForm"
+            (ngSubmit)="signup.submit()"
+            class="footer-signup__form"
+            novalidate
+          >
+            <label for="rm-email-input">Your email for early-access updates</label>
+            <div class="footer-signup__row">
+              <input
+                id="rm-email-input"
+                type="email"
+                formControlName="email"
+                placeholder="Your email"
+                autocomplete="email"
+                [attr.aria-invalid]="signup.emailError() ? 'true' : null"
+                [attr.aria-describedby]="signup.emailError() ? 'rm-email-error' : null"
+              />
+              <button type="submit" [disabled]="signup.isSubmitting()">
+                {{ signup.isSubmitting() ? 'Joining…' : 'Join early access' }}
+                <span class="rm-arrow" aria-hidden="true">→</span>
+              </button>
             </div>
-          </li>
-          <li>
-            <span class="footer-ticket__icon footer-ticket__icon--purple" aria-hidden="true">
-              <i class="fa-solid fa-seedling"></i>
-            </span>
-            <div>
-              <strong>Help shape Rosemarry</strong>
-              <p>Tell us what dating should feel like before we launch.</p>
-            </div>
-          </li>
-        </ul>
+            <p class="footer-signup__offer">1 month of Advanced free at launch</p>
 
-        <div class="footer-ticket__stub">
-          <span class="footer-ticket__stub-label">On us at launch</span>
-          <strong>1 month of Advanced</strong>
-        </div>
-      </aside>
+            @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                Drop your email so we know where to send the invite.
+              </span>
+            } @else if (
+              signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
+            ) {
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                That email does not look quite right. Check it and try again.
+              </span>
+            } @else if (
+              signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
+            ) {
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                Please keep your email under 254 characters.
+              </span>
+            }
+
+            @if (signup.securityError()) {
+              <span class="footer-signup__error" role="alert">
+                The security check needs another go. Refresh it and try again.
+              </span>
+            }
+
+            @if (signup.submissionError()) {
+              <span class="footer-signup__error" role="alert">
+                {{ signup.submissionError() }}
+              </span>
+            }
+
+            <app-turnstile-widget
+              class="footer-signup__turnstile"
+              action="pre_signup"
+              [resetVersion]="signup.turnstileResetVersion()"
+              (tokenChange)="signup.setTurnstileToken($event)"
+              (verificationError)="signup.markTurnstileError()"
+            />
+          </form>
+        }
+
+        @if (signup.submitted()) {
+          <div class="footer-signup__success" role="status">
+            <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+            <p>
+              <strong>You&rsquo;re on the list.</strong>
+              We saved {{ signup.submittedEmail() }} for early-access updates.
+            </p>
+          </div>
+        }
+      </div>
     </div>
   </section>
 

@@ -110,6 +110,13 @@
 .sticker--mint {
   background: var(--mint);
 }
+.sticker--pink {
+  background: var(--pink);
+}
+/* Lightened so small ink text keeps AA contrast. */
+.sticker--purple {
+  background: color-mix(in srgb, var(--purple) 55%, white);
+}
 .hero .sticker {
   padding: 11px 15px 9px;
   font-size: 13px;
@@ -531,6 +538,14 @@
   border-block: 2px solid var(--ink);
   background: var(--mist);
 }
+.problem {
+  position: relative;
+  overflow: hidden;
+  background: var(--mist);
+}
+.problem-shell {
+  position: relative;
+}
 .split-heading {
   display: grid;
   grid-template-columns: 1fr minmax(260px, 0.55fr);
@@ -556,14 +571,17 @@
   font-weight: 600;
   line-height: 1.65;
 }
-.problem-grid {
-  display: grid;
-  grid-template-columns: 1.14fr 0.86fr;
-  gap: 44px;
-  align-items: start;
+.problem-heading {
+  position: relative;
+  z-index: 3;
+  display: block;
+  max-width: 880px;
+  margin-bottom: 44px;
 }
-.problem-grid > :nth-child(2) {
-  margin-top: 72px;
+.problem-grid {
+  position: relative;
+  min-height: 590px;
+  isolation: isolate;
 }
 .outlined-card {
   position: relative;
@@ -572,16 +590,58 @@
   border-radius: 26px;
   background: #dedee5;
   padding: 0;
-  box-shadow: 5px 6px 0 var(--ink);
+}
+.problem-grid .outlined-card {
+  --pop-rest: 8px;
+  position: absolute;
+  aspect-ratio: auto;
+}
+
+/*
+ * Pop cards: on hover the photo card comes to the front, lifts up-left and casts a longer
+ * hard shadow in its accent colour, on top of the shared sticker wiggle.
+ */
+.problem-grid .outlined-card,
+.phase-card,
+.inside-photo {
+  --pop-offset: var(--pop-rest, 6px);
+  box-shadow: var(--pop-offset) var(--pop-offset) 0 var(--card-pop, var(--ink));
+}
+.problem-grid .outlined-card:hover,
+.problem-grid .outlined-card:focus-within,
+.phase-card:hover,
+.phase-card:focus-within,
+.inside-photo:hover,
+.inside-photo:focus-within {
+  --pop-offset: calc(var(--pop-rest, 6px) + 6px * var(--rm-motion));
+  z-index: 5;
+  translate: calc(-3px * var(--rm-motion)) calc(-3px * var(--rm-motion));
+}
+.outlined-card--usual {
+  z-index: 3;
+  top: 72px;
+  left: 0;
+  width: 36%;
+  height: 455px;
+  transform: rotate(-5deg);
+  --card-pop: var(--purple);
+}
+.outlined-card--usual .outlined-card__caption {
+  background: color-mix(in srgb, var(--yellow) 38%, white);
 }
 .outlined-card--pink {
-  background: #f2bfd1;
-  box-shadow: 6px 7px 0 var(--pink);
+  z-index: 2;
+  top: 0;
+  right: 0;
+  width: 78%;
+  height: 520px;
+  background: #dedee5;
 }
 .outlined-card--pink {
+  --card-pop: var(--pink);
   --rm-sticker-tilt: 1deg;
 }
-.outlined-card > span {
+.outlined-card > .outlined-card__photo-label {
   transform: translateY(-18%);
 }
 .outlined-card__caption {
@@ -596,6 +656,35 @@
   background: rgb(255 255 255 / 96%);
   padding: 14px 16px 13px;
   text-align: left;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.outlined-card__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Icon enclosed in a coloured circle; wiggles when its card is hovered. */
+.problem-badge {
+  display: grid;
+  flex: none;
+  width: 26px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 11px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.problem-badge--no {
+  background: var(--pink);
+}
+.problem-badge--yes {
+  background: var(--mint);
+}
+.outlined-card:hover .problem-badge,
+.outlined-card:focus-within .problem-badge {
+  animation: rm-wiggle 420ms var(--rm-ease-bounce);
 }
 .outlined-card__caption h3 {
   margin: 12px 0 5px;
@@ -609,6 +698,65 @@
   font-size: 12px;
   font-weight: 600;
   line-height: 1.45;
+}
+.outlined-card--usual .outlined-card__caption {
+  min-height: 124px;
+}
+.outlined-card--pink .outlined-card__caption {
+  min-height: 132px;
+  background: color-mix(in srgb, var(--pink) 60%, white);
+  padding-left: 23%;
+}
+.outlined-card--pink .outlined-card__caption h3 {
+  font-size: clamp(25px, 3vw, 38px);
+}
+.outlined-card__photo-label {
+  border: 1px solid rgb(32 33 49 / 28%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 52%);
+  padding: 7px 11px 5px;
+}
+.problem-shape {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+.problem-shape--ring {
+  z-index: 0;
+  right: -22px;
+  bottom: 22px;
+  width: 124px;
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background:
+    radial-gradient(var(--ink) 1.5px, transparent 1.6px) 0 0 / 10px 10px,
+    var(--mint);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.problem-shape--diamond {
+  z-index: 0;
+  top: 14px;
+  right: 17px;
+  width: 90px;
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--purple);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(45deg);
+}
+.problem-shape--square {
+  z-index: 4;
+  top: 38px;
+  left: 31%;
+  width: 54px;
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--yellow);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(9deg);
 }
 
 .quote-band {
@@ -674,7 +822,7 @@
   border-radius: 18px;
   background: var(--paper);
   color: var(--ink);
-  box-shadow: 6px 7px 0 var(--purple);
+  --card-pop: var(--purple);
 }
 .phase-card:nth-child(1) {
   grid-column: 1 / span 7;
@@ -694,13 +842,11 @@
   margin-left: 38px;
 }
 .phase-card--yellow {
-  box-shadow: 6px 7px 0 var(--yellow);
-}
-.phase-card--yellow {
+  --card-pop: var(--yellow);
   --rm-sticker-tilt: 1deg;
 }
 .phase-card--pink {
-  box-shadow: 6px 7px 0 var(--pink);
+  --card-pop: var(--pink);
 }
 .phase-card > span {
   transform: translateY(-18%);
@@ -747,17 +893,19 @@
 }
 .inside-photo--portrait-one {
   grid-row: 1 / 3;
-  box-shadow: 6px 7px 0 var(--purple);
+  --card-pop: var(--purple);
 }
 .inside-photo--portrait-two {
   grid-row: 1 / 3;
-  box-shadow: 6px 7px 0 var(--mint);
+  --card-pop: var(--mint);
+  --rm-sticker-tilt: 1deg;
 }
 .inside-photo--wide-one {
-  box-shadow: 6px 7px 0 var(--yellow);
+  --card-pop: var(--yellow);
 }
 .inside-photo--wide-two {
-  box-shadow: 6px 7px 0 var(--pink);
+  --card-pop: var(--pink);
+  --rm-sticker-tilt: 1deg;
 }
 .inside-photo b {
   position: absolute;
@@ -972,15 +1120,43 @@
   .outcome-grid {
     grid-template-columns: 1fr;
   }
-  .problem-grid > :nth-child(2) {
-    margin-top: 0;
+  .problem-heading {
+    margin-bottom: 48px;
   }
-  .outlined-card > p {
+  .problem-grid {
+    display: grid;
+    gap: 28px;
     min-height: 0;
   }
+  .problem-grid .outlined-card {
+    position: relative;
+    inset: auto;
+    width: min(92%, 520px);
+    height: auto;
+    min-height: 390px;
+  }
+  .outlined-card--usual {
+    justify-self: start;
+    transform: rotate(-2.5deg);
+  }
+  .outlined-card--pink {
+    justify-self: end;
+    transform: rotate(1.5deg);
+  }
+  .outlined-card--pink .outlined-card__caption {
+    padding-left: 16px;
+  }
   .outlined-card {
-    min-height: 330px;
     aspect-ratio: auto;
+  }
+  .problem-shape--square {
+    top: 47%;
+    left: auto;
+    right: 2%;
+  }
+  .problem-shape--diamond {
+    top: 48%;
+    right: -18px;
   }
   .quote-band__inner {
     min-height: 300px;
@@ -1030,6 +1206,17 @@
   }
   .button {
     width: 100%;
+  }
+  .problem-grid .outlined-card {
+    width: calc(100% - 8px);
+    min-height: 340px;
+  }
+  .outlined-card--usual,
+  .outlined-card--pink {
+    transform: none;
+  }
+  .outlined-card--pink .outlined-card__caption h3 {
+    font-size: 25px;
   }
   .quote-band blockquote {
     font-size: 43px;
