@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry | A Dating App Built Around Weekly Circles',
+        title: 'Rosemarry | An Interaction-First Dating App',
         description:
           'Rosemarry is an early-stage dating app built around weekly Circles, shared activities and real conversation. The app is still in development.',
         canonicalPath: '/',

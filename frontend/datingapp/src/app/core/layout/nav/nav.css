@@ -2,8 +2,25 @@
   display: contents;
 }
 
-.nav-link--active {
-  color: #d81e4a;
+.site-nav {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 2px solid #202131;
+  background: rgb(251 248 239 / 94%);
+  padding: 10px clamp(20px, 5vw, 72px);
+  color: #202131;
+  backdrop-filter: blur(12px);
+  transition:
+    min-height 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .site-nav a,
@@ -22,23 +39,28 @@
 .nav--over-dark .nav-brand__name {
   color: #fbf2e9;
 }
-
-.nav--over-dark .nav-desktop-link {
-  color: rgb(251 242 233 / 82%);
+.site-nav--dark:not(.site-nav--scrolled) {
+  color: #202131;
 }
-
-.nav--over-dark .nav-desktop-link:hover,
-.nav--over-dark .nav-desktop-link.nav-link--active {
-  color: #f27fa8;
+.site-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: clamp(21px, 2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
 }
-
-.nav--over-dark .nav-menu-button {
-  background: #fbf2e9;
-  color: #1c1418;
+.site-nav__brand img {
+  width: 48px;
+  height: auto;
 }
-
-.nav-link--active .scribble-underline__stroke {
-  stroke-dashoffset: 0;
+.site-nav__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 1vw, 18px);
 }
 
 @media (min-width: 1280px) {
@@ -391,29 +413,119 @@
 
 .nav-mobile-link__label {
   position: relative;
-  display: inline-block;
+  padding: 10px 7px;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
 }
-
-.nav-mobile-link__label::after {
+.site-nav__links a::after {
   position: absolute;
-  right: -0.12rem;
-  bottom: -0.3rem;
-  left: -0.12rem;
-  height: 0.22rem;
-  border-radius: 999px;
-  background: #d81e4a;
+  right: 5px;
+  bottom: 4px;
+  left: 5px;
+  height: 3px;
+  border-radius: 99px;
+  background: #ed77a8;
   content: '';
-  opacity: 0;
-  transform: rotate(-1.5deg) scaleX(0.35);
+  transform: scaleX(0) rotate(-2deg);
   transform-origin: left;
+  transition: transform 180ms ease;
+}
+.site-nav__links a:hover::after,
+.site-nav__links a:focus-visible::after,
+.site-nav__links a.is-active::after {
+  transform: scaleX(1) rotate(-2deg);
+}
+.site-nav__links button,
+.site-nav__mobile button {
+  border: 2px solid #202131;
+  border-radius: 999px;
+  background: #ed77a8;
+  padding: 11px 17px;
+  color: #202131;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 #202131;
+  cursor: pointer;
   transition:
-    opacity 220ms ease,
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.site-nav__links button:hover {
+  transform: translate(-2px, -2px) rotate(-1deg);
+  box-shadow: 5px 6px 0 #202131;
+}
+.site-nav__menu {
+  display: none;
+  width: 46px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid #202131;
+  border-radius: 12px;
+  background: white;
+  color: #202131;
+  font-size: 24px;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 #202131;
+  cursor: pointer;
+}
+.site-nav__mobile {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 14px;
+  left: 14px;
+  display: grid;
+  gap: 8px;
+  border: 2px solid #202131;
+  border-radius: 18px;
+  background: #fbf8ef;
+  padding: 12px;
+  box-shadow: 7px 8px 0 #202131;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+.site-nav__mobile--open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.site-nav__mobile a,
+.site-nav__mobile button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #202131;
+  border-radius: 12px;
+  background: white;
+  padding: 13px 15px;
+  color: #202131;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.site-nav__mobile button {
+  background: #ed77a8;
 }
 
-.nav-mobile-link--active .nav-mobile-link__label::after {
-  opacity: 1;
-  transform: rotate(-1.5deg) scaleX(1);
+@media (max-width: 840px) {
+  .site-nav {
+    min-height: 68px;
+  }
+  .site-nav__links {
+    display: none;
+  }
+  .site-nav__menu {
+    display: grid;
+  }
+  .site-nav__brand img {
+    width: 44px;
+    height: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

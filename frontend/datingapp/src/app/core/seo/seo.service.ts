@@ -58,8 +58,16 @@ export class SeoService {
     this.updateMeta('property', 'og:site_name', 'Rosemarry');
     this.updateMeta('property', 'og:type', seo.article ? 'article' : 'website');
     if (seo.article) {
-      this.updateMeta('property', 'article:published_time', `${seo.article.published}T00:00:00+09:30`);
-      this.updateMeta('property', 'article:modified_time', `${seo.article.modified}T00:00:00+09:30`);
+      this.updateMeta(
+        'property',
+        'article:published_time',
+        `${seo.article.published}T00:00:00+09:30`,
+      );
+      this.updateMeta(
+        'property',
+        'article:modified_time',
+        `${seo.article.modified}T00:00:00+09:30`,
+      );
     } else {
       this.meta.removeTag('property="article:published_time"');
       this.meta.removeTag('property="article:modified_time"');
@@ -144,7 +152,8 @@ export class SeoService {
         url: `${SITE_URL}/`,
         name: 'Rosemarry',
         alternateName: ['Rosemarry Dating App', 'rosemarry.app'],
-        description: 'The official website for Rosemarry, a dating app in development around weekly Circles, shared activities and real conversation.',
+        description:
+          'The official website for Rosemarry, a dating app in development around weekly Circles, shared activities and real conversation.',
         publisher: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'en-AU',
       },
@@ -162,7 +171,11 @@ export class SeoService {
         image: [SOCIAL_IMAGE_URL],
         datePublished: `${seo.article.published}T00:00:00+09:30`,
         dateModified: `${seo.article.modified}T00:00:00+09:30`,
-        author: { '@type': 'Organization', name: 'Rosemarry editorial team', url: `${SITE_URL}/about-us` },
+        author: {
+          '@type': 'Organization',
+          name: 'Rosemarry editorial team',
+          url: `${SITE_URL}/about-us`,
+        },
         publisher: { '@id': `${SITE_URL}/#organization` },
         articleSection: seo.article.topic,
         inLanguage: 'en-AU',
@@ -228,7 +241,7 @@ export class SeoService {
             name: 'How are privacy and safety handled?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Rosemarry is intended for adults aged 18 and over. Planned safeguards include identity checks, reporting, blocking, moderation and controls over future Circles.',
+              text: 'Planned safeguards include identity checks, reporting, blocking, moderation and controls over future Circles.',
             },
           },
         ],

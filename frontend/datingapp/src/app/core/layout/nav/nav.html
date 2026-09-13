@@ -8,26 +8,9 @@
   [class.nav--over-dark]="darkBackground() && !scrolled() && !menuOpen()"
   [class.site-nav--hidden]="navHidden()"
 >
-  <a
-    routerLink="/"
-    fragment="top"
-    (click)="closeMenu()"
-    class="flex min-w-0 items-center gap-2 no-underline"
-  >
-    <img
-      src="images/rosemarry/logo-160.png"
-      width="160"
-      height="120"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      alt="Rosemarry logo"
-      class="h-9 w-auto block"
-    />
-    <span
-      class="nav-brand__name font-display text-[clamp(18px,5.6vw,23px)] font-semibold tracking-tight text-ink"
-      >Rosemarry</span
-    >
+  <a routerLink="/" fragment="top" (click)="closeMenu()" class="site-nav__brand">
+    <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="48" height="37" />
+    <span>Rosemarry</span>
   </a>
 
   <div class="nav-desktop hidden items-center xl:flex">
@@ -168,53 +151,23 @@
 
   <button
     type="button"
-    class="nav-menu-button pricing-card-hover inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-white shadow-[0_10px_24px_-14px_rgba(28,20,24,0.85)] transition-[background-color,transform] duration-200 hover:-translate-y-0.5 xl:hidden"
-    [class.bg-ink]="!menuOpen()"
-    [class.bg-birdpink]="menuOpen()"
+    class="site-nav__menu"
     aria-label="Toggle navigation menu"
     aria-controls="mobile-navigation"
     [attr.aria-expanded]="menuOpen()"
     (click)="toggleMenu()"
   >
     @if (menuOpen()) {
-      <svg
-        aria-hidden="true"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      >
-        <path d="M6 6l12 12M18 6 6 18"></path>
-      </svg>
+      <span aria-hidden="true">×</span>
     } @else {
-      <svg
-        aria-hidden="true"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      >
-        <path d="M4 7h16M4 12h16M4 17h16"></path>
-      </svg>
+      <span aria-hidden="true">☰</span>
     }
   </button>
 
   <div
     id="mobile-navigation"
-    class="absolute inset-x-3 top-full mt-2 flex origin-top flex-col gap-2 rounded-[28px] border border-rose/15 bg-blossom p-3 shadow-[0_24px_50px_-24px_rgba(28,20,24,0.45)] transition-[opacity,transform] duration-200 ease-out xl:hidden"
-    [class.pointer-events-none]="!menuOpen()"
-    [class.-translate-y-1]="!menuOpen()"
-    [class.scale-[0.985]]="!menuOpen()"
-    [class.opacity-0]="!menuOpen()"
-    [class.translate-y-0]="menuOpen()"
-    [class.scale-100]="menuOpen()"
-    [class.opacity-100]="menuOpen()"
+    class="site-nav__mobile"
+    [class.site-nav__mobile--open]="menuOpen()"
     [attr.aria-hidden]="!menuOpen()"
     [attr.inert]="menuOpen() ? null : ''"
   >
