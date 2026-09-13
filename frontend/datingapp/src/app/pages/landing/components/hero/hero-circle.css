@@ -38,13 +38,8 @@
   border: 2px solid rgb(168 92 115 / 38%);
   border-radius: clamp(2rem, 4vw, 3rem);
   background:
-    radial-gradient(circle at 9% 12%, rgb(255 255 255 / 34%) 0 1px, transparent 2px),
     radial-gradient(circle at 86% 22%, rgb(216 30 74 / 6%) 0 15%, transparent 15.2%),
     linear-gradient(135deg, #f8d3d4, #f5c9cc 48%, #f8d8d3);
-  background-size:
-    11px 11px,
-    auto,
-    auto;
   padding: clamp(2.25rem, 5vw, 4.5rem);
   box-shadow:
     0 28px 70px -42px rgb(87 37 55 / 55%),
@@ -76,15 +71,6 @@
   aspect-ratio: 1;
   border-radius: 50%;
   background: rgb(242 127 168 / 26%);
-}
-
-.circle-hero__grain {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  background-image: repeating-linear-gradient(19deg, transparent 0 3px, rgb(255 255 255 / 5%) 4px);
-  mix-blend-mode: soft-light;
-  pointer-events: none;
 }
 
 .circle-hero__doodle {

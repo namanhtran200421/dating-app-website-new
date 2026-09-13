@@ -1,21 +1,152 @@
 <nav
-  class="site-nav"
-  [class.site-nav--scrolled]="scrolled() || menuOpen()"
-  [class.site-nav--dark]="darkBackground() && !scrolled() && !menuOpen()"
+  aria-label="Main navigation"
+  class="site-nav fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 border-b px-[clamp(14px,4vw,44px)] py-3 font-body transition-colors duration-300"
+  [class.bg-cream/90]="scrolled() || menuOpen()"
+  [class.backdrop-blur-md]="scrolled() || menuOpen()"
+  [class.border-ink/10]="scrolled() || menuOpen()"
+  [class.border-transparent]="!scrolled() && !menuOpen()"
+  [class.nav--over-dark]="darkBackground() && !scrolled() && !menuOpen()"
+  [class.site-nav--hidden]="navHidden()"
 >
   <a routerLink="/" fragment="top" (click)="closeMenu()" class="site-nav__brand">
     <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="48" height="37" />
     <span>Rosemarry</span>
   </a>
 
-  <div class="site-nav__links">
-    <a routerLink="/" fragment="problem">Why Rosemarry</a>
-    <a routerLink="/" fragment="how-it-works">How it works</a>
-    <a routerLink="/" fragment="inside-circle">Inside a Circle</a>
-    <a routerLink="/about-us" routerLinkActive="is-active">Our story</a>
-    <button type="button" (click)="signup.goToSignup()">
-      Join early <span aria-hidden="true">→</span>
-    </button>
+  <div class="nav-desktop hidden items-center xl:flex">
+    <div class="nav-desktop__primary">
+      <a
+        routerLink="/circle"
+        routerLinkActive="nav-link--active"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-desktop-link"
+        (click)="closeMenu()"
+      >
+        <span>How it works</span>
+      </a>
+      <a
+        routerLink="/blog"
+        routerLinkActive="nav-link--active"
+        ariaCurrentWhenActive="page"
+        class="nav-desktop-link"
+        (click)="closeMenu()"
+      >
+        <span>Journal</span>
+      </a>
+
+      <div
+        class="nav-company"
+        routerLinkActive="nav-company--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <button
+          #companyMenuTrigger
+          type="button"
+          class="nav-desktop-link nav-company__trigger"
+          aria-controls="desktop-company-navigation"
+          aria-haspopup="true"
+          [attr.aria-expanded]="desktopMenuOpen()"
+          (click)="toggleDesktopMenu()"
+        >
+          <span>Company</span>
+          <svg
+            class="nav-company__chevron"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="m4 6 4 4 4-4"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <div
+          id="desktop-company-navigation"
+          class="nav-company__panel"
+          [class.nav-company__panel--open]="desktopMenuOpen()"
+          [attr.aria-hidden]="!desktopMenuOpen()"
+          [attr.inert]="desktopMenuOpen() ? null : ''"
+        >
+          <div class="nav-company__heading" aria-hidden="true">
+            <span>Behind Rosemarry</span>
+            <span>✦</span>
+          </div>
+          <a
+            routerLink="/about-us"
+            routerLinkActive="nav-company__link--active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-company__link"
+            (click)="closeMenu()"
+          >
+            <span class="nav-company__icon" aria-hidden="true"
+              ><i class="fa-regular fa-heart"></i
+            ></span>
+            <span><strong>Our story</strong><small>Meet the people building it</small></span>
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+          <a
+            routerLink="/press"
+            routerLinkActive="nav-company__link--active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-company__link"
+            (click)="closeMenu()"
+          >
+            <span class="nav-company__icon" aria-hidden="true"
+              ><i class="fa-regular fa-newspaper"></i
+            ></span>
+            <span><strong>Press kit</strong><small>Facts, founders and brand assets</small></span>
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+          <a
+            routerLink="/contact-us"
+            routerLinkActive="nav-company__link--active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-company__link"
+            (click)="closeMenu()"
+          >
+            <span class="nav-company__icon" aria-hidden="true"
+              ><i class="fa-regular fa-paper-plane"></i
+            ></span>
+            <span><strong>Message us</strong><small>Support, feedback or partnerships</small></span>
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <span class="nav-desktop__divider" aria-hidden="true"></span>
+
+    <div class="nav-desktop__actions">
+      <a
+        class="nav-instagram"
+        href="https://www.instagram.com/rosemarry_app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Rosemarry on Instagram (opens in a new tab)"
+        title="Rosemarry on Instagram"
+      >
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+      </a>
+      <a
+        class="nav-join"
+        href="#join"
+        (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
+      >
+        <span>Join early access</span>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
   </div>
 
   <button
@@ -40,14 +171,78 @@
     [attr.aria-hidden]="!menuOpen()"
     [attr.inert]="menuOpen() ? null : ''"
   >
-    <a routerLink="/" fragment="problem" (click)="closeMenu()">Why Rosemarry <span>→</span></a>
-    <a routerLink="/" fragment="how-it-works" (click)="closeMenu()">How it works <span>→</span></a>
-    <a routerLink="/" fragment="inside-circle" (click)="closeMenu()"
-      >Inside a Circle <span>→</span></a
+    <a
+      routerLink="/circle"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
     >
-    <a routerLink="/about-us" (click)="closeMenu()">Our story <span>→</span></a>
-    <button type="button" (click)="closeMenu(); signup.goToSignup()">
-      Join early access <span>→</span>
-    </button>
+      <span class="nav-mobile-link__label">Circle </span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/blog"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Blog</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/about-us"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Our story</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/contact-us"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Message us</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      routerLink="/press"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-colors hover:bg-white"
+    >
+      <span class="nav-mobile-link__label">Press kit</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      href="#join"
+      (click)="$event.preventDefault(); closeMenu(); signup.goToSignup()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-rose"
+    >
+      Get in early
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+    <a
+      href="https://www.instagram.com/rosemarry_app/"
+      target="_blank"
+      rel="noopener"
+      (click)="closeMenu()"
+      class="pricing-card-hover flex items-center justify-between rounded-2xl bg-birdpink px-4 py-3.5 text-sm font-semibold text-ink no-underline transition-[filter] hover:brightness-105"
+    >
+      Catch us on Insta
+      <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+    </a>
   </div>
 </nav>

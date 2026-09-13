@@ -75,8 +75,21 @@
 }
 .footer-signup__primary:hover,
 .footer-signup__form button:hover {
-  transform: translate(-2px, -3px) rotate(-1deg);
-  box-shadow: 6px 7px 0 #202131;
+  border-color: #d81e4a;
+  background: #d81e4a;
+  box-shadow: 4px 4px 0 rgb(28 20 24 / 24%);
+  transform: translateY(-0.2rem);
+}
+
+.footer-signup__primary:focus-visible,
+.footer-signup__form button:focus-visible,
+.footer-signup__form input:focus-visible,
+.footer-signup__privacy a:focus-visible,
+.footer-signup__instagram:focus-visible,
+.footer-social-orbit__link:focus-visible,
+.footer-legal a:focus-visible {
+  outline: 3px solid rgb(216 30 74 / 32%);
+  outline-offset: 3px;
 }
 .footer-signup__form {
   display: grid;
@@ -132,6 +145,23 @@
   text-align: center;
   transform: translateY(5px);
 }
+
+.footer-signup__privacy {
+  color: rgb(28 20 24 / 68%);
+  font-size: 0.68rem;
+  line-height: 1.55;
+}
+
+.footer-signup__privacy a {
+  color: inherit;
+  font-weight: 700;
+  text-underline-offset: 0.18em;
+}
+
+.footer-signup__privacy a:hover {
+  color: #d81e4a;
+}
+
 .footer-signup__success {
   display: flex;
   align-items: center;

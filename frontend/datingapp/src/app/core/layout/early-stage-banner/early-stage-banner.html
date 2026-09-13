@@ -1,8 +1,37 @@
-@if (visible()) {
-  <aside class="early-stage-banner" aria-label="Development status">
-    <p><strong>Still growing.</strong> Rosemarry is in development and is not yet available to download. Launch timing and locations have not been announced.</p>
-    <button type="button" aria-label="Dismiss early-stage notice" (click)="dismiss()">
+<dialog
+  #noticeDialog
+  class="early-stage-dialog"
+  aria-labelledby="early-stage-title"
+  aria-describedby="early-stage-description"
+  (cancel)="handleCancel($event)"
+  (click)="handleBackdropClick($event)"
+  (close)="handleClose()"
+  (keydown)="handleKeydown($event)"
+>
+  <section class="early-stage-card">
+    <button
+      class="early-stage-card__close"
+      type="button"
+      aria-label="Close development notice"
+      (click)="dismiss()"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
-  </aside>
-}
+
+    <p class="early-stage-card__eyebrow">A quick heads-up</p>
+    <h2 id="early-stage-title">Still growing.</h2>
+    <p id="early-stage-description" class="early-stage-card__description">
+      Rosemarry is in development and is not yet available to download. Launch timing and locations
+      have not been announced.
+    </p>
+    <button
+      #primaryAction
+      class="early-stage-card__action"
+      type="button"
+      autofocus
+      (click)="dismiss()"
+    >
+      Got it
+    </button>
+  </section>
+</dialog>

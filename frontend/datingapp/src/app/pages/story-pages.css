@@ -307,6 +307,17 @@
   color: rgb(251 242 233 / 72%);
 }
 
+@media (min-width: 901px) {
+  .feature-card {
+    min-height: 0;
+    padding: clamp(1.5rem, 2.2vw, 1.9rem);
+  }
+
+  .feature-card h3 {
+    margin-top: 2.5rem;
+  }
+}
+
 .story-cta {
   background: #f6c9ef;
   padding: clamp(4rem, 8vw, 7rem) 0 calc(clamp(4rem, 8vw, 7rem) + 2.8rem);
@@ -558,6 +569,9 @@
   border-radius: 2.5rem;
   background: #f6c9ef;
   padding-inline: clamp(1.5rem, 5vw, 3.5rem);
+}
+.blog-article--pink + .blog-article {
+  border-top: 0;
 }
 .blog-article--dark {
   margin-top: clamp(3.5rem, 8vw, 7rem);

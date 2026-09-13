@@ -1,6 +1,6 @@
 <div id="top" class="story-page story-page--blog">
   <section class="blog-hero" aria-labelledby="blog-title">
-    <div class="story-shell">
+    <div data-motion-reveal class="story-shell">
       <span class="story-kicker">The Rosemarry journal</span>
       <h1 id="blog-title">Dating, with room<br /><span>to get to know someone.</span></h1>
       <p class="story-lead">Practical ideas about conversation, dating habits and giving a connection time. From the team building Rosemarry.</p>
@@ -8,7 +8,7 @@
   </section>
   <section class="blog-feed story-shell" aria-label="Journal articles">
     @for (article of articles; track article.slug; let i = $index) {
-      <article class="blog-article" [class.blog-article--pink]="i === 1" [id]="article.legacyId || article.slug">
+      <article data-motion-reveal="fade" class="blog-article" [class.blog-article--pink]="i === 1" [id]="article.legacyId || article.slug">
         <header>
           <span class="blog-article__topic">{{ article.topic }}</span>
           <h2><a [routerLink]="['/blog', article.slug]">{{ article.title }}</a></h2>

@@ -26,10 +26,54 @@
                 placeholder="Your email address"
                 autocomplete="email"
               />
-              <button type="submit" [disabled]="signup.isSubmitting() || !signup.turnstileToken()">
-                {{ signup.isSubmitting() ? 'Checking…' : 'Save me a spot' }}
-                <span aria-hidden="true">→</span>
-              </button>
+
+              @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
+                <span class="footer-signup__error" role="alert">
+                  Drop your email so we know where to send the invite.
+                </span>
+              } @else if (
+                signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
+              ) {
+                <span class="footer-signup__error" role="alert">
+                  That email is not emailing. Check the spelling and try again.
+                </span>
+              } @else if (
+                signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
+              ) {
+                <span class="footer-signup__error" role="alert">
+                  That email is unusually long. Keep it under 254 characters.
+                </span>
+              }
+
+              @if (signup.securityError()) {
+                <span class="footer-signup__error" role="alert">
+                  The security check needs another go. Refresh it and try again.
+                </span>
+              }
+
+              @if (signup.submissionError()) {
+                <span class="footer-signup__error" role="alert">
+                  {{ signup.submissionError() }}
+                </span>
+              }
+
+              <p class="footer-signup__privacy">
+                See how we handle your email in our
+                <a routerLink="/privacy-and-terms" fragment="information-we-collect"
+                  >privacy policy</a
+                >.
+              </p>
+            </form>
+          }
+
+          @if (signup.submitted()) {
+            <div class="footer-signup__success" role="status">
+              <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+              <p>
+                <strong>You&rsquo;re on the list!</strong>
+                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in
+                development.
+              </p>
             </div>
             @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
               <span class="footer-signup__error" role="alert"

@@ -32,7 +32,7 @@ export class Pricing {
       priceLabel: 'forever',
       badge: 'Free',
       description:
-        'Weekly Circles, discovery, matching and messaging — all the essentials to get started.',
+        'Weekly Circles, discovery, matching and messaging – all the essentials to get started.',
       features: [
         'Weekly Circles',
         'Circle chat & activities',

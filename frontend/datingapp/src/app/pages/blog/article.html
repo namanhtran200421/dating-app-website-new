@@ -1,6 +1,6 @@
 <article class="story-page journal-article">
   <header class="story-hero story-hero--compact">
-    <div class="story-shell article-shell">
+    <div data-motion-reveal class="story-shell article-shell">
       <nav class="article-breadcrumbs" aria-label="Breadcrumb">
         <a routerLink="/">Home</a><span aria-hidden="true">/</span>
         <a routerLink="/blog">Journal</a><span aria-hidden="true">/</span>
@@ -17,7 +17,7 @@
     </div>
   </header>
   <div class="story-shell article-shell article-reading">
-    <nav class="article-contents" aria-label="In this article">
+    <nav data-motion-reveal="fade" class="article-contents" aria-label="In this article">
       <h2>In this article</h2>
       <ol>
         @for (section of article().sections; track section.id) {
@@ -26,7 +26,7 @@
       </ol>
     </nav>
     @for (section of article().sections; track section.id) {
-      <section [id]="section.id" [attr.aria-labelledby]="section.id + '-title'">
+      <section data-motion-reveal [id]="section.id" [attr.aria-labelledby]="section.id + '-title'">
         <h2 [id]="section.id + '-title'">{{ section.title }}</h2>
         @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
         @if (section.points) {
@@ -37,21 +37,21 @@
         }
       </section>
     }
-    <aside class="article-signup" aria-labelledby="article-signup-title">
+    <aside data-motion-reveal class="article-signup" aria-labelledby="article-signup-title">
       <p class="story-kicker">A little more time to connect</p>
       <h2 id="article-signup-title">Meet the idea behind weekly Circles.</h2>
       <p>Rosemarry is still in development. Explore the planned experience or join the early-access list for updates from the team.</p>
       <div class="story-actions">
         <a routerLink="/circle" class="story-text-link">How Circles work</a>
         <a [routerLink]="['/blog', article().slug]" fragment="join" class="story-button story-button--dark"
-          (click)="$event.preventDefault(); signup.goToSignup('article')">Join early access <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          (click)="$event.preventDefault(); signup.goToSignup()">Join early access <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </aside>
-    <aside class="article-editorial">
+    <aside data-motion-reveal="fade" class="article-editorial">
       <h2>About this journal</h2>
       <p>We write about conversation, dating habits and the ideas behind Rosemarry. Research is linked where discussed; our product plans are not evidence of relationship outcomes. Articles are prepared with AI assistance. <a routerLink="/about-us">Meet the team building Rosemarry.</a></p>
     </aside>
-    <nav class="article-related" aria-label="Related articles">
+    <nav data-motion-reveal="fade" class="article-related" aria-label="Related articles">
       <h2>Keep exploring</h2>
       @for (related of articles; track related.slug) {
         @if (related.slug !== article().slug) {

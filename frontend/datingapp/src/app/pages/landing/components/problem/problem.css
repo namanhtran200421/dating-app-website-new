@@ -27,6 +27,7 @@
 .problem-card--paywall {
   display: grid;
   grid-column: span 7;
+  align-self: end;
   gap: 2rem;
   background: #f6c9ef;
 }
@@ -38,6 +39,7 @@
 
 .problem-card--safety {
   grid-column: span 5;
+  align-self: start;
   background: #1c1418;
   color: white;
 }
