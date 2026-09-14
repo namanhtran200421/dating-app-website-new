@@ -120,7 +120,7 @@ export class EarlyStageBanner {
     }
 
     queueMicrotask(() =>
-      dialog.querySelector<HTMLButtonElement>('.early-stage-card__action')?.focus(),
+      dialog.querySelector<HTMLElement>('#early-stage-title')?.focus({ preventScroll: true }),
     );
   }
 

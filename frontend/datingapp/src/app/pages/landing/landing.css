@@ -280,17 +280,26 @@
   rotate: calc(var(--rm-sticker-tilt) * var(--rm-motion));
   scale: calc(1 + var(--rm-sticker-grow) * var(--rm-motion));
 }
-.hero-visual__accent {
+.site-star {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+  color: var(--yellow);
+  filter: drop-shadow(5px 6px 0 var(--ink));
+}
+.site-star path {
+  fill: currentColor;
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+.hero-visual__star {
   position: absolute;
   z-index: 5;
   top: -50px;
-  right: -2px;
-  width: 66px;
-  aspect-ratio: 1;
-  border: 3px solid var(--ink);
-  border-radius: 8px;
-  background: var(--yellow);
-  box-shadow: 6px 7px 0 var(--ink);
+  right: -8px;
+  width: 78px;
   transform: rotate(12deg);
 }
 .hero-visual .visual-placeholder span {
@@ -602,17 +611,14 @@
  * hard shadow in its accent colour, on top of the shared sticker wiggle.
  */
 .problem-grid .outlined-card,
-.phase-card,
-.inside-photo {
+.phase-card {
   --pop-offset: var(--pop-rest, 6px);
   box-shadow: var(--pop-offset) var(--pop-offset) 0 var(--card-pop, var(--ink));
 }
 .problem-grid .outlined-card:hover,
 .problem-grid .outlined-card:focus-within,
 .phase-card:hover,
-.phase-card:focus-within,
-.inside-photo:hover,
-.inside-photo:focus-within {
+.phase-card:focus-within {
   --pop-offset: calc(var(--pop-rest, 6px) + 6px * var(--rm-motion));
   z-index: 5;
   translate: calc(-3px * var(--rm-motion)) calc(-3px * var(--rm-motion));
@@ -625,9 +631,7 @@
   height: 455px;
   transform: rotate(-5deg);
   --card-pop: var(--purple);
-}
-.outlined-card--usual .outlined-card__caption {
-  background: color-mix(in srgb, var(--yellow) 38%, white);
+  --caption-accent: var(--yellow);
 }
 .outlined-card--pink {
   z-index: 2;
@@ -638,7 +642,8 @@
   background: #dedee5;
 }
 .outlined-card--pink {
-  --card-pop: var(--pink);
+  --card-pop: var(--mint);
+  --caption-accent: var(--mint);
   --rm-sticker-tilt: 1deg;
 }
 .outlined-card > .outlined-card__photo-label {
@@ -650,13 +655,13 @@
   right: 12px;
   bottom: 12px;
   left: 12px;
-  min-height: 118px;
   border: 2px solid var(--ink);
-  border-radius: 14px;
-  background: rgb(255 255 255 / 96%);
-  padding: 14px 16px 13px;
+  border-radius: 16px;
+  background: var(--paper);
+  padding: 14px 16px;
+  color: var(--ink);
   text-align: left;
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 5px 5px 0 var(--caption-accent);
 }
 .outlined-card__label {
   display: flex;
@@ -699,16 +704,9 @@
   font-weight: 600;
   line-height: 1.45;
 }
-.outlined-card--usual .outlined-card__caption {
-  min-height: 124px;
-}
 .outlined-card--pink .outlined-card__caption {
-  min-height: 132px;
-  background: color-mix(in srgb, var(--pink) 60%, white);
-  padding-left: 23%;
-}
-.outlined-card--pink .outlined-card__caption h3 {
-  font-size: clamp(25px, 3vw, 38px);
+  left: auto;
+  width: min(68%, 560px);
 }
 .outlined-card__photo-label {
   border: 1px solid rgb(32 33 49 / 28%);
@@ -716,46 +714,31 @@
   background: rgb(255 255 255 / 52%);
   padding: 7px 11px 5px;
 }
-.problem-shape {
+.problem-star {
   position: absolute;
-  display: block;
-  pointer-events: none;
 }
-.problem-shape--ring {
+.problem-star--burst {
   z-index: 0;
-  right: -22px;
-  bottom: 22px;
-  width: 124px;
-  aspect-ratio: 1;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  background:
-    radial-gradient(var(--ink) 1.5px, transparent 1.6px) 0 0 / 10px 10px,
-    var(--mint);
-  box-shadow: 4px 4px 0 var(--ink);
+  right: -28px;
+  bottom: 12px;
+  width: 132px;
+  color: var(--mint);
+  transform: rotate(8deg);
 }
-.problem-shape--diamond {
+.problem-star--sparkle {
   z-index: 0;
-  top: 14px;
-  right: 17px;
-  width: 90px;
-  aspect-ratio: 1;
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  background: var(--purple);
-  box-shadow: 4px 4px 0 var(--ink);
-  transform: rotate(45deg);
+  top: 8px;
+  right: 12px;
+  width: 96px;
+  color: var(--purple);
+  transform: rotate(18deg);
 }
-.problem-shape--square {
+.problem-star--pinwheel {
   z-index: 4;
-  top: 38px;
+  top: 30px;
   left: 31%;
-  width: 54px;
-  aspect-ratio: 1;
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  background: var(--yellow);
-  box-shadow: 4px 4px 0 var(--ink);
+  width: 62px;
+  color: var(--yellow);
   transform: rotate(9deg);
 }
 
@@ -777,31 +760,6 @@
   letter-spacing: -0.04em;
   line-height: 0.96;
 }
-.quote-shape {
-  position: absolute;
-  display: block;
-  border: 3px solid var(--ink);
-  box-shadow: 5px 6px 0 var(--ink);
-}
-.quote-shape--square {
-  top: 55px;
-  left: 20px;
-  width: 80px;
-  aspect-ratio: 1;
-  background: var(--yellow);
-  transform: rotate(1deg);
-}
-.quote-shape--circle {
-  right: 34px;
-  bottom: 42px;
-  width: 96px;
-  aspect-ratio: 1;
-  border-color: var(--purple);
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: none;
-}
-
 .outcome {
   background: var(--ink);
   color: white;
@@ -857,15 +815,14 @@
   right: 12px;
   bottom: 12px;
   left: 12px;
-  min-height: 132px;
   border: 2px solid var(--ink);
   border-radius: 14px;
   background: rgb(255 255 255 / 96%);
-  padding: 20px 18px;
+  padding: 16px 18px 14px;
   text-align: left;
 }
 .phase-card__caption h3 {
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   font-family: var(--font-display);
   font-size: clamp(19px, 2vw, 26px);
   line-height: 1.08;
@@ -876,52 +833,6 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
-}
-
-.inside {
-  background: var(--paper);
-}
-.inside-layout {
-  display: grid;
-  grid-template-columns: 0.72fr 0.72fr 1.58fr;
-  grid-template-rows: repeat(2, minmax(190px, 1fr));
-  gap: 28px;
-  min-height: 470px;
-}
-.inside-photo {
-  border-radius: 24px;
-}
-.inside-photo--portrait-one {
-  grid-row: 1 / 3;
-  --card-pop: var(--purple);
-}
-.inside-photo--portrait-two {
-  grid-row: 1 / 3;
-  --card-pop: var(--mint);
-  --rm-sticker-tilt: 1deg;
-}
-.inside-photo--wide-one {
-  --card-pop: var(--yellow);
-}
-.inside-photo--wide-two {
-  --card-pop: var(--pink);
-  --rm-sticker-tilt: 1deg;
-}
-.inside-photo b {
-  position: absolute;
-  right: auto;
-  bottom: 16px;
-  left: 16px;
-  max-width: calc(100% - 32px);
-  border: 2px solid var(--ink);
-  border-radius: 3px;
-  background: white;
-  padding: 10px 13px 8px;
-  color: var(--ink);
-  font-size: 12px;
-  box-shadow: 2px 2px 0 var(--ink);
-  text-align: left;
-  text-transform: none;
 }
 
 .choice-grid {
@@ -1098,11 +1009,10 @@
     width: 42%;
     height: 190px;
   }
-  .hero-visual__accent {
+  .hero-visual__star {
     top: 6px;
     right: 1%;
-    width: 50px;
-    border-width: 2px;
+    width: 58px;
   }
   .match-bubble {
     right: 3%;
@@ -1144,56 +1054,32 @@
     transform: rotate(1.5deg);
   }
   .outlined-card--pink .outlined-card__caption {
-    padding-left: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
   }
   .outlined-card {
     aspect-ratio: auto;
   }
-  .problem-shape--square {
+  .problem-star--pinwheel {
     top: 47%;
     left: auto;
     right: 2%;
   }
-  .problem-shape--diamond {
+  .problem-star--sparkle {
     top: 48%;
     right: -18px;
   }
   .quote-band__inner {
     min-height: 300px;
   }
-  .quote-shape--square {
-    width: 55px;
-  }
-  .quote-shape--circle {
-    width: 65px;
-  }
-  .phase-card {
+  .phase-card:nth-child(n) {
     width: min(100%, 390px);
     margin-inline: auto;
   }
   .phase-card:first-child {
     grid-column: auto;
     width: min(100%, 390px);
-  }
-  .inside-layout {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 330px 220px 220px;
-    gap: 20px;
-    min-height: 0;
-  }
-  .inside-photo--portrait-one,
-  .inside-photo--portrait-two {
-    grid-row: 1;
-  }
-  .inside-photo--wide-one,
-  .inside-photo--wide-two {
-    grid-column: 1 / 3;
-  }
-  .inside-photo--wide-one {
-    grid-row: 2;
-  }
-  .inside-photo--wide-two {
-    grid-row: 3;
   }
   .choice-phone {
     width: min(92%, 470px);
@@ -1215,30 +1101,7 @@
   .outlined-card--pink {
     transform: none;
   }
-  .outlined-card--pink .outlined-card__caption h3 {
-    font-size: 25px;
-  }
   .quote-band blockquote {
     font-size: 43px;
-  }
-  .quote-shape--square {
-    top: 30px;
-    left: 8px;
-  }
-  .quote-shape--circle {
-    right: 8px;
-    bottom: 28px;
-  }
-  .inside-layout {
-    grid-template-rows: 270px 185px 185px;
-    gap: 16px;
-  }
-  .inside-photo b {
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
-    max-width: none;
-    padding: 8px 9px 6px;
-    font-size: 9px;
   }
 }
