@@ -2,56 +2,7 @@
   position: relative;
   overflow: hidden;
   border-block: 2px solid var(--ink);
-  background:
-    radial-gradient(circle at 1px 1px, rgb(32 33 49 / 10%) 1px, transparent 1.4px) 0 0 / 18px 18px,
-    var(--paper);
-}
-
-/* Confetti shapes at the section edges, behind the content. */
-.steps-shape {
-  position: absolute;
-  z-index: 0;
-  display: block;
-  pointer-events: none;
-}
-
-.steps-shape--circle {
-  top: 96px;
-  left: -34px;
-  width: 96px;
-  aspect-ratio: 1;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  background: var(--purple);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-
-.steps-shape--triangle {
-  top: 64px;
-  right: 5%;
-  width: 64px;
-  overflow: visible;
-  filter: drop-shadow(4px 4px 0 var(--ink));
-  rotate: 14deg;
-}
-
-.steps-shape--triangle path {
-  fill: var(--yellow);
-  stroke: var(--ink);
-  stroke-linejoin: round;
-  stroke-width: 3;
-}
-
-.steps-shape--pill {
-  right: -40px;
-  bottom: 96px;
-  width: 150px;
-  height: 46px;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  background: var(--pink);
-  box-shadow: 4px 4px 0 var(--ink);
-  rotate: -18deg;
+  background: var(--paper);
 }
 
 .steps-shell {
@@ -276,10 +227,6 @@
 }
 
 @media (max-width: 620px) {
-  .steps-shape {
-    display: none;
-  }
-
   .steps-heading {
     margin-bottom: 42px;
   }

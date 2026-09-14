@@ -60,6 +60,7 @@
   position: relative;
   display: grid;
   width: 100%;
+  min-height: 108px;
   gap: 9px;
   text-align: left;
 }
@@ -303,6 +304,10 @@
 
   .footer-signup__row {
     grid-template-columns: 1fr;
+  }
+
+  .footer-signup__form {
+    min-height: 184px;
   }
 
   .footer-signup__form input,

@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
-  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  const dialog = page.getByRole('dialog', { name: 'We’re still in development.' });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await dialog.getByRole('button', { name: 'Got it — keep exploring' }).click();
   await expect(dialog).toBeHidden();
 }
 
@@ -23,7 +23,7 @@ for (const viewport of [
       '#how-it-works',
       '.outcome',
       '#inside-circle',
-      '.choice',
+      '#faq',
       '#join',
     ]) {
       await page.locator(selector).scrollIntoViewIfNeeded();
@@ -69,9 +69,8 @@ for (const viewport of [
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
     await expect(page.getByRole('heading', { name: 'One week. Four simple steps.' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Connect first. Decide after.' })).toBeVisible();
     await expect(page.locator('.problem-grid .outlined-card')).toHaveCount(2);
-    await expect(page.locator('.steps-grid .step-card')).toHaveCount(4);
+    await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
     await expect(
       page.getByRole('heading', { name: 'Less judging. More getting to know.' }),
     ).toBeVisible();
@@ -80,16 +79,15 @@ for (const viewport of [
     ).toBeVisible();
     await expect(page.locator('.phase-card')).toHaveCount(3);
     await expect(page.locator('.inside-photo')).toHaveCount(4);
+    await expect(
+      page.getByRole('heading', { name: 'A little clarity before you join.' }),
+    ).toBeVisible();
+    await expect(page.locator('.faq-card')).toHaveCount(6);
 
-
-    const footerCta = page.locator('.footer-cta');
+    const footerCta = page.locator('.footer-signup-panel');
     const heightBeforeSignup = (await footerCta.boundingBox())?.height;
-    await page.getByRole('button', { name: /Save me a spot/ }).click();
-    const heightAfterSignup = (await footerCta.boundingBox())?.height;
 
     expect(heightBeforeSignup).toBeDefined();
-    expect(heightAfterSignup).toBeDefined();
-    expect(Math.abs(heightAfterSignup! - heightBeforeSignup!)).toBeLessThanOrEqual(1);
 
     await page
       .locator('.footer-signup__form')
@@ -108,7 +106,30 @@ for (const viewport of [
   });
 }
 
-test('hero photos still react to mouse hover on a touch-capable device', async ({ browser }) => {
+test('FAQ lives on the homepage and works from the keyboard', async ({ page }) => {
+  await page.goto('/');
+  await dismissDevelopmentNotice(page);
+
+  const firstQuestion = page.getByRole('button', { name: 'How do weekly Circles work?' });
+  const secondQuestion = page.getByRole('button', {
+    name: 'Do I have to decide from a profile first?',
+  });
+
+  await expect(firstQuestion).toHaveAttribute('aria-expanded', 'true');
+  await secondQuestion.focus();
+  await page.keyboard.press('Enter');
+  await expect(secondQuestion).toHaveAttribute('aria-expanded', 'true');
+  await expect(firstQuestion).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#faq-answer-1')).toHaveAttribute('aria-hidden', 'false');
+
+  await page.goto('/about-us');
+  await expect(page.locator('#faq')).toHaveCount(0);
+  await expect(
+    page.getByRole('heading', { name: 'A little clarity before you join.' }),
+  ).toHaveCount(0);
+});
+
+test('hero photos keep their resting composition with reduced motion', async ({ browser }) => {
   const context = await browser.newContext({
     hasTouch: true,
     reducedMotion: 'reduce',
@@ -127,7 +148,7 @@ test('hero photos still react to mouse hover on a touch-capable device', async (
 
   await expect
     .poll(async () => card.evaluate((element) => getComputedStyle(element).transform))
-    .not.toBe(before);
+    .toBe(before);
   await expect
     .poll(async () => image.evaluate((element) => getComputedStyle(element).transform))
     .not.toBe('none');

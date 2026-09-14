@@ -30,7 +30,7 @@
 
 .hero {
   width: 100%;
-  min-height: min(874px, 100vh);
+  min-height: min(874px, 10vh);
   margin: 0;
   border: 0;
   border-bottom: 3px solid var(--ink);

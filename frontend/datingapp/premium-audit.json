@@ -3,7 +3,7 @@
     {
       "category": "violation",
       "file": "src/app/core/layout/early-stage-banner/early-stage-banner.html",
-      "line": 12,
+      "line": 11,
       "message": "Enabled literal button has no detectable action or submit behavior.",
       "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
       "ruleId": "affordance.actionless-button",
@@ -12,16 +12,7 @@
     {
       "category": "violation",
       "file": "src/app/core/layout/early-stage-banner/early-stage-banner.html",
-      "line": 27,
-      "message": "Enabled literal button has no detectable action or submit behavior.",
-      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
-      "ruleId": "affordance.actionless-button",
-      "severity": "error"
-    },
-    {
-      "category": "violation",
-      "file": "src/app/core/layout/footer/footer.html",
-      "line": 10,
+      "line": 30,
       "message": "Enabled literal button has no detectable action or submit behavior.",
       "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
       "ruleId": "affordance.actionless-button",
@@ -30,7 +21,7 @@
     {
       "category": "violation",
       "file": "src/app/core/layout/nav/nav.html",
-      "line": 43,
+      "line": 36,
       "message": "Enabled literal button has no detectable action or submit behavior.",
       "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
       "ruleId": "affordance.actionless-button",
@@ -39,7 +30,25 @@
     {
       "category": "violation",
       "file": "src/app/core/layout/nav/nav.html",
-      "line": 152,
+      "line": 134,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    },
+    {
+      "category": "violation",
+      "file": "src/app/core/layout/nav/nav.html",
+      "line": 141,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    },
+    {
+      "category": "violation",
+      "file": "src/app/core/layout/nav/nav.html",
+      "line": 216,
       "message": "Enabled literal button has no detectable action or submit behavior.",
       "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
       "ruleId": "affordance.actionless-button",
@@ -48,7 +57,25 @@
     {
       "category": "violation",
       "file": "src/app/pages/about-us-page/about-us-page.html",
-      "line": 237,
+      "line": 50,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    },
+    {
+      "category": "violation",
+      "file": "src/app/pages/blog/article.html",
+      "line": 67,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    },
+    {
+      "category": "violation",
+      "file": "src/app/pages/landing/components/faq/faq.html",
+      "line": 20,
       "message": "Enabled literal button has no detectable action or submit behavior.",
       "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
       "ruleId": "affordance.actionless-button",
@@ -86,10 +113,10 @@
   "projectRoot": "/Users/namanhtran/project/dating-app-website-new/frontend/datingapp",
   "schemaVersion": 1,
   "summary": {
-    "errors": 9,
-    "total": 9,
+    "errors": 12,
+    "total": 12,
     "unresolved": 0,
-    "violations": 9,
+    "violations": 12,
     "warnings": 0
   }
 }
