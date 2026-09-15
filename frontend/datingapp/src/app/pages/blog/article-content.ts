@@ -62,7 +62,7 @@ export const articleContent: Record<string, ArticleContent> = {
         id: 'rosemarry',
         title: 'Where Rosemarry fits',
         paragraphs: [
-          'Rosemarry is being built around small weekly Circles: six days with compatible people, group conversation, prompts and shared activities, with the freedom to match at any time. Our design intention is to give people more context before deciding whether to connect.',
+          'Rosemarry is being built around weekly Circles of 10 people: five days of group conversation, prompts and shared activities, with the freedom to match at any time. Our design intention is to give people more context before deciding whether to connect.',
           'The app is still in development. Launch locations and timing have not been announced, and planned features may change. The early-access list is a way to hear from the team as the product develops; it is not access to a working dating app today.',
         ],
       },
@@ -112,7 +112,7 @@ export const articleContent: Record<string, ArticleContent> = {
         title: 'Look for opportunities to build context',
         paragraphs: [
           'An ongoing group, a shared activity or another conversation can show a different side of someone. You might notice that they include a quiet person, remember a detail or make a discussion feel easy. You might also learn that the connection is not for you. Both are useful outcomes.',
-          'Rosemarry’s planned weekly Circles explore this idea by keeping compatible people together for six days. This is a product approach we are developing, not a proven remedy for dating fatigue. You can read how Circles are intended to work and decide whether that pace sounds appealing.',
+          'Rosemarry’s planned weekly Circles explore this idea by keeping 10 compatible people together for five days. This is a product approach we are developing, not a proven remedy for dating fatigue. You can read how Circles are intended to work and decide whether that pace sounds appealing.',
         ],
       },
     ],
@@ -210,7 +210,7 @@ export const articleContent: Record<string, ArticleContent> = {
         paragraphs: [
           'You can appreciate someone and still not want to date them. You can also feel curious without knowing where it will lead. Honest uncertainty is different from making promises you cannot keep.',
           'A slower pace should create room to choose, not pressure to stay. If you are uncomfortable or simply do not want another interaction, that is enough reason to stop. If you are interested, communicate that at a pace that works for both of you.',
-          'Rosemarry’s planned Circles give compatible people six days of conversation and shared activities, with matching available at any time. Six days is our proposed product format, not a scientific threshold for attraction. The app is still in development.',
+          'Rosemarry’s planned Circles give 10 compatible people five days of conversation and shared activities, with matching available at any time. Five days is our proposed product format, not a scientific threshold for attraction. The app is still in development.',
         ],
       },
     ],

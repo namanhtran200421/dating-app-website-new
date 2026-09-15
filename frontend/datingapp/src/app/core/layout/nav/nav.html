@@ -15,7 +15,14 @@
 
   <div class="nav-desktop hidden items-center xl:flex">
     <div class="nav-desktop__primary">
-      <a routerLink="/" fragment="how-it-works" class="nav-desktop-link" (click)="closeMenu()">
+      <a
+        routerLink="/how-it-works"
+        routerLinkActive="nav-link--active"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-desktop-link"
+        (click)="closeMenu()"
+      >
         <span>How it works</span>
       </a>
       <a
@@ -161,8 +168,10 @@
     [attr.inert]="menuOpen() ? null : ''"
   >
     <a
-      routerLink="/"
-      fragment="how-it-works"
+      routerLink="/how-it-works"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="rm-row flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-semibold text-ink no-underline"
     >
