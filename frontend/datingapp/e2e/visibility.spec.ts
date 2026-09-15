@@ -78,11 +78,12 @@ test('desktop editorial cards keep an asymmetric scrapbook rhythm', async ({ pag
   await page.goto('/');
   await dismissDevelopmentNotice(page);
   const problemCards = await page
-    .locator('.outlined-card')
+    .locator('.problem-card')
     .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
-  expect(problemCards).toHaveLength(2);
-  expect(problemCards[0].width).toBeGreaterThan(problemCards[1].width);
-  expect(problemCards[1].y).toBeGreaterThan(problemCards[0].y);
+  expect(problemCards).toHaveLength(6);
+  // Two rows of three: each row shares a line, and the answer row sits below the problem row.
+  expect(Math.abs(problemCards[0].y - problemCards[2].y)).toBeLessThan(12);
+  expect(problemCards[3].y).toBeGreaterThan(problemCards[0].y + problemCards[0].height);
 
   await page.goto('/circle');
   const featureCards = await page

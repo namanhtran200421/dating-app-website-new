@@ -67,40 +67,23 @@
 
   <section id="problem" class="problem section-pad" aria-labelledby="problem-title">
     <div class="shell problem-shell">
-      <header class="split-heading problem-heading" data-motion-reveal>
-        <div>
-          <span class="sticker sticker--mint">The problem + our answer</span>
-          <h2 id="problem-title">Profiles move fast.<br />People don’t.</h2>
-        </div>
+      <header class="problem-heading" data-motion-reveal>
+        <span class="sticker sticker--mint">The problem + our answer</span>
+        <h2 id="problem-title">Profiles move fast.</h2>
       </header>
-      <div class="problem-grid" aria-label="A comparison of fast profiles and slower connection">
-        <article
-          class="outlined-card outlined-card--usual visual-placeholder rm-sticker"
-          data-motion-reveal="fade"
-        >
-          <span class="outlined-card__photo-label">Photo: scrolling alone</span>
-          <div class="outlined-card__caption">
-            <div class="outlined-card__label">
-              <span class="micro-label">The usual way</span>
-            </div>
-            <h3>Decide in a few seconds.</h3>
-            <p>A profile is expected to predict chemistry.</p>
-          </div>
-        </article>
-        <article
-          class="outlined-card outlined-card--pink visual-placeholder rm-sticker"
-          data-motion-reveal="fade"
-        >
-          <span class="outlined-card__photo-label">Photo: people chatting</span>
-          <div class="outlined-card__caption">
-            <div class="outlined-card__label">
-              <span class="micro-label">The Rosemarry way</span>
-            </div>
-            <h3>Get to know them first.</h3>
-            <p>Let personality show before choosing who you like.</p>
-          </div>
-        </article>
-      </div>
+      <!-- Grey placeholders until the photos are ready. -->
+      <ul class="problem-row" aria-hidden="true" data-motion-reveal="fade">
+        <li class="problem-card"></li>
+        <li class="problem-card"></li>
+        <li class="problem-card"></li>
+      </ul>
+
+      <h3 class="problem-heading problem-heading--answer" data-motion-reveal>People don’t.</h3>
+      <ol class="problem-row" aria-label="How people get closer" data-motion-reveal="fade">
+        <li class="problem-card"><span>Stranger</span></li>
+        <li class="problem-card"><span>Friend</span></li>
+        <li class="problem-card"><span>Partner</span></li>
+      </ol>
     </div>
   </section>
 

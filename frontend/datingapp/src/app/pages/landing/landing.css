@@ -574,120 +574,79 @@
   line-height: 1.65;
 }
 .problem-heading {
-  position: relative;
-  z-index: 3;
-  display: block;
-  max-width: 880px;
-  margin-bottom: 44px;
+  margin: 0 0 clamp(28px, 4vw, 44px);
 }
-.problem-grid {
-  position: relative;
-  min-height: 590px;
-  isolation: isolate;
+.problem-heading h2,
+.problem-heading--answer {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.2vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.96;
 }
-.outlined-card {
-  position: relative;
-  aspect-ratio: 1.3;
-  border: 2px solid var(--ink);
-  border-radius: 26px;
-  background: #dedee5;
+.problem-heading h2 {
+  margin: 16px 0 0;
+}
+.problem-heading--answer {
+  margin-top: clamp(64px, 8vw, 104px);
+}
+.problem-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 4vw, 48px);
+  margin: 0;
   padding: 0;
+  list-style: none;
 }
-.problem-grid .outlined-card {
-  --pop-rest: 8px;
-  position: absolute;
-  aspect-ratio: auto;
+/* Portrait photo slots; grey until real images land. */
+.problem-card {
+  --card-pop: var(--pink);
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  background: #dedee5;
+  rotate: -0.6deg;
+  transition: var(--rm-hover-transition);
+}
+.problem-card:nth-child(2) {
+  --card-pop: var(--yellow);
+  --rm-sticker-tilt: 1deg;
+  rotate: 0.5deg;
+}
+.problem-card:nth-child(3) {
+  --card-pop: var(--mint);
+  rotate: -0.3deg;
+}
+.problem-card span {
+  position: relative;
+  color: white;
+  font: 700 clamp(18px, 3.4vw, 46px) / 1 var(--font-display);
+  letter-spacing: -0.02em;
+  -webkit-text-stroke: 6px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--ink);
 }
 
-/* Keep both comparison images in one restrained, neutral shadow system. */
-.problem-grid .outlined-card,
+/* Problem cards and outcome cards share one lift-and-accent-shadow system. */
+.problem-card,
 .phase-card {
   --pop-offset: var(--pop-rest, 6px);
   box-shadow: var(--pop-offset) var(--pop-offset) 0 var(--card-pop, var(--ink));
 }
-.problem-grid .outlined-card:hover,
-.problem-grid .outlined-card:focus-within,
+.problem-card:hover,
 .phase-card:hover,
 .phase-card:focus-within {
   --pop-offset: calc(var(--pop-rest, 6px) + 6px * var(--rm-motion));
   z-index: 5;
   translate: calc(-3px * var(--rm-motion)) calc(-3px * var(--rm-motion));
 }
-.outlined-card--usual {
-  z-index: 3;
-  top: 72px;
-  left: 0;
-  width: 36%;
-  height: 455px;
-  transform: rotate(-5deg);
-  --card-pop: var(--ink);
-}
-.outlined-card--pink {
-  z-index: 2;
-  top: 0;
-  right: 0;
-  width: 78%;
-  height: 520px;
-  background: #dedee5;
-}
-.outlined-card--pink {
-  --card-pop: var(--ink);
-  --rm-sticker-tilt: 1deg;
-}
-.outlined-card > .outlined-card__photo-label {
-  transform: translateY(-18%);
-}
-.outlined-card__caption {
-  position: absolute;
-  z-index: 2;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border: 0;
-  border-top: 2px solid var(--ink);
-  border-radius: 0;
-  background: rgb(251 248 239 / 96%);
-  padding: 17px 18px 16px;
-  color: var(--ink);
-  text-align: left;
-}
-.outlined-card__label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.outlined-card__caption h3 {
-  margin: 10px 0 5px;
-  font-family: var(--font-display);
-  font-size: clamp(20px, 2vw, 27px);
-  line-height: 1.05;
-}
-.outlined-card__caption p {
-  margin: 0;
-  color: rgb(32 33 49 / 62%);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.45;
-}
-.outlined-card--pink .outlined-card__caption {
-  right: 0;
-  left: auto;
-  width: min(70%, 560px);
-  border-left: 2px solid var(--ink);
-  border-top-left-radius: 18px;
-}
-.outlined-card--usual .micro-label {
-  background: var(--ink);
-  color: var(--paper);
-}
-.outlined-card--pink .micro-label {
-  background: var(--pink);
-}
-.outlined-card__photo-label {
-  border: 1px solid rgb(32 33 49 / 28%);
-  border-radius: 999px;
-  background: rgb(255 255 255 / 52%);
-  padding: 7px 11px 5px;
+.problem-card:hover {
+  rotate: calc(var(--rm-sticker-tilt) * var(--rm-motion));
+  scale: calc(1 + var(--rm-sticker-grow) * var(--rm-motion));
 }
 .quote-band {
   overflow: hidden;
@@ -973,42 +932,21 @@
     gap: 24px;
     margin-bottom: 44px;
   }
-  .problem-grid,
   .outcome-grid {
     grid-template-columns: 1fr;
   }
-  .problem-heading {
-    margin-bottom: 48px;
+  .problem-row {
+    gap: 12px;
   }
-  .problem-grid {
-    display: grid;
-    gap: 28px;
-    min-height: 0;
+  /* Phones: keep the three-up rhythm, just flatter and tighter. */
+  .problem-card {
+    --pop-rest: 4px;
+    border-radius: 16px;
+    rotate: none;
   }
-  .problem-grid .outlined-card {
-    position: relative;
-    inset: auto;
-    width: min(92%, 520px);
-    height: auto;
-    min-height: 390px;
-  }
-  .outlined-card--usual {
-    justify-self: start;
-    transform: rotate(-2.5deg);
-  }
-  .outlined-card--pink {
-    justify-self: end;
-    transform: rotate(1.5deg);
-  }
-  .outlined-card--pink .outlined-card__caption {
-    right: 0;
-    left: 0;
-    width: auto;
-    border-left: 0;
-    border-top-left-radius: 0;
-  }
-  .outlined-card {
-    aspect-ratio: auto;
+  .problem-card span {
+    -webkit-text-stroke-width: 4px;
+    text-shadow: 2px 2px 0 var(--ink);
   }
   .quote-band__inner {
     min-height: 300px;
@@ -1032,14 +970,6 @@
   }
   .button {
     width: 100%;
-  }
-  .problem-grid .outlined-card {
-    width: calc(100% - 8px);
-    min-height: 340px;
-  }
-  .outlined-card--usual,
-  .outlined-card--pink {
-    transform: none;
   }
   .quote-band blockquote {
     font-size: 43px;

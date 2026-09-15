@@ -30,10 +30,7 @@
     @case ('interests') {
       <div class="demo-screen" [class.demo-screen--back]="goingBack()">
         <div class="demo-head">
-          <div>
-            <h4 class="demo-title" tabindex="-1">Pick your interests</h4>
-            <p class="demo-hint">Choose up to {{ maxInterests }}.</p>
-          </div>
+          <h4 class="demo-title" tabindex="-1">Pick your interests</h4>
           <span class="demo-count" [class.is-full]="isFull()" aria-live="polite">
             {{ picked().length }}/{{ maxInterests }}
             <span class="sr-only">selected</span>

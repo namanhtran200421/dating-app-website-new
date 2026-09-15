@@ -126,19 +126,15 @@
   color: var(--rm-ink);
   font: inherit;
   text-align: left;
-  box-shadow: 4px 4px 0 var(--rm-ink);
+  box-shadow: var(--rm-pop-shadow);
   cursor: pointer;
-  transition: var(--rm-hover-transition);
+  transition: var(--rm-press-transition);
 }
 
-.circle-activity:hover {
-  box-shadow: 6px 7px 0 var(--rm-ink);
-  translate: 0 calc(-3px * var(--rm-motion));
-}
-
+.circle-activity:hover,
 .circle-activity:active {
-  box-shadow: 2px 2px 0 var(--rm-ink);
-  translate: 0 2px;
+  box-shadow: none;
+  transform: var(--rm-pop-hover-transform);
 }
 
 .circle-activity__icon {

@@ -69,7 +69,7 @@ for (const viewport of [
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
     await expect(page.getByRole('heading', { name: 'One week. Four simple steps.' })).toBeVisible();
-    await expect(page.locator('.problem-grid .outlined-card')).toHaveCount(2);
+    await expect(page.locator('.problem-row .problem-card')).toHaveCount(6);
     await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
     await expect(
       page.getByRole('heading', { name: 'Less judging. More getting to know.' }),

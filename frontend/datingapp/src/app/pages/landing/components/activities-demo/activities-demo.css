@@ -9,7 +9,7 @@
 
 .activities-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -32,8 +32,10 @@
 .activity-list {
   display: grid;
   flex: 1;
-  align-content: space-between;
-  gap: 6px;
+  /* Rows share the card's remaining height equally. */
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 8px;
+  min-height: 0;
   margin: 0;
   padding: 0 6px 4px 0;
   list-style: none;
@@ -49,8 +51,8 @@
   border-radius: 15px;
   background: white;
   padding: 5px 12px 5px 7px;
-  box-shadow: 3px 3px 0 var(--rm-ink);
-  transition: var(--rm-hover-transition);
+  box-shadow: var(--rm-pop-shadow);
+  transition: var(--rm-press-transition);
 }
 
 .activity[data-tone='yellow'] {
@@ -65,10 +67,11 @@
   --tone: var(--rm-mint);
 }
 
+/* Same press-in as the site's buttons: the row sinks into its shadow. */
 .activity:hover {
   background: color-mix(in srgb, var(--tone) 22%, white);
-  box-shadow: 5px 5px 0 var(--rm-ink);
-  translate: calc(-2px * var(--rm-motion)) calc(-2px * var(--rm-motion));
+  box-shadow: none;
+  transform: var(--rm-pop-hover-transform);
 }
 
 .activity__icon {
