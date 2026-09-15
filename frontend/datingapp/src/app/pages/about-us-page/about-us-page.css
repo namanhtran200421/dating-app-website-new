@@ -213,7 +213,7 @@
   overflow: hidden;
   border-bottom: 2px solid var(--about-ink);
   background: var(--about-paper);
-  padding-block: clamp(4rem, 7vw, 6rem);
+  padding: clamp(8rem, 12vw, 10rem) 0 clamp(4rem, 7vw, 6rem);
 }
 
 .founders-layout {
@@ -243,7 +243,7 @@
   transform: rotate(-1deg);
 }
 
-.founders-intro h2 {
+.founders-intro h1 {
   grid-column: 1;
   max-width: 42rem;
   margin-top: 1.15rem;
@@ -282,18 +282,12 @@
   font-weight: 850;
   box-shadow: var(--rm-pop-shadow);
   cursor: pointer;
-  transition: var(--rm-hover-transition);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 
 .founders-switch:hover {
   background: var(--about-yellow);
-  box-shadow: var(--rm-pop-shadow-hover);
-  translate: var(--rm-pop-lift);
-}
-
-.founders-switch:active {
-  box-shadow: var(--rm-pop-shadow-active);
-  translate: var(--rm-pop-press);
 }
 
 .founders-switch:focus-visible {
@@ -320,12 +314,12 @@
 
 .founder-stage {
   display: grid;
+  gap: clamp(3rem, 6vw, 5rem);
   margin-top: clamp(2.75rem, 4.5vw, 3.75rem);
   padding: 0 0.9rem 0.9rem 0;
 }
 
 .founder-roster {
-  grid-area: 1 / 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 2.4vw, 2rem);
@@ -481,7 +475,7 @@
   line-height: 1.35;
 }
 
-.founder-card h3 {
+.founder-card h2 {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.3vw, 1.95rem);
   font-weight: 650;
@@ -562,7 +556,7 @@
     max-width: 45rem;
   }
 
-  .founders-intro h2 {
+  .founders-intro h1 {
     max-width: 42rem;
   }
 
@@ -609,14 +603,14 @@
   }
 
   .about-founders {
-    padding-block: 3.75rem;
+    padding: 6.75rem 0 3.75rem;
   }
 
   .founders-layout {
     gap: 2.5rem;
   }
 
-  .founders-intro h2 {
+  .founders-intro h1 {
     font-size: clamp(2.8rem, 13vw, 4rem);
   }
 
@@ -676,7 +670,7 @@
     font-size: 0.68rem;
   }
 
-  .founder-card h3 {
+  .founder-card h2 {
     font-size: clamp(1.35rem, 7vw, 1.8rem);
   }
 

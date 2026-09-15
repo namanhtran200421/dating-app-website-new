@@ -56,22 +56,11 @@
   color: #fbf2e9;
   font-weight: 800;
   text-decoration: none;
-  transition: var(--rm-hover-transition);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 
   /* Dark button: a pink pop shadow reads better than ink-on-ink. */
   --rm-pop-shadow: 4px 4px 0 var(--rm-pink);
-  --rm-pop-shadow-hover: 6px 6px 0 var(--rm-pink);
-  --rm-pop-shadow-active: 2px 2px 0 var(--rm-pink);
 
   box-shadow: var(--rm-pop-shadow);
-}
-
-.not-found a:hover {
-  box-shadow: var(--rm-pop-shadow-hover);
-  translate: var(--rm-pop-lift);
-}
-
-.not-found a:active {
-  box-shadow: var(--rm-pop-shadow-active);
-  translate: var(--rm-pop-press);
 }

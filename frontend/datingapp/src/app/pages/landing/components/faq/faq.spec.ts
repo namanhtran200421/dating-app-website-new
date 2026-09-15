@@ -16,14 +16,14 @@ describe('HomeFaq', () => {
     await fixture.whenStable();
   });
 
-  it('shows the first answer and moves the open state between questions', () => {
+  it('starts collapsed and opens only the selected question', () => {
     const element = fixture.nativeElement as HTMLElement;
-    const questions = Array.from(
-      element.querySelectorAll<HTMLButtonElement>('.faq-card__trigger'),
-    );
+    const questions = Array.from(element.querySelectorAll<HTMLButtonElement>('.faq-card__trigger'));
 
     expect(questions).toHaveLength(6);
-    expect(questions[0].getAttribute('aria-expanded')).toBe('true');
+    expect(questions.every((question) => question.getAttribute('aria-expanded') === 'false')).toBe(
+      true,
+    );
 
     questions[1].click();
     fixture.detectChanges();

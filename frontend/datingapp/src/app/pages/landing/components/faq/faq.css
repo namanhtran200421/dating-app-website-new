@@ -48,54 +48,50 @@
   align-items: start;
 }
 
-.faq-intro {
+/* One block on top of two, like stacked bricks: the top block spans the middle two columns. */
+.faq-pyramid {
   position: sticky;
   top: 110px;
-  border: 2px solid var(--ink);
-  border-radius: 28px;
-  background: var(--ink);
-  padding: clamp(30px, 4vw, 48px);
-  color: white;
-  box-shadow: 10px 10px 0 var(--purple);
-  transform: rotate(-0.7deg);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.faq-intro h2 {
-  margin: 0;
+.faq-block {
+  display: grid;
+  min-height: clamp(110px, 11vw, 140px);
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  padding: 16px;
+  color: var(--ink);
   font-family: var(--font-display);
-  font-size: clamp(40px, 5vw, 67px);
+  font-size: clamp(40px, 4.4vw, 58px);
   font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 0.98;
 }
 
-.faq-note {
-  position: relative;
-  display: grid;
-  width: min(100%, 310px);
-  margin: 30px -20px -72px auto;
-  border: 2px solid var(--ink);
-  border-radius: 3px;
+.faq-block--top {
+  grid-column: 2 / span 2;
+  background: var(--ink);
+  color: white;
+  box-shadow: 7px 7px 0 var(--purple);
+  transform: rotate(-0.7deg);
+}
+
+.faq-block--left {
+  grid-column: 1 / span 2;
   background: var(--yellow);
-  padding: 22px 24px 19px;
-  color: var(--ink);
-  box-shadow: 5px 6px 0 var(--pink);
-  transform: rotate(2deg);
+  box-shadow: 7px 7px 0 var(--ink);
+  transform: rotate(0.6deg);
 }
 
-.faq-note__tape {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  width: 78px;
-  height: 25px;
-  background: rgb(255 255 255 / 68%);
-  transform: translateX(-50%) rotate(-2deg);
-}
-
-.faq-note strong {
-  font-family: var(--font-display);
-  font-size: 17px;
+.faq-block--right {
+  grid-column: 3 / span 2;
+  background: var(--pink);
+  box-shadow: 7px 7px 0 var(--ink);
+  transform: rotate(-0.4deg);
 }
 
 .faq-list {
@@ -106,14 +102,19 @@
 .faq-card {
   --faq-accent: var(--pink);
   --faq-tilt: -0.2deg;
+  --faq-current-tilt: var(--faq-tilt);
   overflow: hidden;
   border: 2px solid var(--ink);
   border-radius: 22px;
   background: var(--paper);
   box-shadow: 5px 5px 0 var(--faq-accent);
   color: var(--ink);
-  transform: rotate(var(--faq-tilt));
-  transition: var(--rm-hover-transition);
+  transform: rotate(var(--faq-current-tilt));
+  transition:
+    transform var(--rm-press-duration) var(--rm-press-ease),
+    box-shadow var(--rm-press-duration) var(--rm-press-ease),
+    background-color 200ms ease;
+  will-change: transform;
 }
 
 .faq-card:nth-child(4n + 2) {
@@ -130,17 +131,16 @@
   --faq-tilt: 0.2deg;
 }
 
-.faq-card:not(.faq-card--open):hover {
+.faq-card:hover {
   background: color-mix(in srgb, var(--faq-accent) 12%, var(--paper));
-  box-shadow: 7px 7px 0 var(--faq-accent);
-  translate: -2px -2px;
+  box-shadow: none;
+  transform: translate3d(5px, 5px, 0) rotate(var(--faq-current-tilt));
 }
 
 .faq-card--open {
+  --faq-current-tilt: 0deg;
   background: color-mix(in srgb, var(--faq-accent) 9%, var(--paper));
-  box-shadow: 9px 9px 0 var(--faq-accent);
-  transform: rotate(0);
-  translate: -4px -4px;
+  box-shadow: 5px 5px 0 var(--faq-accent);
 }
 
 .faq-card h3 {
@@ -282,18 +282,11 @@
     grid-template-columns: 1fr;
   }
 
-  .faq-intro {
+  .faq-pyramid {
     position: relative;
     top: auto;
-    width: min(100% - 12px, 700px);
-  }
-
-  .faq-note {
-    margin-bottom: -56px;
-  }
-
-  .faq-list {
-    padding-top: 34px;
+    width: min(100% - 8px, 460px);
+    margin-inline: auto;
   }
 }
 
@@ -313,27 +306,25 @@
     bottom: -122px;
   }
 
-  .faq-intro {
-    width: calc(100% - 6px);
-    padding: 28px 24px 34px;
-    box-shadow: 7px 7px 0 var(--purple);
+  .faq-pyramid {
+    gap: 12px;
+  }
+
+  .faq-block {
+    min-height: 92px;
+    border-radius: 20px;
+    padding: 12px;
+    font-size: clamp(34px, 10vw, 44px);
+    box-shadow: 5px 5px 0 var(--ink);
     transform: none;
   }
 
-  .faq-intro h2 {
-    font-size: clamp(38px, 12vw, 52px);
-  }
-
-  .faq-note {
-    width: calc(100% - 12px);
-    margin-right: -12px;
-    margin-bottom: -58px;
-    padding: 20px;
+  .faq-block--top {
+    box-shadow: 5px 5px 0 var(--purple);
   }
 
   .faq-list {
     gap: 13px;
-    padding-top: 38px;
   }
 
   .faq-card,
@@ -342,8 +333,7 @@
   }
 
   .faq-card--open {
-    box-shadow: 6px 6px 0 var(--faq-accent);
-    translate: -2px -2px;
+    box-shadow: 5px 5px 0 var(--faq-accent);
   }
 
   .faq-card__trigger {
@@ -368,7 +358,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .faq-card,
   .faq-card__icon,
   .faq-card__icon span,
   .faq-answer {

@@ -1,74 +1,12 @@
 <div id="top" class="about-page overflow-x-hidden bg-cream/90 font-body text-ink">
-  <section class="about-hero" aria-labelledby="why-title">
-    <div class="about-shell about-hero__grid">
-      <header data-motion-reveal class="about-hero__headline">
-        <span class="about-hero__label">Our story · written in Melbourne</span>
-        <h1 id="why-title">The dating app formula needs a <em>rewrite.</em></h1>
-        <p>
-          Rosemarry started with a simple frustration: more profiles were not creating better
-          connections.
-        </p>
-        <span class="about-hero__margin-note" aria-hidden="true">So we changed the pace!</span>
-      </header>
-
-      <div data-motion-reveal="fade" data-motion-delay="0.08" class="about-hero__composition">
-        <article class="about-letter rm-sticker">
-          <span class="about-letter__tape" aria-hidden="true"></span>
-          <p class="about-letter__salutation">Dear dating apps,</p>
-          <p>
-            The usual formula asks people to make quick decisions from a few photos, keep swiping,
-            and trust an algorithm to find the right person.
-          </p>
-          <p>That creates more choices, but not always better connections.</p>
-          <p>
-            We believe attraction often needs time, familiarity and real interaction to grow. So
-            Rosemarry is built around small weekly Circles, shared conversations and repeated
-            encounters.
-          </p>
-          <span class="about-letter__signoff">— The Rosemarry team</span>
-        </article>
-
-        <aside class="about-principles rm-sticker" aria-label="The Rosemarry rewrite">
-          <div class="about-principles__heading"><span>Our rewrite</span><span>✦</span></div>
-          <ol>
-            <li><span>01</span><strong>Smaller weekly Circles</strong></li>
-            <li><span>02</span><strong>Shared things to talk about</strong></li>
-            <li><span>03</span><strong>Time before the match</strong></li>
-          </ol>
-        </aside>
-      </div>
-    </div>
-  </section>
-
   <section class="about-founders" aria-labelledby="founders-title">
     <div class="about-shell founders-layout">
       <header data-motion-reveal class="founders-intro">
-        <h2 id="founders-title" class="founders-kicker">Meet the team</h2>
-        <button
-          type="button"
-          class="founders-switch"
-          aria-controls="founder-card-deck"
-          [attr.aria-pressed]="showNextTeam()"
-          (click)="toggleFounderGroup()"
-        >
-          <span>{{ showNextTeam() ? 'Meet the founding three' : 'Meet the next three' }}</span>
-          <span class="founders-switch__icon" aria-hidden="true">↔</span>
-        </button>
+        <h1 id="founders-title" class="founders-kicker">Meet the team</h1>
       </header>
 
-      <div
-        id="founder-card-deck"
-        class="founder-stage"
-        [class.founder-stage--next]="showNextTeam()"
-      >
-        <div
-          class="founder-roster founder-roster--founding"
-          [class.founder-roster--active]="!showNextTeam()"
-          [class.founder-roster--behind]="showNextTeam()"
-          [attr.aria-hidden]="showNextTeam()"
-          [attr.inert]="showNextTeam() ? '' : null"
-          aria-label="Rosemarry founding team"
-        >
+      <div id="founder-card-deck" class="founder-stage">
+        <div class="founder-roster" aria-label="Rosemarry founding team">
           <article data-motion-reveal="fade" class="founder-card founder-card--pink">
             <span class="founder-card__number" aria-hidden="true">01</span>
             <div
@@ -79,7 +17,7 @@
               <span class="founder-card__monogram" aria-hidden="true">ST</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Steve Tran</h3>
+              <h2>Steve Tran</h2>
               <span class="founder-card__role">Co-founder · makes stuff work</span>
               <p>I like cats.</p>
             </div>
@@ -99,7 +37,7 @@
               <span class="founder-card__monogram" aria-hidden="true">FV</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Felix Vu</h3>
+              <h2>Felix Vu</h2>
               <span class="founder-card__role">Co-founder · product and community</span>
               <p>Vietnam's Steve Jobs.</p>
             </div>
@@ -119,22 +57,15 @@
               <span class="founder-card__monogram" aria-hidden="true">SN</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Samuel Nicholas</h3>
+              <h2>Samuel Nicholas</h2>
               <span class="founder-card__role">Co-founder · keeps the team moving</span>
               <p>Scrums, systems and the occasional reality check.</p>
             </div>
           </article>
         </div>
 
-        <div
-          class="founder-roster founder-roster--new"
-          [class.founder-roster--active]="showNextTeam()"
-          [class.founder-roster--behind]="!showNextTeam()"
-          [attr.aria-hidden]="!showNextTeam()"
-          [attr.inert]="showNextTeam() ? null : ''"
-          aria-label="Rosemarry new team members"
-        >
-          <article class="founder-card founder-card--purple">
+        <div class="founder-roster" aria-label="Rosemarry team members">
+          <article data-motion-reveal="fade" class="founder-card founder-card--purple">
             <span class="founder-card__number" aria-hidden="true">04</span>
             <div
               class="founder-card__portrait founder-card__initials"
@@ -144,13 +75,17 @@
               <span class="founder-card__monogram" aria-hidden="true">TBA</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Meet them soon</h3>
+              <h2>Meet them soon</h2>
               <span class="founder-card__role">New teammate · role coming soon</span>
-              <p>The fourth member of this small, very human team.</p>
+              <p>The fourth member of the Rosemarry team.</p>
             </div>
           </article>
 
-          <article class="founder-card founder-card--mint">
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.06"
+            class="founder-card founder-card--mint"
+          >
             <span class="founder-card__number" aria-hidden="true">05</span>
             <div
               class="founder-card__portrait founder-card__initials"
@@ -160,13 +95,17 @@
               <span class="founder-card__monogram" aria-hidden="true">TBA</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Meet them soon</h3>
+              <h2>Meet them soon</h2>
               <span class="founder-card__role">New teammate · role coming soon</span>
-              <p>The fifth member of this small, very human team.</p>
+              <p>The fifth member of the Rosemarry team.</p>
             </div>
           </article>
 
-          <article class="founder-card founder-card--yellow">
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.12"
+            class="founder-card founder-card--yellow"
+          >
             <span class="founder-card__number" aria-hidden="true">06</span>
             <div
               class="founder-card__portrait founder-card__initials"
@@ -176,9 +115,9 @@
               <span class="founder-card__monogram" aria-hidden="true">TBA</span>
             </div>
             <div class="founder-card__copy">
-              <h3>Meet them soon</h3>
+              <h2>Meet them soon</h2>
               <span class="founder-card__role">New teammate · role coming soon</span>
-              <p>The sixth member of this small, very human team.</p>
+              <p>The sixth member of the Rosemarry team.</p>
             </div>
           </article>
         </div>

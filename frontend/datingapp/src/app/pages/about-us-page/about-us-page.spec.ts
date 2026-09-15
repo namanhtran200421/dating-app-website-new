@@ -34,17 +34,11 @@ describe('AboutUsPage', () => {
     expect(numbers).toEqual(['01', '02', '03', '04', '05', '06']);
   });
 
-  it('switches from the founding three to the next three', () => {
-    const switchButton = fixture.nativeElement.querySelector(
-      '.founders-switch',
-    ) as HTMLButtonElement;
+  it('lists the second group directly below the founding team', () => {
+    const rosters = fixture.nativeElement.querySelectorAll('.founder-roster');
 
-    switchButton.click();
-    fixture.detectChanges();
-
-    expect(switchButton.getAttribute('aria-pressed')).toBe('true');
-    expect(fixture.nativeElement.querySelector('.founder-roster--new').classList).toContain(
-      'founder-roster--active',
-    );
+    expect(rosters).toHaveLength(2);
+    expect(fixture.nativeElement.querySelector('.founders-switch')).toBeNull();
+    expect(rosters[0].nextElementSibling).toBe(rosters[1]);
   });
 });

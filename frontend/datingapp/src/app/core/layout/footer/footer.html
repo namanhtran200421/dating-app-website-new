@@ -25,9 +25,8 @@
                 [attr.aria-invalid]="signup.emailError() ? 'true' : null"
                 [attr.aria-describedby]="signup.emailError() ? 'rm-email-error' : null"
               />
-              <button type="submit" [disabled]="signup.isSubmitting()">
+              <button type="submit" class="rm-pop" [disabled]="signup.isSubmitting()">
                 {{ signup.isSubmitting() ? 'Joining…' : 'Join early access' }}
-                <span class="rm-arrow" aria-hidden="true">→</span>
               </button>
             </div>
             <p class="footer-signup__offer">1 month of Advanced free at launch</p>

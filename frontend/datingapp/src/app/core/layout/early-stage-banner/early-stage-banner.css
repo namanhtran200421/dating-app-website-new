@@ -95,20 +95,16 @@
   font-size: 2rem;
   font-weight: 900;
   line-height: 1;
+  --rm-pop-hover-transform: translate3d(3px, 3px, 0);
+  --rm-pop-active-transform: translate3d(3px, 3px, 0);
   box-shadow: 3px 3px 0 var(--rm-ink);
   cursor: pointer;
-  transition: var(--rm-hover-transition);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 
 .early-stage-card__close:hover {
   background: var(--rm-pink);
-  box-shadow: var(--rm-pop-shadow-hover);
-  translate: var(--rm-pop-lift);
-}
-
-.early-stage-card__close:active {
-  box-shadow: var(--rm-pop-shadow-active);
-  translate: var(--rm-pop-press);
 }
 
 .early-stage-card__body {
@@ -171,18 +167,12 @@
   font-weight: 800;
   box-shadow: 4px 4px 0 var(--rm-ink);
   cursor: pointer;
-  transition: var(--rm-hover-transition);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 
 .early-stage-card__action:hover {
   background: var(--rm-yellow);
-  box-shadow: 6px 6px 0 var(--rm-ink);
-  translate: var(--rm-pop-lift);
-}
-
-.early-stage-card__action:active {
-  box-shadow: 2px 2px 0 var(--rm-ink);
-  translate: var(--rm-pop-press);
 }
 
 .early-stage-card__close:focus-visible,

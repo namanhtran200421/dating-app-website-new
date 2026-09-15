@@ -1,13 +1,17 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   ElementRef,
   HostListener,
   inject,
   input,
+  PLATFORM_ID,
   signal,
   viewChild,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter } from 'rxjs';
 import { SignupState } from '../../../pages/landing/signup-state';
 
 @Component({
@@ -24,6 +28,8 @@ export class Nav {
   protected readonly menuOpen = signal(false);
   protected readonly desktopMenuOpen = signal(false);
   protected readonly navHidden = signal(false);
+  /** "How it works" is a section on the home page, not a route, so it is highlighted while in view. */
+  protected readonly howItWorksActive = signal(false);
   private readonly companyMenuTrigger =
     viewChild<ElementRef<HTMLButtonElement>>('companyMenuTrigger');
   private lastScrollY = 0;
@@ -31,8 +37,23 @@ export class Nav {
   private directionalTravel = 0;
   readonly darkBackground = input(false);
 
+  constructor() {
+    // The section check reads the DOM and window, so it only runs in the browser, never during SSR.
+    if (!isPlatformBrowser(inject(PLATFORM_ID))) {
+      return;
+    }
+
+    inject(Router)
+      .events.pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => requestAnimationFrame(() => this.updateHowItWorksActive()));
+  }
+
   @HostListener('window:scroll')
   onScroll(): void {
+    this.updateHowItWorksActive();
     const currentScrollY = Math.max(window.scrollY, 0);
     const delta = currentScrollY - this.lastScrollY;
     this.lastScrollY = currentScrollY;
@@ -111,6 +132,18 @@ export class Nav {
     this.showNavigation();
     this.menuOpen.set(false);
     this.desktopMenuOpen.update((open) => !open);
+  }
+
+  private updateHowItWorksActive(): void {
+    const section = document.getElementById('how-it-works');
+    if (!section) {
+      this.howItWorksActive.set(false);
+      return;
+    }
+
+    const { top, bottom } = section.getBoundingClientRect();
+    const readingLine = window.innerHeight * 0.4;
+    this.howItWorksActive.set(top <= readingLine && bottom > readingLine);
   }
 
   private showNavigation(): void {

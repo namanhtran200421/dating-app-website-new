@@ -1,275 +1,173 @@
 <div id="top" class="contact-page">
-  <div class="mx-auto max-w-[1120px]">
+  <main class="contact-shell" aria-labelledby="contact-title">
     <header data-motion-reveal="fade" class="contact-header">
-      <div>
-        <span class="contact-header__eyebrow">The Rosemarry inbox</span>
-        <h1>
-          Reach out to
-          <span class="scribble-underline">
-            Rosemarry
-            <svg
-              class="scribble-underline__line"
-              viewBox="0 0 220 22"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <path
-                class="scribble-underline__stroke"
-                pathLength="1"
-                d="M4 12 C29 4 48 17 72 10 C99 2 117 17 143 9 C164 3 187 14 216 7"
-              />
-              <path
-                class="scribble-underline__stroke scribble-underline__stroke--second"
-                pathLength="1"
-                d="M15 18 C46 14 72 21 104 15 C137 10 167 20 207 13"
-              />
-            </svg>
-          </span>
-        </h1>
-      </div>
+      <h1 id="contact-title">Message us.</h1>
     </header>
 
-    <div class="contact-board">
-      <aside
-        data-motion-reveal
-        class="contact-route rm-sticker"
-        aria-labelledby="message-route-title"
-      >
-        <div class="contact-route__top">
-          <span>After you hit send</span>
-        </div>
-
-        <h2 id="message-route-title">Your message has a route.</h2>
-        <p class="contact-route__intro">Here&rsquo;s the actual journey.</p>
-
-        <ol class="contact-route__steps">
-          <li>
-            <span>01</span>
-            <div>
-              <strong>It lands</strong>
-              <p>Your note arrives in the shared Rosemarry inbox.</p>
-            </div>
-          </li>
-          <li>
-            <span>02</span>
-            <div>
-              <strong>It gets routed</strong>
-              <p>We send it to whoever on the crew knows the most.</p>
-            </div>
-          </li>
-          <li>
-            <span>03</span>
-            <div>
-              <strong>It gets reviewed</strong>
-              <p>We look over the details and work out what happens next.</p>
-            </div>
-          </li>
-          <li>
-            <span>04</span>
-            <div>
-              <strong>We reply</strong>
-              <p>Keep an eye on your email for a response.</p>
-            </div>
-          </li>
-        </ol>
-
-        <div class="contact-route__promise">
-          <span aria-hidden="true">୨ৎ</span>
-          <p><strong>Reply promise:</strong> clear, helpful, and free of corporate jargon.</p>
-        </div>
-      </aside>
-
-      <section
-        data-motion-reveal
-        data-motion-delay="0.08"
-        class="contact-letter rm-sticker"
-        aria-labelledby="contact-form-title"
-      >
-        <div class="contact-letter__heading">
-          <div>
-            <span>Write your note</span>
-            <h2 id="contact-form-title">Dear Rosemarry...</h2>
-          </div>
-        </div>
-
-        <form [formGroup]="contactForm" (ngSubmit)="addContact()" novalidate class="contact-form">
-          <div class="contact-form__names">
-            <label class="contact-field">
-              <span>First name, pls</span>
-              <input
-                type="text"
-                formControlName="firstName"
-                autocomplete="given-name"
-                [class.contact-control--error]="
-                  contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid
-                "
-              />
-              @if (
-                contactForm.controls.firstName.touched &&
-                (contactForm.controls.firstName.hasError('required') ||
-                  contactForm.controls.firstName.hasError('blank'))
-              ) {
-                <small>Drop your first name real quick.</small>
-              } @else if (
-                contactForm.controls.firstName.touched &&
-                contactForm.controls.firstName.hasError('maxlength')
-              ) {
-                <small>That first name needs to stay under 100 characters.</small>
-              }
-            </label>
-
-            <label class="contact-field">
-              <span>Last name, too</span>
-              <input
-                type="text"
-                formControlName="lastName"
-                autocomplete="family-name"
-                [class.contact-control--error]="
-                  contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid
-                "
-              />
-              @if (
-                contactForm.controls.lastName.touched &&
-                (contactForm.controls.lastName.hasError('required') ||
-                  contactForm.controls.lastName.hasError('blank'))
-              ) {
-                <small>We need the last name, too.</small>
-              } @else if (
-                contactForm.controls.lastName.touched &&
-                contactForm.controls.lastName.hasError('maxlength')
-              ) {
-                <small>That last name needs to stay under 100 characters.</small>
-              }
-            </label>
-          </div>
-
+    <section data-motion-reveal class="contact-letter" aria-label="Send Rosemarry a message">
+      <form [formGroup]="contactForm" (ngSubmit)="addContact()" novalidate class="contact-form">
+        <div class="contact-form__names">
           <label class="contact-field">
-            <span>Your email</span>
+            <span>First name</span>
             <input
-              type="email"
-              formControlName="email"
-              autocomplete="email"
-              placeholder="yourname@internet.com"
+              type="text"
+              formControlName="firstName"
+              autocomplete="given-name"
               [class.contact-control--error]="
-                contactForm.controls.email.touched && contactForm.controls.email.invalid
+                contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid
               "
             />
             @if (
-              contactForm.controls.email.touched && contactForm.controls.email.hasError('required')
+              contactForm.controls.firstName.touched &&
+              (contactForm.controls.firstName.hasError('required') ||
+                contactForm.controls.firstName.hasError('blank'))
             ) {
-              <small>Drop your email so we know where to reply.</small>
+              <small>Enter your first name.</small>
             } @else if (
-              contactForm.controls.email.touched && contactForm.controls.email.hasError('pattern')
+              contactForm.controls.firstName.touched &&
+              contactForm.controls.firstName.hasError('maxlength')
             ) {
-              <small>That email is not emailing. Try again?</small>
-            } @else if (
-              contactForm.controls.email.touched && contactForm.controls.email.hasError('maxlength')
-            ) {
-              <small>That email is unusually long. Keep it under 254 characters.</small>
+              <small>Keep your first name under 100 characters.</small>
             }
           </label>
 
           <label class="contact-field">
-            <span>What&rsquo;s this about?</span>
-            <span class="contact-select">
-              <select
-                formControlName="subject"
-                [class.contact-control--error]="
-                  contactForm.controls.subject.touched && contactForm.controls.subject.invalid
-                "
-              >
-                <option value="" disabled>Select one</option>
-                <option value="General question">Just a quick question</option>
-                <option value="Feedback">I have thoughts</option>
-                <option value="Partnerships">Let&rsquo;s collab</option>
-                <option value="Press">Press or media</option>
-              </select>
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m7 9.5 5 5 5-5"></path>
-              </svg>
-            </span>
-            @if (
-              contactForm.controls.subject.touched &&
-              contactForm.controls.subject.hasError('required')
-            ) {
-              <small>Pick a topic so we know who gets this.</small>
-            }
-          </label>
-
-          <label class="contact-field">
-            <span>Tell us more</span>
-            <textarea
-              class="resize-none"
-              formControlName="message"
-              rows="3"
-              placeholder="Give us the full story..."
+            <span>Last name</span>
+            <input
+              type="text"
+              formControlName="lastName"
+              autocomplete="family-name"
               [class.contact-control--error]="
-                contactForm.controls.message.touched && contactForm.controls.message.invalid
+                contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid
               "
-            ></textarea>
+            />
             @if (
-              contactForm.controls.message.touched &&
-              (contactForm.controls.message.hasError('required') ||
-                contactForm.controls.message.hasError('blank'))
+              contactForm.controls.lastName.touched &&
+              (contactForm.controls.lastName.hasError('required') ||
+                contactForm.controls.lastName.hasError('blank'))
             ) {
-              <small>Don&rsquo;t leave us on read – drop a message.</small>
+              <small>Enter your last name.</small>
             } @else if (
-              contactForm.controls.message.touched &&
-              contactForm.controls.message.hasError('maxlength')
+              contactForm.controls.lastName.touched &&
+              contactForm.controls.lastName.hasError('maxlength')
             ) {
-              <small>That&rsquo;s a whole novel. Keep the note under 5,000 characters.</small>
+              <small>Keep your last name under 100 characters.</small>
             }
           </label>
+        </div>
 
-          <app-turnstile-widget
-            class="contact-form__turnstile"
-            action="contact"
-            [resetVersion]="turnstileResetVersion()"
-            (tokenChange)="setTurnstileToken($event)"
-            (verificationError)="markTurnstileError()"
+        <label class="contact-field">
+          <span>Email</span>
+          <input
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            [class.contact-control--error]="
+              contactForm.controls.email.touched && contactForm.controls.email.invalid
+            "
           />
-
-          @if (securityError()) {
-            <small class="contact-form__security-error" role="alert">
-              The security check needs another go. Refresh it and try again.
-            </small>
+          @if (
+            contactForm.controls.email.touched && contactForm.controls.email.hasError('required')
+          ) {
+            <small>Enter your email.</small>
+          } @else if (
+            contactForm.controls.email.touched && contactForm.controls.email.hasError('pattern')
+          ) {
+            <small>Enter a valid email.</small>
+          } @else if (
+            contactForm.controls.email.touched && contactForm.controls.email.hasError('maxlength')
+          ) {
+            <small>Keep your email under 254 characters.</small>
           }
+        </label>
 
-          @if (submissionError()) {
-            <div class="contact-form__submission-error" role="alert">
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <p>{{ submissionError() }}</p>
-            </div>
+        <label class="contact-field">
+          <span>Subject</span>
+          <span class="contact-select">
+            <select
+              formControlName="subject"
+              [class.contact-control--error]="
+                contactForm.controls.subject.touched && contactForm.controls.subject.invalid
+              "
+            >
+              <option value="" disabled>Select a subject</option>
+              <option value="General question">General question</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Partnerships">Partnership</option>
+              <option value="Press">Press or media</option>
+            </select>
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m7 9.5 5 5 5-5"></path>
+            </svg>
+          </span>
+          @if (
+            contactForm.controls.subject.touched &&
+            contactForm.controls.subject.hasError('required')
+          ) {
+            <small>Select a subject.</small>
           }
+        </label>
 
-          <div class="contact-form__footer">
-            <button type="submit" [disabled]="isSubmitting() || !turnstileToken()">
-              <span>{{ isSubmitting() ? 'Checking…' : 'Send' }}</span>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m22 2-7 20-4-9-9-4Z"></path>
-                <path d="M22 2 11 13"></path>
-              </svg>
-            </button>
+        <label class="contact-field">
+          <span>Message</span>
+          <textarea
+            class="resize-none"
+            formControlName="message"
+            rows="5"
+            [class.contact-control--error]="
+              contactForm.controls.message.touched && contactForm.controls.message.invalid
+            "
+          ></textarea>
+          @if (
+            contactForm.controls.message.touched &&
+            (contactForm.controls.message.hasError('required') ||
+              contactForm.controls.message.hasError('blank'))
+          ) {
+            <small>Enter a message.</small>
+          } @else if (
+            contactForm.controls.message.touched &&
+            contactForm.controls.message.hasError('maxlength')
+          ) {
+            <small>Keep your message under 5,000 characters.</small>
+          }
+        </label>
+
+        <app-turnstile-widget
+          class="contact-form__turnstile"
+          action="contact"
+          [resetVersion]="turnstileResetVersion()"
+          (tokenChange)="setTurnstileToken($event)"
+          (verificationError)="markTurnstileError()"
+        />
+
+        @if (securityError()) {
+          <small class="contact-form__security-error" role="alert">
+            Complete the security check and try again.
+          </small>
+        }
+
+        @if (submissionError()) {
+          <div class="contact-form__submission-error" role="alert">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+            <p>{{ submissionError() }}</p>
           </div>
-        </form>
-      </section>
-    </div>
-  </div>
+        }
+
+        <div class="contact-form__footer">
+          <button type="submit" class="rm-pop" [disabled]="isSubmitting() || !turnstileToken()">
+            {{ isSubmitting() ? 'Sending…' : 'Send message' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
 </div>

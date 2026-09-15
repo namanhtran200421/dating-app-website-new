@@ -60,8 +60,9 @@
   position: relative;
   display: grid;
   width: 100%;
-  min-height: 108px;
-  gap: 9px;
+  min-height: 96px;
+  align-content: start;
+  gap: 7px;
   text-align: left;
 }
 
@@ -83,21 +84,21 @@
 
 .footer-signup__form input,
 .footer-signup__form button {
-  min-height: 58px;
+  min-height: 48px;
   border: 2px solid #202131;
   border-radius: 999px;
   font-family: var(--font-body);
-  box-shadow: 4px 5px 0 rgb(32 33 49 / 17%);
   transition: var(--rm-hover-transition);
 }
 
 .footer-signup__form input {
   min-width: 0;
   background: #fff;
-  padding: 0 22px;
+  padding: 0 18px;
   color: #202131;
   font-size: 13px;
   font-weight: 750;
+  box-shadow: 3px 3px 0 rgb(32 33 49 / 16%);
   outline: none;
 }
 
@@ -112,28 +113,24 @@
 }
 
 .footer-signup__form button {
+  --rm-pop-shadow: 4px 4px 0 #202131;
+  --rm-pop-hover-transform: translate3d(4px, 4px, 0);
+  --rm-pop-active-transform: translate3d(4px, 4px, 0);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
   background: #ed77a8;
-  padding: 0 24px;
+  padding: 0 21px;
   color: #202131;
   font-size: 13px;
   font-weight: 850;
   line-height: 1;
   white-space: nowrap;
+  box-shadow: var(--rm-pop-shadow);
   cursor: pointer;
-}
-
-.footer-signup__form button:hover:not(:disabled) {
-  box-shadow: 6px 7px 0 #202131;
-  translate: 0 -2px;
-}
-
-.footer-signup__form button:active:not(:disabled) {
-  box-shadow: 2px 2px 0 #202131;
-  translate: 0 1px;
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 
 .footer-signup__form button:disabled {
@@ -307,7 +304,7 @@
   }
 
   .footer-signup__form {
-    min-height: 184px;
+    min-height: 164px;
   }
 
   .footer-signup__form input,

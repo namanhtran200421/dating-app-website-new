@@ -48,8 +48,8 @@
 
 /*
  * Resting tilt and lift use the individual translate/rotate/scale properties so the
- * shared bouncy hover transition animates them. Hover straightens the card, lifts it and
- * swaps the ink shadow for a bigger shadow in the card's own colour.
+ * shared bouncy hover transition animates them. Cards stack from left to right, while the
+ * hovered card rises just enough to separate itself from the deck.
  */
 .step-card {
   --card-angle: 0deg;
@@ -74,23 +74,23 @@
 
 .step-card:hover {
   z-index: 10;
-  box-shadow: 10px 10px 0 var(--card-pop);
-  translate: 0 calc(var(--card-lift) - 16px * var(--rm-motion));
+  box-shadow: 8px 8px 0 var(--card-pop);
+  translate: 0 calc(var(--card-lift) - 8px * var(--rm-motion));
   rotate: calc(var(--card-angle) * (1 - var(--rm-motion)));
-  scale: calc(1 + 0.035 * var(--rm-motion));
+  scale: calc(1 + 0.015 * var(--rm-motion));
 }
 
 .step-card--interests {
   --card-angle: -3.2deg;
   --card-lift: 8px;
-  z-index: 1;
+  z-index: 4;
 }
 
 .step-card--circle {
   --card-angle: 1.3deg;
   --card-lift: 0px;
   --card-pop: var(--yellow);
-  z-index: 2;
+  z-index: 3;
   height: 510px;
 }
 
@@ -98,7 +98,7 @@
   --card-angle: 0.3deg;
   --card-lift: -18px;
   --card-pop: var(--mint);
-  z-index: 4;
+  z-index: 2;
   height: 560px;
 }
 
@@ -106,7 +106,7 @@
   --card-angle: 3deg;
   --card-lift: 5px;
   --card-pop: var(--purple);
-  z-index: 3;
+  z-index: 1;
 }
 
 .step-card__visual {
@@ -272,10 +272,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .step-card,
-  .step-card:hover {
-    translate: none;
+  .step-card {
     rotate: none;
     scale: none;
+  }
+
+  .step-card:hover {
+    translate: 0 -4px;
   }
 }

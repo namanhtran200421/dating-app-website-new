@@ -44,7 +44,7 @@ export class HomeFaq {
       contact: true,
     },
   ];
-  protected readonly activeFaq = signal<number | null>(0);
+  protected readonly activeFaq = signal<number | null>(null);
 
   protected toggleFaq(index: number): void {
     this.activeFaq.update((current) => (current === index ? null : index));

@@ -154,15 +154,8 @@
   text-decoration: none;
   box-shadow: var(--rm-pop-shadow);
   cursor: pointer;
-  transition: var(--rm-hover-transition);
-}
-.button:hover {
-  box-shadow: var(--rm-pop-shadow-hover);
-  translate: var(--rm-pop-lift);
-}
-.button:active {
-  box-shadow: var(--rm-pop-shadow-active);
-  translate: var(--rm-pop-press);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 .button:focus-visible {
   outline: var(--rm-focus-ring);
@@ -234,7 +227,7 @@
   transform-origin: 50% 60%;
 }
 .photo-card--four img {
-  object-position: 38% center;
+  object-position: 45% center;
 }
 .photo-card--one {
   z-index: 1;
@@ -606,10 +599,7 @@
   aspect-ratio: auto;
 }
 
-/*
- * Pop cards: on hover the photo card comes to the front, lifts up-left and casts a longer
- * hard shadow in its accent colour, on top of the shared sticker wiggle.
- */
+/* Keep both comparison images in one restrained, neutral shadow system. */
 .problem-grid .outlined-card,
 .phase-card {
   --pop-offset: var(--pop-rest, 6px);
@@ -630,8 +620,7 @@
   width: 36%;
   height: 455px;
   transform: rotate(-5deg);
-  --card-pop: var(--purple);
-  --caption-accent: var(--yellow);
+  --card-pop: var(--ink);
 }
 .outlined-card--pink {
   z-index: 2;
@@ -642,8 +631,7 @@
   background: #dedee5;
 }
 .outlined-card--pink {
-  --card-pop: var(--mint);
-  --caption-accent: var(--mint);
+  --card-pop: var(--ink);
   --rm-sticker-tilt: 1deg;
 }
 .outlined-card > .outlined-card__photo-label {
@@ -652,47 +640,24 @@
 .outlined-card__caption {
   position: absolute;
   z-index: 2;
-  right: 12px;
-  bottom: 12px;
-  left: 12px;
-  border: 2px solid var(--ink);
-  border-radius: 16px;
-  background: var(--paper);
-  padding: 14px 16px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+  background: rgb(251 248 239 / 96%);
+  padding: 17px 18px 16px;
   color: var(--ink);
   text-align: left;
-  box-shadow: 5px 5px 0 var(--caption-accent);
 }
 .outlined-card__label {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-/* Icon enclosed in a coloured circle; wiggles when its card is hovered. */
-.problem-badge {
-  display: grid;
-  flex: none;
-  width: 26px;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  color: var(--ink);
-  font-size: 11px;
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.problem-badge--no {
-  background: var(--pink);
-}
-.problem-badge--yes {
-  background: var(--mint);
-}
-.outlined-card:hover .problem-badge,
-.outlined-card:focus-within .problem-badge {
-  animation: rm-wiggle 420ms var(--rm-ease-bounce);
+  gap: 10px;
 }
 .outlined-card__caption h3 {
-  margin: 12px 0 5px;
+  margin: 10px 0 5px;
   font-family: var(--font-display);
   font-size: clamp(20px, 2vw, 27px);
   line-height: 1.05;
@@ -705,8 +670,18 @@
   line-height: 1.45;
 }
 .outlined-card--pink .outlined-card__caption {
+  right: 0;
   left: auto;
-  width: min(68%, 560px);
+  width: min(70%, 560px);
+  border-left: 2px solid var(--ink);
+  border-top-left-radius: 18px;
+}
+.outlined-card--usual .micro-label {
+  background: var(--ink);
+  color: var(--paper);
+}
+.outlined-card--pink .micro-label {
+  background: var(--pink);
 }
 .outlined-card__photo-label {
   border: 1px solid rgb(32 33 49 / 28%);
@@ -714,34 +689,6 @@
   background: rgb(255 255 255 / 52%);
   padding: 7px 11px 5px;
 }
-.problem-star {
-  position: absolute;
-}
-.problem-star--burst {
-  z-index: 0;
-  right: -28px;
-  bottom: 12px;
-  width: 132px;
-  color: var(--mint);
-  transform: rotate(8deg);
-}
-.problem-star--sparkle {
-  z-index: 0;
-  top: 8px;
-  right: 12px;
-  width: 96px;
-  color: var(--purple);
-  transform: rotate(18deg);
-}
-.problem-star--pinwheel {
-  z-index: 4;
-  top: 30px;
-  left: 31%;
-  width: 62px;
-  color: var(--yellow);
-  transform: rotate(9deg);
-}
-
 .quote-band {
   overflow: hidden;
   background: var(--pink);
@@ -1054,21 +1001,14 @@
     transform: rotate(1.5deg);
   }
   .outlined-card--pink .outlined-card__caption {
-    right: 16px;
-    left: 16px;
+    right: 0;
+    left: 0;
     width: auto;
+    border-left: 0;
+    border-top-left-radius: 0;
   }
   .outlined-card {
     aspect-ratio: auto;
-  }
-  .problem-star--pinwheel {
-    top: 47%;
-    left: auto;
-    right: 2%;
-  }
-  .problem-star--sparkle {
-    top: 48%;
-    right: -18px;
   }
   .quote-band__inner {
     min-height: 300px;

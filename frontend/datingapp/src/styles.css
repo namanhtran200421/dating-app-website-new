@@ -42,15 +42,15 @@
    * Interaction tokens. Every hover, press and focus effect on the site reads from these,
    * so the whole feel can be tuned (or switched off) in one place.
    *
-   *   pop     bordered buttons: lift up-left, hard shadow grows; press down-right on click
+   *   pop     bordered buttons: sink down-right into their hard shadow
    *   sticker cards: wiggle (tilt + slight grow); shadow stays put
    *   row     list rows and menu links: slide right over a soft pink tint
    *   fill    outlined secondary controls: fill with yellow
    *   link    text links: thick pink underline appears
    *   icon    badges inside a hovered parent: one quick wiggle
    *
-   * Movement uses the individual `translate` / `rotate` / `scale` properties rather than
-   * `transform`, so it stacks on top of an element's resting tilt instead of replacing it.
+   * Sticker movement uses individual rotate/scale properties so it can stack with resting
+   * transforms. Button presses use translate3d for broad, reliably smooth browser support.
    */
   --rm-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --rm-hover-duration: 300ms;
@@ -60,12 +60,18 @@
     scale var(--rm-hover-duration) var(--rm-ease-bounce),
     box-shadow var(--rm-hover-duration) var(--rm-ease-bounce), background-color 200ms ease,
     border-color 200ms ease, color 200ms ease, text-decoration-color 200ms ease;
+  --rm-press-duration: 200ms;
+  --rm-press-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --rm-press-transition:
+    transform var(--rm-press-duration) var(--rm-press-ease),
+    box-shadow var(--rm-press-duration) var(--rm-press-ease), background-color 200ms ease,
+    border-color 200ms ease, color 200ms ease;
 
   --rm-pop-shadow: 4px 4px 0 var(--rm-ink);
-  --rm-pop-shadow-hover: 6px 6px 0 var(--rm-ink);
-  --rm-pop-shadow-active: 2px 2px 0 var(--rm-ink);
-  --rm-pop-lift: -2px -2px;
-  --rm-pop-press: 2px 2px;
+  --rm-pop-shadow-hover: none;
+  --rm-pop-shadow-active: none;
+  --rm-pop-hover-transform: translate3d(4px, 4px, 0);
+  --rm-pop-active-transform: translate3d(4px, 4px, 0);
 
   /* 1 = full movement, 0 = none. Cards may set their own tilt/grow; this still gates it. */
   --rm-motion: 1;
@@ -89,8 +95,6 @@
 /* Touch screens have no real hover: keep colour feedback, drop the movement. */
 @media (hover: none) {
   :root {
-    --rm-pop-lift: 0 0;
-    --rm-pop-shadow-hover: var(--rm-pop-shadow);
     --rm-motion: 0;
     --rm-row-shift: 0 0;
     --rm-arrow-nudge: 0 0;
@@ -100,8 +104,6 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --rm-hover-duration: 0ms;
-    --rm-pop-lift: 0 0;
-    --rm-pop-press: 0 0;
     --rm-motion: 0;
     --rm-row-shift: 0 0;
     --rm-arrow-nudge: 0 0;
@@ -302,23 +304,23 @@ h6,
 
 .rm-pop {
   box-shadow: var(--rm-pop-shadow);
+  transition: var(--rm-press-transition);
+  will-change: transform;
 }
 
 /* On dark surfaces an ink shadow disappears, so pop with a paper-coloured shadow. */
 .rm-pop--on-dark {
   --rm-pop-shadow: 4px 4px 0 var(--rm-paper);
-  --rm-pop-shadow-hover: 6px 6px 0 var(--rm-paper);
-  --rm-pop-shadow-active: 2px 2px 0 var(--rm-paper);
 }
 
-html body .rm-pop:hover {
+html body .rm-pop:not(:disabled):hover {
   box-shadow: var(--rm-pop-shadow-hover);
-  translate: var(--rm-pop-lift);
+  transform: var(--rm-pop-hover-transform);
 }
 
-html body .rm-pop:active {
+html body .rm-pop:not(:disabled):active {
   box-shadow: var(--rm-pop-shadow-active);
-  translate: var(--rm-pop-press);
+  transform: var(--rm-pop-active-transform);
 }
 
 .rm-sticker:hover,

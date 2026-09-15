@@ -173,7 +173,7 @@
 
 .article-card:hover {
   box-shadow: 9px 10px 0 var(--rm-ink);
-  translate: var(--rm-pop-lift);
+  translate: -2px -2px;
 }
 
 .article-card h3 {

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-about-us-page',
@@ -6,10 +6,4 @@ import { Component, signal } from '@angular/core';
   templateUrl: './about-us-page.html',
   styleUrl: './about-us-page.css',
 })
-export class AboutUsPage {
-  protected readonly showNextTeam = signal(false);
-
-  protected toggleFounderGroup(): void {
-    this.showNextTeam.update((showingNext) => !showingNext);
-  }
-}
+export class AboutUsPage {}
