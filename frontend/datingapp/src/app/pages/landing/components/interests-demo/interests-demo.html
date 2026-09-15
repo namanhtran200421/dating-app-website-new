@@ -1,0 +1,131 @@
+<div class="demo-phone">
+  <div class="demo-bar">
+    @if (screen() === 'goal') {
+      <button type="button" class="demo-back" aria-label="Back to interests" (click)="back()">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      </button>
+    } @else {
+      <span aria-hidden="true"></span>
+    }
+    <ol class="demo-progress" aria-label="Setup progress">
+      <li
+        [class.is-current]="screen() === 'interests'"
+        [class.is-done]="screen() !== 'interests'"
+        [attr.aria-current]="screen() === 'interests' ? 'step' : null"
+      >
+        <span class="sr-only">Interests</span>
+      </li>
+      <li
+        [class.is-current]="screen() === 'goal'"
+        [class.is-done]="screen() === 'done'"
+        [attr.aria-current]="screen() === 'goal' ? 'step' : null"
+      >
+        <span class="sr-only">Looking for</span>
+      </li>
+    </ol>
+    <span aria-hidden="true"></span>
+  </div>
+
+  @switch (screen()) {
+    @case ('interests') {
+      <div class="demo-screen" [class.demo-screen--back]="goingBack()">
+        <div class="demo-head">
+          <div>
+            <h4 class="demo-title" tabindex="-1">Pick your interests</h4>
+            <p class="demo-hint">Choose up to {{ maxInterests }}.</p>
+          </div>
+          <span class="demo-count" [class.is-full]="isFull()" aria-live="polite">
+            {{ picked().length }}/{{ maxInterests }}
+            <span class="sr-only">selected</span>
+          </span>
+        </div>
+
+        <ul class="interest-grid" aria-label="Interests">
+          @for (interest of interests; track interest.label) {
+            <li>
+              <button
+                type="button"
+                class="interest-chip"
+                [class.is-picked]="isPicked(interest.label)"
+                [attr.aria-pressed]="isPicked(interest.label)"
+                [disabled]="isFull() && !isPicked(interest.label)"
+                (click)="toggleInterest(interest.label)"
+              >
+                <i [class]="interest.icon" aria-hidden="true"></i>
+                <span>{{ interest.label }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+
+        <button
+          type="button"
+          class="demo-action"
+          [disabled]="picked().length === 0"
+          (click)="next()"
+        >
+          Next <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
+        </button>
+      </div>
+    }
+
+    @case ('goal') {
+      <div class="demo-screen">
+        <div class="demo-head">
+          <div>
+            <h4 id="interests-demo-goal-title" class="demo-title" tabindex="-1">
+              What are you looking for?
+            </h4>
+            <p class="demo-hint">You can change this anytime.</p>
+          </div>
+        </div>
+
+        <div class="goal-list" role="radiogroup" aria-labelledby="interests-demo-goal-title">
+          @for (option of goals; track option.label) {
+            <label class="goal-option" [class.is-picked]="goal() === option.label">
+              <input
+                class="sr-only"
+                type="radio"
+                name="interests-demo-goal"
+                [value]="option.label"
+                [checked]="goal() === option.label"
+                (change)="goal.set(option.label)"
+              />
+              <span class="goal-option__icon" aria-hidden="true">
+                <i [class]="option.icon"></i>
+              </span>
+              <span class="goal-option__text">
+                <strong>{{ option.label }}</strong>
+                <small>{{ option.hint }}</small>
+              </span>
+              <span class="goal-option__check" aria-hidden="true">
+                <i class="fa-solid fa-check"></i>
+              </span>
+            </label>
+          }
+        </div>
+
+        <button type="button" class="demo-action" [disabled]="!goal()" (click)="finish()">
+          Find my people <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
+        </button>
+      </div>
+    }
+
+    @case ('done') {
+      <div class="demo-screen demo-screen--done">
+        <span class="done-badge" aria-hidden="true"><i class="fa-solid fa-heart"></i></span>
+        <h4 class="demo-title" tabindex="-1">You're all set!</h4>
+        <p class="demo-hint">We'll use this to find a Circle of compatible people nearby.</p>
+        <ul class="done-tags" aria-label="Your picks">
+          <li class="done-tag done-tag--goal">{{ goal() }}</li>
+          @for (label of picked(); track label) {
+            <li class="done-tag">{{ label }}</li>
+          }
+        </ul>
+        <button type="button" class="demo-action demo-action--quiet" (click)="restart()">
+          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Start over
+        </button>
+      </div>
+    }
+  }
+</div>

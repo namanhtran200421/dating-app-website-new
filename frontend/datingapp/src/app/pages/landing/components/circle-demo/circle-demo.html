@@ -1,0 +1,156 @@
+<div class="demo-phone">
+  @switch (screen()) {
+    @case ('circle') {
+      <div class="demo-screen" [class.demo-screen--back]="returned()">
+        <header class="circle-banner">
+          <div class="circle-banner__top">
+            <h4 class="demo-title">The Night Owls</h4>
+            <span class="circle-day">Day 6/6</span>
+          </div>
+          <p>Music, travel &amp; late-night talks</p>
+        </header>
+
+        <div class="circle-body">
+          <ol class="circle-days" aria-label="This week">
+            @for (day of days; track day; let today = $last) {
+              <li [class.is-today]="today" [attr.aria-current]="today ? 'date' : null">
+                {{ day }}
+              </li>
+            }
+          </ol>
+
+          <div class="circle-members">
+            <div class="avatar-stack avatar-stack--large" aria-hidden="true">
+              @for (member of avatars; track member.name) {
+                <img [src]="member.avatar" alt="" width="36" height="36" />
+              }
+              <span>+6</span>
+            </div>
+            <strong>10 members</strong>
+          </div>
+
+          <button type="button" class="circle-activity" (click)="playActivity.emit()">
+            <span class="circle-activity__icon" aria-hidden="true">
+              <i class="fa-solid fa-champagne-glasses"></i>
+            </span>
+            <p class="circle-activity__text">
+              <strong>Flirty prompt</strong>
+              <span>4 of 10 have played</span>
+            </p>
+            <span class="circle-activity__play" aria-hidden="true">Play</span>
+          </button>
+
+          <button #openChatButton type="button" class="circle-chat" (click)="openChat()">
+            <span class="circle-chat__head">
+              <span class="circle-chat__icon" aria-hidden="true">
+                <i class="fa-regular fa-comment"></i>
+              </span>
+              <strong class="circle-chat__title">Open group chat</strong>
+              @if (unread() > 0) {
+                <span class="circle-chat__badge">{{ unread() }} new</span>
+              }
+              <i class="fa-solid fa-chevron-right circle-chat__arrow" aria-hidden="true"></i>
+            </span>
+            <span class="circle-chat__preview" aria-hidden="true">
+              @for (message of recent(); track message.id) {
+                <span class="circle-chat__line">
+                  @if (message.member; as member) {
+                    <img [src]="member.avatar" alt="" width="22" height="22" />
+                    <b [style.color]="member.color">{{ member.name }}</b>
+                  } @else {
+                    <span class="circle-chat__you">You</span>
+                  }
+                  <span class="circle-chat__message">{{ message.text }}</span>
+                </span>
+              }
+            </span>
+          </button>
+        </div>
+      </div>
+    }
+
+    @case ('chat') {
+      <div class="demo-screen">
+        <header class="chat-header">
+          <button type="button" class="demo-back" aria-label="Back to Circle" (click)="closeChat()">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          </button>
+          <div class="avatar-stack" aria-hidden="true">
+            @for (member of avatars.slice(0, 3); track member.name) {
+              <img [src]="member.avatar" alt="" width="28" height="28" />
+            }
+            <span>+7</span>
+          </div>
+          <div class="chat-header__text">
+            <h4 class="demo-title">The Night Owls</h4>
+            <small>10 members · 1d left</small>
+          </div>
+        </header>
+
+        <ol #messageLog class="chat-log" role="log" aria-label="Group chat messages">
+          @for (message of messages(); track message.id) {
+            @if (message.kind === 'event') {
+              <li class="chat-event">{{ message.text }}</li>
+            } @else if (message.kind === 'me') {
+              <li class="chat-msg chat-msg--me">
+                <span class="sr-only">You:</span>
+                <p class="chat-bubble">{{ message.text }}</p>
+              </li>
+            } @else {
+              <li class="chat-msg">
+                <img
+                  class="chat-avatar"
+                  [src]="message.member?.avatar"
+                  alt=""
+                  width="28"
+                  height="28"
+                />
+                <div>
+                  <span class="chat-name" [style.color]="message.member?.color">
+                    {{ message.member?.name }}
+                  </span>
+                  <p class="chat-bubble">{{ message.text }}</p>
+                </div>
+              </li>
+            }
+          }
+          @if (typing(); as member) {
+            <li class="chat-msg chat-msg--typing">
+              <img class="chat-avatar" [src]="member.avatar" alt="" width="28" height="28" />
+              <div>
+                <span class="chat-name" [style.color]="member.color"
+                  >{{ member.name }} is typing</span
+                >
+                <p class="chat-bubble typing-dots" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </p>
+              </div>
+            </li>
+          }
+        </ol>
+
+        <form class="chat-composer" (submit)="send($event)">
+          <label class="sr-only" for="circle-demo-draft">Message the Circle</label>
+          <input
+            #draftInput
+            id="circle-demo-draft"
+            type="text"
+            autocomplete="off"
+            maxlength="160"
+            placeholder="Message the Circle…"
+            [value]="draft()"
+            (input)="draft.set(draftInput.value)"
+          />
+          <button
+            type="submit"
+            class="chat-send"
+            [disabled]="!draft().trim()"
+            aria-label="Send message"
+          >
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+          </button>
+        </form>
+      </div>
+    }
+  }
+</div>

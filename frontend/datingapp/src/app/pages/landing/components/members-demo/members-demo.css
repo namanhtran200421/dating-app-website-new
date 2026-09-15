@@ -1,0 +1,124 @@
+:host {
+  --demo-pop: var(--rm-purple);
+}
+
+.members-banner {
+  border-bottom: 3px solid var(--rm-ink);
+  /* Lightened so ink text keeps AA contrast. */
+  background: color-mix(in srgb, var(--rm-purple) 70%, white);
+  padding: 26px 22px 20px;
+}
+
+.members-banner__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.members-banner .demo-title {
+  font-size: 30px;
+}
+
+.members-banner p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.members-count {
+  flex: none;
+  border: 2px solid var(--rm-ink);
+  border-radius: 8px;
+  background: white;
+  padding: 6px 9px 5px;
+  font: 800 11px/1 var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--rm-ink);
+  rotate: 2deg;
+}
+
+.member-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: center;
+  gap: 14px 10px;
+  margin: 0;
+  padding: 18px 20px 22px;
+  list-style: none;
+}
+
+.member {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.member__avatar {
+  display: grid;
+  width: min(100%, 66px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid var(--rm-ink);
+  border-radius: 50%;
+  background: white;
+  font: 700 24px/1 var(--font-display);
+  box-shadow: 0 0 0 var(--rm-ink);
+  transition: var(--rm-hover-transition);
+}
+
+.member--you .member__avatar {
+  background: var(--rm-yellow);
+  font-size: 18px;
+}
+
+.member:hover .member__avatar {
+  box-shadow: 3px 4px 0 var(--rm-ink);
+  translate: 0 calc(-4px * var(--rm-motion));
+  rotate: calc(-4deg * var(--rm-motion));
+}
+
+.member:nth-child(even):hover .member__avatar {
+  rotate: calc(4deg * var(--rm-motion));
+}
+
+.member__name {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: 12px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+
+.member:hover .member__name {
+  color: #5b3fd0;
+}
+
+@media (max-width: 560px) {
+  .members-banner {
+    padding-inline: 18px;
+  }
+
+  .members-banner .demo-title {
+    font-size: 26px;
+  }
+
+  .member-grid {
+    gap: 16px 8px;
+    padding-inline: 14px;
+  }
+
+  .member__avatar {
+    font-size: 20px;
+  }
+
+  .member--you .member__avatar {
+    font-size: 15px;
+  }
+}

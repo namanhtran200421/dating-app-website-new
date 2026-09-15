@@ -1,0 +1,133 @@
+:host {
+  --demo-pop: var(--rm-mint);
+}
+
+.activities {
+  gap: 12px;
+  padding: 18px 20px 16px;
+}
+
+.activities-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.activities .demo-title {
+  font-size: 26px;
+}
+
+.activities-count {
+  flex: none;
+  border: 2px solid var(--rm-ink);
+  border-radius: 999px;
+  background: var(--rm-mint);
+  padding: 5px 10px 4px;
+  font: 800 11px/1 var(--font-body);
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--rm-ink);
+}
+
+.activity-list {
+  display: grid;
+  flex: 1;
+  align-content: space-between;
+  gap: 6px;
+  margin: 0;
+  padding: 0 6px 4px 0;
+  list-style: none;
+}
+
+.activity {
+  --tone: var(--rm-purple);
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--rm-ink);
+  border-radius: 15px;
+  background: white;
+  padding: 5px 12px 5px 7px;
+  box-shadow: 3px 3px 0 var(--rm-ink);
+  transition: var(--rm-hover-transition);
+}
+
+.activity[data-tone='yellow'] {
+  --tone: var(--rm-yellow);
+}
+
+.activity[data-tone='pink'] {
+  --tone: var(--rm-pink);
+}
+
+.activity[data-tone='mint'] {
+  --tone: var(--rm-mint);
+}
+
+.activity:hover {
+  background: color-mix(in srgb, var(--tone) 22%, white);
+  box-shadow: 5px 5px 0 var(--rm-ink);
+  translate: calc(-2px * var(--rm-motion)) calc(-2px * var(--rm-motion));
+}
+
+.activity__icon {
+  display: grid;
+  width: 38px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid var(--rm-ink);
+  border-radius: 12px;
+  background: var(--tone);
+  font-size: 16px;
+}
+
+.activity:hover .activity__icon {
+  animation: rm-wiggle 420ms var(--rm-ease-bounce);
+}
+
+.activity__text {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+}
+
+.activity__text small {
+  color: rgb(32 33 49 / 60%);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.activity__text strong {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.activity__play {
+  border: 2px solid var(--rm-ink);
+  border-radius: 999px;
+  background: var(--rm-mint);
+  padding: 6px 12px 5px;
+  font: 800 11px/1 var(--font-body);
+  text-transform: uppercase;
+  transition: var(--rm-hover-transition);
+}
+
+.activity:hover .activity__play {
+  background: var(--rm-yellow);
+  box-shadow: 2px 2px 0 var(--rm-ink);
+}
+
+@media (max-width: 560px) {
+  .activities {
+    padding-inline: 16px;
+  }
+
+  .activity {
+    gap: 10px;
+  }
+}
