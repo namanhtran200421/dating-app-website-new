@@ -101,6 +101,7 @@ test('every public page uses the shared section reveal contract', async ({ page 
   for (const path of [
     '/',
     '/circle',
+    '/how-it-works',
     '/blog',
     '/about-us',
     '/press',
