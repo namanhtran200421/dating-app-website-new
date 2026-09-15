@@ -715,6 +715,23 @@
 .phase-card > span {
   transform: translateY(-18%);
 }
+/* A real photo replaces the placeholder's grey fill and crossed lines. */
+.phase-card--photo::before,
+.phase-card--photo::after {
+  content: none;
+}
+.phase-card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+/* Keeps faces above the caption panel that covers the bottom of the card. */
+.phase-card__photo--faces-high {
+  object-position: 50% 30%;
+}
 .phase-card__caption {
   position: absolute;
   z-index: 2;
