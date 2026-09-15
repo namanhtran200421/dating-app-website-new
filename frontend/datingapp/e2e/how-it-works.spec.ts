@@ -10,26 +10,15 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto('/how-it-works');
 
+    await expect(page.getByRole('heading', { name: 'How Circles work.' })).toBeVisible();
+    await expect(page.locator('.journey-card')).toHaveCount(3);
     await expect(
-      page.getByRole('heading', { name: 'One week. Real time to connect.' }),
-    ).toBeVisible();
-    await expect(page.locator('.journey-card')).toHaveCount(4);
-    await expect(page.locator('.choice-card')).toHaveCount(3);
-    await expect(page.locator('.week-board')).toContainText('10 people · 5 days');
-    await expect(page.locator('.journey-string')).toHaveCount(0);
+      page.getByRole('heading', { name: 'Like someone. If it’s mutual, it’s a match.' }),
+    ).toBeAttached();
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',
       'https://www.rosemarry.app/how-it-works',
     );
-
-    await page.getByRole('link', { name: 'Walk through the week' }).click();
-    await expect(page).toHaveURL(/#the-week$/);
-    await expect(page.locator('#the-week')).toBeInViewport();
-
-    await page.getByRole('link', { name: 'Give me the short version' }).click();
-    await expect(page).toHaveURL(/#quick-version$/);
-    await expect(page.locator('#quick-version')).toBeInViewport();
-    await expect(page.locator('#quick-version').getByRole('link')).toHaveCount(0);
 
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
@@ -44,17 +33,5 @@ test('site navigation opens the dedicated how-it-works route', async ({ page }) 
   await page.locator('.nav-desktop').getByRole('link', { name: 'How it works' }).click();
 
   await expect(page).toHaveURL(/\/how-it-works$/);
-  await expect(
-    page.getByRole('heading', { name: 'One week. Real time to connect.' }),
-  ).toBeVisible();
-});
-
-test('homepage call to action opens the dedicated how-it-works route', async ({ page }) => {
-  await page.addInitScript(() => {
-    sessionStorage.setItem('rosemarry-early-stage-dismissed', 'true');
-  });
-  await page.goto('/');
-  await page.getByRole('link', { name: 'See how it works' }).click();
-
-  await expect(page).toHaveURL(/\/how-it-works$/);
+  await expect(page.getByRole('heading', { name: 'How Circles work.' })).toBeVisible();
 });

@@ -75,7 +75,7 @@ export const routes: Routes = [
       seo: {
         title: 'How Rosemarry Works | Weekly Dating Circles',
         description:
-          'See how Rosemarry brings 10 people together for five days of shared prompts and group conversation before they match.',
+          'Each week, Rosemarry places you in a Circle based on shared interests. Chat, do group activities and match when a like is mutual.',
         canonicalPath: '/how-it-works',
         pageType: 'WebPage',
       },

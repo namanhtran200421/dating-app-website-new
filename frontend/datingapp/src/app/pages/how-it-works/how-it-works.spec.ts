@@ -16,20 +16,21 @@ describe('HowItWorksPage', () => {
     fixture.detectChanges();
   });
 
-  it('presents the Circle journey in four ordered steps', () => {
+  it('explains the weekly Circle in three ordered steps', () => {
     const heading = fixture.nativeElement.querySelector('h1');
-    const steps = fixture.nativeElement.querySelectorAll('.journey-card');
+    const steps = fixture.nativeElement.querySelectorAll('.journey-card h3');
 
-    expect(heading.textContent).toContain('One week.');
-    expect(steps).toHaveLength(4);
+    expect(heading.textContent).toContain('How Circles work.');
+    expect([...steps].map((step: Element) => step.textContent)).toEqual([
+      'Join a Circle.',
+      'Chat and do activities.',
+      'The Circle refreshes.',
+    ]);
   });
 
-  it('provides working page landmarks and jump links', () => {
-    const jumpLinks = fixture.nativeElement.querySelectorAll('.how-jump a');
+  it('explains mutual matching', () => {
+    const matching = fixture.nativeElement.querySelector('#matching');
 
-    expect(jumpLinks).toHaveLength(3);
-    expect(fixture.nativeElement.querySelector('#before')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#the-week')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#your-choice')).toBeTruthy();
+    expect(matching.textContent).toContain('If it’s mutual, it’s a match.');
   });
 });
