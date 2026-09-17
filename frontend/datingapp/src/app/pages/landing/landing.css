@@ -209,11 +209,18 @@
   text-transform: uppercase;
 }
 .photo-card {
+  --hero-card-pop: var(--purple);
   position: absolute;
   overflow: hidden;
   border: 2px solid var(--ink);
   border-radius: 30px;
   background: #dedee5;
+  transform-origin: center;
+  transition:
+    translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease;
 }
 .photo-card img {
   display: block;
@@ -235,43 +242,45 @@
   left: 24px;
   width: 43%;
   height: 380px;
-  transform: rotate(-5deg);
+  rotate: -5deg;
 }
 .photo-card--two {
+  --hero-card-pop: var(--yellow);
   z-index: 2;
   top: -38px;
   right: 28px;
   width: 51%;
   height: 440px;
   box-shadow: 10px 10px 0 var(--yellow);
-  transform: rotate(4deg);
+  rotate: 4deg;
 }
 .photo-card--three {
+  --hero-card-pop: var(--pink);
   z-index: 3;
   right: 0;
   bottom: 72px;
   width: 63%;
   height: 300px;
   box-shadow: 9px 10px 0 var(--pink);
-  transform: rotate(3deg);
+  rotate: 3deg;
 }
 .photo-card--four {
+  --hero-card-pop: var(--mint);
   z-index: 4;
   bottom: 8px;
   left: 0;
   width: 36%;
   height: 250px;
   box-shadow: 8px 9px 0 var(--mint);
-  transform: rotate(-7deg);
+  rotate: -7deg;
 }
-/* Sticker wiggle on top of each card's resting tilt; hovered card comes to the front. */
-.photo-card {
-  transition: var(--rm-hover-transition);
-}
+/* Match the People don't cards: rise, straighten and come to the front. */
 .photo-card:hover {
-  z-index: 6;
-  rotate: calc(var(--rm-sticker-tilt) * var(--rm-motion));
-  scale: calc(1 + var(--rm-sticker-grow) * var(--rm-motion));
+  z-index: 8;
+  box-shadow: 14px 16px 0 var(--hero-card-pop);
+  rotate: 0deg;
+  scale: 1.055;
+  translate: 0 -22px;
 }
 .site-star {
   position: absolute;
@@ -590,63 +599,296 @@
 .problem-heading--answer {
   margin-top: clamp(64px, 8vw, 104px);
 }
-.problem-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 4vw, 48px);
+
+/* Swipe fan: seven profiles drift left to right, sharp only as they pass the middle. */
+.swipe-fan {
+  --fan-card: clamp(165px, 19.5vw, 282px);
+  --fan-cycle: 9s;
+  position: relative;
+}
+.swipe-fan__deck {
+  position: relative;
+  height: calc(var(--fan-card) * 1.86);
   margin: 0;
   padding: 0;
   list-style: none;
+  /* Fade the edges so profiles arrive and leave instead of popping. Without
+     no-repeat the gradient tiles and cards reappear past the deck. */
+  mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+  mask-repeat: no-repeat;
 }
-/* Portrait photo slots; grey until real images land. */
-.problem-card {
-  --card-pop: var(--pink);
-  position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
+.swipe-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: var(--fan-card);
+  flex-direction: column;
+  gap: 6px;
   border: 2px solid var(--ink);
-  border-radius: 24px;
-  background: #dedee5;
-  rotate: -0.6deg;
-  transition: var(--rm-hover-transition);
+  border-radius: 20px;
+  background: white;
+  padding: 10px 10px 12px;
+  animation: swipe-drift var(--fan-cycle) linear infinite;
+  animation-delay: calc(var(--i) * (var(--fan-cycle) / -7));
+  box-shadow: 7px 7px 0 var(--pink);
+  will-change: transform, filter;
 }
-.problem-card:nth-child(2) {
-  --card-pop: var(--yellow);
-  --rm-sticker-tilt: 1deg;
-  rotate: 0.5deg;
+.swipe-card:nth-child(3n + 2) {
+  box-shadow: 7px 7px 0 var(--yellow);
 }
-.problem-card:nth-child(3) {
-  --card-pop: var(--mint);
-  rotate: -0.3deg;
+.swipe-card:nth-child(3n) {
+  box-shadow: 7px 7px 0 var(--mint);
 }
-.problem-card span {
-  position: relative;
-  color: white;
-  font: 700 clamp(18px, 3.4vw, 46px) / 1 var(--font-display);
-  letter-spacing: -0.02em;
-  -webkit-text-stroke: 6px var(--ink);
-  paint-order: stroke fill;
-  text-shadow: 3px 3px 0 var(--ink);
+.swipe-card__photo {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #d7d8e0;
+}
+.swipe-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swipe-card__name {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.5vw, 19px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.swipe-card__name span {
+  color: rgb(32 33 49 / 55%);
+  font-weight: 600;
+}
+.swipe-card__bio {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: rgb(32 33 49 / 58%);
+  font-size: clamp(10px, 1.05vw, 13px);
+  font-weight: 600;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.swipe-card__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.swipe-card__btn {
+  display: grid;
+  width: clamp(26px, 3vw, 38px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8e9ef;
+  color: rgb(32 33 49 / 65%);
+  font-size: clamp(12px, 1.4vw, 17px);
+  line-height: 1;
+}
+.swipe-card__btn--like {
+  background: color-mix(in srgb, var(--pink) 24%, white);
+  color: var(--pink);
+}
+/* The cards travel 700% of their own width across 7 staggered delays, so neighbours
+   always sit exactly 100% of a card-width apart. The X keyframes are evenly spaced
+   in both time and distance to keep that gap constant: bunch them and the cards
+   collide. Scale therefore has to stay under 1 so no two ever touch — the biggest
+   pairing is the middle card against its neighbour, 0.5 + 0.41 = 0.91 of the gap. */
+@keyframes swipe-drift {
+  0% {
+    z-index: 0;
+    filter: blur(1.6px);
+    opacity: 0;
+    transform: translate(-400%, -50%) scale(0.56) rotate(-2.4deg);
+  }
+  12.5% {
+    z-index: 1;
+    filter: blur(1.3px);
+    opacity: 0.4;
+    transform: translate(-312.5%, -50%) scale(0.62) rotate(-2deg);
+  }
+  25% {
+    z-index: 2;
+    filter: blur(0.9px);
+    opacity: 0.85;
+    transform: translate(-225%, -50%) scale(0.68) rotate(-1.5deg);
+  }
+  37.5% {
+    z-index: 3;
+    filter: blur(0.4px);
+    opacity: 1;
+    transform: translate(-137.5%, -50%) scale(0.82) rotate(-0.8deg);
+  }
+  50% {
+    z-index: 4;
+    filter: blur(0);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  62.5% {
+    z-index: 3;
+    filter: blur(0.4px);
+    opacity: 1;
+    transform: translate(37.5%, -50%) scale(0.82) rotate(0.8deg);
+  }
+  75% {
+    z-index: 2;
+    filter: blur(0.9px);
+    opacity: 0.85;
+    transform: translate(125%, -50%) scale(0.68) rotate(1.5deg);
+  }
+  87.5% {
+    z-index: 1;
+    filter: blur(1.3px);
+    opacity: 0.4;
+    transform: translate(212.5%, -50%) scale(0.62) rotate(2deg);
+  }
+  100% {
+    z-index: 0;
+    filter: blur(1.6px);
+    opacity: 0;
+    transform: translate(300%, -50%) scale(0.56) rotate(2.4deg);
+  }
+}
+/* The drift is the point of this section, so reduced motion slows it down rather
+   than stopping it: same fan, gentle pace, no scale pulse. */
+@media (prefers-reduced-motion: reduce) {
+  .swipe-fan {
+    --fan-cycle: 14s;
+  }
 }
 
-/* Problem cards and outcome cards share one lift-and-accent-shadow system. */
-.problem-card,
-.phase-card {
-  --pop-offset: var(--pop-rest, 6px);
-  box-shadow: var(--pop-offset) var(--pop-offset) 0 var(--card-pop, var(--ink));
+/* Four moments in one deliberately imperfect stack. Each card keeps its image
+   and copy together, then steps forward and straightens when explored. */
+.people-fan {
+  padding: 24px 0 38px;
 }
-.problem-card:hover,
-.phase-card:hover,
-.phase-card:focus-within {
-  --pop-offset: calc(var(--pop-rest, 6px) + 6px * var(--rm-motion));
-  z-index: 5;
-  translate: calc(-3px * var(--rm-motion)) calc(-3px * var(--rm-motion));
+.people-deck {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0;
+  padding: 42px 28px 34px;
+  list-style: none;
+  isolation: isolate;
 }
-.problem-card:hover {
-  rotate: calc(var(--rm-sticker-tilt) * var(--rm-motion));
-  scale: calc(1 + var(--rm-sticker-grow) * var(--rm-motion));
+.people-story-card {
+  --card-pop: var(--yellow);
+  --card-tilt: -2deg;
+  --card-rest-y: 2px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: clamp(210px, 23vw, 286px);
+  min-width: 0;
+  flex: 0 1 286px;
+  flex-direction: column;
+  margin-left: clamp(-32px, -2.3vw, -18px);
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: white;
+  padding: 10px 10px 18px;
+  box-shadow: 9px 10px 0 var(--card-pop);
+  outline: none;
+  rotate: var(--card-tilt);
+  transform-origin: 50% 92%;
+  translate: 0 var(--card-rest-y);
+  transition:
+    translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease;
+}
+.people-story-card:first-child {
+  margin-left: 0;
+}
+.people-story-card--familiar {
+  --card-pop: var(--mint);
+  --card-tilt: 1.4deg;
+  --card-rest-y: 14px;
+  z-index: 2;
+}
+.people-story-card--friend {
+  --card-pop: var(--pink);
+  --card-tilt: -1deg;
+  --card-rest-y: -4px;
+  z-index: 3;
+}
+.people-story-card--partner {
+  --card-pop: color-mix(in srgb, var(--purple) 65%, white);
+  --card-tilt: 1.8deg;
+  --card-rest-y: 9px;
+  z-index: 4;
+}
+.people-story-card:hover,
+.people-story-card:focus-visible {
+  z-index: 20;
+  box-shadow: 13px 15px 0 var(--card-pop);
+  rotate: 0deg;
+  scale: 1.055;
+  translate: 0 calc(var(--card-rest-y) - 24px);
+}
+.people-story-card:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 5px;
+}
+.people-story-card__tag {
+  position: absolute;
+  z-index: 2;
+  top: -28px;
+  left: -14px;
+  min-width: clamp(118px, 11vw, 148px);
+  justify-content: center;
+  padding: 10px 16px 8px;
+  font-size: clamp(11px, 1.2vw, 15px);
+  letter-spacing: 0.08em;
+  rotate: -2deg;
+}
+.people-story-card--familiar .people-story-card__tag {
+  rotate: 1deg;
+}
+.people-story-card--friend .people-story-card__tag {
+  rotate: -1deg;
+}
+.people-story-card--partner .people-story-card__tag {
+  rotate: 2deg;
+}
+.people-story-card img {
+  width: 100%;
+  aspect-ratio: 4 / 4.35;
+  border-radius: 11px;
+  background: #d9dbe3;
+  object-fit: cover;
+}
+.people-story-card--stranger img {
+  object-position: center 30%;
+}
+.people-story-card--familiar img {
+  object-position: center 34%;
+}
+.people-story-card--friend img {
+  object-position: center 28%;
+}
+.people-story-card--partner img {
+  object-position: 56% center;
+}
+.people-story-card p {
+  min-height: 55px;
+  margin: 14px 7px 0;
+  color: var(--ink);
+  font-size: clamp(13px, 1.35vw, 17px);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.people-story-card p strong {
+  font-family: var(--font-display);
+  font-size: 1.08em;
+  letter-spacing: -0.02em;
 }
 .quote-band {
   overflow: hidden;
@@ -673,89 +915,635 @@
 .split-heading--dark > p {
   color: rgb(255 255 255 / 62%);
 }
-.outcome-grid {
+/* "Why it feels different": a collage of app moments on the dark wall. Three
+   independent columns rather than absolute placement, so nothing can collide as
+   the copy or the viewport changes. Everything borrows the page's own kit —
+   2px ink outline plus a hard offset shadow in an accent colour. */
+.feelgood {
+  --fg-line: 2px solid var(--ink);
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(260px, auto));
-  gap: clamp(22px, 3vw, 42px);
-  align-items: stretch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(22px, 2.8vw, 44px);
+  align-items: start;
 }
-.phase-card {
-  position: relative;
-  min-height: 260px;
+.feelgood__col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 28px);
+}
+
+/* Shared card chrome. */
+.fg-panel,
+.fg-card,
+.fg-label,
+.fg-matched {
+  border: var(--fg-line);
   border-radius: 18px;
-  background: var(--paper);
+}
+.fg-panel,
+.fg-card {
+  overflow: hidden;
+  background: white;
+  /* The section paints its text white; light panels have to opt back out. */
   color: var(--ink);
-  --card-pop: var(--purple);
+  box-shadow: 8px 8px 0 var(--fg-pop, var(--purple));
 }
-.phase-card:nth-child(1) {
-  grid-column: 1 / span 7;
-  grid-row: 1 / span 2;
-  min-height: 602px;
+
+/* Video-call panel. */
+.fg-panel--call {
+  --fg-pop: var(--mint);
+  rotate: -1.2deg;
 }
-.phase-card:nth-child(2),
-.phase-card:nth-child(3) {
-  grid-column: 8 / span 5;
+.fg-panel__bar {
+  display: flex;
+  gap: 6px;
+  border-bottom: var(--fg-line);
+  background: var(--paper);
+  padding: 10px 12px;
 }
-.phase-card:nth-child(2) {
-  grid-row: 1;
+.fg-panel__bar span {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--pink);
 }
-.phase-card:nth-child(3) {
-  grid-row: 2;
-  width: calc(100% - 38px);
-  margin-left: 38px;
+.fg-panel__bar span:nth-child(2) {
+  background: var(--yellow);
 }
-.phase-card--yellow {
-  --card-pop: var(--yellow);
-  --rm-sticker-tilt: 1deg;
+.fg-panel__bar span:nth-child(3) {
+  background: var(--mint);
 }
-.phase-card--pink {
-  --card-pop: var(--pink);
+.fg-call {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
 }
-.phase-card > span {
-  transform: translateY(-18%);
+.fg-call__tile {
+  aspect-ratio: 4 / 3;
+  border-radius: 5px;
+  background: #d7d8e0;
 }
-/* A real photo replaces the placeholder's grey fill and crossed lines. */
-.phase-card--photo::before,
-.phase-card--photo::after {
-  content: none;
+
+/* Feature labels — the three real messages. */
+.fg-label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 18px 16px;
+  color: var(--ink);
+  box-shadow: 6px 6px 0 rgb(32 33 49 / 55%);
 }
-.phase-card__photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
+.fg-label--pink {
+  background: color-mix(in srgb, var(--pink) 42%, white);
+  rotate: -1deg;
 }
-/* Keeps faces above the caption panel that covers the bottom of the card. */
-.phase-card__photo--faces-high {
-  object-position: 50% 30%;
+.fg-label--purple {
+  background: color-mix(in srgb, var(--purple) 32%, white);
+  rotate: 1deg;
 }
-.phase-card__caption {
-  position: absolute;
-  z-index: 2;
-  right: 12px;
-  bottom: 12px;
-  left: 12px;
-  border: 2px solid var(--ink);
-  border-radius: 14px;
-  background: rgb(255 255 255 / 96%);
-  padding: 16px 18px 14px;
-  text-align: left;
+.fg-label--yellow {
+  background: var(--yellow);
+  rotate: -1.4deg;
 }
-.phase-card__caption h3 {
-  margin: 0 0 8px;
+.fg-label__icon {
+  width: clamp(20px, 2.2vw, 26px);
+  flex: none;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+.fg-label--yellow .fg-label__icon {
+  fill: white;
+}
+.fg-label h3 {
+  margin: 0 0 4px;
   font-family: var(--font-display);
-  font-size: clamp(19px, 2vw, 26px);
-  line-height: 1.08;
+  font-size: clamp(16px, 1.75vw, 22px);
+  font-weight: 900;
+  line-height: 1.1;
 }
-.phase-card__caption p {
+.fg-label p {
   margin: 0;
-  color: rgb(32 33 49 / 62%);
-  font-size: 13px;
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.2vw, 14px);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+
+/* "This or That?" activity card. */
+.fg-panel--activity {
+  --fg-pop: var(--pink);
+  background: color-mix(in srgb, var(--mint) 55%, white);
+  padding: 16px 16px 18px;
+  rotate: 1deg;
+}
+.fg-activity__eyebrow {
+  margin: 0;
+  color: rgb(32 33 49 / 72%);
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 700;
+}
+.fg-activity__title {
+  margin: 4px 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.3vw, 30px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.fg-versus {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.fg-option {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: var(--fg-line);
+  border-radius: 12px;
+  background: white;
+  padding: 8px 8px 10px;
+}
+.fg-option__shot {
+  aspect-ratio: 1 / 1;
+  border-radius: 7px;
+  background: #d7d8e0;
+}
+.fg-option__name {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.15vw, 13px);
+  font-weight: 700;
+  text-align: center;
+}
+.fg-versus__badge {
+  display: grid;
+  width: clamp(30px, 3.4vw, 42px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: var(--fg-line);
+  border-radius: 50%;
+  background: white;
+  font-family: var(--font-display);
+  font-size: clamp(11px, 1.2vw, 14px);
+  text-transform: uppercase;
+}
+.fg-voters {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+}
+.fg-voters__face {
+  width: clamp(24px, 2.6vw, 32px);
+  aspect-ratio: 1;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #c9cad6;
+}
+.fg-voters__face + .fg-voters__face {
+  margin-left: -10px;
+}
+.fg-voters__more {
+  display: grid;
+  width: clamp(24px, 2.6vw, 32px);
+  aspect-ratio: 1;
+  place-items: center;
+  margin-left: -10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  font-size: clamp(9px, 1vw, 11px);
+  font-weight: 800;
+}
+
+/* Chat bubbles. */
+.fg-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fg-bubble {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  border: var(--fg-line);
+  border-radius: 14px;
+  background: #2b2c40;
+  padding: 10px 14px 11px;
+  box-shadow: 4px 4px 0 rgb(0 0 0 / 45%);
+}
+.fg-bubble--you {
+  margin-left: auto;
+  background: white;
+}
+.fg-bubble__face {
+  width: 26px;
+  aspect-ratio: 1;
+  flex: none;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: #c9cad6;
+}
+.fg-bubble__meta {
+  margin: 0 0 3px;
+  color: rgb(255 255 255 / 55%);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+}
+.fg-bubble__meta b {
+  color: white;
+  font-weight: 800;
+}
+.fg-bubble__text {
+  margin: 0;
+  color: white;
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.2vw, 14px);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.fg-bubble--you .fg-bubble__meta {
+  color: rgb(32 33 49 / 55%);
+}
+.fg-bubble--you .fg-bubble__meta b,
+.fg-bubble--you .fg-bubble__text {
+  color: var(--ink);
+}
+
+/* Week 3 panel. */
+.fg-panel--week {
+  --fg-pop: var(--yellow);
+  padding: 12px;
+  rotate: 1.4deg;
+}
+.fg-week__bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.fg-week__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.5vw, 19px);
+}
+.fg-week__badge {
+  border: var(--fg-line);
+  border-radius: 999px;
+  background: var(--pink);
+  padding: 6px 10px 5px;
+  font-family: var(--font-body);
+  font-size: clamp(9px, 1vw, 11px);
+  font-weight: 800;
+}
+.fg-week__shot {
+  aspect-ratio: 4 / 3;
+  border: var(--fg-line);
+  border-radius: 10px;
+  background: #d7d8e0;
+}
+
+/* Shared interests. */
+.fg-card--interests {
+  --fg-pop: var(--mint);
+  padding: 16px 16px 18px;
+  rotate: -1deg;
+}
+.fg-card__title {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.6vw, 20px);
+}
+.fg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fg-tags li {
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--purple) 16%, white);
+  padding: 7px 11px 6px;
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 700;
+}
+.fg-tags__more {
+  background: var(--paper);
+}
+
+/* "You matched!" bubble, with a tail like a real speech bubble. */
+.fg-matched {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: fit-content;
+  background: color-mix(in srgb, var(--pink) 48%, white);
+  padding: 14px 20px 15px 14px;
+  box-shadow: 7px 7px 0 var(--ink);
+  rotate: -1.6deg;
+}
+.fg-matched::after {
+  position: absolute;
+  top: 100%;
+  left: 34px;
+  width: 20px;
+  height: 16px;
+  border-right: var(--fg-line);
+  border-bottom: var(--fg-line);
+  background: inherit;
+  content: '';
+  rotate: 8deg;
+  clip-path: polygon(0 0, 100% 0, 30% 100%);
+}
+.fg-matched__faces {
+  display: flex;
+  flex: none;
+}
+.fg-matched__faces span {
+  width: clamp(34px, 3.6vw, 46px);
+  aspect-ratio: 1;
+  border: var(--fg-line);
+  border-radius: 50%;
+  background: #d7d8e0;
+}
+.fg-matched__faces span + span {
+  margin-left: -12px;
+}
+.fg-matched p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.7vw, 21px);
+  line-height: 1.1;
+}
+
+/* Reference composition: on wide screens this section is one deliberately
+   overlapping wall, rather than three equal columns. The percentages keep the
+   composition proportional while the 1440px cap preserves its poster-like scale. */
+.outcome.section-pad {
+  min-height: 950px;
+  padding: clamp(42px, 3.2vw, 50px) 0 clamp(36px, 4vw, 58px);
+  background:
+    radial-gradient(circle at 48% 50%, rgb(76 79 111 / 16%), transparent 38%),
+    var(--ink);
+}
+.outcome .shell {
+  width: min(100% - 40px, 1160px);
+}
+.outcome .split-heading {
+  display: block;
+  margin-bottom: 8px;
+}
+.outcome .split-heading h2 {
+  max-width: 980px;
+  margin-top: 18px;
+  color: #fffaff;
+  font-size: clamp(58px, 5.8vw, 86px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.93;
+  text-shadow: 0 8px 28px rgb(240 208 255 / 10%);
+}
+.feelgood {
+  --fg-line: 2px solid var(--ink);
+  position: relative;
+  display: block;
+  height: 680px;
+  isolation: isolate;
+}
+.feelgood__col {
+  display: contents;
+}
+.feelgood__col > * {
+  position: absolute;
+  margin: 0;
+}
+
+/* Left cluster. */
+.feelgood__col:nth-child(1) > .fg-panel--call {
+  z-index: 1;
+  top: 39px;
+  left: 4.5%;
+  width: 33%;
+}
+.feelgood__col:nth-child(1) > .fg-label--pink {
+  z-index: 6;
+  top: 397px;
+  left: 0.4%;
+  width: 24%;
+}
+.feelgood__col:nth-child(1) > .fg-card--interests {
+  z-index: 3;
+  top: 419px;
+  left: 31%;
+  width: 21%;
+}
+/* Middle cluster. */
+.feelgood__col:nth-child(2) > .fg-panel--activity {
+  z-index: 2;
+  top: 47px;
+  left: 38.5%;
+  width: 26%;
+}
+.feelgood__col:nth-child(2) > .fg-chat {
+  z-index: 7;
+  top: 80px;
+  left: 65%;
+  width: 18.5%;
+}
+.feelgood__col:nth-child(2) > .fg-label--purple {
+  z-index: 8;
+  top: 300px;
+  left: 44.5%;
+  width: 25%;
+}
+
+/* Right cluster. */
+.feelgood__col:nth-child(3) > .fg-panel--week {
+  z-index: 2;
+  top: 20px;
+  right: 1.5%;
+  width: 27%;
+}
+.feelgood__col:nth-child(3) > .fg-label--yellow {
+  z-index: 7;
+  top: 329px;
+  right: 0;
+  width: 24%;
+}
+.feelgood__col:nth-child(3) > .fg-matched {
+  z-index: 4;
+  top: 375px;
+  left: 61%;
+  width: 20%;
+}
+/* Real in-project photos stand in for the reference's people. They can be
+   swapped later without changing the composition. */
+.fg-call__tile,
+.fg-week__shot,
+.fg-option__shot,
+.fg-voters__face,
+.fg-bubble__face,
+.fg-matched__faces span {
+  background-position: center;
+  background-size: cover;
+}
+.fg-call__tile {
+  aspect-ratio: 1.12;
+}
+.fg-call__tile:nth-child(3n + 1) {
+  background-image: url('/images/rosemarry/profile-priya.jpg');
+}
+.fg-call__tile:nth-child(3n + 2) {
+  background-image: url('/images/rosemarry/profile-daniel.jpg');
+}
+.fg-call__tile:nth-child(3n) {
+  background-image: url('/images/rosemarry/profile-mia.jpg');
+}
+.fg-option__shot {
+  display: grid;
+  min-height: 86px;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 40%, white, transparent 62%),
+    #eeeaf7;
+  font-size: clamp(42px, 4.4vw, 66px);
+  line-height: 1;
+}
+.fg-week__shot {
+  aspect-ratio: 1.2;
+  background-image: url('/images/rosemarry/hero-friends.jpg');
+}
+.fg-voters__face:nth-child(1),
+.fg-bubble:nth-child(1) .fg-bubble__face {
+  background-image: url('/images/rosemarry/profile-priya.jpg');
+}
+.fg-voters__face:nth-child(2),
+.fg-bubble:nth-child(2) .fg-bubble__face {
+  background-image: url('/images/rosemarry/profile-mia.jpg');
+}
+.fg-voters__face:nth-child(3),
+.fg-bubble:nth-child(3) .fg-bubble__face {
+  background-image: url('/images/rosemarry/profile-daniel.jpg');
+}
+.fg-voters__face:nth-child(4) {
+  background-image: url('/images/rosemarry/profile-elena.jpg');
+}
+.fg-voters__face:nth-child(5) {
+  background-image: url('/images/rosemarry/profile-theo.jpg');
+}
+.fg-matched {
+  display: block;
+  min-height: 150px;
+  padding: 20px 22px;
+}
+.fg-matched__faces span:first-child {
+  background-image: url('/images/rosemarry/profile-theo.jpg');
+}
+.fg-matched__faces span:last-child {
+  background-image: url('/images/rosemarry/profile-mia.jpg');
+}
+.fg-matched p {
+  margin-top: 16px;
+  font-size: clamp(18px, 1.7vw, 25px);
+}
+.fg-label {
+  min-height: 0;
+  align-items: center;
+  padding: 13px 18px;
+}
+.fg-label h3 {
+  margin: 0;
+  font-size: clamp(18px, 1.65vw, 25px);
+}
+.fg-label p {
+  font-size: clamp(11px, 1.05vw, 15px);
+}
+.fg-label__icon {
+  width: clamp(28px, 2.8vw, 40px);
+}
+.fg-chat {
+  gap: 8px;
+}
+.fg-bubble {
+  width: 100%;
+  padding: 10px 12px;
+}
+.fg-bubble:nth-child(2) {
+  translate: 10px 0;
+}
+.fg-bubble:nth-child(3) {
+  translate: 24px 0;
+}
+.fg-week__badge {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-right: -34px;
+  padding: 8px 14px 7px;
+  font-size: clamp(9px, 0.95vw, 13px);
+  translate: 0 -28px;
+}
+.fg-week__badge > span {
+  font-size: 1.5em;
+  line-height: 0.7;
+}
+
+/* The desktop reference uses a loose scrapbook rhythm: every large card and
+   caption sits at a visibly different angle. Keep those stronger rotations to
+   wide screens so the stacked mobile version remains easy to scan. */
+@media (min-width: 901px) {
+  .fg-panel--call {
+    rotate: 3deg;
+  }
+  .fg-panel--activity {
+    rotate: 6deg;
+  }
+  .fg-panel--week {
+    overflow: visible;
+    rotate: 5deg;
+  }
+  .fg-label--pink {
+    rotate: 3deg;
+  }
+  .fg-label--purple {
+    rotate: -4deg;
+  }
+  .fg-label--yellow {
+    rotate: -5deg;
+  }
+  .fg-card--interests {
+    rotate: -5deg;
+  }
+  .fg-matched {
+    rotate: 3deg;
+  }
+}
+.fg-card--interests {
+  padding: 18px 20px 20px;
+}
+.fg-tags li {
+  border: 0;
 }
 
 .choice-grid {
@@ -836,6 +1624,43 @@
   .choice-grid {
     grid-template-columns: 1fr;
   }
+  /* Two columns still reads as a collage; three would squeeze the chat bubbles.
+     The column wrappers dissolve so all 14 pieces reflow as one sequence —
+     otherwise the third wrapper drops onto its own row and leaves half of it
+     empty. `align-items: start` keeps short items from stretching. */
+  .feelgood {
+    display: block;
+    height: auto;
+    columns: 2;
+    column-gap: clamp(18px, 2.6vw, 30px);
+  }
+  .outcome.section-pad {
+    min-height: 0;
+  }
+  .outcome .shell {
+    width: min(100% - 40px, 760px);
+  }
+  .outcome .split-heading {
+    margin-bottom: 44px;
+  }
+  .outcome .split-heading h2 {
+    margin-left: 0;
+    font-size: clamp(48px, 8.5vw, 68px);
+  }
+  .feelgood__col {
+    display: contents;
+  }
+  .feelgood__col > * {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    break-inside: avoid;
+    margin-bottom: clamp(18px, 2.4vw, 28px);
+  }
+  .fg-week__badge {
+    margin-right: 0;
+    translate: none;
+  }
   .hero {
     min-height: auto;
   }
@@ -862,27 +1687,40 @@
   .match-bubble {
     right: 8px;
   }
-  .outcome-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
-    gap: 20px;
-  }
-  .phase-card:nth-child(n) {
-    grid-column: auto;
-    grid-row: auto;
-    width: auto;
-    min-height: 390px;
-    margin-left: 0;
-  }
-  .phase-card:first-child {
-    grid-column: 1 / -1;
-    width: min(72%, 560px);
-  }
 }
 
 @media (max-width: 700px) {
   .shell {
     width: min(100% - 28px, 1160px);
+  }
+  /* Phones: one column, flatter shadows, and the margin notes stop tilting so
+     their scribbles cannot reach out past the shell. */
+  .feelgood {
+    columns: 1;
+  }
+  .outcome .shell {
+    width: min(100% - 28px, 560px);
+  }
+  .outcome .split-heading h2 {
+    font-size: clamp(42px, 13vw, 58px);
+  }
+  .outcome .split-heading .sticker {
+    padding: 8px 12px 7px;
+    font-size: 10px;
+  }
+  .fg-bubble:nth-child(2),
+  .fg-bubble:nth-child(3) {
+    translate: none;
+  }
+  .fg-panel,
+  .fg-card {
+    box-shadow: 5px 5px 0 var(--fg-pop, var(--purple));
+  }
+  .fg-label {
+    box-shadow: 4px 4px 0 rgb(32 33 49 / 55%);
+  }
+  .fg-matched {
+    box-shadow: 5px 5px 0 var(--ink);
   }
   .section-pad {
     padding: 72px 0;
@@ -949,32 +1787,21 @@
     gap: 24px;
     margin-bottom: 44px;
   }
-  .outcome-grid {
-    grid-template-columns: 1fr;
+  .swipe-fan {
+    --fan-card: clamp(150px, 50vw, 205px);
   }
-  .problem-row {
-    gap: 12px;
+  .swipe-card {
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--pink);
   }
-  /* Phones: keep the three-up rhythm, just flatter and tighter. */
-  .problem-card {
-    --pop-rest: 4px;
-    border-radius: 16px;
-    rotate: none;
+  .swipe-card:nth-child(3n + 2) {
+    box-shadow: 4px 4px 0 var(--yellow);
   }
-  .problem-card span {
-    -webkit-text-stroke-width: 4px;
-    text-shadow: 2px 2px 0 var(--ink);
+  .swipe-card:nth-child(3n) {
+    box-shadow: 4px 4px 0 var(--mint);
   }
   .quote-band__inner {
     min-height: 300px;
-  }
-  .phase-card:nth-child(n) {
-    width: min(100%, 390px);
-    margin-inline: auto;
-  }
-  .phase-card:first-child {
-    grid-column: auto;
-    width: min(100%, 390px);
   }
   .choice-phone {
     width: min(92%, 470px);
@@ -990,5 +1817,57 @@
   }
   .quote-band blockquote {
     font-size: 43px;
+  }
+}
+
+@media (max-width: 700px) {
+  .people-fan {
+    padding-top: 10px;
+  }
+  .people-deck {
+    display: grid;
+    width: min(100%, 560px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 54px 0;
+    margin-inline: auto;
+    padding: 44px 8px 34px;
+  }
+  .people-story-card {
+    width: calc(100% + 10px);
+    max-width: 240px;
+    margin-left: 0;
+    padding: 7px 7px 13px;
+    border-radius: 14px;
+    box-shadow: 6px 7px 0 var(--card-pop);
+  }
+  .people-story-card:nth-child(odd) {
+    justify-self: end;
+    margin-right: -7px;
+  }
+  .people-story-card:nth-child(even) {
+    justify-self: start;
+    margin-left: -7px;
+  }
+  .people-story-card:hover,
+  .people-story-card:focus-visible {
+    box-shadow: 9px 10px 0 var(--card-pop);
+    scale: 1.04;
+    translate: 0 calc(var(--card-rest-y) - 16px);
+  }
+  .people-story-card__tag {
+    top: -22px;
+    left: -8px;
+    min-width: clamp(86px, 25vw, 112px);
+    padding: 8px 10px 6px;
+    font-size: clamp(9px, 2.8vw, 11px);
+  }
+  .people-story-card img {
+    aspect-ratio: 4 / 4.5;
+    border-radius: 8px;
+  }
+  .people-story-card p {
+    min-height: 50px;
+    margin: 11px 4px 0;
+    font-size: clamp(11px, 3.2vw, 14px);
   }
 }

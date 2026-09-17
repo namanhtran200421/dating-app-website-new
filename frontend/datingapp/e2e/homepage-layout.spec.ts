@@ -69,7 +69,9 @@ for (const viewport of [
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
     await expect(page.getByRole('heading', { name: 'One week. Four simple steps.' })).toBeVisible();
-    await expect(page.locator('.problem-row .problem-card')).toHaveCount(6);
+    await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(7);
+    await expect(page.locator('.swipe-card__photo img')).toHaveCount(4);
+    await expect(page.locator('.people-deck .people-story-card')).toHaveCount(4);
     await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
     await expect(
       page.getByRole('heading', { name: 'Less judging. More getting to know.' }),
@@ -77,7 +79,8 @@ for (const viewport of [
     await expect(
       page.getByRole('heading', { name: 'For people who want more than another swipe.' }),
     ).toBeVisible();
-    await expect(page.locator('.phase-card')).toHaveCount(3);
+    await expect(page.locator('.feelgood .fg-label h3')).toHaveCount(3);
+    await expect(page.locator('.feelgood .fg-bubble')).toHaveCount(3);
     await expect(page.locator('.inside-photo')).toHaveCount(4);
     await expect(
       page.getByRole('heading', { name: 'A little clarity before you join.' }),

@@ -77,13 +77,42 @@ test('desktop editorial cards keep an asymmetric scrapbook rhythm', async ({ pag
 
   await page.goto('/');
   await dismissDevelopmentNotice(page);
-  const problemCards = await page
-    .locator('.problem-card')
+  const peopleCards = await page
+    .locator('.people-card')
     .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
-  expect(problemCards).toHaveLength(6);
-  // Two rows of three: each row shares a line, and the answer row sits below the problem row.
-  expect(Math.abs(problemCards[0].y - problemCards[2].y)).toBeLessThan(12);
-  expect(problemCards[3].y).toBeGreaterThan(problemCards[0].y + problemCards[0].height);
+  expect(peopleCards).toHaveLength(4);
+  // One row of four below the swipe fan, with the middle card the tallest.
+  const swipeFan = await page.locator('.swipe-fan__deck').boundingBox();
+  expect(peopleCards[0].y).toBeGreaterThan(swipeFan!.y + swipeFan!.height);
+  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[0].height);
+  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[3].height);
+  // The cards deliberately overlap, so every neighbour pair shares some x range.
+  for (let i = 1; i < peopleCards.length; i++) {
+    expect(peopleCards[i].x).toBeLessThan(peopleCards[i - 1].x + peopleCards[i - 1].width);
+  }
+  // ...but no card painted on top may reach the text of one beneath it. Compared as
+  // boxes rather than by hit-testing, since the cards are tilted and a rotated
+  // element does not fill the corners of its own bounding rect.
+  const buriedText = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('.people-card')];
+    const depth = (el: Element) => Number(getComputedStyle(el).zIndex) || 0;
+    const boxes = cards.map((card) => card.getBoundingClientRect());
+    const clashes: string[] = [];
+    cards.forEach((card, i) => {
+      cards.forEach((other, j) => {
+        if (i === j || depth(other) <= depth(card)) return;
+        const over = boxes[j];
+        card.querySelectorAll('.people-card__caption, .people-card__tag').forEach((text) => {
+          const r = text.getBoundingClientRect();
+          if (r.left < over.right && r.right > over.left && r.top < over.bottom && r.bottom > over.top) {
+            clashes.push(text.textContent!.trim().replace(/\s+/g, ' '));
+          }
+        });
+      });
+    });
+    return clashes;
+  });
+  expect(buriedText).toEqual([]);
 
   await page.goto('/circle');
   const featureCards = await page
@@ -102,7 +131,6 @@ test('every public page uses the shared section reveal contract', async ({ page 
   for (const path of [
     '/',
     '/circle',
-    '/how-it-works',
     '/blog',
     '/about-us',
     '/press',

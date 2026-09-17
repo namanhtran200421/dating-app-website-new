@@ -69,19 +69,6 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'how-it-works',
-    loadComponent: () => import('./pages/how-it-works/how-it-works').then((m) => m.HowItWorksPage),
-    data: {
-      seo: {
-        title: 'How Rosemarry Works | Weekly Dating Circles',
-        description:
-          'Each week, Rosemarry places you in a Circle based on shared interests. Chat, do group activities and match when a like is mutual.',
-        canonicalPath: '/how-it-works',
-        pageType: 'WebPage',
-      },
-    },
-  },
-  {
     path: 'press',
     loadComponent: () => import('./pages/press/press').then((m) => m.PressPage),
     data: {
@@ -112,6 +99,7 @@ export const routes: Routes = [
     redirectTo: 'privacy-and-terms',
     pathMatch: 'full',
   },
+  { path: 'how-it-works', redirectTo: '', pathMatch: 'full' },
   { path: 'circle', redirectTo: '', pathMatch: 'full' },
   {
     path: '**',
