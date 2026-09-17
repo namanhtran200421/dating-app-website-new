@@ -1,25 +1,134 @@
-.article-shell { max-width: 780px; }
-.journal-article .story-hero h1 { font-size: clamp(2.3rem, 5.4vw, 4.5rem); line-height: 1.12; }
-.article-breadcrumbs { display: flex; flex-wrap: wrap; gap: .65rem; margin-bottom: 2.2rem; font-size: .8rem; }
-.article-breadcrumbs a, .article-byline a { text-decoration: underline; text-underline-offset: .2em; }
-.article-byline { margin-top: 1.5rem; font-size: .8rem; line-height: 1.8; }
-.article-reading { padding-block: 3rem 5rem; }
-.article-contents { padding: 1.6rem; border: 1px solid #c5aeb6; border-radius: 1.3rem; background: #fff8f3; }
-.article-reading h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.3; margin-bottom: 1.2rem; }
-.article-reading p, .article-reading li { font-size: 1rem; line-height: 1.9; color: #49393f; }
-.article-reading p + p { margin-top: 1.2rem; }
-.article-reading a { text-decoration: underline; text-underline-offset: .23em; }
-.article-reading a:hover { color: #9e1537; }
-.article-reading a:focus-visible, .article-breadcrumbs a:focus-visible { outline: 3px solid #9e1537; outline-offset: 5px; border-radius: 3px; }
-.article-reading ul, .article-reading ol { padding-left: 1.5rem; margin-block: 1rem; list-style: disc; }
-.article-reading ol { list-style: decimal; }
-.article-reading li + li { margin-top: .7rem; }
-.article-reading section { margin-block: 3.2rem; scroll-margin-top: 7rem; }
-.article-source { margin-top: 1rem; font-size: .86rem !important; }
-.article-signup { padding: clamp(1.4rem, 4vw, 2.5rem); border-radius: 1.5rem; background: #f6c9ef; }
-.article-signup .story-button { text-decoration: none; }
-.article-signup .story-button:hover { color: #fff8f3; }
-.article-editorial { margin-block: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid #c5aeb6; }
-.article-editorial h2 { font-size: 1.15rem; }
-.article-editorial p { font-size: .85rem; }
-.article-related a { display: flex; justify-content: space-between; gap: 1rem; padding-block: .9rem; line-height: 1.6; }
+.article-shell {
+  max-width: 780px;
+}
+.journal-article .story-hero h1 {
+  font-size: clamp(2.3rem, 5.4vw, 4.5rem);
+  line-height: 1.12;
+}
+.article-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 2.2rem;
+  font-size: 0.8rem;
+}
+.article-breadcrumbs a,
+.article-byline a,
+.article-reading a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.23em;
+  transition: var(--rm-hover-transition);
+}
+.article-breadcrumbs a:hover,
+.article-byline a:hover,
+.article-reading a:hover {
+  color: var(--rm-link-hover);
+  text-decoration-color: var(--rm-link-underline);
+  text-decoration-thickness: 3px;
+}
+.article-byline {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+.article-reading {
+  padding-block: 3rem 5rem;
+}
+.article-contents {
+  padding: 1.6rem;
+  border: 2px solid #202131;
+  border-radius: 1.3rem;
+  background: #fff;
+  box-shadow: 5px 6px 0 #8d6cff;
+}
+.article-reading h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.3;
+  margin-bottom: 1.2rem;
+}
+.article-reading p,
+.article-reading li {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #49393f;
+}
+.article-reading p + p {
+  margin-top: 1.2rem;
+}
+.article-reading a:focus-visible,
+.article-breadcrumbs a:focus-visible {
+  outline: var(--rm-focus-ring);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+.article-reading ul,
+.article-reading ol {
+  padding-left: 1.5rem;
+  margin-block: 1rem;
+  list-style: disc;
+}
+.article-reading ol {
+  list-style: decimal;
+}
+.article-reading li + li {
+  margin-top: 0.7rem;
+}
+.article-reading section {
+  margin-block: 3.2rem;
+  scroll-margin-top: 7rem;
+}
+.article-source {
+  margin-top: 1rem;
+  font-size: 0.86rem !important;
+}
+.article-signup {
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  border: 2px solid #202131;
+  border-radius: 1.5rem;
+  background: #f6c9ef;
+  box-shadow: 6px 7px 0 #ffc53d;
+}
+.article-signup .story-button {
+  text-decoration: none;
+}
+.article-editorial {
+  margin-block: 2.5rem;
+  padding: 1.5rem;
+  border: 2px solid #202131;
+  border-radius: 1.3rem;
+  background: #fff;
+  box-shadow: 5px 6px 0 #47d8ad;
+}
+.article-editorial h2 {
+  font-size: 1.15rem;
+}
+.article-editorial p {
+  font-size: 0.85rem;
+}
+.article-related {
+  padding: 1.5rem;
+  border: 2px solid #202131;
+  border-radius: 1.3rem;
+  background: #fbf8ef;
+  box-shadow: 5px 6px 0 #ed77a8;
+}
+.article-related a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  line-height: 1.6;
+}
+/* Related links are rows, not inline text links. */
+.article-related a {
+  border-radius: 0.6rem;
+  padding-inline: 0.5rem;
+  text-decoration: none;
+}
+.article-related a:hover {
+  background: var(--rm-row-tint);
+  color: inherit;
+  text-decoration-color: transparent;
+  translate: var(--rm-row-shift);
+}

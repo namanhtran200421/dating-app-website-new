@@ -1,24 +1,60 @@
-<div id="top" class="story-page story-page--blog">
-  <section class="blog-hero" aria-labelledby="blog-title">
-    <div data-motion-reveal class="story-shell">
-      <span class="story-kicker">The Rosemarry journal</span>
-      <h1 id="blog-title">Dating, with room<br /><span>to get to know someone.</span></h1>
-      <p class="story-lead">Practical ideas about conversation, dating habits and giving a connection time. From the team building Rosemarry.</p>
+<main id="top" class="story-page journal-page">
+  <section class="journal-page__featured" aria-labelledby="blog-title">
+    <div class="story-shell">
+      <header class="journal-page__header">
+        <h1 id="blog-title">Journal</h1>
+      </header>
+
+      @for (article of articles; track article.slug; let i = $index) {
+        @if (i === 0) {
+          <a class="featured-article rm-sticker" [routerLink]="['/blog', article.slug]">
+            <div class="featured-article__copy">
+              <div class="featured-article__labels">
+                <span class="featured-article__label">Featured</span>
+              </div>
+              <h2>{{ article.title }}</h2>
+              <p>{{ article.description }}</p>
+              <footer>
+                <time [attr.datetime]="article.published">{{
+                  article.published + 'T00:00:00Z' | date: 'd MMM y' : 'UTC'
+                }}</time>
+                <span>Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </footer>
+            </div>
+            <div class="featured-article__image" aria-hidden="true">
+              <img src="/images/rosemarry/hero-group.jpg" alt="" />
+            </div>
+          </a>
+        }
+      }
     </div>
   </section>
-  <section class="blog-feed story-shell" aria-label="Journal articles">
-    @for (article of articles; track article.slug; let i = $index) {
-      <article data-motion-reveal="fade" class="blog-article" [class.blog-article--pink]="i === 1" [id]="article.legacyId || article.slug">
-        <header>
-          <span class="blog-article__topic">{{ article.topic }}</span>
-          <h2><a [routerLink]="['/blog', article.slug]">{{ article.title }}</a></h2>
-          <p class="blog-article__dek">By the Rosemarry editorial team<br /><time [attr.datetime]="article.modified">{{ article.modified | date: 'd MMMM y' : 'UTC' }}</time></p>
-        </header>
-        <div class="blog-article__body">
-          <p>{{ article.description }}</p>
-          <a [routerLink]="['/blog', article.slug]" class="article-link">Read: {{ article.title }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-        </div>
-      </article>
-    }
+
+  <section class="journal-page__archive" aria-labelledby="past-articles-title">
+    <div class="story-shell">
+      <header class="journal-page__archive-header">
+        <h2 id="past-articles-title">Past articles</h2>
+      </header>
+
+      <div class="article-grid" aria-label="Past journal articles">
+        @for (article of articles; track article.slug; let i = $index) {
+          @if (i > 0) {
+            <a
+              class="article-card"
+              [id]="article.legacyId || article.slug"
+              [routerLink]="['/blog', article.slug]"
+            >
+              <h3>{{ article.title }}</h3>
+              <footer>
+                <time [attr.datetime]="article.published">{{
+                  article.published + 'T00:00:00Z' | date: 'd MMM y' : 'UTC'
+                }}</time>
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </footer>
+            </a>
+          }
+        }
+      </div>
+    </div>
   </section>
-</div>
+</main>

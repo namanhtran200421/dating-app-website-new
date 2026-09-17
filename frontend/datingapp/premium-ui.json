@@ -1,0 +1,9 @@
+{
+  "profile": "marketing",
+  "sourceRoots": ["src"],
+  "locale": "en-AU",
+  "ownership": {
+    "Select/Listbox": "native"
+  },
+  "requiredCommands": []
+}

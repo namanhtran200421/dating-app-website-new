@@ -1,0 +1,22 @@
+<div class="demo-phone">
+  <div class="demo-screen activities">
+    <div class="activities-head">
+      <h4 class="demo-title">Activities</h4>
+      <span class="activities-count">0/{{ activities.length }} done</span>
+    </div>
+
+    <!-- Preview only for now: rows react on hover but aren't playable yet. -->
+    <ul class="activity-list">
+      @for (activity of activities; track activity.name) {
+        <li class="activity" [attr.data-tone]="activity.tone">
+          <span class="activity__icon" aria-hidden="true"><i [class]="activity.icon"></i></span>
+          <p class="activity__text">
+            <small>{{ activity.day }}</small>
+            <strong>{{ activity.name }}</strong>
+          </p>
+          <span class="activity__play" aria-hidden="true">Play</span>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

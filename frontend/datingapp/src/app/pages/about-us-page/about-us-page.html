@@ -1,275 +1,125 @@
-<div id="top" class="overflow-x-hidden bg-cream/90 font-body text-ink">
-  <section
-    class="border-y border-ink/10 bg-white/45 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
-    aria-labelledby="why-title"
-  >
-    <div class="mx-auto max-w-[1180px]">
-      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-[clamp(56px,8vw,110px)]">
-        <div data-motion-reveal>
-          <span class="mb-4 block text-sm font-bold uppercase tracking-[0.14em] text-rose">
-            Why Rosemarry exists ?
-          </span>
-          <h1
-            id="why-title"
-            class="font-display text-[clamp(38px,5.5vw,70px)] font-semibold leading-[1.02] tracking-[-1.5px]"
-          >
-            The dating app <br />formula needs a
-            <span class="scribble-underline">
-              rewrite
-              <svg
-                class="scribble-underline__line"
-                viewBox="0 0 220 22"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  class="scribble-underline__stroke"
-                  pathLength="1"
-                  d="M4 12 C29 4 48 17 72 10 C99 2 117 17 143 9 C164 3 187 14 216 7"
-                />
-                <path
-                  class="scribble-underline__stroke scribble-underline__stroke--second"
-                  pathLength="1"
-                  d="M15 18 C46 14 72 21 104 15 C137 10 167 20 207 13"
-                />
-              </svg>
-            </span>
-          </h1>
-        </div>
-
-        <div
-          data-motion-reveal
-          data-motion-delay="0.08"
-          class="space-y-6 text-[clamp(17px,1.8vw,22px)] font-medium leading-[1.75] text-ink/75"
-        >
-          <p>
-            The usual formula asks people to make quick decisions from a few photos, keep swiping,
-            and trust an algorithm to find the right person.
-          </p>
-          <p>That creates more choices, but not always better connections.</p>
-          <p>We believe attraction often needs time, familiarity and real interaction to grow.</p>
-          <p>
-            So Rosemarry is built around small weekly Circles, shared conversations and repeated
-            encounters – giving people more chances to actually get to know each other.
-          </p>
-          <p class="font-semibold text-ink">Less swiping. More getting to know each other.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section
-    class="bg-blossom/90 px-[clamp(18px,5vw,56px)] py-[clamp(72px,9vw,120px)]"
-    aria-labelledby="founders-title"
-  >
-    <div class="mx-auto max-w-[1180px]">
-      <header data-motion-reveal class="mb-[clamp(36px,5vw,58px)] max-w-[850px]">
-        <h2
-          id="founders-title"
-          class="font-display text-[clamp(44px,7vw,88px)] font-semibold leading-[0.98] tracking-[-2px]"
-        >
-          Built by people who <span class="text-rose">get it.</span>
-        </h2>
-        <p
-          class="mt-6 max-w-[680px] text-[clamp(18px,2vw,23px)] font-medium leading-relaxed text-ink/75"
-        >
-          The faces, stories, and brains behind Rosemarry.
-        </p>
+<div id="top" class="about-page overflow-x-hidden bg-cream/90 font-body text-ink">
+  <section class="about-founders" aria-labelledby="founders-title">
+    <div class="about-shell founders-layout">
+      <header data-motion-reveal class="founders-intro">
+        <h1 id="founders-title" class="founders-kicker">Meet the team</h1>
       </header>
 
-      <div class="mx-auto max-w-[1040px]">
-        <div data-motion-reveal="fade" data-motion-delay="0.08" class="founder-deck">
-          <div
-            aria-label="Founders Steve Tran, Felix Vu, and Samuel Nicholas"
-            class="founder-deck-page founder-deck-page--active"
+      <div id="founder-card-deck" class="founder-stage">
+        <div class="founder-roster" aria-label="Rosemarry founding team">
+          <article data-motion-reveal="fade" class="founder-card founder-card--pink">
+            <span class="founder-card__number" aria-hidden="true">01</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="Steve Tran, Rosemarry co-founder"
+            >
+              <span class="founder-card__monogram" aria-hidden="true">ST</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Steve Tran</h2>
+              <span class="founder-card__role">Co-founder · makes stuff work</span>
+              <p>I like cats.</p>
+            </div>
+          </article>
+
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.06"
+            class="founder-card founder-card--mint"
           >
-            <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-ink/10 bg-cream p-3 shadow-[0_28px_70px_-46px_rgba(28,20,24,0.55)]"
+            <span class="founder-card__number" aria-hidden="true">02</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="Felix Vu, Rosemarry co-founder"
             >
-              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
-                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <picture class="block h-full w-full">
-                    <source srcset="images/steve-960.avif" type="image/avif" />
-                    <img
-                      src="images/steve.jpg"
-                      width="960"
-                      height="1280"
-                      loading="lazy"
-                      decoding="async"
-                      alt="Steve Tran, Rosemarry co-founder"
-                      draggable="false"
-                      class="h-full w-full object-cover"
-                    />
-                  </picture>
-                </div>
-              </div>
+              <span class="founder-card__monogram" aria-hidden="true">FV</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Felix Vu</h2>
+              <span class="founder-card__role">Co-founder · product and community</span>
+              <p>Vietnam's Steve Jobs.</p>
+            </div>
+          </article>
 
-              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-                <span class="text-xs font-bold uppercase tracking-[0.14em] text-rose"> Meet </span>
-                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
-                  Steve Tran
-                </h3>
-                <p class="mt-1 text-sm font-bold text-rose">Co-founder · make stuff work</p>
-                <p class="mt-5 font-medium leading-[1.7] text-ink/75">I like cats.</p>
-
-                <div class="mt-auto flex items-center gap-3 pt-7 text-rose/60" aria-hidden="true">
-                  <span class="h-px flex-1 bg-ink/15"></span>
-                  <span class="font-display">୨ৎ</span>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.12"
+            class="founder-card founder-card--yellow"
+          >
+            <span class="founder-card__number" aria-hidden="true">03</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="Samuel Nicholas, Rosemarry co-founder"
             >
-              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
-                <div class="aspect-[4/5] overflow-hidden rounded-[18px] sm:aspect-[4/3]">
-                  <picture class="block h-full w-full">
-                    <source srcset="images/quang-960.avif" type="image/avif" />
-                    <img
-                      src="images/quang.png"
-                      width="1020"
-                      height="1020"
-                      loading="lazy"
-                      decoding="async"
-                      alt="Felix Vu, Rosemarry co-founder"
-                      draggable="false"
-                      class="h-full w-full object-cover"
-                    />
-                  </picture>
-                </div>
-              </div>
-
-              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-                <span class="text-xs font-bold uppercase tracking-[0.14em] text-birdpink">
-                  Meet
-                </span>
-                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
-                  Felix Vu
-                </h3>
-                <p class="mt-1 text-sm font-bold text-birdpink">Co-founder · vietnam steve's job</p>
-                <p class="mt-5 font-medium leading-[1.7] text-cream/75">
-                  I feel like I get scammed when using most dating apps, so I&rsquo;m making my own
-                  app.
-                </p>
-
-                <div
-                  class="mt-auto flex items-center gap-3 pt-7 text-birdpink/70"
-                  aria-hidden="true"
-                >
-                  <span class="h-px flex-1 bg-cream/15"></span>
-                  <span class="font-display">୨ৎ</span>
-                </div>
-              </div>
-            </article>
-            <article
-              class="founder-card pricing-card-hover relative flex h-full flex-col rounded-[32px] border border-white/10 bg-ink p-3 text-cream shadow-[0_28px_70px_-46px_rgba(28,20,24,0.7)]"
-            >
-              <div class="overflow-hidden rounded-[24px] bg-cream p-2">
-                <div
-                  role="img"
-                  aria-label="Photo placeholder for Samuel Nicholas, Rosemarry co-founder"
-                  class="grid aspect-[4/5] place-items-center overflow-hidden rounded-[18px] bg-birdpink/20 sm:aspect-[4/3]"
-                >
-                  <span
-                    class="grid h-28 w-28 place-items-center rounded-full border border-ink/10 bg-cream font-display text-4xl font-semibold text-ink shadow-sm"
-                    aria-hidden="true"
-                  >
-                    SN
-                  </span>
-                </div>
-              </div>
-
-              <div class="flex flex-1 flex-col px-3 pb-5 pt-6 sm:px-4">
-                <span class="text-xs font-bold uppercase tracking-[0.14em] text-birdpink">
-                  Meet
-                </span>
-                <h3 class="mt-2 font-display text-[clamp(28px,3vw,38px)] font-semibold">
-                  Samuel Nicholas
-                </h3>
-                <p class="mt-1 text-sm font-bold text-birdpink">Co-founder · Scrum guy</p>
-                <p class="mt-5 font-medium leading-[1.7] text-cream/75">Scrums</p>
-
-                <div
-                  class="mt-auto flex items-center gap-3 pt-7 text-birdpink/70"
-                  aria-hidden="true"
-                >
-                  <span class="h-px flex-1 bg-cream/15"></span>
-                  <span class="font-display">୨ৎ</span>
-                </div>
-              </div>
-            </article>
-          </div>
+              <span class="founder-card__monogram" aria-hidden="true">SN</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Samuel Nicholas</h2>
+              <span class="founder-card__role">Co-founder · keeps the team moving</span>
+              <p>Scrums, systems and the occasional reality check.</p>
+            </div>
+          </article>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="px-[clamp(18px,5vw,56px)] py-[clamp(64px,8vw,104px)]" aria-labelledby="faq-title">
-    <div
-      data-motion-reveal="fade"
-      class="faq-shell relative mx-auto max-w-[1180px] overflow-hidden rounded-[clamp(32px,5vw,52px)] border-2 border-ink p-[clamp(24px,4.5vw,58px)] shadow-[10px_12px_0_#1c1418]"
-    >
-      <div class="relative z-10 grid gap-[clamp(36px,6vw,82px)] lg:grid-cols-[0.72fr_1.28fr]">
-        <header data-motion-reveal class="max-w-[470px] lg:sticky lg:top-28 lg:self-start">
-          <span
-            class="inline-flex -rotate-2 rounded-full border-[1.5px] border-ink bg-ink px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-birdpink"
-          >
-            Questions, answered
-          </span>
-          <h2
-            id="faq-title"
-            class="mt-6 font-display text-[clamp(40px,5.5vw,68px)] font-semibold leading-[1.02] tracking-[-1.5px]"
-          >
-            Ask us anything,
-            <span class="text-rose">please</span>
-          </h2>
-        </header>
-
-        <div data-motion-reveal="fade" data-motion-delay="0.08" class="faq-list grid gap-3.5">
-          @for (faq of faqs; track faq.question; let index = $index) {
-            <article
-              class="faq-card"
-              [class.faq-card--open]="activeFaq() === index"
-              [style.--faq-index]="index"
+        <div class="founder-roster" aria-label="Rosemarry team members">
+          <article data-motion-reveal="fade" class="founder-card founder-card--purple">
+            <span class="founder-card__number" aria-hidden="true">04</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="New Rosemarry teammate, details coming soon"
             >
-              <h3>
-                <button
-                  type="button"
-                  class="faq-card__trigger"
-                  [attr.id]="'faq-trigger-' + index"
-                  [attr.aria-controls]="'faq-answer-' + index"
-                  [attr.aria-expanded]="activeFaq() === index"
-                  (click)="toggleFaq(index)"
-                >
-                  <span class="faq-card__number">0{{ index + 1 }}</span>
-                  <span class="flex-1">{{ faq.question }}</span>
-                  <span class="faq-card__icon" aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                  </span>
-                </button>
-              </h3>
+              <span class="founder-card__monogram" aria-hidden="true">TBA</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Meet them soon</h2>
+              <span class="founder-card__role">New teammate · role coming soon</span>
+              <p>The fourth member of the Rosemarry team.</p>
+            </div>
+          </article>
 
-              <div
-                class="faq-answer"
-                [class.faq-answer--open]="activeFaq() === index"
-                [attr.id]="'faq-answer-' + index"
-                [attr.aria-labelledby]="'faq-trigger-' + index"
-                [attr.aria-hidden]="activeFaq() !== index"
-                [attr.inert]="activeFaq() === index ? null : ''"
-              >
-                <div>
-                  <p class="faq-answer__copy">
-                    @if (faq.contact) {
-                      <a routerLink="/contact-us">Message us</a>
-                    }
-                    {{ faq.answer }}
-                  </p>
-                </div>
-              </div>
-            </article>
-          }
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.06"
+            class="founder-card founder-card--mint"
+          >
+            <span class="founder-card__number" aria-hidden="true">05</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="New Rosemarry teammate, details coming soon"
+            >
+              <span class="founder-card__monogram" aria-hidden="true">TBA</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Meet them soon</h2>
+              <span class="founder-card__role">New teammate · role coming soon</span>
+              <p>The fifth member of the Rosemarry team.</p>
+            </div>
+          </article>
+
+          <article
+            data-motion-reveal="fade"
+            data-motion-delay="0.12"
+            class="founder-card founder-card--yellow"
+          >
+            <span class="founder-card__number" aria-hidden="true">06</span>
+            <div
+              class="founder-card__portrait founder-card__initials"
+              role="img"
+              aria-label="New Rosemarry teammate, details coming soon"
+            >
+              <span class="founder-card__monogram" aria-hidden="true">TBA</span>
+            </div>
+            <div class="founder-card__copy">
+              <h2>Meet them soon</h2>
+              <span class="founder-card__role">New teammate · role coming soon</span>
+              <p>The sixth member of the Rosemarry team.</p>
+            </div>
+          </article>
         </div>
       </div>
     </div>

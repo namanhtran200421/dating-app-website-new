@@ -16,9 +16,14 @@ import { SignupState } from '../landing/signup-state';
 export class ArticlePage {
   private readonly route = inject(ActivatedRoute);
   protected readonly signup = inject(SignupState);
-  protected readonly article = toSignal(this.route.data.pipe(map((data) => {
-    const summary = data['article'] as ArticleSummary;
-    return { ...summary, ...articleContent[summary.slug] };
-  })), { requireSync: true });
+  protected readonly article = toSignal(
+    this.route.data.pipe(
+      map((data) => {
+        const summary = data['article'] as ArticleSummary;
+        return { ...summary, ...articleContent[summary.slug] };
+      }),
+    ),
+    { requireSync: true },
+  );
   protected readonly articles = articles;
 }

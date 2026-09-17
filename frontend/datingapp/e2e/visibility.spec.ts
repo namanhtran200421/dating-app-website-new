@@ -72,26 +72,59 @@ test('desktop navigation yields while reading and returns on upward intent', asy
   await expect(navigation).not.toHaveClass(/site-nav--hidden/);
 });
 
-test('desktop editorial cards keep a compact rhythm without an attached journal divider', async ({
-  page,
-}) => {
+test('desktop editorial cards keep an asymmetric scrapbook rhythm', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   await page.goto('/');
   await dismissDevelopmentNotice(page);
-  const problemCard = await page.locator('.problem-card--paywall').boundingBox();
-  expect(problemCard?.height).toBeLessThan(240);
+  const peopleCards = await page
+    .locator('.people-card')
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
+  expect(peopleCards).toHaveLength(4);
+  // One row of four below the swipe fan, with the middle card the tallest.
+  const swipeFan = await page.locator('.swipe-fan__deck').boundingBox();
+  expect(peopleCards[0].y).toBeGreaterThan(swipeFan!.y + swipeFan!.height);
+  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[0].height);
+  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[3].height);
+  // The cards deliberately overlap, so every neighbour pair shares some x range.
+  for (let i = 1; i < peopleCards.length; i++) {
+    expect(peopleCards[i].x).toBeLessThan(peopleCards[i - 1].x + peopleCards[i - 1].width);
+  }
+  // ...but no card painted on top may reach the text of one beneath it. Compared as
+  // boxes rather than by hit-testing, since the cards are tilted and a rotated
+  // element does not fill the corners of its own bounding rect.
+  const buriedText = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('.people-card')];
+    const depth = (el: Element) => Number(getComputedStyle(el).zIndex) || 0;
+    const boxes = cards.map((card) => card.getBoundingClientRect());
+    const clashes: string[] = [];
+    cards.forEach((card, i) => {
+      cards.forEach((other, j) => {
+        if (i === j || depth(other) <= depth(card)) return;
+        const over = boxes[j];
+        card.querySelectorAll('.people-card__caption, .people-card__tag').forEach((text) => {
+          const r = text.getBoundingClientRect();
+          if (r.left < over.right && r.right > over.left && r.top < over.bottom && r.bottom > over.top) {
+            clashes.push(text.textContent!.trim().replace(/\s+/g, ' '));
+          }
+        });
+      });
+    });
+    return clashes;
+  });
+  expect(buriedText).toEqual([]);
 
   await page.goto('/circle');
-  const featureCardHeights = await page
+  const featureCards = await page
     .locator('.feature-card')
-    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().height));
-  expect(featureCardHeights).toHaveLength(3);
-  expect(Math.max(...featureCardHeights)).toBeLessThan(340);
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
+  expect(featureCards).toHaveLength(3);
+  expect(featureCards[0].width).toBeGreaterThan(featureCards[1].width);
+  expect(featureCards[1].y).toBeGreaterThan(featureCards[0].y);
 
   await page.goto('/blog');
   const articleAfterPink = page.locator('.blog-article--pink + .blog-article');
-  await expect(articleAfterPink).toHaveCSS('border-top-width', '0px');
+  await expect(articleAfterPink).toHaveCSS('border-top-width', '2px');
 });
 
 test('every public page uses the shared section reveal contract', async ({ page }) => {

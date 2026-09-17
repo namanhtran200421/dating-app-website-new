@@ -15,6 +15,10 @@ async function scan(directory) {
         const name = [...match[1].matchAll(/\bfa-([a-z0-9-]+)\b/g)].map((m) => m[1]).find((n) => !['solid', 'regular', 'brands'].includes(n));
         if (name) used.add(`${style}/${name}`);
       }
+      // Icon classes kept in TS data and bound with [class], e.g. icon: 'fa-solid fa-camera'.
+      for (const match of text.matchAll(/'fa-(solid|regular|brands) fa-([a-z0-9-]+)'/g)) {
+        used.add(`${match[1]}/${match[2]}`);
+      }
     }
   }
 }

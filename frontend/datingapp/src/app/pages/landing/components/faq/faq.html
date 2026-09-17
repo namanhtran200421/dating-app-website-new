@@ -1,0 +1,52 @@
+<section id="faq" class="faq section-pad" aria-labelledby="faq-title">
+  <div class="shell faq-layout">
+    <header class="faq-pyramid" data-motion-reveal>
+      <h2 id="faq-title" class="sr-only">FAQ</h2>
+      <div class="faq-block faq-block--top" aria-hidden="true">F</div>
+      <div class="faq-block faq-block--left" aria-hidden="true">A</div>
+      <div class="faq-block faq-block--right" aria-hidden="true">Q</div>
+    </header>
+
+    <div class="faq-list" data-motion-reveal="fade" data-motion-delay="0.08">
+      @for (faq of faqs; track faq.question; let index = $index) {
+        <article class="faq-card" [class.faq-card--open]="activeFaq() === index">
+          <h3>
+            <button
+              type="button"
+              class="faq-card__trigger"
+              [attr.id]="'faq-trigger-' + index"
+              [attr.aria-controls]="'faq-answer-' + index"
+              [attr.aria-expanded]="activeFaq() === index"
+              (click)="toggleFaq(index)"
+            >
+              <span class="faq-card__mark" aria-hidden="true">Q</span>
+              <span class="faq-card__question">{{ faq.question }}</span>
+              <span class="faq-card__icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+              </span>
+            </button>
+          </h3>
+
+          <div
+            class="faq-answer"
+            [class.faq-answer--open]="activeFaq() === index"
+            [attr.id]="'faq-answer-' + index"
+            [attr.aria-labelledby]="'faq-trigger-' + index"
+            [attr.aria-hidden]="activeFaq() !== index"
+            [attr.inert]="activeFaq() === index ? null : ''"
+          >
+            <div>
+              <p>
+                @if (faq.contact) {
+                  <a routerLink="/contact-us">Message us</a>
+                }
+                {{ faq.answer }}
+              </p>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

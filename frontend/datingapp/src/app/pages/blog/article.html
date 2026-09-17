@@ -2,8 +2,8 @@
   <header class="story-hero story-hero--compact">
     <div data-motion-reveal class="story-shell article-shell">
       <nav class="article-breadcrumbs" aria-label="Breadcrumb">
-        <a routerLink="/">Home</a><span aria-hidden="true">/</span>
-        <a routerLink="/blog">Journal</a><span aria-hidden="true">/</span>
+        <a routerLink="/">Home</a><span aria-hidden="true">/</span> <a routerLink="/blog">Journal</a
+        ><span aria-hidden="true">/</span>
         <span aria-current="page">{{ article().topic }}</span>
       </nav>
       <p class="story-kicker">{{ article().topic }}</p>
@@ -12,50 +12,79 @@
       <p class="article-byline">
         By <a routerLink="/about-us">Rosemarry editorial team</a>
         <span aria-hidden="true"> · </span>
-        <time [attr.datetime]="article().published">{{ (article().published + 'T00:00:00Z') | date: 'd MMMM y' : 'UTC' }}</time>
+        <time [attr.datetime]="article().published">{{
+          article().published + 'T00:00:00Z' | date: 'd MMMM y' : 'UTC'
+        }}</time>
       </p>
     </div>
   </header>
   <div class="story-shell article-shell article-reading">
-    <nav data-motion-reveal="fade" class="article-contents" aria-label="In this article">
+    <nav data-motion-reveal="fade" class="article-contents rm-sticker" aria-label="In this article">
       <h2>In this article</h2>
       <ol>
         @for (section of article().sections; track section.id) {
-          <li><a [routerLink]="['/blog', article().slug]" [fragment]="section.id">{{ section.title }}</a></li>
+          <li>
+            <a [routerLink]="['/blog', article().slug]" [fragment]="section.id">{{
+              section.title
+            }}</a>
+          </li>
         }
       </ol>
     </nav>
     @for (section of article().sections; track section.id) {
       <section data-motion-reveal [id]="section.id" [attr.aria-labelledby]="section.id + '-title'">
         <h2 [id]="section.id + '-title'">{{ section.title }}</h2>
-        @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
+        @for (paragraph of section.paragraphs; track $index) {
+          <p>{{ paragraph }}</p>
+        }
         @if (section.points) {
-          <ul>@for (point of section.points; track $index) { <li>{{ point }}</li> }</ul>
+          <ul>
+            @for (point of section.points; track $index) {
+              <li>{{ point }}</li>
+            }
+          </ul>
         }
         @if (section.source) {
-          <p class="article-source">Source: <a [href]="section.source.url">{{ section.source.label }}</a></p>
+          <p class="article-source">
+            Source: <a [href]="section.source.url">{{ section.source.label }}</a>
+          </p>
         }
       </section>
     }
-    <aside data-motion-reveal class="article-signup" aria-labelledby="article-signup-title">
+    <aside
+      data-motion-reveal
+      class="article-signup rm-sticker"
+      aria-labelledby="article-signup-title"
+    >
       <p class="story-kicker">A little more time to connect</p>
       <h2 id="article-signup-title">Meet the idea behind weekly Circles.</h2>
-      <p>Rosemarry is still in development. Explore the planned experience or join the early-access list for updates from the team.</p>
+      <p>
+        Rosemarry is still in development. Explore the planned experience or join the early-access
+        list for updates from the team.
+      </p>
       <div class="story-actions">
-        <a routerLink="/circle" class="story-text-link">How Circles work</a>
-        <a [routerLink]="['/blog', article().slug]" fragment="join" class="story-button story-button--dark"
-          (click)="$event.preventDefault(); signup.goToSignup()">Join early access <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a routerLink="/" fragment="how-it-works" class="story-text-link">How Circles work</a>
+        <button type="button" class="story-button story-button--dark" (click)="signup.goToSignup()">
+          Join early access <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
+        </button>
       </div>
     </aside>
-    <aside data-motion-reveal="fade" class="article-editorial">
+    <aside data-motion-reveal="fade" class="article-editorial rm-sticker">
       <h2>About this journal</h2>
-      <p>We write about conversation, dating habits and the ideas behind Rosemarry. Research is linked where discussed; our product plans are not evidence of relationship outcomes. Articles are prepared with AI assistance. <a routerLink="/about-us">Meet the team building Rosemarry.</a></p>
+      <p>
+        We write about conversation, dating habits and the ideas behind Rosemarry. Research is
+        linked where discussed; our product plans are not evidence of relationship outcomes.
+        Articles are prepared with AI assistance.
+        <a routerLink="/about-us">Meet the team building Rosemarry.</a>
+      </p>
     </aside>
-    <nav data-motion-reveal="fade" class="article-related" aria-label="Related articles">
+    <nav data-motion-reveal="fade" class="article-related rm-sticker" aria-label="Related articles">
       <h2>Keep exploring</h2>
       @for (related of articles; track related.slug) {
         @if (related.slug !== article().slug) {
-          <a [routerLink]="['/blog', related.slug]">{{ related.title }} <span aria-hidden="true">→</span></a>
+          <a [routerLink]="['/blog', related.slug]"
+            >{{ related.title }} <span class="rm-arrow" aria-hidden="true">→</span></a
+          >
         }
       }
       <a routerLink="/blog">All journal articles</a>

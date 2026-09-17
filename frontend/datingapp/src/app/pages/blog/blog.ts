@@ -7,7 +7,7 @@ import { articles } from './article-catalog';
   selector: 'app-blog-page',
   imports: [RouterLink, DatePipe],
   templateUrl: './blog.html',
-  styleUrl: '../story-pages.css',
+  styleUrls: ['../story-pages.css', './blog.css'],
 })
 export class BlogPage {
   protected readonly articles = articles;

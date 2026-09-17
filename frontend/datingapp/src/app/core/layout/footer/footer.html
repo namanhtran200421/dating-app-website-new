@@ -1,21 +1,18 @@
-<footer id="join" class="footer">
-  <section class="footer-cta" aria-labelledby="footer-invite-title">
-    <div class="footer-cta__inner">
-      <span class="footer-sticker">Early access</span>
-      <h2 id="footer-invite-title">Ready to meet people differently?</h2>
-      <p>Join early, help shape Rosemarry and get one month of Advanced when we launch.</p>
+<footer class="footer">
+  <section id="join" class="footer-signup-panel" aria-labelledby="footer-signup-title">
+    <div class="footer-signup-panel__inner" data-motion-reveal>
+      <div class="footer-signup-panel__copy">
+        <span class="footer-sticker">Early access</span>
+        <h2 id="footer-signup-title">Get in before the first Circle.</h2>
+      </div>
 
       <div class="footer-signup">
-        @if (signup.showSignupButton()) {
-          <button type="button" class="footer-signup__primary" (click)="signup.open()">
-            Save me a spot <span aria-hidden="true">→</span>
-          </button>
-        }
-        @if (signup.showSignupForm()) {
+        @if (!signup.submitted()) {
           <form
             [formGroup]="signup.preSignForm"
             (ngSubmit)="signup.submit()"
             class="footer-signup__form"
+            novalidate
           >
             <label for="rm-email-input">Your email for early-access updates</label>
             <div class="footer-signup__row">
@@ -23,88 +20,47 @@
                 id="rm-email-input"
                 type="email"
                 formControlName="email"
-                placeholder="Your email address"
+                placeholder="Your email"
                 autocomplete="email"
+                [attr.aria-invalid]="signup.emailError() ? 'true' : null"
+                [attr.aria-describedby]="signup.emailError() ? 'rm-email-error' : null"
               />
-
-              @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
-                <span class="footer-signup__error" role="alert">
-                  Drop your email so we know where to send the invite.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
-              ) {
-                <span class="footer-signup__error" role="alert">
-                  That email is not emailing. Check the spelling and try again.
-                </span>
-              } @else if (
-                signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
-              ) {
-                <span class="footer-signup__error" role="alert">
-                  That email is unusually long. Keep it under 254 characters.
-                </span>
-              }
-
-              @if (signup.securityError()) {
-                <span class="footer-signup__error" role="alert">
-                  The security check needs another go. Refresh it and try again.
-                </span>
-              }
-
-              @if (signup.submissionError()) {
-                <span class="footer-signup__error" role="alert">
-                  {{ signup.submissionError() }}
-                </span>
-              }
-
-              <p class="footer-signup__privacy">
-                See how we handle your email in our
-                <a routerLink="/privacy-and-terms" fragment="information-we-collect"
-                  >privacy policy</a
-                >.
-              </p>
-            </form>
-          }
-
-          @if (signup.submitted()) {
-            <div class="footer-signup__success" role="status">
-              <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
-              <p>
-                <strong>You&rsquo;re on the list!</strong>
-                We saved {{ signup.submittedEmail() }} for early-access updates. The app is still in
-                development.
-              </p>
+              <button type="submit" class="rm-pop" [disabled]="signup.isSubmitting()">
+                {{ signup.isSubmitting() ? 'Joining…' : 'Join early access' }}
+              </button>
             </div>
+            <p class="footer-signup__offer">1 month of Advanced free at launch</p>
+
             @if (signup.emailError() && signup.preSignForm.controls.email.hasError('required')) {
-              <span class="footer-signup__error" role="alert"
-                >Drop your email so we know where to send the invite.</span
-              >
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                Drop your email so we know where to send the invite.
+              </span>
             } @else if (
               signup.emailError() && signup.preSignForm.controls.email.hasError('pattern')
             ) {
-              <span class="footer-signup__error" role="alert"
-                >That email does not look quite right. Check it and try again.</span
-              >
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                That email does not look quite right. Check it and try again.
+              </span>
             } @else if (
               signup.emailError() && signup.preSignForm.controls.email.hasError('maxlength')
             ) {
-              <span class="footer-signup__error" role="alert"
-                >Please keep your email under 254 characters.</span
-              >
+              <span id="rm-email-error" class="footer-signup__error" role="alert">
+                Please keep your email under 254 characters.
+              </span>
             }
-            @if (signup.duplicateEmailError()) {
-              <span class="footer-signup__error" role="alert"
-                >That email is already on the list. You’re in!</span
-              >
-            }
+
             @if (signup.securityError()) {
-              <span class="footer-signup__error" role="alert"
-                >The security check needs another go. Refresh it and try again.</span
-              >
+              <span class="footer-signup__error" role="alert">
+                The security check needs another go. Refresh it and try again.
+              </span>
             }
+
             @if (signup.submissionError()) {
-              <span class="footer-signup__error" role="alert">{{ signup.submissionError() }}</span>
+              <span class="footer-signup__error" role="alert">
+                {{ signup.submissionError() }}
+              </span>
             }
+
             <app-turnstile-widget
               class="footer-signup__turnstile"
               action="pre_signup"
@@ -114,12 +70,13 @@
             />
           </form>
         }
+
         @if (signup.submitted()) {
           <div class="footer-signup__success" role="status">
-            <span aria-hidden="true">✓</span>
+            <span aria-hidden="true"><i class="fa-solid fa-check"></i></span>
             <p>
-              <strong>You’re on the list!</strong> We saved {{ signup.submittedEmail() }} for
-              early-access updates.
+              <strong>You&rsquo;re on the list.</strong>
+              We saved {{ signup.submittedEmail() }} for early-access updates.
             </p>
           </div>
         }
@@ -128,7 +85,7 @@
   </section>
 
   <div class="footer-bar">
-    <a routerLink="/" class="footer-brand">
+    <a routerLink="/" fragment="top" class="footer-brand">
       <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="38" height="29" />
       <span>Rosemarry</span>
     </a>

@@ -1,0 +1,217 @@
+.steps {
+  position: relative;
+  overflow: hidden;
+  border-block: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.steps-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.steps-heading {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  margin-bottom: clamp(56px, 7vw, 96px);
+}
+
+.steps-heading h2 {
+  margin: 20px 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6.2vw, 82px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.steps-heading > p {
+  margin: 0;
+  color: rgb(32 33 49 / 54%);
+  font-size: clamp(13px, 1.4vw, 16px);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+/* Zig-zag rows: copy beside a demo stage, swapping sides on every other step. */
+.steps-deck {
+  display: grid;
+  gap: clamp(64px, 9vw, 120px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-card {
+  --card-pop: var(--pink);
+  display: grid;
+  grid-template-areas: 'copy demo';
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 6vw, 88px);
+  align-items: center;
+}
+
+.step-card:nth-child(even) {
+  grid-template-areas: 'demo copy';
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+}
+
+.step-card--circle {
+  --card-pop: var(--yellow);
+}
+
+.step-card--chat {
+  --card-pop: var(--mint);
+}
+
+.step-card--match {
+  --card-pop: var(--purple);
+}
+
+.step-card__copy {
+  grid-area: copy;
+  justify-self: center;
+  max-width: 440px;
+}
+
+.step-card__number {
+  display: grid;
+  width: 64px;
+  aspect-ratio: 1;
+  place-items: center;
+  margin-bottom: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card-pop);
+  color: var(--ink);
+  font: 900 26px/1 var(--font-display);
+  box-shadow: 3px 3px 0 var(--ink);
+  rotate: -4deg;
+}
+
+.step-card {
+  scroll-margin-top: 6rem;
+}
+
+.step-card__copy h3:focus {
+  outline: none;
+}
+
+.step-card__copy h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.4vw, 56px);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.step-card__copy p {
+  max-width: 34ch;
+  margin: 0;
+  color: rgb(32 33 49 / 66%);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+/* Step 04 bonus note: Circles re-form around the people you clicked with. */
+.step-card__bonus {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  max-width: 36ch;
+  margin-top: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--paper);
+  padding: 12px 15px 13px;
+  color: var(--ink);
+  font-size: clamp(13px, 1.2vw, 15px);
+  font-weight: 650;
+  line-height: 1.5;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.step-card__bonus-tag {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card-pop);
+  padding: 3px 9px 2px;
+  font-family: var(--font-body);
+  font-size: clamp(10px, 1vw, 11px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.step-card__demo {
+  position: relative;
+  grid-area: demo;
+  justify-self: center;
+  width: min(100%, 480px);
+}
+
+.step-card__try {
+  position: absolute;
+  z-index: 2;
+  top: -13px;
+  right: 28px;
+  transform: rotate(-3deg);
+}
+
+/* Stack before the demo column gets too narrow to hold the square demo. */
+@media (max-width: 1000px) {
+  .step-card,
+  .step-card:nth-child(even) {
+    grid-template-areas:
+      'copy'
+      'demo';
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .step-card__copy {
+    justify-self: start;
+  }
+
+  .step-card__demo {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 620px) {
+  .steps-heading {
+    margin-bottom: 48px;
+  }
+
+  .steps-heading h2 {
+    max-width: 340px;
+    font-size: clamp(43px, 13vw, 58px);
+  }
+
+  .step-card__number {
+    width: 54px;
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+
+  .step-card__demo {
+    width: calc(100% - 6px);
+  }
+
+  .step-card__try {
+    top: -20px;
+    right: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-card__number,
+  .step-card__try {
+    rotate: none;
+    transform: none;
+  }
+}

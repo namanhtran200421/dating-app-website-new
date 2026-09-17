@@ -1,0 +1,31 @@
+<div class="demo-phone">
+  <div class="demo-screen">
+    <header class="members-banner">
+      <div class="members-banner__top">
+        <h4 class="demo-title">Members</h4>
+        <span class="members-count">{{ members.length + 1 }} total</span>
+      </div>
+      <p>Everyone in this week's Circle. Tap to see a profile.</p>
+    </header>
+
+    <!-- Preview only for now: avatars react on hover; profiles open in a later version. -->
+    <ul class="member-grid" aria-label="Circle members">
+      <li class="member member--you">
+        <span class="member__avatar" aria-hidden="true">You</span>
+        <span class="member__name">You</span>
+      </li>
+      @for (member of members; track member.name) {
+        <li class="member">
+          @if (member.avatar) {
+            <img class="member__avatar" [src]="member.avatar" alt="" width="64" height="64" />
+          } @else {
+            <span class="member__avatar" [style.background]="member.tone" aria-hidden="true">
+              {{ member.name[0] }}
+            </span>
+          }
+          <span class="member__name">{{ member.name }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</div>
