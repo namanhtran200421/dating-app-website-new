@@ -600,45 +600,19 @@
   margin-top: clamp(64px, 8vw, 104px);
 }
 
-/* Swipe fan: seven profiles drift left to right, sharp only as they pass the middle. */
-.swipe-fan {
-  --fan-card: clamp(165px, 19.5vw, 282px);
-  --fan-cycle: 9s;
-  position: relative;
-}
-.swipe-fan__deck {
-  position: relative;
-  height: calc(var(--fan-card) * 1.86);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  /* Fade the edges so profiles arrive and leave instead of popping. Without
-     no-repeat the gradient tiles and cards reappear past the deck. */
-  mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
-  mask-repeat: no-repeat;
-}
 .swipe-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   display: flex;
-  width: var(--fan-card);
+  width: auto;
+  height: 100%;
+  min-width: 0;
   flex-direction: column;
   gap: 6px;
   border: 2px solid var(--ink);
   border-radius: 20px;
   background: white;
   padding: 10px 10px 12px;
-  animation: swipe-drift var(--fan-cycle) linear infinite;
-  animation-delay: calc(var(--i) * (var(--fan-cycle) / -7));
-  box-shadow: 7px 7px 0 var(--pink);
-  will-change: transform, filter;
-}
-.swipe-card:nth-child(3n + 2) {
-  box-shadow: 7px 7px 0 var(--yellow);
-}
-.swipe-card:nth-child(3n) {
-  box-shadow: 7px 7px 0 var(--mint);
+  box-shadow: 4px 4px 0 var(--stack-pop);
 }
 .swipe-card__photo {
   aspect-ratio: 4 / 5;
@@ -677,18 +651,23 @@
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 .swipe-card__btn {
   display: grid;
-  width: clamp(26px, 3vw, 38px);
+  width: clamp(34px, 3.2vw, 42px);
   aspect-ratio: 1;
   place-items: center;
+  border: 1.5px solid transparent;
   border-radius: 50%;
   background: #e8e9ef;
   color: rgb(32 33 49 / 65%);
+  font-family: inherit;
   font-size: clamp(12px, 1.4vw, 17px);
+  font-weight: 800;
   line-height: 1;
+  transition: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .swipe-card__btn--like {
   background: color-mix(in srgb, var(--pink) 24%, white);
@@ -699,70 +678,109 @@
    in both time and distance to keep that gap constant: bunch them and the cards
    collide. Scale therefore has to stay under 1 so no two ever touch — the biggest
    pairing is the middle card against its neighbour, 0.5 + 0.41 = 0.91 of the gap. */
-@keyframes swipe-drift {
+/* Interactive profile stacks replace the old passing carousel. */
+.swipe-fan {
+  padding: 14px 5px 24px;
+}
+.swipe-fan__deck {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(18px, 2.2vw, 32px);
+  margin: 0;
+  padding: 0 8px 14px 0;
+  list-style: none;
+}
+.swipe-slot {
+  --stack-pop: var(--pink);
+  position: relative;
+  min-width: 0;
+}
+.swipe-slot:nth-child(3n + 2) {
+  --stack-pop: var(--yellow);
+}
+.swipe-slot:nth-child(3n) {
+  --stack-pop: var(--mint);
+}
+.swipe-slot .swipe-card {
+  transform: rotate(calc((var(--slot) - 1.5) * 0.35deg));
+}
+.swipe-slot .swipe-card--passing,
+.swipe-slot .swipe-card--liking {
+  animation: swipe-card-exit 460ms ease-out both;
+  pointer-events: none;
+}
+.swipe-card__decision {
+  position: absolute;
+  z-index: 2;
+  top: 38%;
+  left: 50%;
+  width: clamp(58px, 6vw, 76px);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  font-size: clamp(27px, 3vw, 40px);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2) rotate(-12deg);
+}
+.swipe-card--passing .swipe-card__decision,
+.swipe-card--liking .swipe-card__decision {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.12) rotate(4deg);
+}
+.swipe-card--liking .swipe-card__decision {
+  background: var(--pink);
+  color: white;
+}
+.swipe-slot .swipe-card--passing {
+  --fly-rotate: -13deg;
+}
+.swipe-slot .swipe-card--liking {
+  --fly-rotate: 13deg;
+}
+.swipe-slot .swipe-card--entering {
+  animation: swipe-card-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: none;
+}
+@keyframes swipe-card-exit {
   0% {
-    z-index: 0;
-    filter: blur(1.6px);
+    opacity: 1;
+    transform: rotate(calc((var(--slot) - 1.5) * 0.35deg)) scale(1);
+  }
+  18% {
+    opacity: 1;
+    transform: translateY(4px) rotate(0) scale(0.93, 0.97);
+  }
+  52% {
+    opacity: 1;
+    transform: translateY(-10px) rotate(calc(var(--fly-rotate) / 6)) scale(1.18);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-12px) rotate(calc(var(--fly-rotate) / 5)) scale(1.24);
+  }
+  78%,
+  100% {
     opacity: 0;
-    transform: translate(-400%, -50%) scale(0.56) rotate(-2.4deg);
+    transform: translateY(-12px) rotate(calc(var(--fly-rotate) / 5)) scale(1.3);
   }
-  12.5% {
-    z-index: 1;
-    filter: blur(1.3px);
-    opacity: 0.4;
-    transform: translate(-312.5%, -50%) scale(0.62) rotate(-2deg);
+}
+@keyframes swipe-card-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(72px) rotate(3deg) scale(0.38);
   }
-  25% {
-    z-index: 2;
-    filter: blur(0.9px);
-    opacity: 0.85;
-    transform: translate(-225%, -50%) scale(0.68) rotate(-1.5deg);
-  }
-  37.5% {
-    z-index: 3;
-    filter: blur(0.4px);
+  55% {
     opacity: 1;
-    transform: translate(-137.5%, -50%) scale(0.82) rotate(-0.8deg);
+    transform: translateY(-10px) rotate(-1deg) scale(1.12);
   }
-  50% {
-    z-index: 4;
-    filter: blur(0);
+  76% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  }
-  62.5% {
-    z-index: 3;
-    filter: blur(0.4px);
-    opacity: 1;
-    transform: translate(37.5%, -50%) scale(0.82) rotate(0.8deg);
-  }
-  75% {
-    z-index: 2;
-    filter: blur(0.9px);
-    opacity: 0.85;
-    transform: translate(125%, -50%) scale(0.68) rotate(1.5deg);
-  }
-  87.5% {
-    z-index: 1;
-    filter: blur(1.3px);
-    opacity: 0.4;
-    transform: translate(212.5%, -50%) scale(0.62) rotate(2deg);
+    transform: translateY(3px) rotate(0) scale(0.96);
   }
   100% {
-    z-index: 0;
-    filter: blur(1.6px);
-    opacity: 0;
-    transform: translate(300%, -50%) scale(0.56) rotate(2.4deg);
+    opacity: 1;
+    transform: rotate(calc((var(--slot) - 1.5) * 0.35deg)) scale(1);
   }
 }
-/* The drift is the point of this section, so reduced motion slows it down rather
-   than stopping it: same fan, gentle pace, no scale pulse. */
-@media (prefers-reduced-motion: reduce) {
-  .swipe-fan {
-    --fan-cycle: 14s;
-  }
-}
-
 /* Four moments in one deliberately imperfect stack. Each card keeps its image
    and copy together, then steps forward and straightens when explored. */
 .people-fan {
@@ -771,9 +789,9 @@
 .people-deck {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: space-between;
   margin: 0;
-  padding: 42px 28px 34px;
+  padding: 42px 0 34px;
   list-style: none;
   isolation: isolate;
 }
@@ -784,9 +802,9 @@
   position: relative;
   z-index: 1;
   display: flex;
-  width: clamp(210px, 23vw, 286px);
+  width: clamp(210px, 24vw, 300px);
   min-width: 0;
-  flex: 0 1 286px;
+  flex: 0 1 300px;
   flex-direction: column;
   margin-left: clamp(-32px, -2.3vw, -18px);
   border: 2px solid var(--ink);
@@ -1303,9 +1321,7 @@
 .outcome.section-pad {
   min-height: 950px;
   padding: clamp(42px, 3.2vw, 50px) 0 clamp(36px, 4vw, 58px);
-  background:
-    radial-gradient(circle at 48% 50%, rgb(76 79 111 / 16%), transparent 38%),
-    var(--ink);
+  background: radial-gradient(circle at 48% 50%, rgb(76 79 111 / 16%), transparent 38%), var(--ink);
 }
 .outcome .shell {
   width: min(100% - 40px, 1160px);
@@ -1424,9 +1440,7 @@
   display: grid;
   min-height: 86px;
   place-items: center;
-  background:
-    radial-gradient(circle at 50% 40%, white, transparent 62%),
-    #eeeaf7;
+  background: radial-gradient(circle at 50% 40%, white, transparent 62%), #eeeaf7;
   font-size: clamp(42px, 4.4vw, 66px);
   line-height: 1;
 }
@@ -1787,24 +1801,28 @@
     gap: 24px;
     margin-bottom: 44px;
   }
-  .swipe-fan {
-    --fan-card: clamp(150px, 50vw, 205px);
-  }
   .swipe-card {
     border-radius: 14px;
-    box-shadow: 4px 4px 0 var(--pink);
-  }
-  .swipe-card:nth-child(3n + 2) {
-    box-shadow: 4px 4px 0 var(--yellow);
-  }
-  .swipe-card:nth-child(3n) {
-    box-shadow: 4px 4px 0 var(--mint);
   }
   .quote-band__inner {
     min-height: 300px;
   }
   .choice-phone {
     width: min(92%, 470px);
+  }
+}
+
+/* Keep profile choices spacious as the viewport narrows. */
+@media (max-width: 900px) {
+  .swipe-fan__deck {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px clamp(16px, 5vw, 36px);
+  }
+}
+
+@media (max-width: 330px) {
+  .swipe-fan__deck {
+    grid-template-columns: 1fr;
   }
 }
 

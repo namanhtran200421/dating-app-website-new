@@ -3,6 +3,7 @@ import { Component, DestroyRef, ElementRef, afterNextRender, inject } from '@ang
 import { Router } from '@angular/router';
 
 const DISMISSED_KEY = 'rosemarry-early-stage-dismissed';
+const DISMISSED_EVENT = 'rosemarry:early-stage-dismissed';
 
 @Component({
   selector: 'app-early-stage-banner',
@@ -63,6 +64,7 @@ export class EarlyStageBanner {
 
     dialog?.classList.remove('early-stage-dialog--fallback');
     this.release();
+    this.document.defaultView?.dispatchEvent(new Event(DISMISSED_EVENT));
   }
 
   protected handleCancel(event: Event): void {
