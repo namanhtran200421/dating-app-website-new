@@ -6,6 +6,7 @@
     "start": "node scripts/generate-icons.mjs && ng serve",
     "build": "node scripts/generate-icons.mjs && ng build && node scripts/finalize-seo.mjs",
     "build:analyze": "node scripts/generate-icons.mjs && ng build --source-map --stats-json && node scripts/finalize-seo.mjs",
+    "social:image": "node scripts/generate-social-image.mjs",
     "indexnow": "node scripts/submit-indexnow.mjs",
     "search:report": "node scripts/search-console.mjs report",
     "search:inspect": "node scripts/search-console.mjs inspect",
