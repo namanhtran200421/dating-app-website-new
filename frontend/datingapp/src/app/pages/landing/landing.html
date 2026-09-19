@@ -71,140 +71,63 @@
         <span class="sticker sticker--mint">The problem + our answer</span>
         <h2 id="problem-title">Profiles move fast.</h2>
       </header>
-      <!-- Profiles drift left to right; only the one in the middle is ever in focus.
-           Priya/Asha/Jonah are Pexels stock (photo ids 7625104, 37186493, 32230550);
+      <!-- Priya/Asha/Jonah are Pexels stock (photo ids 7625104, 37186493, 32230550);
            the rest are our own. Pexels needs no attribution but its licence does not
            cover promotional use of a recognisable face without a model release. -->
-
-      <div class="swipe-fan" aria-hidden="true" data-motion-reveal="fade">
-        <ul class="swipe-fan__deck">
-          <li class="swipe-card" style="--i: 0">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-elena.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Elena <span>28</span></p>
-            <p class="swipe-card__bio">Reads two books at once, finishes neither.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 1">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-priya.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Priya <span>26</span></p>
-            <p class="swipe-card__bio">Runs on iced coffee and very long walks.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 2">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-daniel.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Daniel <span>24</span></p>
-            <p class="swipe-card__bio">Plays bass badly, cooks extremely well.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 3">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-mia.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Mia <span>27</span></p>
-            <p class="swipe-card__bio">Ceramics class dropout. Unbeatable at mini golf.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 4">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-theo.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Theo <span>23</span></p>
-            <p class="swipe-card__bio">Climbing gym regular, terrible at resting.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 5">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-asha.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Asha <span>25</span></p>
-            <p class="swipe-card__bio">Sunday markets, bad puns, other people's dogs.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
-          <li class="swipe-card" style="--i: 6">
-            <div class="swipe-card__photo">
-              <img
-                src="/images/rosemarry/profile-jonah.jpg"
-                alt=""
-                width="560"
-                height="700"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p class="swipe-card__name">Jonah <span>30</span></p>
-            <p class="swipe-card__bio">Will drive two hours for a decent taco.</p>
-            <div class="swipe-card__actions">
-              <span class="swipe-card__btn swipe-card__btn--pass">✕</span>
-              <span class="swipe-card__btn swipe-card__btn--like">♥</span>
-            </div>
-          </li>
+      <div class="swipe-fan" data-motion-reveal="fade">
+        <ul class="swipe-fan__deck" aria-label="Example dating profiles">
+          @for (slot of swipeSlots(); track slot.slot) {
+            @let profile = swipeProfiles[slot.profileIndex];
+            <li class="swipe-slot" [style.--slot]="slot.slot">
+              <article
+                class="swipe-card"
+                [class.swipe-card--passing]="slot.phase === 'passing'"
+                [class.swipe-card--liking]="slot.phase === 'liking'"
+                [class.swipe-card--entering]="slot.phase === 'entering'"
+                [attr.aria-label]="profile.name + ', ' + profile.age"
+              >
+                <span class="swipe-card__btn swipe-card__decision" aria-hidden="true">
+                  {{ slot.phase === 'liking' ? '♥' : '✕' }}
+                </span>
+                <div class="swipe-card__photo">
+                  <img
+                    [src]="profile.image"
+                    [alt]="'Profile photo of ' + profile.name"
+                    width="560"
+                    height="700"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <p class="swipe-card__name">
+                  {{ profile.name }} <span>{{ profile.age }}</span>
+                </p>
+                <p class="swipe-card__bio">{{ profile.bio }}</p>
+                <div class="swipe-card__actions" aria-label="Choose this profile">
+                  <button
+                    type="button"
+                    class="swipe-card__btn swipe-card__btn--pass"
+                    [disabled]="slot.phase !== 'idle'"
+                    [attr.aria-label]="'Pass on ' + profile.name"
+                    (click)="chooseProfile(slot.slot, 'pass')"
+                  >
+                    <span aria-hidden="true">✕</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="swipe-card__btn swipe-card__btn--like"
+                    [disabled]="slot.phase !== 'idle'"
+                    [attr.aria-label]="'Like ' + profile.name"
+                    (click)="chooseProfile(slot.slot, 'like')"
+                  >
+                    <span aria-hidden="true">♥</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+          }
         </ul>
+        <p class="sr-only" aria-live="polite">{{ swipeAnnouncement() }}</p>
       </div>
 
       <h3 class="problem-heading problem-heading--answer" data-motion-reveal>People don’t.</h3>
@@ -319,8 +242,8 @@
             <p>Choose when it feels right, with more than a profile to go on.</p>
             <p class="step-card__bonus">
               <span class="step-card__bonus-tag"><span aria-hidden="true">↻</span> Bonus</span>
-              Next week, you are put in a Circle again with the people from this one you
-              matched best with.
+              Next week, you are put in a Circle again with the people from this one you matched
+              best with.
             </p>
           </div>
           <div class="step-card__demo">
@@ -390,7 +313,6 @@
               <li class="fg-tags__more">+3</li>
             </ul>
           </article>
-
         </div>
 
         <div class="feelgood__col">
@@ -459,7 +381,9 @@
           <article class="fg-panel fg-panel--week">
             <div class="fg-week__bar">
               <p class="fg-week__title">Week 3 <span aria-hidden="true">✦</span></p>
-              <span class="fg-week__badge"><span aria-hidden="true">↻</span> Same circle again!</span>
+              <span class="fg-week__badge"
+                ><span aria-hidden="true">↻</span> Same circle again!</span
+              >
             </div>
             <div class="fg-week__shot" aria-hidden="true"></div>
           </article>

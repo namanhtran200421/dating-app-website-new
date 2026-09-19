@@ -79,7 +79,11 @@ export class SeoService {
     this.updateMeta('property', 'og:image', SOCIAL_IMAGE_URL);
     this.updateMeta('property', 'og:image:width', '1200');
     this.updateMeta('property', 'og:image:height', '630');
-    this.updateMeta('property', 'og:image:alt', 'Rosemarry – Good things take time');
+    this.updateMeta(
+      'property',
+      'og:image:alt',
+      'The Rosemarry wordmark, framed by photos of people together',
+    );
     this.updateMeta('name', 'twitter:card', 'summary_large_image');
     this.updateMeta('name', 'twitter:title', seo.title);
     this.updateMeta('name', 'twitter:description', seo.description);

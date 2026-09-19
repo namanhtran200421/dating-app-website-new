@@ -1,0 +1,212 @@
+<!doctype html>
+<!--
+  Source artwork for /images/rosemarry-social.png (Open Graph, Twitter and press kit).
+  Rendered to PNG by `npm run social:image`. Centred wordmark framed by the landing
+  hero's photo cards: cream paper, ink borders, hard offset shadows in the accent colours.
+  Keep the lockup inside the middle ~800x400 so feed crops never clip it.
+-->
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'DynaPuff';
+        src: url('../public/fonts/dynapuff-latin.woff2') format('woff2');
+        font-weight: 400 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: 'Playpen Sans';
+        src: url('../public/fonts/playpen-sans-latin.woff2') format('woff2');
+        font-weight: 400 700;
+        font-display: block;
+      }
+
+      :root {
+        --ink: #202131;
+        --paper: #fbf8ef;
+        --pink: #ed77a8;
+        --rose: #d81e4a;
+        --yellow: #ffc53d;
+        --mint: #47d8ad;
+        --purple: #8d6cff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: var(--paper);
+        font-family: 'Playpen Sans', system-ui, sans-serif;
+        color: var(--ink);
+      }
+
+      .card {
+        position: relative;
+        display: grid;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        place-items: center;
+      }
+
+      /* Soft tint behind the lockup, the way the site warms its sections. It has to
+         fade out rather than end on an edge, or the ellipse reads as a shape of its own. */
+      .blob {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          58% 62% at 50% 50%,
+          color-mix(in srgb, var(--pink) 18%, var(--paper)) 0%,
+          color-mix(in srgb, var(--pink) 9%, var(--paper)) 48%,
+          var(--paper) 78%
+        );
+      }
+
+      /* Hero photo cards, tilted in from each corner and cropped by the card edges. */
+      .photo-card {
+        position: absolute;
+        overflow: hidden;
+        border: 2px solid var(--ink);
+        border-radius: 24px;
+        background: #dedee5;
+      }
+      .photo-card img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo-card--tl {
+        top: -34px;
+        left: -38px;
+        width: 190px;
+        height: 228px;
+        box-shadow: 10px 10px 0 var(--mint);
+        transform: rotate(-8deg);
+      }
+      .photo-card--tr {
+        top: -40px;
+        right: -36px;
+        width: 198px;
+        height: 236px;
+        box-shadow: 10px 10px 0 var(--yellow);
+        transform: rotate(7deg);
+      }
+      .photo-card--bl {
+        bottom: -36px;
+        left: -32px;
+        width: 228px;
+        height: 190px;
+        box-shadow: 10px 10px 0 var(--pink);
+        transform: rotate(5deg);
+      }
+      .photo-card--br {
+        bottom: -34px;
+        right: -38px;
+        width: 188px;
+        height: 220px;
+        box-shadow: 10px 10px 0 var(--purple);
+        transform: rotate(-6deg);
+      }
+      .photo-card--tl img {
+        object-position: 45% 58%;
+      }
+      .photo-card--bl img {
+        object-position: 50% 42%;
+      }
+      .photo-card--br img {
+        object-position: 50% 72%;
+      }
+
+      .lockup {
+        position: relative;
+        z-index: 3;
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        /* The corner cards weight the lower half; nudge up so it reads optically centred. */
+        transform: translateY(-18px);
+      }
+
+      .lockup > img {
+        width: 146px;
+        height: auto;
+        margin-bottom: 6px;
+      }
+
+      h1 {
+        font-family: 'DynaPuff', system-ui, sans-serif;
+        font-size: 172px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      .star {
+        position: absolute;
+        z-index: 4;
+        overflow: visible;
+        color: var(--yellow);
+        filter: drop-shadow(5px 6px 0 var(--ink));
+      }
+      .star path {
+        fill: currentColor;
+        stroke: var(--ink);
+        stroke-width: 5;
+        stroke-linejoin: round;
+      }
+      .star--one {
+        top: 168px;
+        left: 262px;
+        width: 54px;
+        transform: rotate(12deg);
+      }
+      .star--two {
+        right: 236px;
+        bottom: 96px;
+        width: 44px;
+        transform: rotate(-9deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="blob"></div>
+
+      <div class="photo-card photo-card--tl">
+        <img src="../public/images/rosemarry/hero-reaction.jpg" alt="" />
+      </div>
+      <div class="photo-card photo-card--tr">
+        <img src="../public/images/rosemarry/hero-two-people.jpg" alt="" />
+      </div>
+      <div class="photo-card photo-card--bl">
+        <img src="../public/images/rosemarry/hero-friends.jpg" alt="" />
+      </div>
+      <div class="photo-card photo-card--br">
+        <img src="../public/images/rosemarry/hero-candid-concert.jpg" alt="" />
+      </div>
+
+      <svg class="star star--one" viewBox="0 0 200 200" aria-hidden="true">
+        <path
+          d="M100 5s5.088 49.035 25.527 69.473C145.965 94.912 195 100 195 100s-49.035 5.088-69.473 25.527C105.088 145.965 100 195 100 195s-5.088-49.035-25.527-69.473C54.035 105.088 5 100 5 100s49.035-5.088 69.473-25.527C94.912 54.035 100 5 100 5"
+        />
+      </svg>
+      <svg class="star star--two" viewBox="0 0 200 200" aria-hidden="true">
+        <path
+          d="M100 5s5.088 49.035 25.527 69.473C145.965 94.912 195 100 195 100s-49.035 5.088-69.473 25.527C105.088 145.965 100 195 100 195s-5.088-49.035-25.527-69.473C54.035 105.088 5 100 5 100s49.035-5.088 69.473-25.527C94.912 54.035 100 5 100 5"
+        />
+      </svg>
+
+      <div class="lockup">
+        <img src="../public/images/rosemarry/rose-hand-logo.png" alt="" />
+        <h1>Rosemarry</h1>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
   const dialog = page.getByRole('dialog', { name: 'We’re still in development.' });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Got it — keep exploring' }).click();
+  await dialog.getByRole('button', { name: 'Keep exploring' }).click();
   await expect(dialog).toBeHidden();
 }
 
@@ -18,14 +18,7 @@ for (const viewport of [
     await page.goto('/');
     await dismissDevelopmentNotice(page);
 
-    for (const selector of [
-      '#problem',
-      '#how-it-works',
-      '.outcome',
-      '#inside-circle',
-      '#faq',
-      '#join',
-    ]) {
+    for (const selector of ['#problem', '#how-it-works', '.outcome', '#faq', '#join']) {
       await page.locator(selector).scrollIntoViewIfNeeded();
       await page.waitForTimeout(750);
     }
@@ -40,7 +33,7 @@ for (const viewport of [
       'hero-candid-concert.jpg',
       'hero-reaction.jpg',
       'hero-two-people.jpg',
-      'hero-group.jpg',
+      'hero-friends.jpg',
     ]) {
       await expect(page.locator(`.hero-visual img[src$="${imageName}"]`)).toBeVisible();
     }
@@ -69,22 +62,23 @@ for (const viewport of [
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
     await expect(page.getByRole('heading', { name: 'One week. Four simple steps.' })).toBeVisible();
-    await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(7);
+    await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(4);
     await expect(page.locator('.swipe-card__photo img')).toHaveCount(4);
+    await expect(page.locator('button.swipe-card__btn')).toHaveCount(8);
+    const profileColumnCount = await page
+      .locator('.swipe-fan__deck')
+      .evaluate(
+        (deck) => getComputedStyle(deck).gridTemplateColumns.split(' ').filter(Boolean).length,
+      );
+    expect(profileColumnCount).toBe(viewport.name === 'desktop' ? 4 : 2);
+
     await expect(page.locator('.people-deck .people-story-card')).toHaveCount(4);
     await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
     await expect(
       page.getByRole('heading', { name: 'Less judging. More getting to know.' }),
     ).toBeVisible();
-    await expect(
-      page.getByRole('heading', { name: 'For people who want more than another swipe.' }),
-    ).toBeVisible();
     await expect(page.locator('.feelgood .fg-label h3')).toHaveCount(3);
     await expect(page.locator('.feelgood .fg-bubble')).toHaveCount(3);
-    await expect(page.locator('.inside-photo')).toHaveCount(4);
-    await expect(
-      page.getByRole('heading', { name: 'A little clarity before you join.' }),
-    ).toBeVisible();
     await expect(page.locator('.faq-card')).toHaveCount(6);
 
     const footerCta = page.locator('.footer-signup-panel');
@@ -118,7 +112,7 @@ test('FAQ lives on the homepage and works from the keyboard', async ({ page }) =
     name: 'Do I have to decide from a profile first?',
   });
 
-  await expect(firstQuestion).toHaveAttribute('aria-expanded', 'true');
+  await expect(firstQuestion).toHaveAttribute('aria-expanded', 'false');
   await secondQuestion.focus();
   await page.keyboard.press('Enter');
   await expect(secondQuestion).toHaveAttribute('aria-expanded', 'true');
