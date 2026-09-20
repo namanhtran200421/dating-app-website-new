@@ -45,7 +45,7 @@ const recipes = [
   { src: 'rosemarry/profile-jonah-original.jpg', widths: [240, 360, 560] },
 
   // Blog hero band.
-  { src: 'rosemarry/hero-group.jpg', widths: [640, 1280] },
+  { src: 'rosemarry/hero-group.jpg', widths: [640, 1200] },
 
   // Press kit downloads stay lossless; only the on-page previews are re-encoded.
   { src: 'rosemarry/logo-160.png', widths: [160, 320] },

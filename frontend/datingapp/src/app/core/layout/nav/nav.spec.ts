@@ -73,6 +73,18 @@ describe('Nav', () => {
     expect(actions.textContent).toContain('Join early access');
   });
 
+  it('uses the same Journal label in desktop and mobile navigation', () => {
+    const fixture = TestBed.createComponent(Nav);
+    fixture.detectChanges();
+
+    const desktopNavigation = fixture.nativeElement.querySelector('.nav-desktop__primary');
+    const mobileNavigation = fixture.nativeElement.querySelector('#mobile-navigation');
+
+    expect(desktopNavigation.textContent).toContain('Journal');
+    expect(mobileNavigation.textContent).toContain('Journal');
+    expect(mobileNavigation.textContent).not.toContain('Blog');
+  });
+
   it('opens the company navigation and returns focus to its trigger on Escape', () => {
     const fixture = TestBed.createComponent(Nav);
     fixture.detectChanges();
