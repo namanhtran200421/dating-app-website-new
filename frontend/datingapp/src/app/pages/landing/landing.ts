@@ -45,7 +45,7 @@ export class Landing implements AfterViewInit, OnDestroy {
       image: '/images/rosemarry/profile-mia-original.jpg',
     },
     {
-      name: 'Steve',
+      name: 'Andy',
       age: 23,
       bio: 'Climbing gym regular, terrible at resting.',
       image: '/images/rosemarry/profile-steve-candid.jpg',
