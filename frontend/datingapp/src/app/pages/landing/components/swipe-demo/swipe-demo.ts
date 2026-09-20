@@ -114,7 +114,7 @@ export class SwipeDemo implements AfterViewInit, OnDestroy {
     this.scheduleAutomaticChoice(1400);
   }
 
-  private scheduleAutomaticChoice(delay = 2600): void {
+  private scheduleAutomaticChoice(delay = 1800): void {
     this.schedule(() => {
       const choice = this.nextAutomaticChoice;
       this.chooseProfile(choice, false);
