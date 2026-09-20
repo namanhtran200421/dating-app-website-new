@@ -1,202 +1,20 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivitiesDemo } from './components/activities-demo/activities-demo';
 import { CircleDemo } from './components/circle-demo/circle-demo';
 import { HomeFaq } from './components/faq/faq';
 import { InterestsDemo } from './components/interests-demo/interests-demo';
 import { MembersDemo } from './components/members-demo/members-demo';
-import { ResponsiveImage, responsiveImage } from '../../shared/images/responsive-image';
+import { SwipeDemo } from './components/swipe-demo/swipe-demo';
 import { SignupState } from './signup-state';
 
 @Component({
   selector: 'app-landing',
-  imports: [ActivitiesDemo, CircleDemo, HomeFaq, InterestsDemo, MembersDemo],
+  imports: [ActivitiesDemo, CircleDemo, HomeFaq, InterestsDemo, MembersDemo, SwipeDemo],
   templateUrl: './landing.html',
   styleUrls: ['./landing.css', '../../../landing-steps.css'],
 })
-export class Landing implements AfterViewInit, OnDestroy {
+export class Landing {
   protected readonly signup = inject(SignupState);
-
-  private readonly document = inject(DOCUMENT);
-  private readonly platformId = inject(PLATFORM_ID);
-
-  /** Four across above 900px, two across below it, one across on the narrowest phones. */
-  private static readonly PROFILE_WIDTHS = [240, 360, 560];
-  protected readonly profileSizes = '(max-width: 330px) 88vw, (max-width: 900px) 44vw, 250px';
-
-  protected readonly swipeProfiles: ReadonlyArray<SwipeProfile> = [
-    {
-      name: 'Elena',
-      age: 28,
-      bio: 'Reads two books at once, finishes neither.',
-      photo: responsiveImage('rosemarry/profile-elena', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Priya',
-      age: 26,
-      bio: 'Runs on iced coffee and very long walks.',
-      photo: responsiveImage('rosemarry/profile-priya', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Daniel',
-      age: 24,
-      bio: 'Plays bass badly, cooks extremely well.',
-      photo: responsiveImage('rosemarry/profile-daniel', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Mia',
-      age: 27,
-      bio: 'Ceramics class dropout. Unbeatable at mini golf.',
-      photo: responsiveImage('rosemarry/profile-mia-original', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Andy',
-      age: 23,
-      bio: 'Climbing gym regular, terrible at resting.',
-      photo: responsiveImage('rosemarry/profile-steve-candid', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Asha',
-      age: 25,
-      bio: "Sunday markets, bad puns, other people's dogs.",
-      photo: responsiveImage('rosemarry/profile-asha-original', Landing.PROFILE_WIDTHS),
-    },
-    {
-      name: 'Jonah',
-      age: 30,
-      bio: 'Will drive two hours for a decent taco.',
-      photo: responsiveImage('rosemarry/profile-jonah-original', Landing.PROFILE_WIDTHS),
-    },
-  ];
-
-  protected readonly swipeSlots = signal<ReadonlyArray<SwipeSlot>>(
-    this.swipeProfiles.slice(0, 4).map((_, slot) => ({ slot, profileIndex: slot, phase: 'idle' })),
-  );
-
-  protected swipeAnnouncement = signal('');
-
-  private nextProfileIndex = 4;
-  private previousAutomaticSlot: number | null = null;
-  private nextAutomaticChoice: SwipeChoice = 'pass';
-  private automaticChoicesStarted = false;
-  private readonly swipeTimers = new Set<ReturnType<typeof setTimeout>>();
-  private readonly startChoicesAfterNotice = () => this.startAutomaticChoices();
-
-  ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const view = this.document.defaultView;
-    if (!view) return;
-
-    view.addEventListener('rosemarry:early-stage-dismissed', this.startChoicesAfterNotice);
-
-    try {
-      if (view.sessionStorage.getItem('rosemarry-early-stage-dismissed') === 'true') {
-        this.startAutomaticChoices();
-      }
-    } catch {
-      // The notice dispatches the dismissal event even when session storage is unavailable.
-    }
-  }
-
-  private startAutomaticChoices(): void {
-    if (this.automaticChoicesStarted) return;
-    this.automaticChoicesStarted = true;
-    this.scheduleAutomaticChoice(800);
-  }
-
-  protected chooseProfile(slotNumber: number, choice: SwipeChoice, announceChoice = true): void {
-    const selectedSlot = this.swipeSlots().find((slot) => slot.slot === slotNumber);
-
-    if (!selectedSlot || selectedSlot.phase !== 'idle') {
-      return;
-    }
-
-    const selectedProfile = this.swipeProfiles[selectedSlot.profileIndex];
-    if (announceChoice) {
-      this.swipeAnnouncement.set(
-        choice === 'like'
-          ? `You liked ${selectedProfile.name}.`
-          : `You passed on ${selectedProfile.name}.`,
-      );
-    }
-    this.updateSwipeSlot(slotNumber, { phase: choice === 'like' ? 'liking' : 'passing' });
-
-    this.scheduleSwipeUpdate(() => {
-      const replacementIndex = this.takeNextAvailableProfile(slotNumber);
-      this.updateSwipeSlot(slotNumber, { profileIndex: replacementIndex, phase: 'entering' });
-
-      this.scheduleSwipeUpdate(() => {
-        this.updateSwipeSlot(slotNumber, { phase: 'idle' });
-      }, 520);
-    }, 460);
-  }
-
-  private scheduleAutomaticChoice(delay = 1100): void {
-    this.scheduleSwipeUpdate(() => {
-      const slotNumber = this.pickRandomAutomaticSlot();
-      const choice = this.nextAutomaticChoice;
-
-      if (slotNumber !== null) {
-        this.chooseProfile(slotNumber, choice, false);
-        this.previousAutomaticSlot = slotNumber;
-        this.nextAutomaticChoice = choice === 'pass' ? 'like' : 'pass';
-      }
-
-      this.scheduleAutomaticChoice();
-    }, delay);
-  }
-
-  private pickRandomAutomaticSlot(): number | null {
-    const idleSlots = this.swipeSlots().filter((slot) => slot.phase === 'idle');
-    const differentSlots = idleSlots.filter((slot) => slot.slot !== this.previousAutomaticSlot);
-    const candidates = differentSlots.length > 0 ? differentSlots : idleSlots;
-
-    if (candidates.length === 0) return null;
-
-    return candidates[Math.floor(Math.random() * candidates.length)].slot;
-  }
-
-  private takeNextAvailableProfile(slotNumber: number): number {
-    const occupiedProfiles = new Set(
-      this.swipeSlots()
-        .filter((slot) => slot.slot !== slotNumber)
-        .map((slot) => slot.profileIndex),
-    );
-
-    for (let offset = 0; offset < this.swipeProfiles.length; offset += 1) {
-      const candidate = (this.nextProfileIndex + offset) % this.swipeProfiles.length;
-
-      if (!occupiedProfiles.has(candidate)) {
-        this.nextProfileIndex = (candidate + 1) % this.swipeProfiles.length;
-        return candidate;
-      }
-    }
-
-    return this.nextProfileIndex;
-  }
-
-  private updateSwipeSlot(slotNumber: number, update: Partial<SwipeSlot>): void {
-    this.swipeSlots.update((slots) =>
-      slots.map((slot) => (slot.slot === slotNumber ? { ...slot, ...update } : slot)),
-    );
-  }
-
-  private scheduleSwipeUpdate(update: () => void, delay: number): void {
-    const timer = setTimeout(() => {
-      this.swipeTimers.delete(timer);
-      update();
-    }, delay);
-    this.swipeTimers.add(timer);
-  }
-
-  ngOnDestroy(): void {
-    this.document.defaultView?.removeEventListener(
-      'rosemarry:early-stage-dismissed',
-      this.startChoicesAfterNotice,
-    );
-    this.swipeTimers.forEach((timer) => clearTimeout(timer));
-  }
 
   /** Scrolls to a "How it works" step and moves focus there so keyboard users follow along. */
   protected goToStep(step: HTMLElement, title: HTMLElement): void {
@@ -204,20 +22,4 @@ export class Landing implements AfterViewInit, OnDestroy {
     step.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     title.focus({ preventScroll: true });
   }
-}
-
-interface SwipeProfile {
-  readonly name: string;
-  readonly age: number;
-  readonly bio: string;
-  readonly photo: ResponsiveImage;
-}
-
-type SwipeChoice = 'pass' | 'like';
-type SwipePhase = 'idle' | 'passing' | 'liking' | 'entering';
-
-interface SwipeSlot {
-  readonly slot: number;
-  readonly profileIndex: number;
-  readonly phase: SwipePhase;
 }

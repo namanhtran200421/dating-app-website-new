@@ -1,4 +1,4 @@
-<div class="demo-phone">
+<div class="demo-phone" [class.demo-phone--interests]="screen() === 'interests'">
   <div class="demo-bar">
     @if (screen() === 'goal') {
       <button type="button" class="demo-back" aria-label="Back to interests" (click)="back()">

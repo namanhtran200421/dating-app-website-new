@@ -1,0 +1,107 @@
+<section id="problem" class="swipe-showcase section-pad" aria-labelledby="problem-title">
+  <div class="shell swipe-showcase__shell">
+    <div class="swipe-showcase__copy" data-motion-reveal>
+      <span class="sticker">The problem</span>
+      <h2 id="problem-title">Profiles move fast</h2>
+      <p>A photo. Two lines. One split-second decision. Then another person takes their place.</p>
+    </div>
+
+    <div class="swipe-phone-stage" data-motion-reveal="fade">
+      <span class="swipe-phone-stage__note swipe-phone-stage__note--pass" aria-hidden="true"
+        >too quick</span
+      >
+      <span class="swipe-phone-stage__note swipe-phone-stage__note--like" aria-hidden="true"
+        >next face</span
+      >
+
+      <div class="swipe-phone" aria-label="Interactive dating profile demo">
+        <div class="swipe-phone__screen">
+          <div class="swipe-phone__statusbar" aria-hidden="true">
+            <span>9:41</span>
+            <span class="swipe-phone__island"></span>
+            <span>● ▰</span>
+          </div>
+          <div class="swipe-phone__appbar" aria-hidden="true">
+            <span class="swipe-phone__brand-mark">✦</span>
+            <span class="swipe-phone__title">
+              <small>Swipe app</small>
+              <strong>Next, please</strong>
+            </span>
+            <span class="swipe-phone__filter"><i></i><i></i><i></i></span>
+          </div>
+
+          <div class="swipe-fan">
+            <ul class="swipe-fan__deck" aria-label="Example dating profiles">
+              @for (slot of slots(); track slot.slot) {
+                @let profile = profiles[slot.profileIndex];
+                <li class="swipe-slot">
+                  <article
+                    class="swipe-card"
+                    [class.swipe-card--passing]="slot.phase === 'passing'"
+                    [class.swipe-card--liking]="slot.phase === 'liking'"
+                    [class.swipe-card--entering]="slot.phase === 'entering'"
+                    [attr.aria-label]="profile.name + ', ' + profile.age"
+                  >
+                    <span class="swipe-card__btn swipe-card__decision" aria-hidden="true">
+                      {{ slot.phase === 'liking' ? '♥' : '✕' }}
+                    </span>
+                    <div class="swipe-card__photo">
+                      <picture>
+                        <source
+                          type="image/avif"
+                          [srcset]="profile.photo.avif"
+                          [sizes]="profileSizes"
+                        />
+                        <source
+                          type="image/webp"
+                          [srcset]="profile.photo.webp"
+                          [sizes]="profileSizes"
+                        />
+                        <img
+                          [src]="profile.photo.src"
+                          [alt]="'Profile photo of ' + profile.name"
+                          width="560"
+                          height="700"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </picture>
+                    </div>
+                    <p class="swipe-card__name">
+                      {{ profile.name }} <span>{{ profile.age }}</span>
+                    </p>
+                    <p class="swipe-card__bio">{{ profile.bio }}</p>
+                    <div class="swipe-card__actions" aria-label="Choose this profile">
+                      <button
+                        type="button"
+                        class="swipe-card__btn swipe-card__btn--pass"
+                        [disabled]="slot.phase !== 'idle'"
+                        [attr.aria-label]="'Pass on ' + profile.name"
+                        (click)="chooseProfile('pass')"
+                      >
+                        <span aria-hidden="true">✕</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="swipe-card__btn swipe-card__btn--like"
+                        [disabled]="slot.phase !== 'idle'"
+                        [attr.aria-label]="'Like ' + profile.name"
+                        (click)="chooseProfile('like')"
+                      >
+                        <span aria-hidden="true">♥</span>
+                      </button>
+                    </div>
+                  </article>
+                </li>
+              }
+            </ul>
+          </div>
+          <p class="swipe-phone__footer" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <p class="sr-only" aria-live="polite">{{ announcement() }}</p>
+  </div>
+</section>

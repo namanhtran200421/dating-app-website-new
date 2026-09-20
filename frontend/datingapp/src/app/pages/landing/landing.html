@@ -4,7 +4,7 @@
       <div class="hero-copy" data-motion-reveal>
         <span class="sticker sticker--yellow">Dating, at a better pace</span>
         <h1 id="hero-title">
-          <span>Get to know</span><span>someone before</span><span>you match.</span>
+          <span>Get to know</span><span>someone before</span><span>you match</span>
         </h1>
         <svg class="scribble" viewBox="0 0 260 24" aria-hidden="true">
           <path d="M4 15 C54 3 102 21 151 11 C189 4 224 15 256 7" />
@@ -147,84 +147,14 @@
     </div>
   </section>
 
-  <section id="problem" class="problem section-pad" aria-labelledby="problem-title">
-    <div class="shell problem-shell">
-      <header class="problem-heading" data-motion-reveal>
-        <span class="sticker sticker--mint">The problem + our answer</span>
-        <h2 id="problem-title">Profiles move fast.</h2>
-      </header>
-      <!-- Priya/Asha/Jonah are Pexels stock (photo ids 7625104, 37186493, 32230550);
-           the rest are our own. Pexels needs no attribution but its licence does not
-           cover promotional use of a recognisable face without a model release. -->
-      <div class="swipe-fan" data-motion-reveal="fade">
-        <ul class="swipe-fan__deck" aria-label="Example dating profiles">
-          @for (slot of swipeSlots(); track slot.slot) {
-            @let profile = swipeProfiles[slot.profileIndex];
-            <li class="swipe-slot" [style.--slot]="slot.slot">
-              <article
-                class="swipe-card"
-                [class.swipe-card--passing]="slot.phase === 'passing'"
-                [class.swipe-card--liking]="slot.phase === 'liking'"
-                [class.swipe-card--entering]="slot.phase === 'entering'"
-                [attr.aria-label]="profile.name + ', ' + profile.age"
-              >
-                <span class="swipe-card__btn swipe-card__decision" aria-hidden="true">
-                  {{ slot.phase === 'liking' ? '♥' : '✕' }}
-                </span>
-                <div class="swipe-card__photo">
-                  <picture>
-                    <source
-                      type="image/avif"
-                      [srcset]="profile.photo.avif"
-                      [sizes]="profileSizes"
-                    />
-                    <source
-                      type="image/webp"
-                      [srcset]="profile.photo.webp"
-                      [sizes]="profileSizes"
-                    />
-                    <img
-                      [src]="profile.photo.src"
-                      [alt]="'Profile photo of ' + profile.name"
-                      width="560"
-                      height="700"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
-                </div>
-                <p class="swipe-card__name">
-                  {{ profile.name }} <span>{{ profile.age }}</span>
-                </p>
-                <p class="swipe-card__bio">{{ profile.bio }}</p>
-                <div class="swipe-card__actions" aria-label="Choose this profile">
-                  <button
-                    type="button"
-                    class="swipe-card__btn swipe-card__btn--pass"
-                    [disabled]="slot.phase !== 'idle'"
-                    [attr.aria-label]="'Pass on ' + profile.name"
-                    (click)="chooseProfile(slot.slot, 'pass')"
-                  >
-                    <span aria-hidden="true">✕</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="swipe-card__btn swipe-card__btn--like"
-                    [disabled]="slot.phase !== 'idle'"
-                    [attr.aria-label]="'Like ' + profile.name"
-                    (click)="chooseProfile(slot.slot, 'like')"
-                  >
-                    <span aria-hidden="true">♥</span>
-                  </button>
-                </div>
-              </article>
-            </li>
-          }
-        </ul>
-        <p class="sr-only" aria-live="polite">{{ swipeAnnouncement() }}</p>
-      </div>
+  <app-swipe-demo />
 
-      <h3 class="problem-heading problem-heading--answer" data-motion-reveal>People don’t.</h3>
+  <section class="problem problem--answer section-pad" aria-labelledby="answer-title">
+    <div class="shell problem-shell">
+      <header class="problem-heading problem-heading--answer" data-motion-reveal>
+        <span class="sticker sticker--pink">Our answer</span>
+        <h2 id="answer-title">People don’t</h2>
+      </header>
       <div class="people-fan" data-motion-reveal="fade">
         <ol class="people-deck" aria-label="How people become familiar over time">
           <li class="people-story-card people-story-card--stranger" tabindex="0">
@@ -364,7 +294,7 @@
     <div class="shell steps-shell">
       <header class="steps-heading" data-motion-reveal>
         <span class="sticker sticker--pink">How it works</span>
-        <h2 id="steps-title">One week. Four simple steps.</h2>
+        <h2 id="steps-title">One week. Four simple steps</h2>
         <p>Meet, talk and match at your own pace.</p>
       </header>
 
@@ -398,7 +328,7 @@
         <li #activitiesStep class="step-card step-card--chat" data-motion-reveal="fade">
           <div class="step-card__copy">
             <span class="step-card__number" aria-hidden="true">03</span>
-            <h3 #activitiesTitle tabindex="-1">Chat. Play.<br />Get familiar.</h3>
+            <h3 #activitiesTitle tabindex="-1">Chat. Play.<br />Get familiar</h3>
             <p>Prompts and shared activities give personality time to show up.</p>
           </div>
           <div class="step-card__demo">
@@ -413,7 +343,7 @@
           <div class="step-card__copy">
             <span class="step-card__number" aria-hidden="true">04</span>
             <h3>Like when it clicks</h3>
-            <p>Choose when it feels right, with more than a profile to go on.</p>
+            <p>Choose when it feels right, with more than a profile to go off.</p>
             <p class="step-card__bonus">
               <span class="step-card__bonus-tag"><span aria-hidden="true">↻</span> Bonus</span>
               Next week, you are put in a Circle again with the people from this one you matched
@@ -442,7 +372,7 @@
       <header class="split-heading split-heading--dark" data-motion-reveal>
         <div>
           <span class="sticker sticker--mint">Why it feels different</span>
-          <h2 id="outcome-title">Less judging.<br />More getting to know.</h2>
+          <h2 id="outcome-title">Less judging.<br />More getting to know</h2>
         </div>
       </header>
       <div class="feelgood" data-motion-reveal="fade">
