@@ -29,6 +29,10 @@ async function scan(directory) {
       ) {
         const date =
           doc
+            .querySelector('meta[property="og:updated_time"]')
+            ?.getAttribute('content')
+            ?.slice(0, 10) ||
+          doc
             .querySelector('meta[property="article:modified_time"]')
             ?.getAttribute('content')
             ?.slice(0, 10) ||
