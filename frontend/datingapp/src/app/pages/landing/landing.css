@@ -1414,7 +1414,9 @@
   width: 20%;
 }
 /* Real in-project photos stand in for the reference's people. They can be
-   swapped later without changing the composition. */
+   swapped later without changing the composition.
+   These fill small tiles and avatar circles, so they read the narrow generated
+   variants from public/img rather than the full-resolution originals. */
 .fg-call__tile,
 .fg-week__shot,
 .fg-option__shot,
@@ -1428,13 +1430,13 @@
   aspect-ratio: 1.12;
 }
 .fg-call__tile:nth-child(3n + 1) {
-  background-image: url('/images/rosemarry/profile-priya.jpg');
+  background-image: url('/img/rosemarry/profile-priya-240.webp');
 }
 .fg-call__tile:nth-child(3n + 2) {
-  background-image: url('/images/rosemarry/profile-daniel.jpg');
+  background-image: url('/img/rosemarry/profile-daniel-240.webp');
 }
 .fg-call__tile:nth-child(3n) {
-  background-image: url('/images/rosemarry/profile-mia-original.jpg');
+  background-image: url('/img/rosemarry/profile-mia-original-240.webp');
 }
 .fg-option__shot {
   display: grid;
@@ -1446,25 +1448,25 @@
 }
 .fg-week__shot {
   aspect-ratio: 1.2;
-  background-image: url('/images/rosemarry/hero-friends.jpg');
+  background-image: url('/img/rosemarry/hero-friends-360.webp');
 }
 .fg-voters__face:nth-child(1),
 .fg-bubble:nth-child(1) .fg-bubble__face {
-  background-image: url('/images/rosemarry/profile-priya.jpg');
+  background-image: url('/img/rosemarry/profile-priya-240.webp');
 }
 .fg-voters__face:nth-child(2),
 .fg-bubble:nth-child(2) .fg-bubble__face {
-  background-image: url('/images/rosemarry/profile-mia-original.jpg');
+  background-image: url('/img/rosemarry/profile-mia-original-240.webp');
 }
 .fg-voters__face:nth-child(3),
 .fg-bubble:nth-child(3) .fg-bubble__face {
-  background-image: url('/images/rosemarry/profile-daniel.jpg');
+  background-image: url('/img/rosemarry/profile-daniel-240.webp');
 }
 .fg-voters__face:nth-child(4) {
-  background-image: url('/images/rosemarry/profile-elena.jpg');
+  background-image: url('/img/rosemarry/profile-elena-240.webp');
 }
 .fg-voters__face:nth-child(5) {
-  background-image: url('/images/rosemarry/profile-steve-candid.jpg');
+  background-image: url('/img/rosemarry/profile-steve-candid-240.webp');
 }
 .fg-matched {
   display: block;
@@ -1472,10 +1474,10 @@
   padding: 20px 22px;
 }
 .fg-matched__faces span:first-child {
-  background-image: url('/images/rosemarry/profile-steve-candid.jpg');
+  background-image: url('/img/rosemarry/profile-steve-candid-240.webp');
 }
 .fg-matched__faces span:last-child {
-  background-image: url('/images/rosemarry/profile-mia-original.jpg');
+  background-image: url('/img/rosemarry/profile-mia-original-240.webp');
 }
 .fg-matched p {
   margin-top: 16px;

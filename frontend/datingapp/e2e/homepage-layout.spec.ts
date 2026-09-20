@@ -54,7 +54,9 @@ for (const viewport of [
     const navLogo = page.locator('.site-nav__brand img');
     await expect(navLogo).toBeVisible();
     await expect(page.locator('.footer-brand img')).toBeVisible();
-    await expect(navLogo).toHaveAttribute('src', '/images/rosemarry/rose-hand-logo.png');
+    // The wordmark must come from the generated variants, never the 325 kB original.
+    const navLogoSource = await navLogo.evaluate((image: HTMLImageElement) => image.currentSrc);
+    expect(navLogoSource).toMatch(/\/img\/rosemarry\/rose-hand-logo-\d+\.(avif|webp|png)$/);
     const logoDimensions = await navLogo.evaluate((image: HTMLImageElement) => ({
       renderedRatio: image.clientWidth / image.clientHeight,
       naturalRatio: image.naturalWidth / image.naturalHeight,

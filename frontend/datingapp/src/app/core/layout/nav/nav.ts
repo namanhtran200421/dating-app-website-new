@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   ElementRef,
   HostListener,
   inject,
@@ -35,6 +36,8 @@ export class Nav {
   private lastScrollY = 0;
   private scrollDirection: -1 | 0 | 1 = 0;
   private directionalTravel = 0;
+  private scrollFrame = 0;
+  private sectionObserver?: IntersectionObserver;
   readonly darkBackground = input(false);
 
   constructor() {
@@ -43,17 +46,35 @@ export class Nav {
       return;
     }
 
+    /*
+     * A passive listener, coalesced to one frame, so scrolling is never held up waiting for this
+     * handler and the nav state is recomputed at most once per painted frame.
+     */
+    const onScroll = () => {
+      if (this.scrollFrame) return;
+      this.scrollFrame = requestAnimationFrame(() => {
+        this.scrollFrame = 0;
+        this.updateScrollState();
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     inject(Router)
       .events.pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
-      .subscribe(() => requestAnimationFrame(() => this.updateHowItWorksActive()));
+      .subscribe(() => requestAnimationFrame(() => this.watchHowItWorksSection()));
+    requestAnimationFrame(() => this.watchHowItWorksSection());
+
+    inject(DestroyRef).onDestroy(() => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(this.scrollFrame);
+      this.sectionObserver?.disconnect();
+    });
   }
 
-  @HostListener('window:scroll')
-  onScroll(): void {
-    this.updateHowItWorksActive();
+  private updateScrollState(): void {
     const currentScrollY = Math.max(window.scrollY, 0);
     const delta = currentScrollY - this.lastScrollY;
     this.lastScrollY = currentScrollY;
@@ -134,16 +155,28 @@ export class Nav {
     this.desktopMenuOpen.update((open) => !open);
   }
 
-  private updateHowItWorksActive(): void {
+  /**
+   * Highlights "How it works" while the section crosses the reading line at 40% of the viewport.
+   *
+   * This used to be a `getBoundingClientRect()` on every scroll event, which forces the browser to
+   * lay the page out again mid-scroll. A zero-height root margin band at the same 40% line asks
+   * the browser the identical question and costs nothing while scrolling.
+   */
+  private watchHowItWorksSection(): void {
+    this.sectionObserver?.disconnect();
+    this.sectionObserver = undefined;
+
     const section = document.getElementById('how-it-works');
-    if (!section) {
+    if (!section || typeof IntersectionObserver === 'undefined') {
       this.howItWorksActive.set(false);
       return;
     }
 
-    const { top, bottom } = section.getBoundingClientRect();
-    const readingLine = window.innerHeight * 0.4;
-    this.howItWorksActive.set(top <= readingLine && bottom > readingLine);
+    this.sectionObserver = new IntersectionObserver(
+      ([entry]) => this.howItWorksActive.set(entry?.isIntersecting ?? false),
+      { rootMargin: '-40% 0px -60% 0px', threshold: 0 },
+    );
+    this.sectionObserver.observe(section);
   }
 
   private showNavigation(): void {

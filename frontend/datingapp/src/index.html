@@ -12,7 +12,8 @@
     <meta name="theme-color" content="#fbf2e9" />
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href="https://www.rosemarry.app/" />
-    <link rel="icon" type="image/png" href="/images/rosemarry/rose-hand-logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/rosemarry/rose-hand-logo-32.png" />
+    <link rel="apple-touch-icon" href="/img/rosemarry/rose-hand-logo-180.png" />
     <link
       rel="preload"
       href="/fonts/playpen-sans-latin.woff2"
@@ -27,6 +28,12 @@
       type="font/woff2"
       crossorigin
     />
+    <!--
+      The signup and contact forms talk to these two origins. Warming the connections costs one
+      socket each and saves the DNS + TLS round trips at the moment someone actually submits.
+    -->
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://rosemarry-api.onrender.com" />
     <meta name="google-site-verification" content="afU0gL_6SbQeX7fpLkfsXpN5RjQZz4RJIUvm4lCYd8Y" />
   </head>
   <body>

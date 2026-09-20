@@ -156,6 +156,11 @@
   width: min(100%, 480px);
 }
 
+/* Holds the widget's slot while its deferred chunk loads. It is out of flow, so nothing shifts. */
+.footer-signup__turnstile--pending {
+  min-height: 4.1rem;
+}
+
 .footer-signup__error {
   color: #78162e;
   font-size: 11px;

@@ -9,7 +9,30 @@
   [class.site-nav--hidden]="navHidden()"
 >
   <a routerLink="/" fragment="top" (click)="closeMenu()" class="site-nav__brand">
-    <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="48" height="37" />
+    <picture>
+      <source
+        type="image/avif"
+        srcset="
+          /img/rosemarry/rose-hand-logo-132.avif 1x,
+          /img/rosemarry/rose-hand-logo-264.avif 2x
+        "
+      />
+      <source
+        type="image/webp"
+        srcset="
+          /img/rosemarry/rose-hand-logo-132.webp 1x,
+          /img/rosemarry/rose-hand-logo-264.webp 2x
+        "
+      />
+      <img
+        src="/img/rosemarry/rose-hand-logo-264.png"
+        alt=""
+        width="48"
+        height="37"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
     <span>Rosemarry</span>
   </a>
 
@@ -184,11 +207,7 @@
     >
       <span class="nav-mobile-link__label">Message us</span>
     </a>
-    <button
-      type="button"
-      (click)="closeMenu(); signup.goToSignup()"
-      class="nav-mobile-join rm-pop"
-    >
+    <button type="button" (click)="closeMenu(); signup.goToSignup()" class="nav-mobile-join rm-pop">
       Join early access
     </button>
     <a

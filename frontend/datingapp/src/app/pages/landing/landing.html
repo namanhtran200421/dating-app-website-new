@@ -22,33 +22,115 @@
       </div>
       <div class="hero-visual" aria-label="People getting to know each other">
         <div class="photo-card photo-card--one">
-          <img
-            src="/images/rosemarry/hero-candid-concert.jpg"
-            alt="Portrait of a woman at a stadium"
-            decoding="async"
-          />
+          <picture>
+            <source
+              type="image/avif"
+              srcset="
+                /img/rosemarry/hero-candid-concert-360.avif   360w,
+                /img/rosemarry/hero-candid-concert-720.avif   720w,
+                /img/rosemarry/hero-candid-concert-1080.avif 1080w
+              "
+              sizes="(max-width: 900px) 43vw, 285px"
+            />
+            <source
+              type="image/webp"
+              srcset="
+                /img/rosemarry/hero-candid-concert-360.webp   360w,
+                /img/rosemarry/hero-candid-concert-720.webp   720w,
+                /img/rosemarry/hero-candid-concert-1080.webp 1080w
+              "
+              sizes="(max-width: 900px) 43vw, 285px"
+            />
+            <img
+              src="/images/rosemarry/hero-candid-concert.jpg"
+              alt="Portrait of a woman at a stadium"
+              width="1363"
+              height="2048"
+              decoding="async"
+            />
+          </picture>
         </div>
         <div class="photo-card photo-card--two">
-          <img
-            src="/images/rosemarry/hero-two-people.jpg"
-            alt="A couple sharing a close, happy moment"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <picture>
+            <source
+              type="image/avif"
+              srcset="
+                /img/rosemarry/hero-two-people-360.avif 360w,
+                /img/rosemarry/hero-two-people-720.avif 720w
+              "
+              sizes="(max-width: 900px) 51vw, 340px"
+            />
+            <source
+              type="image/webp"
+              srcset="
+                /img/rosemarry/hero-two-people-360.webp 360w,
+                /img/rosemarry/hero-two-people-720.webp 720w
+              "
+              sizes="(max-width: 900px) 51vw, 340px"
+            />
+            <img
+              src="/images/rosemarry/hero-two-people.jpg"
+              alt="A couple sharing a close, happy moment"
+              width="900"
+              height="1184"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
         </div>
         <div class="photo-card photo-card--three">
-          <img
-            src="/images/rosemarry/hero-friends.jpg"
-            alt="A group of friends posing together"
-            decoding="async"
-          />
+          <picture>
+            <source
+              type="image/avif"
+              srcset="
+                /img/rosemarry/hero-friends-360.avif 360w,
+                /img/rosemarry/hero-friends-720.avif 720w
+              "
+              sizes="(max-width: 900px) 65vw, 430px"
+            />
+            <source
+              type="image/webp"
+              srcset="
+                /img/rosemarry/hero-friends-360.webp 360w,
+                /img/rosemarry/hero-friends-720.webp 720w
+              "
+              sizes="(max-width: 900px) 65vw, 430px"
+            />
+            <img
+              src="/images/rosemarry/hero-friends.jpg"
+              alt="A group of friends posing together"
+              width="1200"
+              height="900"
+              decoding="async"
+            />
+          </picture>
         </div>
         <div class="photo-card photo-card--four">
-          <img
-            src="/images/rosemarry/hero-reaction.jpg"
-            alt="A woman laughing, caught with flash"
-            decoding="async"
-          />
+          <picture>
+            <source
+              type="image/avif"
+              srcset="
+                /img/rosemarry/hero-reaction-300.avif 300w,
+                /img/rosemarry/hero-reaction-600.avif 600w
+              "
+              sizes="(max-width: 900px) 42vw, 280px"
+            />
+            <source
+              type="image/webp"
+              srcset="
+                /img/rosemarry/hero-reaction-300.webp 300w,
+                /img/rosemarry/hero-reaction-600.webp 600w
+              "
+              sizes="(max-width: 900px) 42vw, 280px"
+            />
+            <img
+              src="/images/rosemarry/hero-reaction.jpg"
+              alt="A woman laughing, caught with flash"
+              width="900"
+              height="950"
+              decoding="async"
+            />
+          </picture>
         </div>
         <svg
           class="site-star hero-visual__star"
@@ -90,14 +172,26 @@
                   {{ slot.phase === 'liking' ? '♥' : '✕' }}
                 </span>
                 <div class="swipe-card__photo">
-                  <img
-                    [src]="profile.image"
-                    [alt]="'Profile photo of ' + profile.name"
-                    width="560"
-                    height="700"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <picture>
+                    <source
+                      type="image/avif"
+                      [srcset]="profile.photo.avif"
+                      [sizes]="profileSizes"
+                    />
+                    <source
+                      type="image/webp"
+                      [srcset]="profile.photo.webp"
+                      [sizes]="profileSizes"
+                    />
+                    <img
+                      [src]="profile.photo.src"
+                      [alt]="'Profile photo of ' + profile.name"
+                      width="560"
+                      height="700"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 </div>
                 <p class="swipe-card__name">
                   {{ profile.name }} <span>{{ profile.age }}</span>
@@ -135,50 +229,130 @@
         <ol class="people-deck" aria-label="How people become familiar over time">
           <li class="people-story-card people-story-card--stranger" tabindex="0">
             <span class="sticker sticker--yellow people-story-card__tag">Stranger</span>
-            <img
-              src="/images/rosemarry/story-stranger.jpg"
-              alt="Two people sitting apart on the floor at a party, looking away from each other"
-              width="720"
-              height="720"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-stranger-240.avif 240w,
+                  /img/rosemarry/story-stranger-360.avif 360w,
+                  /img/rosemarry/story-stranger-560.avif 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-stranger-240.webp 240w,
+                  /img/rosemarry/story-stranger-360.webp 360w,
+                  /img/rosemarry/story-stranger-560.webp 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <img
+                src="/images/rosemarry/story-stranger.jpg"
+                alt="Two people sitting apart on the floor at a party, looking away from each other"
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <p>Same city.<br /><strong>Different stories.</strong></p>
           </li>
           <li class="people-story-card people-story-card--familiar" tabindex="0">
             <span class="sticker sticker--mint people-story-card__tag">Familiar</span>
-            <img
-              src="/images/rosemarry/story-familiar.jpg"
-              alt="The same two people sitting on a staircase, talking and looking at each other"
-              width="720"
-              height="1080"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-familiar-240.avif 240w,
+                  /img/rosemarry/story-familiar-360.avif 360w,
+                  /img/rosemarry/story-familiar-560.avif 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-familiar-240.webp 240w,
+                  /img/rosemarry/story-familiar-360.webp 360w,
+                  /img/rosemarry/story-familiar-560.webp 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <img
+                src="/images/rosemarry/story-familiar.jpg"
+                alt="The same two people sitting on a staircase, talking and looking at each other"
+                width="720"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <p>You start to<br /><strong>know them.</strong></p>
           </li>
           <li class="people-story-card people-story-card--friend" tabindex="0">
             <span class="sticker sticker--pink people-story-card__tag">Friend</span>
-            <img
-              src="/images/rosemarry/story-friend.jpg"
-              alt="The pair posing with their group of friends at a bowling alley"
-              width="720"
-              height="960"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-friend-240.avif 240w,
+                  /img/rosemarry/story-friend-360.avif 360w,
+                  /img/rosemarry/story-friend-560.avif 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-friend-240.webp 240w,
+                  /img/rosemarry/story-friend-360.webp 360w,
+                  /img/rosemarry/story-friend-560.webp 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <img
+                src="/images/rosemarry/story-friend.jpg"
+                alt="The pair posing with their group of friends at a bowling alley"
+                width="720"
+                height="960"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <p>Shared interests.<br /><strong>Real moments.</strong></p>
           </li>
           <li class="people-story-card people-story-card--partner" tabindex="0">
             <span class="sticker sticker--purple people-story-card__tag">Partner</span>
-            <img
-              src="/images/rosemarry/story-partner.jpg"
-              alt="The two of them close together, one giving the other a piggyback ride"
-              width="720"
-              height="720"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-partner-240.avif 240w,
+                  /img/rosemarry/story-partner-360.avif 360w,
+                  /img/rosemarry/story-partner-560.avif 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-partner-240.webp 240w,
+                  /img/rosemarry/story-partner-360.webp 360w,
+                  /img/rosemarry/story-partner-560.webp 560w
+                "
+                sizes="(max-width: 900px) 45vw, clamp(190px, 22vw, 280px)"
+              />
+              <img
+                src="/images/rosemarry/story-partner.jpg"
+                alt="The two of them close together, one giving the other a piggyback ride"
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <p><strong>A real connection.</strong></p>
           </li>
         </ol>

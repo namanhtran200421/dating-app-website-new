@@ -18,3 +18,6 @@ out-tsc/
 # Logs
 *.log
 npm-debug.log*
+
+# Angular CLI build cache
+.angular/

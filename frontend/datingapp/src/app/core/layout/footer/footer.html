@@ -61,13 +61,22 @@
               </span>
             }
 
-            <app-turnstile-widget
-              class="footer-signup__turnstile"
-              action="pre_signup"
-              [resetVersion]="signup.turnstileResetVersion()"
-              (tokenChange)="signup.setTurnstileToken($event)"
-              (verificationError)="signup.markTurnstileError()"
-            />
+            <!--
+              Cloudflare's script was loading on every page view for a form most visitors never
+              reach. It now loads once the signup panel is actually on screen, which is still well
+              before anyone can finish typing an email.
+            -->
+            @defer (on viewport) {
+              <app-turnstile-widget
+                class="footer-signup__turnstile"
+                action="pre_signup"
+                [resetVersion]="signup.turnstileResetVersion()"
+                (tokenChange)="signup.setTurnstileToken($event)"
+                (verificationError)="signup.markTurnstileError()"
+              />
+            } @placeholder {
+              <div class="footer-signup__turnstile footer-signup__turnstile--pending"></div>
+            }
           </form>
         }
 
@@ -86,7 +95,30 @@
 
   <div class="footer-bar">
     <a routerLink="/" fragment="top" class="footer-brand">
-      <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="38" height="29" />
+      <picture>
+        <source
+          type="image/avif"
+          srcset="
+            /img/rosemarry/rose-hand-logo-132.avif 1x,
+            /img/rosemarry/rose-hand-logo-264.avif 2x
+          "
+        />
+        <source
+          type="image/webp"
+          srcset="
+            /img/rosemarry/rose-hand-logo-132.webp 1x,
+            /img/rosemarry/rose-hand-logo-264.webp 2x
+          "
+        />
+        <img
+          src="/img/rosemarry/rose-hand-logo-264.png"
+          alt=""
+          width="38"
+          height="29"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
       <span>Rosemarry</span>
     </a>
     <span>Good things take time · © 2026 Rosemarry</span>

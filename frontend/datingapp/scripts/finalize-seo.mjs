@@ -22,6 +22,7 @@ async function scan(directory) {
         (await readFile(path, 'utf8')).replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ''),
       );
       const doc = dom.window.document;
+      await preloadPriorityImages(path, doc);
       const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href');
       if (
         canonical?.startsWith(site + '/') &&
@@ -44,6 +45,48 @@ async function scan(directory) {
     }
   }
 }
+
+/**
+ * Hoists every `fetchpriority="high"` image into a matching `<link rel="preload">`.
+ *
+ * Each route is prerendered separately, so this puts the right image in the right page's head
+ * rather than preloading the home page's hero everywhere. `type` is carried across from the
+ * `<picture>` source, which makes a browser without AVIF ignore the hint instead of wasting a
+ * download on a file it cannot decode.
+ */
+async function preloadPriorityImages(path, doc) {
+  const links = [];
+
+  for (const image of doc.querySelectorAll('img[fetchpriority="high"]')) {
+    const source = image.parentElement?.querySelector?.('source[type="image/avif"]');
+    const attributes = source
+      ? {
+          type: 'image/avif',
+          imagesrcset: source.getAttribute('srcset')?.replace(/\s+/g, ' ').trim(),
+          imagesizes: source.getAttribute('sizes')?.replace(/\s+/g, ' ').trim(),
+        }
+      : { href: image.getAttribute('src') };
+
+    const serialised = Object.entries({
+      rel: 'preload',
+      as: 'image',
+      ...attributes,
+      fetchpriority: 'high',
+    })
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(' ');
+    const tag = `<link ${serialised}>`;
+    if (!links.includes(tag)) links.push(tag);
+  }
+
+  if (links.length === 0) return;
+
+  const html = await readFile(path, 'utf8');
+  if (html.includes('rel="preload" as="image"')) return;
+  await writeFile(path, html.replace('</head>', `${links.join('')}</head>`));
+}
+
 await scan(root);
 if (!pages.has(site + '/') || pages.size < 10)
   throw new Error('Expected homepage and all public article routes in prerender output.');

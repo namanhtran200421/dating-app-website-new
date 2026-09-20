@@ -82,14 +82,26 @@
         </article>
         <article class="rm-sticker">
           <div class="asset-preview asset-preview--social">
-            <img
-              src="images/rosemarry-social.png"
-              width="1200"
-              height="630"
-              loading="lazy"
-              decoding="async"
-              alt="Rosemarry social sharing artwork: the wordmark framed by photos of people together"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="/img/rosemarry-social-600.avif 600w, /img/rosemarry-social-1200.avif 1200w"
+                sizes="(max-width: 700px) 92vw, 520px"
+              />
+              <source
+                type="image/webp"
+                srcset="/img/rosemarry-social-600.webp 600w, /img/rosemarry-social-1200.webp 1200w"
+                sizes="(max-width: 700px) 92vw, 520px"
+              />
+              <img
+                src="images/rosemarry-social.png"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="Rosemarry social sharing artwork: the wordmark framed by photos of people together"
+              />
+            </picture>
           </div>
           <h3>Social and press artwork</h3>
           <a href="images/rosemarry-social.png" download>Download 1200 × 630 PNG</a>

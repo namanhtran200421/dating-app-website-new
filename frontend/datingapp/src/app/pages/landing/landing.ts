@@ -5,6 +5,7 @@ import { CircleDemo } from './components/circle-demo/circle-demo';
 import { HomeFaq } from './components/faq/faq';
 import { InterestsDemo } from './components/interests-demo/interests-demo';
 import { MembersDemo } from './components/members-demo/members-demo';
+import { ResponsiveImage, responsiveImage } from '../../shared/images/responsive-image';
 import { SignupState } from './signup-state';
 
 @Component({
@@ -19,50 +20,54 @@ export class Landing implements AfterViewInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
 
-  protected readonly swipeProfiles = [
+  /** Four across above 900px, two across below it, one across on the narrowest phones. */
+  private static readonly PROFILE_WIDTHS = [240, 360, 560];
+  protected readonly profileSizes = '(max-width: 330px) 88vw, (max-width: 900px) 44vw, 250px';
+
+  protected readonly swipeProfiles: ReadonlyArray<SwipeProfile> = [
     {
       name: 'Elena',
       age: 28,
       bio: 'Reads two books at once, finishes neither.',
-      image: '/images/rosemarry/profile-elena.jpg',
+      photo: responsiveImage('rosemarry/profile-elena', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Priya',
       age: 26,
       bio: 'Runs on iced coffee and very long walks.',
-      image: '/images/rosemarry/profile-priya.jpg',
+      photo: responsiveImage('rosemarry/profile-priya', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Daniel',
       age: 24,
       bio: 'Plays bass badly, cooks extremely well.',
-      image: '/images/rosemarry/profile-daniel.jpg',
+      photo: responsiveImage('rosemarry/profile-daniel', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Mia',
       age: 27,
       bio: 'Ceramics class dropout. Unbeatable at mini golf.',
-      image: '/images/rosemarry/profile-mia-original.jpg',
+      photo: responsiveImage('rosemarry/profile-mia-original', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Andy',
       age: 23,
       bio: 'Climbing gym regular, terrible at resting.',
-      image: '/images/rosemarry/profile-steve-candid.jpg',
+      photo: responsiveImage('rosemarry/profile-steve-candid', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Asha',
       age: 25,
       bio: "Sunday markets, bad puns, other people's dogs.",
-      image: '/images/rosemarry/profile-asha-original.jpg',
+      photo: responsiveImage('rosemarry/profile-asha-original', Landing.PROFILE_WIDTHS),
     },
     {
       name: 'Jonah',
       age: 30,
       bio: 'Will drive two hours for a decent taco.',
-      image: '/images/rosemarry/profile-jonah-original.jpg',
+      photo: responsiveImage('rosemarry/profile-jonah-original', Landing.PROFILE_WIDTHS),
     },
-  ] as const;
+  ];
 
   protected readonly swipeSlots = signal<ReadonlyArray<SwipeSlot>>(
     this.swipeProfiles.slice(0, 4).map((_, slot) => ({ slot, profileIndex: slot, phase: 'idle' })),
@@ -199,6 +204,13 @@ export class Landing implements AfterViewInit, OnDestroy {
     step.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     title.focus({ preventScroll: true });
   }
+}
+
+interface SwipeProfile {
+  readonly name: string;
+  readonly age: number;
+  readonly bio: string;
+  readonly photo: ResponsiveImage;
 }
 
 type SwipeChoice = 'pass' | 'like';

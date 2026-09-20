@@ -3,9 +3,56 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Nav } from './nav';
 
+/** The nav coalesces scroll work into one animation frame, so tests wait for that frame. */
+function nextFrame(): Promise<void> {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+interface StubEntry {
+  isIntersecting: boolean;
+}
+
+/** jsdom has no IntersectionObserver; this one lets a test drive the reading-line callback. */
+class StubIntersectionObserver {
+  static instances: StubIntersectionObserver[] = [];
+
+  readonly targets: Element[] = [];
+
+  constructor(
+    private readonly callback: (entries: StubEntry[]) => void,
+    readonly options?: IntersectionObserverInit,
+  ) {
+    StubIntersectionObserver.instances.push(this);
+  }
+
+  observe(target: Element): void {
+    this.targets.push(target);
+  }
+
+  unobserve(): void {}
+  disconnect(): void {}
+  takeRecords(): StubEntry[] {
+    return [];
+  }
+
+  emit(isIntersecting: boolean): void {
+    this.callback([{ isIntersecting }]);
+  }
+}
+
 describe('Nav', () => {
+  const realIntersectionObserver = globalThis.IntersectionObserver;
+
+  afterEach(() => {
+    globalThis.IntersectionObserver = realIntersectionObserver;
+    StubIntersectionObserver.instances = [];
+  });
+
   beforeEach(async () => {
     Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
+    StubIntersectionObserver.instances = [];
+    globalThis.IntersectionObserver =
+      StubIntersectionObserver as unknown as typeof IntersectionObserver;
 
     await TestBed.configureTestingModule({
       imports: [Nav],
@@ -44,9 +91,9 @@ describe('Nav', () => {
     expect(panel.textContent).toContain('Message us');
     expect(panel.textContent).not.toContain('Press kit');
     expect(panel.querySelectorAll('.fa-arrow-right')).toHaveLength(0);
-    expect(fixture.nativeElement.querySelectorAll('#mobile-navigation .fa-arrow-right')).toHaveLength(
-      0,
-    );
+    expect(
+      fixture.nativeElement.querySelectorAll('#mobile-navigation .fa-arrow-right'),
+    ).toHaveLength(0);
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     fixture.detectChanges();
@@ -56,24 +103,29 @@ describe('Nav', () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it('highlights How it works while its section is in view', () => {
-    const fixture = TestBed.createComponent(Nav);
-    fixture.detectChanges();
-    const link = fixture.nativeElement.querySelector('.nav-desktop__primary a') as HTMLAnchorElement;
-
+  it('highlights How it works while its section crosses the reading line', async () => {
     const section = document.createElement('section');
     section.id = 'how-it-works';
     document.body.appendChild(section);
-    let rect = { top: 900, bottom: 1800 };
-    section.getBoundingClientRect = () => rect as DOMRect;
 
     try {
-      window.dispatchEvent(new Event('scroll'));
+      const fixture = TestBed.createComponent(Nav);
+      fixture.detectChanges();
+      const link = fixture.nativeElement.querySelector(
+        '.nav-desktop__primary a',
+      ) as HTMLAnchorElement;
+
+      await nextFrame();
+      const observer = StubIntersectionObserver.instances.at(-1);
+      expect(observer?.targets).toContain(section);
+      // A zero-height band at 40% of the viewport, matching the old reading-line maths.
+      expect(observer?.options?.rootMargin).toBe('-40% 0px -60% 0px');
+
+      observer?.emit(false);
       fixture.detectChanges();
       expect(link.classList).not.toContain('nav-link--active');
 
-      rect = { top: -100, bottom: 700 };
-      window.dispatchEvent(new Event('scroll'));
+      observer?.emit(true);
       fixture.detectChanges();
       expect(link.classList).toContain('nav-link--active');
       expect(link.getAttribute('aria-current')).toBe('location');
@@ -82,18 +134,20 @@ describe('Nav', () => {
     }
   });
 
-  it('gets out of the way while scrolling down and returns while scrolling up', () => {
+  it('gets out of the way while scrolling down and returns while scrolling up', async () => {
     const fixture = TestBed.createComponent(Nav);
     fixture.detectChanges();
     const navigation = fixture.nativeElement.querySelector('.site-nav') as HTMLElement;
 
     Object.defineProperty(window, 'scrollY', { configurable: true, value: 220 });
     window.dispatchEvent(new Event('scroll'));
+    await nextFrame();
     fixture.detectChanges();
     expect(navigation.classList).toContain('site-nav--hidden');
 
     Object.defineProperty(window, 'scrollY', { configurable: true, value: 190 });
     window.dispatchEvent(new Event('scroll'));
+    await nextFrame();
     fixture.detectChanges();
     expect(navigation.classList).not.toContain('site-nav--hidden');
   });

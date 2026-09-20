@@ -14,7 +14,11 @@ type DemoScreen = 'interests' | 'goal' | 'done';
 @Component({
   selector: 'app-interests-demo',
   templateUrl: './interests-demo.html',
-  styleUrls: ['../demo-card.css', './interests-demo.css'],
+  styleUrls: [
+    '../../../../../generated/icons/pages-landing-components-interests-demo.css',
+    '../demo-card.css',
+    './interests-demo.css',
+  ],
 })
 export class InterestsDemo {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);

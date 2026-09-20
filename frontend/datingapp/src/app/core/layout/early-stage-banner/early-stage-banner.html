@@ -10,7 +10,30 @@
   <section class="early-stage-card">
     <header class="early-stage-card__header">
       <div class="early-stage-card__brand" aria-label="Rosemarry">
-        <img src="/images/rosemarry/rose-hand-logo.png" alt="" width="132" height="104" />
+        <picture>
+          <source
+            type="image/avif"
+            srcset="
+              /img/rosemarry/rose-hand-logo-132.avif 1x,
+              /img/rosemarry/rose-hand-logo-264.avif 2x
+            "
+          />
+          <source
+            type="image/webp"
+            srcset="
+              /img/rosemarry/rose-hand-logo-132.webp 1x,
+              /img/rosemarry/rose-hand-logo-264.webp 2x
+            "
+          />
+          <img
+            src="/img/rosemarry/rose-hand-logo-264.png"
+            alt=""
+            width="132"
+            height="104"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
         <span>Rosemarry</span>
       </div>
       <button

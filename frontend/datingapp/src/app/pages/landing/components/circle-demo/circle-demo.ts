@@ -61,7 +61,11 @@ const REPLIES: ReadonlyArray<[CircleMember, string]> = [
 @Component({
   selector: 'app-circle-demo',
   templateUrl: './circle-demo.html',
-  styleUrls: ['../demo-card.css', './circle-demo.css'],
+  styleUrls: [
+    '../../../../../generated/icons/pages-landing-components-circle-demo.css',
+    '../demo-card.css',
+    './circle-demo.css',
+  ],
 })
 export class CircleDemo {
   private readonly injector = inject(Injector);

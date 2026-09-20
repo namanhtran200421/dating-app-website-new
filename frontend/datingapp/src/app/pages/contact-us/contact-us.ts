@@ -12,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { TurnstileWidget } from '../../shared/turnstile/turnstile-widget';
 import { getFormErrorMessage } from '../../shared/forms/form-error-message';
+import { loadDialogStyles } from '../../shared/dialog/dialog-styles';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,7 +26,7 @@ function notBlank(control: AbstractControl): ValidationErrors | null {
   selector: 'app-contact-us',
   imports: [ReactiveFormsModule, TurnstileWidget],
   templateUrl: './contact-us.html',
-  styleUrl: './contact-us.css',
+  styleUrls: ['../../../generated/icons/pages-contact-us.css', './contact-us.css'],
 })
 export class ContactUs {
   constructor(private preSignupService: PreSignupService) {}
@@ -109,7 +110,11 @@ export class ContactUs {
         next: async () => {
           this.submissionError.set('');
           this.contactForm.reset();
-          const { default: Swal } = await import('sweetalert2/dist/sweetalert2.esm.js');
+          // Script and stylesheet are both off the critical path; fetch them together.
+          const [{ default: Swal }] = await Promise.all([
+            import('sweetalert2/dist/sweetalert2.esm.js'),
+            loadDialogStyles(),
+          ]);
 
           Swal.fire({
             title: 'Message delivered!',

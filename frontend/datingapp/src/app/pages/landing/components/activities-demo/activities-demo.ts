@@ -4,7 +4,11 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-activities-demo',
   templateUrl: './activities-demo.html',
-  styleUrls: ['../demo-card.css', './activities-demo.css'],
+  styleUrls: [
+    '../../../../../generated/icons/pages-landing-components-activities-demo.css',
+    '../demo-card.css',
+    './activities-demo.css',
+  ],
 })
 export class ActivitiesDemo {
   // Icon classes are spelled out in full so scripts/generate-icons.mjs can find them.

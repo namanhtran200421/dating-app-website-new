@@ -11,7 +11,7 @@ import { SignupState } from '../landing/signup-state';
   selector: 'app-journal-article',
   imports: [RouterLink, DatePipe],
   templateUrl: './article.html',
-  styleUrls: ['../story-pages.css', './article.css'],
+  styleUrls: ['../../../generated/icons/pages-blog.css', '../story-pages.css', './article.css'],
 })
 export class ArticlePage {
   private readonly route = inject(ActivatedRoute);
