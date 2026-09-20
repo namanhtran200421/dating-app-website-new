@@ -10,12 +10,15 @@ interface RouteSeoData {
   description: string;
   canonicalPath: string;
   pageType: 'WebPage' | 'AboutPage' | 'ContactPage';
+  modified?: string;
   noIndex?: boolean;
   article?: ArticleSummary;
 }
 
 const SITE_URL = 'https://www.rosemarry.app';
-const SOCIAL_IMAGE_URL = `${SITE_URL}/images/rosemarry-social.png`;
+// Use a new URL when the artwork changes so social platforms do not keep showing
+// an older cached preview after a deployment.
+const SOCIAL_IMAGE_URL = `${SITE_URL}/images/rosemarry-social-20260920.png`;
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
@@ -77,6 +80,8 @@ export class SeoService {
     this.updateMeta('property', 'og:description', seo.description);
     this.updateMeta('property', 'og:url', canonicalUrl);
     this.updateMeta('property', 'og:image', SOCIAL_IMAGE_URL);
+    this.updateMeta('property', 'og:image:secure_url', SOCIAL_IMAGE_URL);
+    this.updateMeta('property', 'og:image:type', 'image/png');
     this.updateMeta('property', 'og:image:width', '1200');
     this.updateMeta('property', 'og:image:height', '630');
     this.updateMeta(
@@ -84,10 +89,20 @@ export class SeoService {
       'og:image:alt',
       'The Rosemarry wordmark, framed by photos of people together',
     );
+    if (seo.modified) {
+      this.updateMeta('property', 'og:updated_time', `${seo.modified}T00:00:00+09:30`);
+    } else {
+      this.meta.removeTag('property="og:updated_time"');
+    }
     this.updateMeta('name', 'twitter:card', 'summary_large_image');
     this.updateMeta('name', 'twitter:title', seo.title);
     this.updateMeta('name', 'twitter:description', seo.description);
     this.updateMeta('name', 'twitter:image', SOCIAL_IMAGE_URL);
+    this.updateMeta(
+      'name',
+      'twitter:image:alt',
+      'The Rosemarry wordmark, framed by photos of people together',
+    );
     this.updateCanonical(canonicalUrl);
     this.updateStructuredData(seo, canonicalUrl);
   }
@@ -125,6 +140,7 @@ export class SeoService {
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#organization` },
       inLanguage: 'en-AU',
+      ...(seo.modified ? { dateModified: `${seo.modified}T00:00:00+09:30` } : {}),
     };
 
     const graph: Record<string, unknown>[] = [

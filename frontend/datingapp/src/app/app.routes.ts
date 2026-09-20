@@ -12,6 +12,7 @@ export const routes: Routes = [
           'Rosemarry is an early-stage dating app built around weekly Circles, shared activities and real conversation. The app is still in development.',
         canonicalPath: '/',
         pageType: 'WebPage',
+        modified: '2026-09-20',
       },
     },
   },
