@@ -69,7 +69,7 @@ describe('Nav', () => {
 
     expect(primary.textContent).toContain('How it works');
     expect(primary.textContent).toContain('Journal');
-    expect(primary.textContent).toContain('Company');
+    expect(primary.textContent).toContain('About');
     expect(actions.textContent).toContain('Join early access');
   });
 
