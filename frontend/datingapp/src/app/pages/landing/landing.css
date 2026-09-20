@@ -1434,7 +1434,7 @@
   background-image: url('/images/rosemarry/profile-daniel.jpg');
 }
 .fg-call__tile:nth-child(3n) {
-  background-image: url('/images/rosemarry/profile-mia.jpg');
+  background-image: url('/images/rosemarry/profile-mia-original.jpg');
 }
 .fg-option__shot {
   display: grid;
@@ -1454,7 +1454,7 @@
 }
 .fg-voters__face:nth-child(2),
 .fg-bubble:nth-child(2) .fg-bubble__face {
-  background-image: url('/images/rosemarry/profile-mia.jpg');
+  background-image: url('/images/rosemarry/profile-mia-original.jpg');
 }
 .fg-voters__face:nth-child(3),
 .fg-bubble:nth-child(3) .fg-bubble__face {
@@ -1464,7 +1464,7 @@
   background-image: url('/images/rosemarry/profile-elena.jpg');
 }
 .fg-voters__face:nth-child(5) {
-  background-image: url('/images/rosemarry/profile-theo.jpg');
+  background-image: url('/images/rosemarry/profile-steve-candid.jpg');
 }
 .fg-matched {
   display: block;
@@ -1472,10 +1472,10 @@
   padding: 20px 22px;
 }
 .fg-matched__faces span:first-child {
-  background-image: url('/images/rosemarry/profile-theo.jpg');
+  background-image: url('/images/rosemarry/profile-steve-candid.jpg');
 }
 .fg-matched__faces span:last-child {
-  background-image: url('/images/rosemarry/profile-mia.jpg');
+  background-image: url('/images/rosemarry/profile-mia-original.jpg');
 }
 .fg-matched p {
   margin-top: 16px;

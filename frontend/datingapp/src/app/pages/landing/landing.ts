@@ -42,25 +42,25 @@ export class Landing implements AfterViewInit, OnDestroy {
       name: 'Mia',
       age: 27,
       bio: 'Ceramics class dropout. Unbeatable at mini golf.',
-      image: '/images/rosemarry/profile-mia.jpg',
+      image: '/images/rosemarry/profile-mia-original.jpg',
     },
     {
-      name: 'Theo',
+      name: 'Steve',
       age: 23,
       bio: 'Climbing gym regular, terrible at resting.',
-      image: '/images/rosemarry/profile-theo.jpg',
+      image: '/images/rosemarry/profile-steve-candid.jpg',
     },
     {
       name: 'Asha',
       age: 25,
       bio: "Sunday markets, bad puns, other people's dogs.",
-      image: '/images/rosemarry/profile-asha.jpg',
+      image: '/images/rosemarry/profile-asha-original.jpg',
     },
     {
       name: 'Jonah',
       age: 30,
       bio: 'Will drive two hours for a decent taco.',
-      image: '/images/rosemarry/profile-jonah.jpg',
+      image: '/images/rosemarry/profile-jonah-original.jpg',
     },
   ] as const;
 
