@@ -114,19 +114,6 @@
   rotate: 3deg;
 }
 
-.swipe-phone-stage::after {
-  position: absolute;
-  z-index: -1;
-  top: 84px;
-  right: 7%;
-  width: 72px;
-  aspect-ratio: 1;
-  background: var(--mint);
-  clip-path: polygon(50% 0, 61% 38%, 100% 50%, 61% 62%, 50% 100%, 39% 62%, 0 50%, 39% 38%);
-  content: '';
-  rotate: 10deg;
-}
-
 .swipe-phone-stage__note {
   position: absolute;
   z-index: 4;
@@ -603,12 +590,6 @@
     height: 470px;
     border-radius: 32px;
     box-shadow: 10px 12px 0 var(--pink);
-  }
-
-  .swipe-phone-stage::after {
-    top: 54px;
-    right: 0;
-    width: 56px;
   }
 
   .swipe-phone-stage__note {
