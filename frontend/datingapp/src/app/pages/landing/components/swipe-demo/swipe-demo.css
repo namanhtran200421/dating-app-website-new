@@ -597,10 +597,6 @@
   stroke-linecap: round;
 }
 
-.people-journey__line-mobile {
-  display: none;
-}
-
 .people-deck {
   position: relative;
   z-index: 1;
@@ -815,42 +811,23 @@
   }
 
   .people-journey {
-    min-height: 650px;
+    min-height: 590px;
     margin-top: 50px;
   }
 
   .people-journey__line {
-    display: block;
-    height: 650px;
-  }
-
-  .people-journey__line-desktop {
     display: none;
-  }
-
-  .people-journey__line-mobile {
-    display: block;
   }
 
   .people-deck {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 72px 8px;
+    gap: 52px 8px;
   }
 
   .people-story-card {
     --story-size: 150px;
     --story-shift: 0;
     padding: 0 2px;
-  }
-
-  .people-story-card--familiar,
-  .people-story-card--partner {
-    --story-shift: 32px;
-  }
-
-  .people-story-card--friend,
-  .people-story-card--partner {
-    --story-size: 162px;
   }
 
   .people-story-card__tag {
