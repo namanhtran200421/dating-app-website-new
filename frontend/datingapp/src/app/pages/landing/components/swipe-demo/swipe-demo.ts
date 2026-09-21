@@ -1,4 +1,4 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, PLATFORM_ID, inject, signal } from '@angular/core';
 import { ResponsiveImage, responsiveImage } from '../../../../shared/images/responsive-image';
 
@@ -9,8 +9,8 @@ import { ResponsiveImage, responsiveImage } from '../../../../shared/images/resp
 })
 export class SwipeDemo implements AfterViewInit, OnDestroy {
   private static readonly PROFILE_WIDTHS = [240, 360, 560];
+  private static readonly SWIPE_DURATION = 1000;
 
-  private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
 
   protected readonly profileSizes = '(max-width: 560px) 76vw, 320px';
@@ -60,36 +60,26 @@ export class SwipeDemo implements AfterViewInit, OnDestroy {
   ];
 
   protected readonly slots = signal<ReadonlyArray<SwipeSlot>>([
-    { slot: 0, profileIndex: 0, phase: 'idle' },
+    { slot: 0, profileIndex: 0, phase: 'idle', position: 'active' },
+    { slot: 1, profileIndex: 1, phase: 'idle', position: 'queued' },
   ]);
   protected readonly announcement = signal('');
 
-  private nextProfileIndex = 1;
-  private nextAutomaticChoice: SwipeChoice = 'pass';
+  private nextProfileIndex = 2;
   private automaticChoicesStarted = false;
   private readonly timers = new Set<ReturnType<typeof setTimeout>>();
-  private readonly startChoicesAfterNotice = () => this.startAutomaticChoices();
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-
-    const view = this.document.defaultView;
-    if (!view) return;
-
-    view.addEventListener('rosemarry:early-stage-dismissed', this.startChoicesAfterNotice);
-
-    try {
-      if (view.sessionStorage.getItem('rosemarry-early-stage-dismissed') === 'true') {
-        this.startAutomaticChoices();
-      }
-    } catch {
-      // The notice dispatches the dismissal event even when session storage is unavailable.
-    }
+    this.startAutomaticChoices();
   }
 
   protected chooseProfile(choice: SwipeChoice, announceChoice = true): void {
-    const selectedSlot = this.slots()[0];
+    const selectedSlot = this.slots().find((slot) => slot.position === 'active');
     if (!selectedSlot || selectedSlot.phase !== 'idle') return;
+
+    const queuedSlot = this.slots().find((slot) => slot.position === 'queued');
+    if (!queuedSlot) return;
 
     const selectedProfile = this.profiles[selectedSlot.profileIndex];
     if (announceChoice) {
@@ -100,25 +90,37 @@ export class SwipeDemo implements AfterViewInit, OnDestroy {
       );
     }
 
-    this.updateSlot({ phase: choice === 'like' ? 'liking' : 'passing' });
+    this.slots.update((slots) =>
+      slots.map((slot) =>
+        slot.position === 'active'
+          ? { ...slot, phase: choice === 'like' ? 'liking' : 'passing' }
+          : { ...slot, phase: 'revealing' },
+      ),
+    );
 
     this.schedule(() => {
-      this.updateSlot({ profileIndex: this.takeNextProfile(), phase: 'entering' });
-      this.schedule(() => this.updateSlot({ phase: 'idle' }), 500);
-    }, 520);
+      this.slots.set([
+        { ...queuedSlot, phase: 'idle', position: 'active' },
+        {
+          ...selectedSlot,
+          profileIndex: this.takeNextProfile(),
+          phase: 'idle',
+          position: 'queued',
+        },
+      ]);
+    }, SwipeDemo.SWIPE_DURATION);
   }
 
   private startAutomaticChoices(): void {
     if (this.automaticChoicesStarted) return;
     this.automaticChoicesStarted = true;
-    this.scheduleAutomaticChoice(1400);
+    this.scheduleAutomaticChoice(650);
   }
 
-  private scheduleAutomaticChoice(delay = 1800): void {
+  private scheduleAutomaticChoice(delay = 2300): void {
     this.schedule(() => {
-      const choice = this.nextAutomaticChoice;
+      const choice: SwipeChoice = Math.random() < 0.5 ? 'pass' : 'like';
       this.chooseProfile(choice, false);
-      this.nextAutomaticChoice = choice === 'pass' ? 'like' : 'pass';
       this.scheduleAutomaticChoice();
     }, delay);
   }
@@ -127,10 +129,6 @@ export class SwipeDemo implements AfterViewInit, OnDestroy {
     const candidate = this.nextProfileIndex;
     this.nextProfileIndex = (candidate + 1) % this.profiles.length;
     return candidate;
-  }
-
-  private updateSlot(update: Partial<SwipeSlot>): void {
-    this.slots.update(([slot]) => [{ ...slot, ...update }]);
   }
 
   private schedule(update: () => void, delay: number): void {
@@ -142,10 +140,6 @@ export class SwipeDemo implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.document.defaultView?.removeEventListener(
-      'rosemarry:early-stage-dismissed',
-      this.startChoicesAfterNotice,
-    );
     this.timers.forEach((timer) => clearTimeout(timer));
   }
 }
@@ -158,10 +152,12 @@ interface SwipeProfile {
 }
 
 type SwipeChoice = 'pass' | 'like';
-type SwipePhase = 'idle' | 'passing' | 'liking' | 'entering';
+type SwipePhase = 'idle' | 'passing' | 'liking' | 'revealing';
+type SwipePosition = 'active' | 'queued';
 
 interface SwipeSlot {
   readonly slot: number;
   readonly profileIndex: number;
   readonly phase: SwipePhase;
+  readonly position: SwipePosition;
 }

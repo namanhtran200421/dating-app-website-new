@@ -1,5 +1,5 @@
 import { readdir, readFile, writeFile, mkdir, copyFile, rm } from 'node:fs/promises';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 
 /*
  * Keep the existing icon classes and appearance, shipping only SVGs used by the site.
@@ -17,7 +17,7 @@ const generatedRoot = 'src/generated';
 const perComponentRoot = join(generatedRoot, 'icons');
 
 /** Layout shown on every route: these icons stay global. */
-const GLOBAL_AREA = 'src/app/core';
+const GLOBAL_AREA = join('src', 'app', 'core');
 
 const BASE_RULE =
   '.fa-solid,.fa-regular,.fa-brands{display:inline-block;width:1.25em;height:1em;flex-shrink:0;' +
@@ -95,7 +95,7 @@ const globalIcons = new Set();
 const componentSheets = [];
 
 for (const [directory, icons] of byDirectory) {
-  if (directory.startsWith(GLOBAL_AREA)) {
+  if (directory === GLOBAL_AREA || directory.startsWith(`${GLOBAL_AREA}${sep}`)) {
     icons.forEach((icon) => globalIcons.add(icon));
     continue;
   }
