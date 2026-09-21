@@ -544,18 +544,9 @@
   }
 }
 
-.problem,
 .choice {
   border-block: 2px solid var(--ink);
   background: var(--mist);
-}
-.problem {
-  position: relative;
-  overflow: hidden;
-  background: var(--mist);
-}
-.problem-shell {
-  position: relative;
 }
 .split-heading {
   display: grid;
@@ -581,169 +572,6 @@
   font-size: 15px;
   font-weight: 600;
   line-height: 1.65;
-}
-.problem-heading {
-  margin: 0 0 clamp(28px, 4vw, 44px);
-}
-.problem-heading h2 {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 5.2vw, 68px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 0.96;
-}
-.problem-heading h2 {
-  margin: 16px 0 0;
-}
-.problem-heading--answer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.48fr);
-  align-items: end;
-  gap: 36px;
-  margin-bottom: clamp(42px, 6vw, 72px);
-}
-.problem-heading--answer .sticker {
-  grid-column: 1 / -1;
-  width: fit-content;
-}
-.problem-heading--answer h2 {
-  margin-top: 0;
-}
-.problem-heading--answer p {
-  max-width: 410px;
-  margin: 0 0 4px;
-  color: rgb(32 33 49 / 65%);
-  font-size: 15px;
-  font-weight: 650;
-  line-height: 1.65;
-}
-
-/* Four moments in one deliberately imperfect stack. Each card keeps its image
-   and copy together, then steps forward and straightens when explored. */
-.people-fan {
-  padding: 24px 0 38px;
-}
-.people-deck {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin: 0;
-  padding: 42px 0 34px;
-  list-style: none;
-  isolation: isolate;
-}
-.people-story-card {
-  --card-pop: var(--yellow);
-  --card-tilt: -2deg;
-  --card-rest-y: 2px;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  width: clamp(210px, 24vw, 300px);
-  min-width: 0;
-  flex: 0 1 300px;
-  flex-direction: column;
-  margin-left: clamp(-32px, -2.3vw, -18px);
-  border: 2px solid var(--ink);
-  border-radius: 18px;
-  background: white;
-  padding: 10px 10px 18px;
-  box-shadow: 9px 10px 0 var(--card-pop);
-  outline: none;
-  rotate: var(--card-tilt);
-  transform-origin: 50% 92%;
-  translate: 0 var(--card-rest-y);
-  transition:
-    translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    scale 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    rotate 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 220ms ease;
-}
-.people-story-card:first-child {
-  margin-left: 0;
-}
-.people-story-card--familiar {
-  --card-pop: var(--mint);
-  --card-tilt: 1.4deg;
-  --card-rest-y: 14px;
-  z-index: 2;
-}
-.people-story-card--friend {
-  --card-pop: var(--pink);
-  --card-tilt: -1deg;
-  --card-rest-y: -4px;
-  z-index: 3;
-}
-.people-story-card--partner {
-  --card-pop: color-mix(in srgb, var(--purple) 65%, white);
-  --card-tilt: 1.8deg;
-  --card-rest-y: 9px;
-  z-index: 4;
-}
-.people-story-card:hover,
-.people-story-card:focus-visible {
-  z-index: 20;
-  box-shadow: 13px 15px 0 var(--card-pop);
-  rotate: 0deg;
-  scale: 1.055;
-  translate: 0 calc(var(--card-rest-y) - 24px);
-}
-.people-story-card:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: 5px;
-}
-.people-story-card__tag {
-  position: absolute;
-  z-index: 2;
-  top: -28px;
-  left: -14px;
-  min-width: clamp(118px, 11vw, 148px);
-  justify-content: center;
-  padding: 10px 16px 8px;
-  font-size: clamp(11px, 1.2vw, 15px);
-  letter-spacing: 0.08em;
-  rotate: -2deg;
-}
-.people-story-card--familiar .people-story-card__tag {
-  rotate: 1deg;
-}
-.people-story-card--friend .people-story-card__tag {
-  rotate: -1deg;
-}
-.people-story-card--partner .people-story-card__tag {
-  rotate: 2deg;
-}
-.people-story-card img {
-  width: 100%;
-  aspect-ratio: 4 / 4.35;
-  border-radius: 11px;
-  background: #d9dbe3;
-  object-fit: cover;
-}
-.people-story-card--stranger img {
-  object-position: center 30%;
-}
-.people-story-card--familiar img {
-  object-position: center 34%;
-}
-.people-story-card--friend img {
-  object-position: center 28%;
-}
-.people-story-card--partner img {
-  object-position: 56% center;
-}
-.people-story-card p {
-  min-height: 55px;
-  margin: 14px 7px 0;
-  color: var(--ink);
-  font-size: clamp(13px, 1.35vw, 17px);
-  font-weight: 600;
-  line-height: 1.35;
-}
-.people-story-card p strong {
-  font-family: var(--font-display);
-  font-size: 1.08em;
-  letter-spacing: -0.02em;
 }
 .quote-band {
   overflow: hidden;
@@ -1648,22 +1476,6 @@
   }
 }
 
-@media (max-width: 900px) {
-  .problem-heading--answer {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-  .problem-heading--answer .sticker {
-    grid-column: auto;
-  }
-}
-
-@media (max-width: 700px) {
-  .problem-heading--answer p {
-    font-size: 14px;
-  }
-}
-
 @media (max-width: 480px) {
   .hero-actions {
     flex-direction: column;
@@ -1673,57 +1485,5 @@
   }
   .quote-band blockquote {
     font-size: 43px;
-  }
-}
-
-@media (max-width: 700px) {
-  .people-fan {
-    padding-top: 10px;
-  }
-  .people-deck {
-    display: grid;
-    width: min(100%, 560px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 54px 0;
-    margin-inline: auto;
-    padding: 44px 8px 34px;
-  }
-  .people-story-card {
-    width: calc(100% + 10px);
-    max-width: 240px;
-    margin-left: 0;
-    padding: 7px 7px 13px;
-    border-radius: 14px;
-    box-shadow: 6px 7px 0 var(--card-pop);
-  }
-  .people-story-card:nth-child(odd) {
-    justify-self: end;
-    margin-right: -7px;
-  }
-  .people-story-card:nth-child(even) {
-    justify-self: start;
-    margin-left: -7px;
-  }
-  .people-story-card:hover,
-  .people-story-card:focus-visible {
-    box-shadow: 9px 10px 0 var(--card-pop);
-    scale: 1.04;
-    translate: 0 calc(var(--card-rest-y) - 16px);
-  }
-  .people-story-card__tag {
-    top: -22px;
-    left: -8px;
-    min-width: clamp(86px, 25vw, 112px);
-    padding: 8px 10px 6px;
-    font-size: clamp(9px, 2.8vw, 11px);
-  }
-  .people-story-card img {
-    aspect-ratio: 4 / 4.5;
-    border-radius: 8px;
-  }
-  .people-story-card p {
-    min-height: 50px;
-    margin: 11px 4px 0;
-    font-size: clamp(11px, 3.2vw, 14px);
   }
 }

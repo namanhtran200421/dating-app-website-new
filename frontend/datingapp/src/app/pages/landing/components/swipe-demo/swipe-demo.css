@@ -537,6 +537,200 @@
   background: var(--ink);
 }
 
+/* The answer stays in the same yellow chapter, but shifts from app chrome to a
+   human, growing path of candid moments. */
+.swipe-answer {
+  position: relative;
+  padding-block: clamp(52px, 6vw, 84px) 0;
+}
+
+.swipe-answer__heading {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.sticker--answer {
+  margin-inline: auto;
+  background: var(--pink);
+}
+
+.swipe-answer__heading h2 {
+  margin: 28px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(54px, 7vw, 92px);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.swipe-answer__heading p {
+  margin: 18px 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.people-journey {
+  position: relative;
+  min-width: 0;
+  min-height: 390px;
+  margin-top: clamp(40px, 5vw, 66px);
+}
+
+.people-journey__line {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 242px;
+  overflow: visible;
+}
+
+.people-journey__line path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 4;
+  stroke-dasharray: 3 14;
+  stroke-linecap: round;
+}
+
+.people-journey__line-mobile {
+  display: none;
+}
+
+.people-deck {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.people-story-card {
+  --story-accent: var(--yellow);
+  --story-size: 182px;
+  --story-shift: 54px;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  translate: 0 var(--story-shift);
+}
+
+.people-story-card--familiar {
+  --story-accent: var(--mint);
+  --story-size: 202px;
+  --story-shift: 0;
+}
+
+.people-story-card--friend {
+  --story-accent: var(--pink);
+  --story-size: 222px;
+  --story-shift: 48px;
+}
+
+.people-story-card--partner {
+  --story-accent: color-mix(in srgb, var(--purple) 58%, white);
+  --story-size: 242px;
+  --story-shift: -8px;
+}
+
+.people-story-card__photo {
+  position: relative;
+  width: var(--story-size);
+  max-width: 100%;
+}
+
+.people-story-card__tag {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: -10px;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  background: var(--story-accent);
+  padding: 8px 12px 6px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: clamp(9px, 0.9vw, 11px);
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  rotate: -4deg;
+}
+
+.people-story-card picture,
+.people-story-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.people-story-card img {
+  aspect-ratio: 1;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: #d9dbe3;
+  object-fit: cover;
+  box-shadow: 9px 10px 0 var(--story-accent);
+  transition:
+    translate 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.people-story-card--stranger img {
+  object-position: center 30%;
+}
+
+.people-story-card--familiar img {
+  object-position: center 34%;
+}
+
+.people-story-card--friend img {
+  object-position: center 28%;
+}
+
+.people-story-card--partner img {
+  object-position: 56% center;
+}
+
+.people-story-card p {
+  min-width: min(100%, 166px);
+  margin: 18px 0 0;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 10px 12px 9px;
+  box-shadow: 4px 5px 0 var(--ink);
+  color: var(--ink);
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: center;
+  rotate: -1deg;
+}
+
+.people-story-card p strong {
+  font-family: var(--font-display);
+  font-size: 1.08em;
+  letter-spacing: -0.02em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .people-story-card:hover img {
+    box-shadow: 13px 15px 0 var(--story-accent);
+    translate: 0 -5px;
+  }
+}
+
 @media (max-width: 900px) {
   .swipe-showcase__shell {
     min-height: 0;
@@ -554,6 +748,10 @@
   .swipe-showcase__copy > p:not(.swipe-showcase__note),
   .swipe-showcase__note {
     margin-inline: auto;
+  }
+
+  .swipe-answer {
+    padding-top: 44px;
   }
 }
 
@@ -605,6 +803,73 @@
   .swipe-phone-stage__note--like {
     right: 0;
     bottom: 86px;
+  }
+
+  .swipe-answer {
+    padding-top: 58px;
+  }
+
+  .swipe-answer__heading h2 {
+    margin-bottom: 10px;
+    font-size: clamp(50px, 15vw, 68px);
+  }
+
+  .people-journey {
+    min-height: 650px;
+    margin-top: 50px;
+  }
+
+  .people-journey__line {
+    display: block;
+    height: 650px;
+  }
+
+  .people-journey__line-desktop {
+    display: none;
+  }
+
+  .people-journey__line-mobile {
+    display: block;
+  }
+
+  .people-deck {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 72px 8px;
+  }
+
+  .people-story-card {
+    --story-size: 150px;
+    --story-shift: 0;
+    padding: 0 2px;
+  }
+
+  .people-story-card--familiar,
+  .people-story-card--partner {
+    --story-shift: 32px;
+  }
+
+  .people-story-card--friend,
+  .people-story-card--partner {
+    --story-size: 162px;
+  }
+
+  .people-story-card__tag {
+    top: 5px;
+    left: -3px;
+    padding: 7px 9px 5px;
+    font-size: 8px;
+  }
+
+  .people-story-card img {
+    box-shadow: 7px 8px 0 var(--story-accent);
+  }
+
+  .people-story-card p {
+    width: 146px;
+    min-width: 0;
+    margin-top: 14px;
+    padding: 8px 7px 7px;
+    font-size: 10px;
   }
 }
 

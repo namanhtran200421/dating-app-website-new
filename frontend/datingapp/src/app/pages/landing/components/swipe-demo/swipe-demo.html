@@ -7,8 +7,6 @@
     </div>
 
     <div class="swipe-phone-stage" data-motion-reveal="fade">
-     
-
       <div class="swipe-phone" aria-label="Interactive dating profile demo">
         <div class="swipe-phone__screen">
           <div class="swipe-phone__statusbar" aria-hidden="true">
@@ -98,5 +96,169 @@
       </div>
     </div>
     <p class="sr-only" aria-live="polite">{{ announcement() }}</p>
+  </div>
+
+  <div class="shell swipe-answer" aria-labelledby="answer-title">
+    <header class="swipe-answer__heading" data-motion-reveal>
+      <span class="sticker sticker--answer">Our answer</span>
+      <h2 id="answer-title">People don’t</h2>
+      <p>Connection takes time.</p>
+    </header>
+
+    <div class="people-journey" data-motion-reveal="fade">
+      <svg
+        class="people-journey__line"
+        viewBox="0 0 1000 242"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          class="people-journey__line-desktop"
+          d="M125 145 C215 145 275 101 375 101 S525 159 625 159 S775 113 875 113"
+        />
+        <path
+          class="people-journey__line-mobile"
+          d="M250 28 C500 28 500 40 750 40 S500 143 250 143 S500 155 750 155"
+        />
+      </svg>
+      <ol class="people-deck" aria-label="How people become familiar over time">
+        <li class="people-story-card people-story-card--stranger">
+          <div class="people-story-card__photo">
+            <span class="people-story-card__tag">Stranger</span>
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-stranger-240.avif 240w,
+                  /img/rosemarry/story-stranger-360.avif 360w,
+                  /img/rosemarry/story-stranger-560.avif 560w
+                "
+                sizes="(max-width: 700px) 220px, 190px"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-stranger-240.webp 240w,
+                  /img/rosemarry/story-stranger-360.webp 360w,
+                  /img/rosemarry/story-stranger-560.webp 560w
+                "
+                sizes="(max-width: 700px) 220px, 190px"
+              />
+              <img
+                src="/images/rosemarry/story-stranger.jpg"
+                alt="Two people sitting apart on the floor at a party, looking away from each other"
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <p>Same city.<br /><strong>Different stories.</strong></p>
+        </li>
+        <li class="people-story-card people-story-card--familiar">
+          <div class="people-story-card__photo">
+            <span class="people-story-card__tag">Familiar</span>
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-familiar-240.avif 240w,
+                  /img/rosemarry/story-familiar-360.avif 360w,
+                  /img/rosemarry/story-familiar-560.avif 560w
+                "
+                sizes="(max-width: 700px) 220px, 210px"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-familiar-240.webp 240w,
+                  /img/rosemarry/story-familiar-360.webp 360w,
+                  /img/rosemarry/story-familiar-560.webp 560w
+                "
+                sizes="(max-width: 700px) 220px, 210px"
+              />
+              <img
+                src="/images/rosemarry/story-familiar.jpg"
+                alt="The same two people sitting on a staircase, talking and looking at each other"
+                width="720"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <p>You start to<br /><strong>know them.</strong></p>
+        </li>
+        <li class="people-story-card people-story-card--friend">
+          <div class="people-story-card__photo">
+            <span class="people-story-card__tag">Friend</span>
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-friend-240.avif 240w,
+                  /img/rosemarry/story-friend-360.avif 360w,
+                  /img/rosemarry/story-friend-560.avif 560w
+                "
+                sizes="(max-width: 700px) 220px, 230px"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-friend-240.webp 240w,
+                  /img/rosemarry/story-friend-360.webp 360w,
+                  /img/rosemarry/story-friend-560.webp 560w
+                "
+                sizes="(max-width: 700px) 220px, 230px"
+              />
+              <img
+                src="/images/rosemarry/story-friend.jpg"
+                alt="The pair posing with their group of friends at a bowling alley"
+                width="720"
+                height="960"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <p>Shared interests.<br /><strong>Real moments.</strong></p>
+        </li>
+        <li class="people-story-card people-story-card--partner">
+          <div class="people-story-card__photo">
+            <span class="people-story-card__tag">Partner</span>
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /img/rosemarry/story-partner-240.avif 240w,
+                  /img/rosemarry/story-partner-360.avif 360w,
+                  /img/rosemarry/story-partner-560.avif 560w
+                "
+                sizes="(max-width: 700px) 220px, 250px"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /img/rosemarry/story-partner-240.webp 240w,
+                  /img/rosemarry/story-partner-360.webp 360w,
+                  /img/rosemarry/story-partner-560.webp 560w
+                "
+                sizes="(max-width: 700px) 220px, 250px"
+              />
+              <img
+                src="/images/rosemarry/story-partner.jpg"
+                alt="The two of them close together, one giving the other a piggyback ride"
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <p><strong>A real connection.</strong></p>
+        </li>
+      </ol>
+    </div>
   </div>
 </section>
