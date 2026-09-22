@@ -14,26 +14,24 @@
             <span class="swipe-phone__island"></span>
             <span>● ▰</span>
           </div>
-          <div class="swipe-phone__appbar" aria-hidden="true">
-            <span class="swipe-phone__brand-mark">✦</span>
-            <span class="swipe-phone__title">
-              <small>Swipe app</small>
-              <strong>Next, please</strong>
-            </span>
-            <span class="swipe-phone__filter"><i></i><i></i><i></i></span>
-          </div>
-
           <div class="swipe-fan">
             <ul class="swipe-fan__deck" aria-label="Example dating profiles">
               @for (slot of slots(); track slot.slot) {
                 @let profile = profiles[slot.profileIndex];
-                <li class="swipe-slot">
+                <li
+                  class="swipe-slot"
+                  [class.swipe-slot--active]="slot.position === 'active'"
+                  [class.swipe-slot--queued]="slot.position === 'queued'"
+                >
                   <article
                     class="swipe-card"
+                    [class.swipe-card--active]="slot.position === 'active'"
+                    [class.swipe-card--queued]="slot.position === 'queued'"
                     [class.swipe-card--passing]="slot.phase === 'passing'"
                     [class.swipe-card--liking]="slot.phase === 'liking'"
-                    [class.swipe-card--entering]="slot.phase === 'entering'"
+                    [class.swipe-card--revealing]="slot.phase === 'revealing'"
                     [attr.aria-label]="profile.name + ', ' + profile.age"
+                    [attr.aria-hidden]="slot.position === 'queued' ? 'true' : null"
                   >
                     <span class="swipe-card__btn swipe-card__decision" aria-hidden="true">
                       {{ slot.phase === 'liking' ? '♥' : '✕' }}
@@ -68,7 +66,8 @@
                       <button
                         type="button"
                         class="swipe-card__btn swipe-card__btn--pass"
-                        [disabled]="slot.phase !== 'idle'"
+                        [disabled]="slot.position !== 'active' || slot.phase !== 'idle'"
+                        [attr.tabindex]="slot.position === 'active' ? null : -1"
                         [attr.aria-label]="'Pass on ' + profile.name"
                         (click)="chooseProfile('pass')"
                       >
@@ -77,7 +76,8 @@
                       <button
                         type="button"
                         class="swipe-card__btn swipe-card__btn--like"
-                        [disabled]="slot.phase !== 'idle'"
+                        [disabled]="slot.position !== 'active' || slot.phase !== 'idle'"
+                        [attr.tabindex]="slot.position === 'active' ? null : -1"
                         [attr.aria-label]="'Like ' + profile.name"
                         (click)="chooseProfile('like')"
                       >

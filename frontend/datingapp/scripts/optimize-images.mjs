@@ -24,7 +24,8 @@ const WEBP = { quality: 74, effort: 4 };
 
 const recipes = [
   // Hero collage. The cards are ~280-340 CSS px wide; card one scales its image 1.72x.
-  { src: 'rosemarry/hero-candid-concert.jpg', widths: [360, 720, 1080] },
+  // This photo is zoomed 1.72x in the collage, so it needs wider candidates than its card.
+  { src: 'rosemarry/hero-candid-concert.jpg', widths: [360, 720, 1080, 1360] },
   { src: 'rosemarry/hero-two-people.jpg', widths: [360, 720] },
   { src: 'rosemarry/hero-friends.jpg', widths: [360, 720] },
   { src: 'rosemarry/hero-reaction.jpg', widths: [300, 600] },

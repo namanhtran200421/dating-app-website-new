@@ -234,87 +234,10 @@
   content: '';
 }
 
-.swipe-phone__appbar {
-  display: grid;
-  height: 48px;
-  flex: none;
-  grid-template-columns: 31px 1fr 31px;
-  align-items: center;
-  gap: 7px;
-  margin: 3px 1px 8px;
-  border: 2px solid var(--ink);
-  border-radius: 13px;
-  background: var(--yellow);
-  padding: 5px 7px;
-  box-shadow: 3px 3px 0 var(--pink);
-}
-
-.swipe-phone__brand-mark,
-.swipe-phone__filter {
-  display: grid;
-  width: 29px;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  background: var(--mint);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.swipe-phone__title {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1;
-}
-
-.swipe-phone__title small {
-  margin-bottom: 2px;
-  font-size: 6px;
-  font-weight: 900;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.swipe-phone__title strong {
-  font-family: var(--font-display);
-  font-size: 17px;
-  letter-spacing: -0.025em;
-  line-height: 0.9;
-}
-
-.swipe-phone__filter {
-  align-content: center;
-  gap: 2px;
-  background: var(--paper);
-}
-
-.swipe-phone__filter i {
-  display: block;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--ink);
-}
-
-.swipe-phone__filter i:first-child {
-  width: 14px;
-}
-
-.swipe-phone__filter i:nth-child(2) {
-  width: 10px;
-}
-
-.swipe-phone__filter i:last-child {
-  width: 6px;
-}
-
 .swipe-fan {
   min-height: 0;
   flex: 1;
-  padding: 3px 3px 4px;
+  padding: 8px 3px 4px;
 }
 
 .swipe-fan__deck,
@@ -333,6 +256,15 @@
 .swipe-slot {
   position: relative;
   min-width: 0;
+  grid-area: 1 / 1;
+}
+
+.swipe-slot--active {
+  z-index: 2;
+}
+
+.swipe-slot--queued {
+  z-index: 1;
 }
 
 .swipe-card {
@@ -349,9 +281,19 @@
   transform-origin: 50% 95%;
 }
 
+.swipe-card--queued {
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--pink) 58%, white);
+  pointer-events: none;
+  transform: translateY(11px) scale(0.96);
+}
+
+.swipe-card--revealing {
+  animation: swipe-card-reveal 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
 .swipe-card__photo {
-  height: 334px;
-  flex: none;
+  min-height: 0;
+  flex: 1;
   overflow: hidden;
   border-radius: 13px;
   background: #d7d8e0;
@@ -465,23 +407,24 @@
 
 .swipe-card--passing,
 .swipe-card--liking {
-  animation: swipe-card-exit 520ms cubic-bezier(0.55, 0.08, 0.68, 0.53) both;
+  animation: swipe-card-exit 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
   pointer-events: none;
 }
 
 .swipe-card--passing {
-  --fly-x: -135%;
-  --fly-rotate: -13deg;
+  --fly-x: -155%;
+  --fly-rotate: -18deg;
+  --fly-mid-x: -65%;
+  --fly-mid-rotate: -10deg;
+  --reduced-fly-x: -42px;
 }
 
 .swipe-card--liking {
-  --fly-x: 135%;
-  --fly-rotate: 13deg;
-}
-
-.swipe-card--entering {
-  animation: swipe-card-enter 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  pointer-events: none;
+  --fly-x: 155%;
+  --fly-rotate: 18deg;
+  --fly-mid-x: 65%;
+  --fly-mid-rotate: 10deg;
+  --reduced-fly-x: 42px;
 }
 
 @keyframes swipe-card-exit {
@@ -489,10 +432,9 @@
     opacity: 1;
     transform: translateX(0) rotate(0deg) scale(1);
   }
-  24% {
+  58% {
     opacity: 1;
-    transform: translateX(calc(var(--fly-x) * 0.04)) rotate(calc(var(--fly-rotate) * 0.08))
-      scale(0.98);
+    transform: translateX(var(--fly-mid-x)) rotate(var(--fly-mid-rotate)) scale(0.98);
   }
   100% {
     opacity: 0;
@@ -500,18 +442,14 @@
   }
 }
 
-@keyframes swipe-card-enter {
-  0% {
-    opacity: 0;
-    transform: translateX(38px) rotate(2.5deg) scale(0.96);
+@keyframes swipe-card-reveal {
+  from {
+    box-shadow: 3px 3px 0 color-mix(in srgb, var(--pink) 58%, white);
+    transform: translateY(11px) scale(0.96);
   }
-  70% {
-    opacity: 1;
-    transform: translateX(-4px) rotate(-0.4deg) scale(1.005);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) rotate(0deg) scale(1);
+  to {
+    box-shadow: 4px 4px 0 var(--pink);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -867,8 +805,31 @@
 
 @media (prefers-reduced-motion: reduce) {
   .swipe-card--passing,
-  .swipe-card--liking,
-  .swipe-card--entering {
-    animation-duration: 1ms;
+  .swipe-card--liking {
+    animation: swipe-card-exit-reduced 1000ms ease-out both;
+  }
+
+  .swipe-card--revealing {
+    animation: swipe-card-reveal-reduced 1000ms ease-out both;
+  }
+}
+
+@keyframes swipe-card-exit-reduced {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--reduced-fly-x));
+  }
+}
+
+@keyframes swipe-card-reveal-reduced {
+  from {
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    transform: translateY(0) scale(1);
   }
 }
