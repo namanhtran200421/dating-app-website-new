@@ -33,7 +33,7 @@ const recipes = [
   // "People don't" story deck: clamp(210px, 24vw, 300px) cards.
   { src: 'rosemarry/story-stranger.jpg', widths: [240, 360, 560] },
   { src: 'rosemarry/story-familiar.jpg', widths: [240, 360, 560] },
-  { src: 'rosemarry/story-friend.jpg', widths: [240, 360, 560] },
+  { src: 'rosemarry/story-friend.jpg', widths: [240, 360, 560, 720] },
   { src: 'rosemarry/story-partner.jpg', widths: [240, 360, 560] },
 
   // Swipe deck profiles: four across at ~250 CSS px, one across at ~320 on a phone.
