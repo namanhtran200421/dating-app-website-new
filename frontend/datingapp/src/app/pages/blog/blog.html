@@ -25,25 +25,33 @@
               <picture>
                 <source
                   type="image/avif"
-                  srcset="
-                    /img/rosemarry/story-friend-360.avif?v=2d78eec3 360w,
-                    /img/rosemarry/story-friend-720.avif?v=2d78eec3 720w
+                  [attr.srcset]="
+                    '/img/articles/' +
+                    article.slug +
+                    '-640x336.avif 640w, ' +
+                    '/img/articles/' +
+                    article.slug +
+                    '-960x504.avif 960w'
                   "
                   sizes="(max-width: 900px) 100vw, 480px"
                 />
                 <source
                   type="image/webp"
-                  srcset="
-                    /img/rosemarry/story-friend-360.webp?v=2d78eec3 360w,
-                    /img/rosemarry/story-friend-720.webp?v=2d78eec3 720w
+                  [attr.srcset]="
+                    '/img/articles/' +
+                    article.slug +
+                    '-640x336.webp 640w, ' +
+                    '/img/articles/' +
+                    article.slug +
+                    '-960x504.webp 960w'
                   "
                   sizes="(max-width: 900px) 100vw, 480px"
                 />
                 <img
-                  src="/images/rosemarry/story-friend.jpg?v=2d78eec3"
+                  [src]="'/img/articles/' + article.slug + '-1200x630.jpg'"
                   alt=""
-                  width="720"
-                  height="960"
+                  width="1200"
+                  height="630"
                   fetchpriority="high"
                   decoding="async"
                 />

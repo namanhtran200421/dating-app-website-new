@@ -16,6 +16,20 @@ export const routes: Routes = [
       },
     },
   },
+  {
+    path: 'how-it-works',
+    loadComponent: () => import('./pages/how-it-works/how-it-works').then((m) => m.HowItWorksPage),
+    data: {
+      seo: {
+        title: 'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
+        description:
+          'See how Rosemarry plans to use five-day Circles, group conversation and shared activities to help people connect before matching.',
+        canonicalPath: '/how-it-works',
+        pageType: 'WebPage',
+        modified: '2026-09-27',
+      },
+    },
+  },
   ...articles.map((article) => ({
     path: `blog/${article.slug}`,
     loadComponent: () => import('./pages/blog/article').then((m) => m.ArticlePage),
@@ -100,7 +114,6 @@ export const routes: Routes = [
     redirectTo: 'privacy-and-terms',
     pathMatch: 'full',
   },
-  { path: 'how-it-works', redirectTo: '', pathMatch: 'full' },
   { path: 'circle', redirectTo: '', pathMatch: 'full' },
   {
     path: '**',

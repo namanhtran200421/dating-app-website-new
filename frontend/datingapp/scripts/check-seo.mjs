@@ -20,11 +20,22 @@ for (const url of urls) {
   assert.equal(doc.querySelectorAll('main').length, 1, `One main landmark: ${url}`);
   assert.ok(doc.querySelector('meta[name="description"]')?.content, url);
   assert.ok(!doc.querySelector('meta[name="robots"]')?.content.includes('noindex'), url);
-  assert.equal(doc.querySelector('meta[property="og:image:type"]')?.content, 'image/png', url);
+  const isArticle = path.startsWith('/blog/');
+  assert.equal(
+    doc.querySelector('meta[property="og:image:type"]')?.content,
+    isArticle ? 'image/jpeg' : 'image/png',
+    url,
+  );
   assert.equal(doc.querySelector('meta[property="og:image:width"]')?.content, '1200', url);
   assert.equal(doc.querySelector('meta[property="og:image:height"]')?.content, '630', url);
   const socialImage = doc.querySelector('meta[property="og:image"]')?.content;
-  assert.match(socialImage || '', /\/images\/rosemarry-social-20260920\.png$/, url);
+  assert.match(
+    socialImage || '',
+    isArticle
+      ? /\/img\/articles\/[a-z0-9-]+-1200x630\.jpg$/
+      : /\/images\/rosemarry-social-20260920\.png$/,
+    url,
+  );
   assert.equal(
     doc.querySelector('meta[property="og:image:secure_url"]')?.content,
     socialImage,
@@ -35,11 +46,14 @@ for (const url of urls) {
   assert.ok(!titles.has(doc.title), `Unique title: ${url}`);
   titles.add(doc.title);
   const graph = JSON.parse(doc.getElementById('rosemarry-structured-data').textContent)['@graph'];
-  if (path.startsWith('/blog/')) {
+  if (isArticle) {
     const article = graph.find((node) => node['@type'] === 'BlogPosting');
     assert.ok(article?.datePublished && article?.author?.url, `Article identity: ${url}`);
     assert.equal(article.headline, doc.querySelector('h1').textContent.trim());
     assert.ok(graph.some((node) => node['@type'] === 'BreadcrumbList'));
+    assert.equal(article.image.length, 3, `Article image aspect ratios: ${url}`);
+    for (const image of article.image) await access(`${root}${new URL(image).pathname}`);
+    assert.ok(doc.querySelector('.article-hero-image img[fetchpriority="high"]'), url);
     assert.ok(
       doc.querySelectorAll('article section p').length >= 8,
       `Prerendered article body: ${url}`,
@@ -47,6 +61,10 @@ for (const url of urls) {
   }
 }
 assert.equal(docs.get('/')?.title, 'Rosemarry | Interaction-First Dating');
+assert.equal(
+  docs.get('/how-it-works')?.title,
+  'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
+);
 assert.match(
   docs.get('/')?.querySelector('meta[property="og:updated_time"]')?.content || '',
   /^2026-09-20T/,

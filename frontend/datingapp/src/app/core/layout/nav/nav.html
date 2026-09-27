@@ -8,7 +8,7 @@
   [class.nav--over-dark]="darkBackground() && !scrolled() && !menuOpen()"
   [class.site-nav--hidden]="navHidden()"
 >
-  <a routerLink="/" fragment="top" (click)="closeMenu()" class="site-nav__brand">
+  <a routerLink="/" (click)="closeMenu()" class="site-nav__brand">
     <picture>
       <source
         type="image/avif"
@@ -39,11 +39,11 @@
   <div class="nav-desktop hidden items-center xl:flex">
     <div class="nav-desktop__primary">
       <a
-        routerLink="/"
-        fragment="how-it-works"
+        routerLink="/how-it-works"
+        routerLinkActive="nav-link--active"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="nav-desktop-link"
-        [class.nav-link--active]="howItWorksActive()"
-        [attr.aria-current]="howItWorksActive() ? 'location' : null"
         (click)="closeMenu()"
       >
         <span>How it works</span>
@@ -168,12 +168,12 @@
     [attr.inert]="menuOpen() ? null : ''"
   >
     <a
-      routerLink="/"
-      fragment="how-it-works"
+      routerLink="/how-it-works"
+      routerLinkActive="nav-mobile-link--active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
       (click)="closeMenu()"
       class="nav-mobile-link"
-      [class.nav-mobile-link--active]="howItWorksActive()"
-      [attr.aria-current]="howItWorksActive() ? 'location' : null"
     >
       <span class="nav-mobile-link__label">How it works</span>
     </a>

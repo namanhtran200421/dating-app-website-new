@@ -8,51 +8,9 @@ function nextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
-interface StubEntry {
-  isIntersecting: boolean;
-}
-
-/** jsdom has no IntersectionObserver; this one lets a test drive the reading-line callback. */
-class StubIntersectionObserver {
-  static instances: StubIntersectionObserver[] = [];
-
-  readonly targets: Element[] = [];
-
-  constructor(
-    private readonly callback: (entries: StubEntry[]) => void,
-    readonly options?: IntersectionObserverInit,
-  ) {
-    StubIntersectionObserver.instances.push(this);
-  }
-
-  observe(target: Element): void {
-    this.targets.push(target);
-  }
-
-  unobserve(): void {}
-  disconnect(): void {}
-  takeRecords(): StubEntry[] {
-    return [];
-  }
-
-  emit(isIntersecting: boolean): void {
-    this.callback([{ isIntersecting }]);
-  }
-}
-
 describe('Nav', () => {
-  const realIntersectionObserver = globalThis.IntersectionObserver;
-
-  afterEach(() => {
-    globalThis.IntersectionObserver = realIntersectionObserver;
-    StubIntersectionObserver.instances = [];
-  });
-
   beforeEach(async () => {
     Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
-    StubIntersectionObserver.instances = [];
-    globalThis.IntersectionObserver =
-      StubIntersectionObserver as unknown as typeof IntersectionObserver;
 
     await TestBed.configureTestingModule({
       imports: [Nav],
@@ -115,35 +73,11 @@ describe('Nav', () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it('highlights How it works while its section crosses the reading line', async () => {
-    const section = document.createElement('section');
-    section.id = 'how-it-works';
-    document.body.appendChild(section);
-
-    try {
-      const fixture = TestBed.createComponent(Nav);
-      fixture.detectChanges();
-      const link = fixture.nativeElement.querySelector(
-        '.nav-desktop__primary a',
-      ) as HTMLAnchorElement;
-
-      await nextFrame();
-      const observer = StubIntersectionObserver.instances.at(-1);
-      expect(observer?.targets).toContain(section);
-      // A zero-height band at 40% of the viewport, matching the old reading-line maths.
-      expect(observer?.options?.rootMargin).toBe('-40% 0px -60% 0px');
-
-      observer?.emit(false);
-      fixture.detectChanges();
-      expect(link.classList).not.toContain('nav-link--active');
-
-      observer?.emit(true);
-      fixture.detectChanges();
-      expect(link.classList).toContain('nav-link--active');
-      expect(link.getAttribute('aria-current')).toBe('location');
-    } finally {
-      section.remove();
-    }
+  it('links How it works to its indexable route', () => {
+    const fixture = TestBed.createComponent(Nav);
+    fixture.detectChanges();
+    const links = fixture.nativeElement.querySelectorAll('a[href="/how-it-works"]');
+    expect(links).toHaveLength(2);
   });
 
   it('gets out of the way while scrolling down and returns while scrolling up', async () => {

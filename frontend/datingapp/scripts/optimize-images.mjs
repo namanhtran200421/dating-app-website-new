@@ -21,14 +21,15 @@ const MANIFEST = join(OUTPUT_ROOT, '.manifest.json');
 /** Quality settings picked to stay visually indistinguishable from the JPEG originals. */
 const AVIF = { quality: 52, effort: 4, chromaSubsampling: '4:2:0' };
 const WEBP = { quality: 74, effort: 4 };
+const JPEG = { quality: 82, mozjpeg: true };
 
 const recipes = [
   // Hero collage. The cards are ~280-340 CSS px wide; card one scales its image 1.72x.
   // This photo is zoomed 1.72x in the collage, so it needs wider candidates than its card.
-  { src: 'rosemarry/hero-candid-concert.jpg', widths: [360, 720, 1080, 1360] },
-  { src: 'rosemarry/hero-two-people.jpg', widths: [360, 720] },
-  { src: 'rosemarry/hero-friends.jpg', widths: [360, 720] },
-  { src: 'rosemarry/hero-reaction.jpg', widths: [300, 600] },
+  { src: 'rosemarry/hero-candid-concert.jpg', widths: [360, 560, 720, 1080, 1360] },
+  { src: 'rosemarry/hero-two-people.jpg', widths: [300, 480, 600, 720] },
+  { src: 'rosemarry/hero-friends.jpg', widths: [360, 560, 720] },
+  { src: 'rosemarry/hero-reaction.jpg', widths: [240, 420, 600] },
 
   // "People don't" story deck: clamp(210px, 24vw, 300px) cards.
   { src: 'rosemarry/story-stranger.jpg', widths: [240, 360, 560] },
@@ -107,6 +108,61 @@ for (const recipe of recipes) {
     await mkdir(dirname(target), { recursive: true });
     await encoded.toFile(target);
     written += 1;
+  }
+}
+
+// Editorial images use a consistent social-preview crop plus the three aspect ratios Google
+// recommends for article images. The downloaded Pexels originals remain as provenance masters.
+const articleSlugs = [
+  'dating-without-swiping',
+  'endless-swiping',
+  'dating-app-fatigue',
+  'attraction-over-time',
+];
+const articleCrops = [
+  { width: 640, height: 336, formats: ['avif', 'webp'] },
+  { width: 960, height: 504, formats: ['avif', 'webp'] },
+  { width: 1200, height: 630, formats: ['avif', 'webp', 'jpeg'] },
+  { width: 1200, height: 900, formats: ['jpeg'] },
+  { width: 1200, height: 1200, formats: ['jpeg'] },
+];
+
+for (const slug of articleSlugs) {
+  const sourcePath = join(SOURCE_ROOT, `articles/${slug}.jpg`);
+  const source = await stat(sourcePath);
+
+  for (const { width, height, formats } of articleCrops) {
+    for (const format of formats) {
+      const extension = format === 'jpeg' ? 'jpg' : format;
+      const target = join(OUTPUT_ROOT, `articles/${slug}-${width}x${height}.${extension}`);
+      const key = createHash('sha1')
+        .update(`${sourcePath}:${source.size}:${source.mtimeMs}:${width}:${height}:${format}:1`)
+        .digest('hex');
+      fingerprints[target] = key;
+
+      if (manifest[target] === key && (await stat(target).catch(() => null))) {
+        skipped += 1;
+        continue;
+      }
+
+      const pipeline = sharp(sourcePath).resize({
+        width,
+        height,
+        fit: 'cover',
+        position: sharp.strategy.attention,
+        withoutEnlargement: true,
+      });
+      const encoded =
+        format === 'avif'
+          ? pipeline.avif(AVIF)
+          : format === 'webp'
+            ? pipeline.webp(WEBP)
+            : pipeline.jpeg(JPEG);
+
+      await mkdir(dirname(target), { recursive: true });
+      await encoded.toFile(target);
+      written += 1;
+    }
   }
 }
 

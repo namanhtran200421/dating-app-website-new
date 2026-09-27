@@ -35,6 +35,27 @@
 .article-reading {
   padding-block: 3rem 5rem;
 }
+.article-hero-image {
+  margin: 0 0 3rem;
+}
+.article-hero-image picture,
+.article-hero-image img {
+  display: block;
+  width: 100%;
+}
+.article-hero-image img {
+  aspect-ratio: 40 / 21;
+  border: 2px solid #202131;
+  border-radius: 1.5rem;
+  object-fit: cover;
+  box-shadow: 7px 8px 0 #8d6cff;
+}
+.article-hero-image figcaption {
+  margin-top: 0.85rem;
+  color: rgb(28 20 24 / 62%);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
 .article-contents {
   padding: 1.6rem;
   border: 2px solid #202131;

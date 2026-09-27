@@ -1,5 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const config = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8'));
 const globalHeaders = config.headers?.find((entry) => entry.source === '/(.*)')?.headers ?? [];
@@ -24,6 +25,7 @@ if (/script-src[^;]*(?:'unsafe-inline'|'unsafe-eval')/.test(csp)) {
 }
 
 const buildRoot = new URL('../dist/datingapp/browser/', import.meta.url);
+const buildRootPath = fileURLToPath(buildRoot);
 const files = await readdir(buildRoot, { recursive: true });
 
 if (files.some((file) => file.endsWith('.map'))) {
@@ -32,7 +34,7 @@ if (files.some((file) => file.endsWith('.map'))) {
 
 const secretPattern = /MONGO_URI|TURNSTILE_SECRET|mongodb(?:\+srv)?:\/\/|BEGIN .*PRIVATE KEY/;
 for (const file of files.filter((name) => /\.(?:html|js|json|css)$/.test(name))) {
-  const contents = await readFile(join(buildRoot.pathname, file), 'utf8');
+  const contents = await readFile(join(buildRootPath, file), 'utf8');
   if (secretPattern.test(contents)) throw new Error(`Potential secret in production file: ${file}`);
 
   if (file.endsWith('.html')) {

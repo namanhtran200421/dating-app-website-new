@@ -16,7 +16,8 @@ if (!robots.includes(`${site}/sitemap.xml`))
   throw new Error('robots.txt must reference the production sitemap.');
 const sitemap = await fetchPublic('/sitemap.xml');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-if (urls.length < 10) throw new Error('The latest sitemap with all journal articles is not live.');
+if (urls.length < 11 || !urls.includes(`${site}/how-it-works`))
+  throw new Error('The latest sitemap with the How it works page is not live.');
 const homepage = await fetchPublic('/');
 if (
   !homepage.includes('<title>Rosemarry | Interaction-First Dating</title>') ||
@@ -55,7 +56,6 @@ const missing = await fetch(`${site}/seo-check-page-does-not-exist`, {
 if (missing.status !== 404)
   throw new Error(`Unknown URLs must return 404, received ${missing.status}.`);
 for (const [path, expected] of [
-  ['/how-it-works', '/'],
   ['/circle', '/'],
   ['/policy-page', '/privacy-and-terms'],
 ]) {

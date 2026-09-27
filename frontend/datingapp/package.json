@@ -15,6 +15,7 @@
     "check:seo": "node scripts/check-seo.mjs",
     "check:security": "node scripts/check-security.mjs",
     "check:live": "node scripts/check-live-seo.mjs",
+    "check:ai": "node scripts/check-ai-crawlers.mjs",
     "test:e2e": "playwright test",
     "test": "ng test",
     "assets": "node scripts/generate-icons.mjs && node scripts/prepare-dialog-styles.mjs && node scripts/optimize-images.mjs"

@@ -19,6 +19,55 @@
     </div>
   </header>
   <div class="story-shell article-shell article-reading">
+    <figure class="article-hero-image">
+      <picture>
+        <source
+          type="image/avif"
+          [attr.srcset]="
+            '/img/articles/' +
+            article().slug +
+            '-640x336.avif 640w, ' +
+            '/img/articles/' +
+            article().slug +
+            '-960x504.avif 960w, ' +
+            '/img/articles/' +
+            article().slug +
+            '-1200x630.avif 1200w'
+          "
+          sizes="(max-width: 860px) calc(100vw - 36px), 780px"
+        />
+        <source
+          type="image/webp"
+          [attr.srcset]="
+            '/img/articles/' +
+            article().slug +
+            '-640x336.webp 640w, ' +
+            '/img/articles/' +
+            article().slug +
+            '-960x504.webp 960w, ' +
+            '/img/articles/' +
+            article().slug +
+            '-1200x630.webp 1200w'
+          "
+          sizes="(max-width: 860px) calc(100vw - 36px), 780px"
+        />
+        <img
+          [src]="'/img/articles/' + article().slug + '-1200x630.jpg'"
+          [alt]="article().image.alt"
+          width="1200"
+          height="630"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+      <figcaption>
+        Photo by
+        <a [href]="article().image.sourceUrl" rel="noopener noreferrer">{{
+          article().image.photographer
+        }}</a>
+        on Pexels
+      </figcaption>
+    </figure>
     <nav data-motion-reveal="fade" class="article-contents rm-sticker" aria-label="In this article">
       <h2>In this article</h2>
       <ol>
@@ -63,7 +112,7 @@
         list for updates from the team.
       </p>
       <div class="story-actions">
-        <a routerLink="/" fragment="how-it-works" class="story-text-link">How Circles work</a>
+        <a routerLink="/how-it-works" class="story-text-link">How Circles work</a>
         <button type="button" class="story-button story-button--dark" (click)="signup.goToSignup()">
           Join early access <i class="fa-solid fa-arrow-right rm-arrow" aria-hidden="true"></i>
         </button>
