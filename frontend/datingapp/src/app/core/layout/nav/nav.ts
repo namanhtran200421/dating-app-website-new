@@ -10,9 +10,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { filter } from 'rxjs';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SignupState } from '../../../pages/landing/signup-state';
 
 @Component({
@@ -29,15 +27,12 @@ export class Nav {
   protected readonly menuOpen = signal(false);
   protected readonly desktopMenuOpen = signal(false);
   protected readonly navHidden = signal(false);
-  /** "How it works" is a section on the home page, not a route, so it is highlighted while in view. */
-  protected readonly howItWorksActive = signal(false);
   private readonly companyMenuTrigger =
     viewChild<ElementRef<HTMLButtonElement>>('companyMenuTrigger');
   private lastScrollY = 0;
   private scrollDirection: -1 | 0 | 1 = 0;
   private directionalTravel = 0;
   private scrollFrame = 0;
-  private sectionObserver?: IntersectionObserver;
   readonly darkBackground = input(false);
 
   constructor() {
@@ -59,18 +54,9 @@ export class Nav {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    inject(Router)
-      .events.pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => requestAnimationFrame(() => this.watchHowItWorksSection()));
-    requestAnimationFrame(() => this.watchHowItWorksSection());
-
     inject(DestroyRef).onDestroy(() => {
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(this.scrollFrame);
-      this.sectionObserver?.disconnect();
     });
   }
 
@@ -153,30 +139,6 @@ export class Nav {
     this.showNavigation();
     this.menuOpen.set(false);
     this.desktopMenuOpen.update((open) => !open);
-  }
-
-  /**
-   * Highlights "How it works" while the section crosses the reading line at 40% of the viewport.
-   *
-   * This used to be a `getBoundingClientRect()` on every scroll event, which forces the browser to
-   * lay the page out again mid-scroll. A zero-height root margin band at the same 40% line asks
-   * the browser the identical question and costs nothing while scrolling.
-   */
-  private watchHowItWorksSection(): void {
-    this.sectionObserver?.disconnect();
-    this.sectionObserver = undefined;
-
-    const section = document.getElementById('how-it-works');
-    if (!section || typeof IntersectionObserver === 'undefined') {
-      this.howItWorksActive.set(false);
-      return;
-    }
-
-    this.sectionObserver = new IntersectionObserver(
-      ([entry]) => this.howItWorksActive.set(entry?.isIntersecting ?? false),
-      { rootMargin: '-40% 0px -60% 0px', threshold: 0 },
-    );
-    this.sectionObserver.observe(section);
   }
 
   private showNavigation(): void {

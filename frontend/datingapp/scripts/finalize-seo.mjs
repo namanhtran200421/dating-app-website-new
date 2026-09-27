@@ -88,7 +88,7 @@ async function preloadPriorityImages(path, doc) {
 }
 
 await scan(root);
-if (!pages.has(site + '/') || pages.size < 10)
+if (!pages.has(site + '/') || !pages.has(site + '/how-it-works') || pages.size < 11)
   throw new Error('Expected homepage and all public article routes in prerender output.');
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[
   ...pages,

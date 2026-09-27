@@ -6,6 +6,11 @@ export interface ArticleSummary {
   topic: string;
   published: string;
   modified: string;
+  image: {
+    alt: string;
+    photographer: string;
+    sourceUrl: string;
+  };
 }
 
 export const articles: readonly ArticleSummary[] = [
@@ -17,6 +22,11 @@ export const articles: readonly ArticleSummary[] = [
     topic: 'Intentional dating',
     published: '2026-09-05',
     modified: '2026-09-05',
+    image: {
+      alt: 'Friends talking together around a cafe table',
+      photographer: 'Edmond Dantès',
+      sourceUrl: 'https://www.pexels.com/photo/a-people-talking-in-the-cafeteria-4345990/',
+    },
   },
   {
     slug: 'endless-swiping',
@@ -27,6 +37,12 @@ export const articles: readonly ArticleSummary[] = [
     topic: 'Dating culture',
     published: '2026-09-05',
     modified: '2026-09-05',
+    image: {
+      alt: 'A person scrolling on a phone while resting on a sofa',
+      photographer: 'Sam Lion',
+      sourceUrl:
+        'https://www.pexels.com/photo/woman-using-smartphone-while-resting-on-sofa-6001475/',
+    },
   },
   {
     slug: 'dating-app-fatigue',
@@ -37,6 +53,12 @@ export const articles: readonly ArticleSummary[] = [
     topic: 'Dating habits',
     published: '2026-09-05',
     modified: '2026-09-05',
+    image: {
+      alt: 'Two friends having a supportive conversation over coffee',
+      photographer: 'Edmond Dantès',
+      sourceUrl:
+        'https://www.pexels.com/photo/people-talking-while-drinking-coffee-at-the-restaurant-4340080/',
+    },
   },
   {
     slug: 'attraction-over-time',
@@ -47,5 +69,11 @@ export const articles: readonly ArticleSummary[] = [
     topic: 'Connection',
     published: '2026-09-05',
     modified: '2026-09-05',
+    image: {
+      alt: 'A couple getting to know each other while talking in a park',
+      photographer: 'Katerina Holmes',
+      sourceUrl:
+        'https://www.pexels.com/photo/young-stylish-couple-talking-with-each-other-in-park-5910965/',
+    },
   },
 ];

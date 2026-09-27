@@ -51,6 +51,13 @@ export class SeoService {
     }
 
     const canonicalUrl = new URL(seo.canonicalPath, SITE_URL).toString();
+    const socialImageUrl = seo.article
+      ? `${SITE_URL}/img/articles/${seo.article.slug}-1200x630.jpg`
+      : SOCIAL_IMAGE_URL;
+    const socialImageType = seo.article ? 'image/jpeg' : 'image/png';
+    const socialImageAlt = seo.article
+      ? seo.article.image.alt
+      : 'The Rosemarry wordmark, framed by photos of people together';
     const robots = seo.noIndex
       ? 'noindex, nofollow'
       : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
@@ -79,16 +86,12 @@ export class SeoService {
     this.updateMeta('property', 'og:title', seo.title);
     this.updateMeta('property', 'og:description', seo.description);
     this.updateMeta('property', 'og:url', canonicalUrl);
-    this.updateMeta('property', 'og:image', SOCIAL_IMAGE_URL);
-    this.updateMeta('property', 'og:image:secure_url', SOCIAL_IMAGE_URL);
-    this.updateMeta('property', 'og:image:type', 'image/png');
+    this.updateMeta('property', 'og:image', socialImageUrl);
+    this.updateMeta('property', 'og:image:secure_url', socialImageUrl);
+    this.updateMeta('property', 'og:image:type', socialImageType);
     this.updateMeta('property', 'og:image:width', '1200');
     this.updateMeta('property', 'og:image:height', '630');
-    this.updateMeta(
-      'property',
-      'og:image:alt',
-      'The Rosemarry wordmark, framed by photos of people together',
-    );
+    this.updateMeta('property', 'og:image:alt', socialImageAlt);
     if (seo.modified) {
       this.updateMeta('property', 'og:updated_time', `${seo.modified}T00:00:00+09:30`);
     } else {
@@ -97,12 +100,8 @@ export class SeoService {
     this.updateMeta('name', 'twitter:card', 'summary_large_image');
     this.updateMeta('name', 'twitter:title', seo.title);
     this.updateMeta('name', 'twitter:description', seo.description);
-    this.updateMeta('name', 'twitter:image', SOCIAL_IMAGE_URL);
-    this.updateMeta(
-      'name',
-      'twitter:image:alt',
-      'The Rosemarry wordmark, framed by photos of people together',
-    );
+    this.updateMeta('name', 'twitter:image', socialImageUrl);
+    this.updateMeta('name', 'twitter:image:alt', socialImageAlt);
     this.updateCanonical(canonicalUrl);
     this.updateStructuredData(seo, canonicalUrl);
   }
@@ -188,7 +187,11 @@ export class SeoService {
         description: seo.description,
         url: canonicalUrl,
         mainEntityOfPage: { '@id': `${canonicalUrl}#webpage` },
-        image: [SOCIAL_IMAGE_URL],
+        image: [
+          `${SITE_URL}/img/articles/${seo.article.slug}-1200x630.jpg`,
+          `${SITE_URL}/img/articles/${seo.article.slug}-1200x900.jpg`,
+          `${SITE_URL}/img/articles/${seo.article.slug}-1200x1200.jpg`,
+        ],
         datePublished: `${seo.article.published}T00:00:00+09:30`,
         dateModified: `${seo.article.modified}T00:00:00+09:30`,
         author: {

@@ -30,6 +30,7 @@ for (const viewport of [
     await expect(page.locator('.hero-visual .photo-card')).toHaveCount(4);
     await expect(page.locator('.hero-visual .photo-card img')).toHaveCount(4);
     await expect(page.locator('.hero-visual')).not.toHaveAttribute('data-motion-reveal');
+    await expect(page.locator('.hero-copy')).not.toHaveAttribute('data-motion-reveal');
     for (const imageName of [
       'hero-candid-concert.jpg',
       'hero-reaction.jpg',

@@ -1,0 +1,167 @@
+<div id="top" class="story-page how-page">
+  <header class="story-hero">
+    <div class="story-shell story-hero__center">
+      <p class="story-kicker">How Rosemarry works</p>
+      <h1>A dating app built around conversation, not endless swiping</h1>
+      <p class="story-lead">
+        Rosemarry is an early-stage dating app in development. The plan is to introduce you to a
+        small weekly Circle of compatible people nearby, with five days to talk, try shared
+        activities and decide whether you want to match.
+      </p>
+      <div class="story-actions how-page__hero-actions">
+        <a
+          class="story-button story-button--dark"
+          routerLink="/how-it-works"
+          fragment="weekly-circle"
+          >See the four steps</a
+        >
+        <button type="button" class="story-text-link" (click)="signup.goToSignup()">
+          Join early access
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div>
+    <section id="weekly-circle" class="how-page__steps" aria-labelledby="steps-title">
+      <div class="story-shell">
+        <header class="story-section__header story-section__header--center">
+          <p class="story-kicker">The short version</p>
+          <h2 id="steps-title">One Circle. Five days. Four simple steps.</h2>
+          <p>
+            This is the planned experience. Rosemarry is not available to download yet, and the
+            details may change as we test the product.
+          </p>
+        </header>
+        <ol class="how-page__step-grid">
+          <li data-motion-reveal>
+            <span>01</span>
+            <h3>Tell us what matters</h3>
+            <p>
+              Share your preferences and enough about yourself for Rosemarry to look for compatible
+              people nearby.
+            </p>
+          </li>
+          <li data-motion-reveal>
+            <span>02</span>
+            <h3>Join a weekly Circle</h3>
+            <p>
+              A Circle brings 10 compatible people together for a five-day cycle instead of an
+              endless stream of profiles.
+            </p>
+          </li>
+          <li data-motion-reveal>
+            <span>03</span>
+            <h3>Talk and do things together</h3>
+            <p>
+              Group conversation, prompts and shared activities create more context than a quick
+              first impression.
+            </p>
+          </li>
+          <li data-motion-reveal>
+            <span>04</span>
+            <h3>Match when it feels right</h3>
+            <p>
+              You can choose to match during the Circle. When the cycle ends, a new Circle can
+              begin.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="how-page__comparison" aria-labelledby="comparison-title">
+      <div class="story-shell">
+        <header class="story-section__header">
+          <p class="story-kicker">A different rhythm</p>
+          <h2 id="comparison-title">Weekly Circles compared with a swipe feed</h2>
+          <p>
+            Dating apps vary, but this table shows the product distinction Rosemarry is designed
+            around.
+          </p>
+        </header>
+        <div class="how-page__table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Part of the experience</th>
+                <th scope="col">Rosemarry's plan</th>
+                <th scope="col">A typical swipe feed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Discovery</th>
+                <td>A limited weekly group</td>
+                <td>A continuing queue of profiles</td>
+              </tr>
+              <tr>
+                <th scope="row">First interaction</th>
+                <td>Talk and join activities before matching</td>
+                <td>Usually match before messaging</td>
+              </tr>
+              <tr>
+                <th scope="row">Pace</th>
+                <td>A five-day Circle cycle</td>
+                <td>A self-directed stream</td>
+              </tr>
+              <tr>
+                <th scope="row">Context</th>
+                <td>Repeated group interactions</td>
+                <td>Profile photos and prompts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-page__details" aria-labelledby="details-title">
+      <div class="story-shell how-page__details-grid">
+        <div>
+          <p class="story-kicker">Choice and safety</p>
+          <h2 id="details-title">You stay in control</h2>
+          <p>
+            The product plan includes identity checks, reporting, blocking, moderation and controls
+            over future Circles. Those safeguards are still being developed and will be documented
+            in detail before launch.
+          </p>
+          <a routerLink="/privacy-and-terms" class="story-text-link">Read our safety commitments</a>
+        </div>
+        <aside class="how-page__status rm-sticker" aria-labelledby="status-title">
+          <p class="story-kicker">Current status</p>
+          <h2 id="status-title">Is Rosemarry available?</h2>
+          <p>
+            Not yet. Rosemarry is in development, and launch timing and locations have not been
+            announced. Joining early access means you can receive product updates; it is not a
+            download or guaranteed launch invitation.
+          </p>
+          <button
+            type="button"
+            class="story-button story-button--dark"
+            (click)="signup.goToSignup()"
+          >
+            Join early access
+          </button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="how-page__reading" aria-labelledby="reading-title">
+      <div class="story-shell">
+        <header class="story-section__header">
+          <p class="story-kicker">Keep exploring</p>
+          <h2 id="reading-title">The thinking behind the product</h2>
+        </header>
+        <div class="how-page__reading-grid">
+          <a routerLink="/blog/dating-without-swiping">Dating without swiping: what to look for</a>
+          <a routerLink="/blog/endless-swiping">The problem with endless swiping</a>
+          <a routerLink="/blog/dating-app-fatigue"
+            >Dating app fatigue: finding a pace that works for you</a
+          >
+          <a routerLink="/blog/attraction-over-time">Can attraction grow over time?</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

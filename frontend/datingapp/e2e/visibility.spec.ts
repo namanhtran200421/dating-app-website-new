@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
-  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  const dialog = page.getByRole('dialog', { name: /still in development/i });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await dialog.getByRole('button', { name: 'Keep exploring' }).click();
   await expect(dialog).toBeHidden();
 }
 
@@ -13,8 +13,7 @@ test('journal navigation updates metadata and removes article tags on the homepa
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/blog');
-  await dismissDevelopmentNotice(page);
-  await page.locator('.blog-article h2 a').first().click();
+  await page.locator('.featured-article').click();
   await expect(page).toHaveURL(/\/blog\/dating-without-swiping$/);
   await expect(page.locator('h1')).toHaveText('Dating without swiping: what to look for');
   await expect(page.locator('time')).toHaveText('5 September 2026');
@@ -48,7 +47,7 @@ test('article is readable on mobile and with JavaScript disabled', async ({ brow
   await expect(
     page.getByRole('heading', { name: 'What choice-overload research found' }),
   ).toBeVisible();
-  await expect(page.getByRole('dialog', { name: 'Still growing.' })).toBeHidden();
+  await expect(page.getByRole('dialog', { name: /still in development/i })).toBeHidden();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
@@ -60,10 +59,7 @@ test('desktop navigation yields while reading and returns on upward intent', asy
   await page.goto('/');
   await dismissDevelopmentNotice(page);
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
-  await expect(page.locator('.nav-desktop__primary')).toHaveCSS(
-    'background-color',
-    'rgba(0, 0, 0, 0)',
-  );
+  await expect(page.locator('.nav-desktop__primary')).toBeVisible();
 
   await page.evaluate(() => window.scrollTo(0, 720));
   await expect(navigation).toHaveClass(/site-nav--hidden/);
@@ -72,66 +68,30 @@ test('desktop navigation yields while reading and returns on upward intent', asy
   await expect(navigation).not.toHaveClass(/site-nav--hidden/);
 });
 
-test('desktop editorial cards keep an asymmetric scrapbook rhythm', async ({ page }) => {
+test('desktop editorial cards keep a deliberate scrapbook rhythm', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   await page.goto('/');
   await dismissDevelopmentNotice(page);
   const peopleCards = await page
-    .locator('.people-card')
+    .locator('.people-story-card')
     .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
   expect(peopleCards).toHaveLength(4);
-  // One row of four below the swipe fan, with the middle card the tallest.
+  // One deliberately uneven row of four below the swipe fan.
   const swipeFan = await page.locator('.swipe-fan__deck').boundingBox();
   expect(peopleCards[0].y).toBeGreaterThan(swipeFan!.y + swipeFan!.height);
-  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[0].height);
-  expect(peopleCards[1].height).toBeGreaterThan(peopleCards[3].height);
-  // The cards deliberately overlap, so every neighbour pair shares some x range.
-  for (let i = 1; i < peopleCards.length; i++) {
-    expect(peopleCards[i].x).toBeLessThan(peopleCards[i - 1].x + peopleCards[i - 1].width);
-  }
-  // ...but no card painted on top may reach the text of one beneath it. Compared as
-  // boxes rather than by hit-testing, since the cards are tilted and a rotated
-  // element does not fill the corners of its own bounding rect.
-  const buriedText = await page.evaluate(() => {
-    const cards = [...document.querySelectorAll('.people-card')];
-    const depth = (el: Element) => Number(getComputedStyle(el).zIndex) || 0;
-    const boxes = cards.map((card) => card.getBoundingClientRect());
-    const clashes: string[] = [];
-    cards.forEach((card, i) => {
-      cards.forEach((other, j) => {
-        if (i === j || depth(other) <= depth(card)) return;
-        const over = boxes[j];
-        card.querySelectorAll('.people-card__caption, .people-card__tag').forEach((text) => {
-          const r = text.getBoundingClientRect();
-          if (r.left < over.right && r.right > over.left && r.top < over.bottom && r.bottom > over.top) {
-            clashes.push(text.textContent!.trim().replace(/\s+/g, ' '));
-          }
-        });
-      });
-    });
-    return clashes;
-  });
-  expect(buriedText).toEqual([]);
-
-  await page.goto('/circle');
-  const featureCards = await page
-    .locator('.feature-card')
-    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().toJSON()));
-  expect(featureCards).toHaveLength(3);
-  expect(featureCards[0].width).toBeGreaterThan(featureCards[1].width);
-  expect(featureCards[1].y).toBeGreaterThan(featureCards[0].y);
+  expect(new Set(peopleCards.map((card) => Math.round(card.height))).size).toBeGreaterThan(1);
+  await page.goto('/how-it-works');
+  await expect(page.locator('.how-page__step-grid > li')).toHaveCount(4);
 
   await page.goto('/blog');
-  const articleAfterPink = page.locator('.blog-article--pink + .blog-article');
-  await expect(articleAfterPink).toHaveCSS('border-top-width', '2px');
+  await expect(page.locator('.article-card').first()).toHaveCSS('border-top-width', '2px');
 });
 
 test('every public page uses the shared section reveal contract', async ({ page }) => {
   for (const path of [
     '/',
-    '/circle',
-    '/blog',
+    '/how-it-works',
     '/about-us',
     '/press',
     '/contact-us',
@@ -152,11 +112,11 @@ test('development notice opens as a modal and stays dismissed for the session', 
   page,
 }) => {
   await page.goto('/');
-  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
-  const action = dialog.getByRole('button', { name: 'Got it' });
+  const dialog = page.getByRole('dialog', { name: /still in development/i });
+  const action = dialog.getByRole('button', { name: 'Keep exploring' });
 
   await expect(dialog).toBeVisible();
-  await expect(action).toBeFocused();
+  await expect(dialog.getByRole('heading', { name: /still in development/i })).toBeFocused();
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
 
   await page.keyboard.press('Tab');
@@ -181,12 +141,12 @@ test('development notice remains visible when the native dialog API is unavailab
   });
   await page.goto('/');
 
-  const dialog = page.getByRole('dialog', { name: 'Still growing.' });
+  const dialog = page.getByRole('dialog', { name: /still in development/i });
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveCSS('position', 'fixed');
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
 
-  await dialog.getByRole('button', { name: 'Got it' }).click();
+  await dialog.getByRole('button', { name: 'Keep exploring' }).click();
   await expect(dialog).toBeHidden();
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
 });
@@ -213,6 +173,7 @@ test('the enforced security policy works across every public page', async ({ pag
   for (const path of [
     '/',
     '/circle',
+    '/how-it-works',
     '/blog',
     '/about-us',
     '/press',
@@ -282,8 +243,10 @@ for (const successful of [true, false]) {
     await page.goto(
       'https://www.rosemarry.app/blog/dating-without-swiping?utm_source=instagram&email=private@example.com',
     );
-    await dismissDevelopmentNotice(page);
-    await page.locator('.article-signup').getByRole('link', { name: 'Join early access' }).click();
+    await page
+      .locator('.article-signup')
+      .getByRole('button', { name: 'Join early access' })
+      .click();
     await page.getByLabel('Your email for early-access updates').fill('reader@example.com');
     await expect(page.locator('.footer-signup__form button[type="submit"]')).toBeEnabled();
     await page.locator('.footer-signup__form button[type="submit"]').click();

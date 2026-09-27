@@ -1,0 +1,230 @@
+:host {
+  display: block;
+}
+
+.how-page .story-hero {
+  padding-block: clamp(7.5rem, 11vw, 9rem) clamp(4rem, 7vw, 5.5rem);
+}
+
+.how-page .story-hero__center {
+  max-width: 62rem;
+}
+
+.how-page .story-hero h1 {
+  max-width: 54rem;
+  margin-inline: auto;
+  font-size: clamp(2.55rem, 4.6vw, 4.25rem);
+  line-height: 1.04;
+}
+
+.how-page .story-hero .story-lead {
+  max-width: 43rem;
+  margin-top: 1.35rem;
+  font-size: clamp(1rem, 1.45vw, 1.16rem);
+  line-height: 1.65;
+}
+
+.how-page__hero-actions {
+  justify-content: center;
+  margin-top: 1.65rem;
+}
+
+.how-page__hero-actions button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.how-page__steps,
+.how-page__comparison,
+.how-page__details,
+.how-page__reading {
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+}
+
+.story-section__header > p:not(.story-kicker),
+.how-page__details p:not(.story-kicker),
+.how-page__status p:not(.story-kicker) {
+  max-width: 760px;
+  margin-top: 1rem;
+  color: rgb(28 20 24 / 72%);
+  font-weight: 550;
+  line-height: 1.8;
+}
+
+.how-page__step-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.4rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.how-page__step-grid li {
+  min-height: 20rem;
+  border: 2px solid #202131;
+  border-radius: 1.7rem;
+  background: #fff8f3;
+  padding: clamp(1.5rem, 3vw, 2.3rem);
+  box-shadow: 6px 7px 0 #8d6cff;
+}
+
+.how-page__step-grid li:nth-child(2),
+.how-page__step-grid li:nth-child(4) {
+  background: #f6c9ef;
+  box-shadow: 6px 7px 0 #ffc53d;
+}
+
+.how-page__step-grid span {
+  display: grid;
+  width: 3.4rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid #202131;
+  border-radius: 50%;
+  background: #ffc53d;
+  font-weight: 850;
+}
+
+.how-page__step-grid h3,
+.how-page h2 {
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.how-page__step-grid h3 {
+  margin-top: 3rem;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  line-height: 1.18;
+}
+
+.how-page__step-grid p {
+  margin-top: 1rem;
+  color: rgb(28 20 24 / 72%);
+  font-weight: 550;
+  line-height: 1.75;
+}
+
+.how-page__comparison {
+  border-block: 2px solid #202131;
+  background: #f6c9ef;
+}
+
+.how-page__table-wrap {
+  overflow-x: auto;
+  border: 2px solid #202131;
+  border-radius: 1.3rem;
+  background: #fff;
+  box-shadow: 7px 8px 0 #202131;
+}
+
+.how-page table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.how-page th,
+.how-page td {
+  border-bottom: 1px solid rgb(32 33 49 / 20%);
+  padding: 1.2rem 1.4rem;
+  line-height: 1.6;
+}
+
+.how-page thead th {
+  background: #202131;
+  color: #fbf8ef;
+}
+
+.how-page tbody th {
+  font-weight: 800;
+}
+
+.how-page tbody td {
+  font-weight: 550;
+}
+
+.how-page tbody tr:last-child th,
+.how-page tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.how-page__details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.75fr);
+  gap: clamp(2rem, 7vw, 6rem);
+  align-items: start;
+}
+
+.how-page__details h2,
+.how-page__reading h2,
+.how-page__comparison h2,
+.how-page__steps h2 {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  line-height: 1.05;
+}
+
+.how-page__details .story-text-link {
+  display: inline-block;
+  margin-top: 1.7rem;
+}
+
+.how-page__status {
+  border: 2px solid #202131;
+  border-radius: 1.7rem;
+  background: #fff;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: 7px 8px 0 #47d8ad;
+}
+
+.how-page__status h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+}
+
+.how-page__reading {
+  background: #1c1418;
+  color: #fbf8ef;
+}
+
+.how-page__reading-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-block: 1px solid rgb(251 248 239 / 35%);
+}
+
+.how-page__reading-grid a {
+  padding: 1.6rem;
+  border-bottom: 1px solid rgb(251 248 239 / 20%);
+  color: inherit;
+  font-weight: 700;
+  line-height: 1.55;
+  text-decoration: none;
+  transition: var(--rm-hover-transition);
+}
+
+.how-page__reading-grid a:nth-child(odd) {
+  border-right: 1px solid rgb(251 248 239 / 20%);
+}
+
+.how-page__reading-grid a:hover {
+  background: rgb(242 127 168 / 14%);
+  color: #f27fa8;
+}
+
+@media (max-width: 760px) {
+  .how-page__step-grid,
+  .how-page__details-grid,
+  .how-page__reading-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .how-page__step-grid li {
+    min-height: 0;
+  }
+
+  .how-page__reading-grid a:nth-child(odd) {
+    border-right: 0;
+  }
+}
