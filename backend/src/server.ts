@@ -5,6 +5,7 @@ import { createApp } from "./app.js";
 import { validateRetentionConfiguration } from "./config/retention.js";
 import { ContactMessageSchema } from "./models/contactModel.js";
 import { PreSignSchema } from "./models/subscripeModel.js";
+import { createAutoReplyEmailService } from "./services/autoReplyEmail.js";
 
 mongoose.set("sanitizeFilter", true);
 
@@ -23,12 +24,13 @@ if (!mongo) {
 const mongoUri = mongo;
 
 validateRetentionConfiguration();
+const autoReplyEmailService = createAutoReplyEmailService(nodeEnv);
 
 async function startServer(): Promise<void> {
   await mongoose.connect(mongoUri);
   await Promise.all([ContactMessageSchema.init(), PreSignSchema.init()]);
 
-  const app = createApp({ nodeEnv });
+  const app = createApp({ autoReplyEmailService, nodeEnv });
 
   console.log("Connected to required services");
 

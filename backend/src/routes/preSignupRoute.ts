@@ -1,10 +1,17 @@
 import { Router } from "express";
 
-import { createPreSignup } from "../controllers/preSignupController.js";
+import { createPreSignupController } from "../controllers/preSignupController.js";
 import { verifyTurnstile } from "../middleware/verifyTurnstile.js";
+import type { AutoReplyEmailService } from "../services/autoReplyEmail.js";
 
-const preSignupRouter = Router();
+export function createPreSignupRouter(emailService: AutoReplyEmailService) {
+  const preSignupRouter = Router();
 
-preSignupRouter.post("/", verifyTurnstile("pre_signup"), createPreSignup);
+  preSignupRouter.post(
+    "/",
+    verifyTurnstile("pre_signup"),
+    createPreSignupController(emailService),
+  );
 
-export default preSignupRouter;
+  return preSignupRouter;
+}

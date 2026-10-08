@@ -5,6 +5,12 @@ import request from "supertest";
 import { createApp } from "./app.js";
 import { ContactMessageSchema } from "./models/contactModel.js";
 import { PreSignSchema } from "./models/subscripeModel.js";
+import {
+  createAutoReplyEmailService,
+  type AutoReplyEmailService,
+  type ContactAutoReplyInput,
+  type PreSignupAutoReplyInput,
+} from "./services/autoReplyEmail.js";
 
 function setEnvironment(
   t: TestContext,
@@ -50,6 +56,28 @@ function mockSuccessfulTurnstile(
         { status: 200, headers: { "Content-Type": "application/json" } },
       ),
   );
+}
+
+function createRecordingEmailService(): {
+  contactReplies: ContactAutoReplyInput[];
+  preSignupReplies: PreSignupAutoReplyInput[];
+  service: AutoReplyEmailService;
+} {
+  const contactReplies: ContactAutoReplyInput[] = [];
+  const preSignupReplies: PreSignupAutoReplyInput[] = [];
+
+  return {
+    contactReplies,
+    preSignupReplies,
+    service: {
+      async sendContactReply(input): Promise<void> {
+        contactReplies.push(input);
+      },
+      async sendPreSignupReply(input): Promise<void> {
+        preSignupReplies.push(input);
+      },
+    },
+  };
 }
 
 test("production CORS excludes local development origins", async () => {
@@ -200,6 +228,50 @@ test("Turnstile test credentials require an explicit local environment", async (
   assert.equal(updateOne.mock.callCount(), 0);
 });
 
+test("Turnstile accepts configured hostnames and rejects an unlisted hostname", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_HOSTNAMES", "www.rosemarry.app,rosemarry.app");
+  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
+  let hostname = "rosemarry.app";
+  t.mock.method(globalThis, "fetch", async () =>
+    new Response(
+      JSON.stringify({ success: true, hostname, action: "pre_signup" }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    ),
+  );
+  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
+    acknowledged: true,
+  }));
+  const app = createApp({ nodeEnv: "production" });
+  const submit = () =>
+    request(app).post("/api/pre-signups").send({
+      email: "person@example.com",
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal((await submit()).status, 202);
+  hostname = "localhost";
+  assert.equal((await submit()).status, 403);
+  assert.equal(updateOne.mock.callCount(), 1);
+});
+
+test("Turnstile rejects submissions without a configured hostname", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_HOSTNAMES", undefined);
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", undefined);
+  mockSuccessfulTurnstile(t, "pre_signup");
+  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
+    acknowledged: true,
+  }));
+
+  const response = await request(createApp({ nodeEnv: "production" }))
+    .post("/api/pre-signups")
+    .send({ email: "person@example.com", turnstileToken: "valid-token" });
+
+  assert.equal(response.status, 403);
+  assert.equal(updateOne.mock.callCount(), 0);
+});
+
 test("contact success does not echo personal data or database fields", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
@@ -215,7 +287,7 @@ test("contact success does not echo personal data or database fields", async (t)
     firstName: "Rose",
     lastName: "Marry",
     email: "person@example.com",
-    subject: "Feedback",
+    subject: "Press",
     message: "Hello",
     turnstileToken: "valid-token",
   });
@@ -228,4 +300,115 @@ test("contact success does not echo personal data or database fields", async (t)
     false,
   );
   assert.equal(JSON.stringify(response.body).includes("internal-id"), false);
+});
+
+test("new pre-signups receive one automatic reply", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
+  mockSuccessfulTurnstile(t, "pre_signup");
+  let isFirstSignup = true;
+  t.mock.method(PreSignSchema, "updateOne", async () => {
+    const upsertedId = isFirstSignup ? "signup-record-1" : null;
+    isFirstSignup = false;
+    return { acknowledged: true, upsertedId };
+  });
+  const email = createRecordingEmailService();
+  const app = createApp({
+    autoReplyEmailService: email.service,
+    nodeEnv: "test",
+  });
+  const submit = () =>
+    request(app).post("/api/pre-signups").send({
+      email: "New.Person@Example.com",
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal((await submit()).status, 202);
+  assert.equal((await submit()).status, 202);
+  assert.deepEqual(email.preSignupReplies, [
+    { email: "new.person@example.com", signupId: "signup-record-1" },
+  ]);
+  assert.deepEqual(email.contactReplies, []);
+});
+
+test("contact submissions receive an automatic reply after being stored", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
+  mockSuccessfulTurnstile(t, "contact");
+  t.mock.method(ContactMessageSchema, "create", async () => ({
+    _id: "contact-record-1",
+  }));
+  const email = createRecordingEmailService();
+  const app = createApp({
+    autoReplyEmailService: email.service,
+    nodeEnv: "test",
+  });
+
+  const response = await request(app).post("/api/contact").send({
+    firstName: "Rose",
+    lastName: "Marry",
+    email: "Person@Example.com",
+    subject: "Feedback",
+    message: "Hello",
+    turnstileToken: "valid-token",
+  });
+
+  assert.equal(response.status, 201);
+  assert.deepEqual(email.contactReplies, [
+    {
+      email: "person@example.com",
+      firstName: "Rose",
+      subject: "Feedback",
+      submissionId: "contact-record-1",
+    },
+  ]);
+  assert.deepEqual(email.preSignupReplies, []);
+});
+
+test("Resend requests use the registered sender and stable idempotency keys", async (t) => {
+  const requests: Array<{ body: Record<string, unknown>; headers: Headers }> = [];
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (_input: string | URL | Request, init?: RequestInit) => {
+      requests.push({
+        body: JSON.parse(String(init?.body)) as Record<string, unknown>,
+        headers: new Headers(init?.headers),
+      });
+      return new Response(JSON.stringify({ id: "email-id" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  );
+  const emailService = createAutoReplyEmailService("test", "re_test_key");
+
+  await emailService.sendContactReply({
+    email: "contact@example.com",
+    firstName: "Rose",
+    subject: "Feedback",
+    submissionId: "contact-record-1",
+  });
+  await emailService.sendPreSignupReply({
+    email: "signup@example.com",
+    signupId: "signup-record-1",
+  });
+
+  assert.equal(requests.length, 2);
+  assert.equal(requests[0]?.body.from, "Rosemarry <noreply@rosemarry.app>");
+  assert.deepEqual(requests[0]?.body.to, ["contact@example.com"]);
+  assert.equal(
+    requests[0]?.headers.get("idempotency-key"),
+    "contact-received/contact-record-1",
+  );
+  assert.equal(requests[1]?.body.from, "Rosemarry <noreply@rosemarry.app>");
+  assert.deepEqual(requests[1]?.body.to, ["signup@example.com"]);
+  assert.equal(
+    requests[1]?.headers.get("idempotency-key"),
+    "early-access-welcome/signup-record-1",
+  );
+  assert.match(String(requests[0]?.body.html), /We got your message/);
+  assert.match(String(requests[1]?.body.text), /You're on the list/);
 });

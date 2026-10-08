@@ -6,6 +6,7 @@ export const CONTACT_SUBJECTS = [
   "General question",
   "Feedback",
   "Partnerships",
+  "Press",
 ] as const;
 
 const UNSAFE_CONTROL_CHARACTERS =

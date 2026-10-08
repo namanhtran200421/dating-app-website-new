@@ -76,10 +76,21 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
         process.env.NODE_ENV === "development" ||
         process.env.NODE_ENV === "test";
       const usingLocalTestKey = isLocalEnvironment && secret === TEST_SECRET;
-      const expectedHostname =
-        process.env.TURNSTILE_EXPECTED_HOSTNAME?.trim() || "www.rosemarry.app";
+      const expectedHostnames = new Set(
+        (
+          process.env.TURNSTILE_HOSTNAMES ??
+          process.env.TURNSTILE_EXPECTED_HOSTNAME ??
+          ""
+        )
+          .split(",")
+          .map((hostname) => hostname.trim())
+          .filter(Boolean),
+      );
       const hostnameMatches =
-        usingLocalTestKey || verification.hostname === expectedHostname;
+        expectedHostnames.size > 0 &&
+        (usingLocalTestKey ||
+          (typeof verification.hostname === "string" &&
+            expectedHostnames.has(verification.hostname)));
       const actionMatches =
         usingLocalTestKey || verification.action === expectedAction;
 

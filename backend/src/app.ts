@@ -7,8 +7,12 @@ import express, {
 import helmet from "helmet";
 import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 
-import contactRouter from "./routes/contactRoute.js";
-import preSignupRouter from "./routes/preSignupRoute.js";
+import { createContactRouter } from "./routes/contactRoute.js";
+import { createPreSignupRouter } from "./routes/preSignupRoute.js";
+import {
+  disabledAutoReplyEmailService,
+  type AutoReplyEmailService,
+} from "./services/autoReplyEmail.js";
 
 const PRODUCTION_ORIGINS = [
   "https://www.rosemarry.app",
@@ -21,6 +25,7 @@ const DEVELOPMENT_ORIGINS = [
 ] as const;
 
 export interface AppOptions {
+  autoReplyEmailService?: AutoReplyEmailService;
   nodeEnv?: string;
   trustedProxyHops?: number | false;
 }
@@ -79,6 +84,8 @@ export function createApp(options: AppOptions = {}) {
   const allowedOrigins = isDevelopment
     ? DEVELOPMENT_ORIGINS
     : PRODUCTION_ORIGINS;
+  const autoReplyEmailService =
+    options.autoReplyEmailService ?? disabledAutoReplyEmailService;
 
   // Render is the only network path to this process and contributes one proxy hop.
   // This makes req.ip, and therefore the rate-limit key, represent the client.
@@ -102,12 +109,12 @@ export function createApp(options: AppOptions = {}) {
   app.use(
     "/api/pre-signups",
     createLimiter("pre-signup", 100, 15 * 60 * 1000),
-    preSignupRouter,
+    createPreSignupRouter(autoReplyEmailService),
   );
   app.use(
     "/api/contact",
     createLimiter("contact", 50, 15 * 60 * 1000),
-    contactRouter,
+    createContactRouter(autoReplyEmailService),
   );
 
   app.get("/api/health", function (_req: Request, res: Response): void {
