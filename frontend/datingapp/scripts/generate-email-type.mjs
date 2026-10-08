@@ -10,19 +10,11 @@ import { mkdir, readFile } from 'node:fs/promises';
 
 const ink = '#202131';
 const paper = '#fbf8ef';
-const white = '#ffffff';
-const rose = '#d81e4a';
-const yellow = '#ffc53d';
 
 const lines = [
   { file: 'brand-nav', text: 'Rosemarry', size: 26, tracking: -1, color: ink, surface: paper, logo: 44 },
-  { file: 'brand-footer', text: 'Rosemarry', size: 18, tracking: -0.5, color: white, surface: ink, logo: 36 },
   { file: 'title-contact', text: 'We got your message', size: 56, tracking: -2.5, color: ink, surface: paper },
   { file: 'title-early-access', text: 'You’re on the list', size: 56, tracking: -2.5, color: ink, surface: paper },
-  { file: 'note-contact', text: 'Message received.', size: 20, tracking: 0, color: ink, surface: paper },
-  { file: 'note-early-access', text: 'You’re on the list.', size: 20, tracking: 0, color: ink, surface: paper },
-  { file: 'panel-title', text: 'Get in before the first Circle', size: 38, tracking: -1.5, color: ink, surface: yellow },
-  { file: 'signoff', text: 'The Rosemarry team', size: 19, tracking: 0, color: rose, surface: white },
 ];
 
 // Inlined because a page built with setContent cannot read file:// URLs.
