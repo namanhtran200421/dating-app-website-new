@@ -45,28 +45,37 @@ const COLORS = {
   paper: "#fbf8ef",
   white: "#ffffff",
   pink: "#ed77a8",
+  rose: "#d81e4a",
+  quiet: "#6f6b78",
 };
-// Gmail and Outlook ignore web fonts, so each stack falls back to the closest rounded system face.
+// The fallback stacks only show when an email client blocks images (see emailText below).
 const DISPLAY_FONT = "'DynaPuff','Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif";
 const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
 
 /*
- * DynaPuff lines rendered to 2x PNGs by frontend/datingapp/scripts/generate-email-type.mjs
- * (`npm run email:type`) and served from the website. Sizes are the CSS sizes that script prints.
- * Bump EMAIL_TYPE_VERSION whenever the images are regenerated so mail proxies fetch the new ones.
+ * Every line of copy is rendered to a 2x PNG by frontend/datingapp/scripts/generate-email-type.mjs
+ * (`npm run email:type`) and served from the website, because Gmail and Outlook ignore web fonts.
+ * Sizes are the CSS sizes that script prints. Bump EMAIL_TYPE_VERSION whenever the images are
+ * regenerated so mail proxies fetch the new ones.
  */
-const EMAIL_TYPE_VERSION = "1";
+const EMAIL_TYPE_VERSION = "2";
 const EMAIL_TYPE = {
-  "brand-nav": { width: 195, height: 39, text: "Rosemarry", size: 26 },
-  "title-contact": { width: 568, height: 70, text: "We got your message", size: 52 },
-  "title-early-access": { width: 454, height: 70, text: "You're on the list", size: 52 },
+  "brand-nav": { width: 195, height: 39, text: "Rosemarry", font: DISPLAY_FONT, size: 26, color: COLORS.ink },
+  "title-contact": { width: 568, height: 70, text: "We got your message", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-early-access": { width: 454, height: 70, text: "You're on the list", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "message-contact": { width: 330, height: 60, text: "Thanks so much for reaching out! We'll get back to you soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "message-early-access": { width: 330, height: 60, text: "We'll email you as soon as Rosemarry is ready for you!", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "button-early-access": { width: 160, height: 24, text: "See how Circles work", font: BODY_FONT, size: 15, color: COLORS.ink },
+  "signoff-warmly": { width: 66, height: 25, text: "Warmly,", font: BODY_FONT, size: 16, color: COLORS.ink },
+  "signoff-team": { width: 218, height: 24, text: "The Rosemarry team", font: DISPLAY_FONT, size: 20, color: COLORS.rose },
+  "footer-note": { width: 345, height: 20, text: "Automatic email from Rosemarry. Replies aren't monitored.", font: BODY_FONT, size: 12, color: COLORS.quiet },
 } as const;
 type EmailTypeKey = keyof typeof EMAIL_TYPE;
 
-// The alt text carries the line itself and is styled, so blocked images still read as the heading.
-function displayType(key: EmailTypeKey): string {
-  const { width, height, text, size } = EMAIL_TYPE[key];
-  return `<img src="${WEBSITE_URL}/images/email/${key}.png?v=${EMAIL_TYPE_VERSION}" width="${width}" height="${height}" alt="${escapeHtml(text)}" style="display:block;width:${width}px;max-width:100%;height:auto;border:0;font-family:${DISPLAY_FONT};font-size:${size}px;font-weight:700;line-height:1.1;color:${COLORS.ink};">`;
+// The alt text carries the line itself and is styled, so blocked images still read as the copy.
+function emailText(key: EmailTypeKey): string {
+  const { width, height, text, font, size, color } = EMAIL_TYPE[key];
+  return `<img src="${WEBSITE_URL}/images/email/${key}.png?v=${EMAIL_TYPE_VERSION}" width="${width}" height="${height}" alt="${escapeHtml(text)}" style="display:block;width:${width}px;max-width:100%;height:auto;border:0;font-family:${font};font-size:${size}px;font-weight:700;line-height:1.3;color:${color};">`;
 }
 
 /*
@@ -100,25 +109,37 @@ function offsetShadow(
 </table>`;
 }
 
-function pillButton(text: string, href: string): string {
-  return offsetShadow(
-    `<a href="${href}" style="display:block;font-family:${BODY_FONT};font-size:15px;font-weight:800;line-height:1;color:${COLORS.ink};text-decoration:none;white-space:nowrap;text-align:center;">${escapeHtml(text)}</a>`,
-    { background: COLORS.pink, shadow: COLORS.ink, offset: 4, radius: 999, padding: "14px 24px", width: "auto" },
-  );
+function pillButton(label: EmailTypeKey, href: string): string {
+  return offsetShadow(`<a href="${href}" style="display:block;text-decoration:none;">${emailText(label)}</a>`, {
+    background: COLORS.pink,
+    shadow: COLORS.ink,
+    offset: 4,
+    radius: 999,
+    padding: "14px 24px",
+    width: "auto",
+  });
 }
 
 interface EmailLayoutInput {
   preheader: string;
   heading: string;
   headingImage: EmailTypeKey;
-  message: string;
-  cta?: { text: string; href: string };
+  message: EmailTypeKey;
+  cta?: { label: EmailTypeKey; href: string };
 }
 
 function emailLayout({ preheader, heading, headingImage, message, cta }: EmailLayoutInput): string {
   const card = offsetShadow(
-    `<p style="margin:0;font-family:${BODY_FONT};font-size:17px;line-height:1.6;color:${COLORS.ink};">${message}</p>
-      ${cta ? `<div style="margin-top:24px;">${pillButton(cta.text, cta.href)}</div>` : ""}`,
+    `${emailText(message)}
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:26px;">
+        <tr>
+          <td class="rm-stack" valign="bottom">
+            ${emailText("signoff-warmly")}
+            <div style="margin-top:2px;">${emailText("signoff-team")}</div>
+          </td>
+          ${cta ? `<td class="rm-stack rm-stack-gap" align="right" valign="bottom">${pillButton(cta.label, cta.href)}</td>` : ""}
+        </tr>
+      </table>`,
     { background: COLORS.white, shadow: COLORS.pink, offset: 8, radius: 24, padding: "32px", className: "rm-pad" },
   );
 
@@ -130,10 +151,11 @@ function emailLayout({ preheader, heading, headingImage, message, cta }: EmailLa
     <meta name="color-scheme" content="light only">
     <meta name="supported-color-schemes" content="light">
     <title>${escapeHtml(heading)}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
     <style>
       @media (max-width: 520px) {
         .rm-pad { padding: 22px !important; }
+        .rm-stack { display: block !important; width: 100% !important; text-align: left !important; }
+        .rm-stack-gap { padding-top: 22px !important; }
       }
     </style>
   </head>
@@ -143,19 +165,17 @@ function emailLayout({ preheader, heading, headingImage, message, cta }: EmailLa
       <tr>
         <td align="center" style="padding:14px 16px;border-bottom:2px solid ${COLORS.ink};">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
-            <tr><td><a href="${WEBSITE_URL}" style="text-decoration:none;">${displayType("brand-nav")}</a></td></tr>
+            <tr><td><a href="${WEBSITE_URL}" style="text-decoration:none;">${emailText("brand-nav")}</a></td></tr>
           </table>
         </td>
       </tr>
       <tr>
         <td align="center" style="padding:40px 16px 32px;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
-            <tr><td style="padding-bottom:24px;"><h1 style="margin:0;">${displayType(headingImage)}</h1></td></tr>
+            <tr><td style="padding-bottom:24px;"><h1 style="margin:0;">${emailText(headingImage)}</h1></td></tr>
             <tr><td>${card}</td></tr>
             <tr>
-              <td style="padding:28px 0 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6f6b78;">
-                Automatic email from <a href="${WEBSITE_URL}" style="color:${COLORS.ink};">Rosemarry</a>. Replies aren't monitored.
-              </td>
+              <td style="padding-top:26px;"><a href="${WEBSITE_URL}" style="text-decoration:none;">${emailText("footer-note")}</a></td>
             </tr>
           </table>
         </td>
@@ -186,19 +206,17 @@ export function createAutoReplyEmailService(
 
   return {
     async sendContactReply(input): Promise<void> {
-      const firstName = escapeHtml(input.firstName);
-      const contactSubject = escapeHtml(input.subject);
       const { error } = await resend.emails.send(
         {
           from: FROM_ADDRESS,
           to: [input.email],
           subject: "We received your Rosemarry message",
-          text: `Thanks, ${input.firstName}. We got your message about ${input.subject} and will reply soon.\n\nAutomatic email from Rosemarry. Replies aren't monitored.\n${WEBSITE_URL}`,
+          text: `Hi ${input.firstName},\n\nThanks so much for reaching out about ${input.subject}! We'll get back to you soon.\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.\n${WEBSITE_URL}`,
           html: emailLayout({
-            preheader: "We'll reply soon.",
+            preheader: "Thanks so much for reaching out! We'll get back to you soon.",
             heading: "We got your message",
             headingImage: "title-contact",
-            message: `Thanks, ${firstName}. We'll reply about <strong>${contactSubject}</strong> soon.`,
+            message: "message-contact",
           }),
           tags: [{ name: "form", value: "contact" }],
         },
@@ -219,13 +237,13 @@ export function createAutoReplyEmailService(
           from: FROM_ADDRESS,
           to: [input.email],
           subject: "You're on the Rosemarry early access list",
-          text: `You're on the list. We'll email you when Rosemarry is ready.\n\nSee how Circles work: ${WEBSITE_URL}/how-it-works\n\nAutomatic email from Rosemarry. Replies aren't monitored.`,
+          text: `You're on the list! We'll email you as soon as Rosemarry is ready for you.\n\nSee how Circles work: ${WEBSITE_URL}/how-it-works\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.`,
           html: emailLayout({
-            preheader: "We'll email you when Rosemarry is ready.",
+            preheader: "We'll email you as soon as Rosemarry is ready for you!",
             heading: "You're on the list",
             headingImage: "title-early-access",
-            message: "We'll email you when Rosemarry is ready.",
-            cta: { text: "See how Circles work", href: `${WEBSITE_URL}/how-it-works` },
+            message: "message-early-access",
+            cta: { label: "button-early-access", href: `${WEBSITE_URL}/how-it-works` },
           }),
           tags: [{ name: "form", value: "pre-signup" }],
         },
