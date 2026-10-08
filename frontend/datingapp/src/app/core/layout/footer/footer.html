@@ -25,7 +25,11 @@
                 [attr.aria-invalid]="signup.emailError() ? 'true' : null"
                 [attr.aria-describedby]="signup.emailError() ? 'rm-email-error' : null"
               />
-              <button type="submit" class="rm-pop" [disabled]="signup.isSubmitting()">
+              <button
+                type="submit"
+                class="rm-pop"
+                [disabled]="signup.isSubmitting() || !signup.turnstileToken()"
+              >
                 {{ signup.isSubmitting() ? 'Joining…' : 'Join early access' }}
               </button>
             </div>

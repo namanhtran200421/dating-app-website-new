@@ -1,8 +1,6 @@
+@import "tailwindcss";
 @import './generated/icons.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.js";
 
 @font-face {
   font-family: 'DynaPuff';

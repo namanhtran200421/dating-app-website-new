@@ -12,6 +12,8 @@ import {
   type PreSignupAutoReplyInput,
 } from "./services/autoReplyEmail.js";
 
+const PRODUCTION_ORIGIN = "https://www.rosemarry.app";
+
 function setEnvironment(
   t: TestContext,
   key: string,
@@ -97,6 +99,27 @@ test("production CORS excludes local development origins", async () => {
   );
 });
 
+test("API responses include restrictive security and cache headers", async () => {
+  const response = await request(createApp({ nodeEnv: "production" })).get(
+    "/api/health",
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers["cache-control"], "no-store");
+  assert.equal(response.headers["x-content-type-options"], "nosniff");
+  assert.equal(response.headers["x-frame-options"], "DENY");
+  assert.equal(response.headers["referrer-policy"], "no-referrer");
+  assert.equal(response.headers["x-robots-tag"], "noindex, nofollow, noarchive");
+  assert.match(
+    String(response.headers["strict-transport-security"]),
+    /max-age=63072000/i,
+  );
+  assert.match(
+    String(response.headers["content-security-policy"]),
+    /default-src 'none'/,
+  );
+});
+
 test("unknown environments use production CORS defaults", async () => {
   const app = createApp({ nodeEnv: "staging" });
 
@@ -112,6 +135,7 @@ test("rate limiting keys requests by forwarded client IP", async () => {
   const submit = (clientIp: string) =>
     request(app)
       .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
       .set("X-Forwarded-For", clientIp)
       .send({});
 
@@ -124,26 +148,67 @@ test("rate limiting keys requests by forwarded client IP", async () => {
   assert.equal(remaining(anotherClient), remaining(first));
 });
 
-test("rate limiting keys requests by Cloudflare's CF-Connecting-IP", async () => {
-  // Behind Cloudflare, the real client is on CF-Connecting-IP. It must take
-  // precedence over the forwarded chain so that limits track the true caller
-  // and cannot be evaded by rotating a spoofed X-Forwarded-For value.
+test("rate limiting ignores spoofed CF-Connecting-IP headers", async () => {
   const app = createApp({ nodeEnv: "production", trustedProxyHops: 1 });
-  const submit = (cfIp: string, forwardedFor: string) =>
+  const submit = (cfIp: string) =>
     request(app)
       .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
       .set("CF-Connecting-IP", cfIp)
-      .set("X-Forwarded-For", forwardedFor)
+      .set("X-Forwarded-For", "203.0.113.1")
       .send({});
 
-  // Same CF-Connecting-IP but different X-Forwarded-For => one shared bucket.
-  const first = await submit("198.51.100.5", "203.0.113.1");
-  const second = await submit("198.51.100.5", "203.0.113.99");
-  // Different CF-Connecting-IP but identical X-Forwarded-For => separate bucket.
-  const otherClient = await submit("198.51.100.6", "203.0.113.1");
+  const first = await submit("198.51.100.5");
+  const second = await submit("198.51.100.99");
 
   assert.equal(remaining(second), remaining(first) - 1);
-  assert.equal(remaining(otherClient), remaining(first));
+});
+
+test("form endpoints enforce the configured rate limit", async () => {
+  const app = createApp({ nodeEnv: "production", trustedProxyHops: false });
+
+  for (let attempt = 1; attempt <= 10; attempt += 1) {
+    const response = await request(app)
+      .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
+      .send({});
+    assert.equal(response.status, 403);
+  }
+
+  const limited = await request(app)
+    .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({});
+  assert.equal(limited.status, 429);
+  assert.deepEqual(limited.body, {
+    success: false,
+    message: "Too many requests. Please try again later.",
+  });
+});
+
+test("form endpoints reject missing, foreign, and non-JSON requests", async (t) => {
+  const fetchMock = t.mock.method(globalThis, "fetch", async () => {
+    throw new Error("Turnstile must not be called for a rejected request.");
+  });
+  const app = createApp({ nodeEnv: "production" });
+
+  const missingOrigin = await request(app)
+    .post("/api/pre-signups")
+    .send({ email: "person@example.com", turnstileToken: "token" });
+  const foreignOrigin = await request(app)
+    .post("/api/pre-signups")
+    .set("Origin", "https://attacker.example")
+    .send({ email: "person@example.com", turnstileToken: "token" });
+  const nonJson = await request(app)
+    .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .set("Content-Type", "text/plain")
+    .send("email=person@example.com");
+
+  assert.equal(missingOrigin.status, 403);
+  assert.equal(foreignOrigin.status, 403);
+  assert.equal(nonJson.status, 415);
+  assert.equal(fetchMock.mock.callCount(), 0);
 });
 
 test("malformed and oversized JSON receive generic JSON errors", async () => {
@@ -151,10 +216,12 @@ test("malformed and oversized JSON receive generic JSON errors", async () => {
 
   const malformed = await request(app)
     .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
     .set("Content-Type", "application/json")
     .send('{"broken":');
   const oversized = await request(app)
     .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
     .send({ padding: "a".repeat(34_000) });
 
   assert.equal(malformed.status, 400);
@@ -182,6 +249,7 @@ test("pre-signup responses do not reveal whether an email exists", async (t) => 
   const submit = (email: string) =>
     request(app)
       .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
       .send({ email, turnstileToken: "valid-token" });
   const first = await submit("new@example.com");
   const second = await submit("existing@example.com");
@@ -219,10 +287,13 @@ test("Turnstile test credentials require an explicit local environment", async (
   }));
   const app = createApp();
 
-  const response = await request(app).post("/api/pre-signups").send({
-    email: "person@example.com",
-    turnstileToken: "valid-token",
-  });
+  const response = await request(app)
+    .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      email: "person@example.com",
+      turnstileToken: "valid-token",
+    });
 
   assert.equal(response.status, 403);
   assert.equal(updateOne.mock.callCount(), 0);
@@ -244,10 +315,13 @@ test("Turnstile accepts configured hostnames and rejects an unlisted hostname", 
   }));
   const app = createApp({ nodeEnv: "production" });
   const submit = () =>
-    request(app).post("/api/pre-signups").send({
-      email: "person@example.com",
-      turnstileToken: "valid-token",
-    });
+    request(app)
+      .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
+      .send({
+        email: "person@example.com",
+        turnstileToken: "valid-token",
+      });
 
   assert.equal((await submit()).status, 202);
   hostname = "localhost";
@@ -266,6 +340,7 @@ test("Turnstile rejects submissions without a configured hostname", async (t) =>
 
   const response = await request(createApp({ nodeEnv: "production" }))
     .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
     .send({ email: "person@example.com", turnstileToken: "valid-token" });
 
   assert.equal(response.status, 403);
@@ -283,14 +358,17 @@ test("contact success does not echo personal data or database fields", async (t)
   }));
   const app = createApp({ nodeEnv: "test" });
 
-  const response = await request(app).post("/api/contact").send({
-    firstName: "Rose",
-    lastName: "Marry",
-    email: "person@example.com",
-    subject: "Press",
-    message: "Hello",
-    turnstileToken: "valid-token",
-  });
+  const response = await request(app)
+    .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      firstName: "Rose",
+      lastName: "Marry",
+      email: "person@example.com",
+      subject: "Press",
+      message: '<img src=x onerror="alert(1)">',
+      turnstileToken: "valid-token",
+    });
 
   assert.equal(response.status, 201);
   assert.equal(response.body.success, true);
@@ -300,6 +378,29 @@ test("contact success does not echo personal data or database fields", async (t)
     false,
   );
   assert.equal(JSON.stringify(response.body).includes("internal-id"), false);
+  assert.equal(JSON.stringify(response.body).includes("onerror"), false);
+});
+
+test("NoSQL operator payloads are rejected before database access", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  mockSuccessfulTurnstile(t, "pre_signup");
+  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
+    acknowledged: true,
+  }));
+
+  const response = await request(createApp({ nodeEnv: "test" }))
+    .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      email: { $ne: null },
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal(response.status, 400);
+  assert.equal(response.body.success, false);
+  assert.equal(updateOne.mock.callCount(), 0);
+  assert.equal(Object.prototype.hasOwnProperty.call(Object.prototype, "polluted"), false);
 });
 
 test("new pre-signups receive one automatic reply", async (t) => {
@@ -319,10 +420,13 @@ test("new pre-signups receive one automatic reply", async (t) => {
     nodeEnv: "test",
   });
   const submit = () =>
-    request(app).post("/api/pre-signups").send({
-      email: "New.Person@Example.com",
-      turnstileToken: "valid-token",
-    });
+    request(app)
+      .post("/api/pre-signups")
+      .set("Origin", PRODUCTION_ORIGIN)
+      .send({
+        email: "New.Person@Example.com",
+        turnstileToken: "valid-token",
+      });
 
   assert.equal((await submit()).status, 202);
   assert.equal((await submit()).status, 202);
@@ -346,14 +450,17 @@ test("contact submissions receive an automatic reply after being stored", async 
     nodeEnv: "test",
   });
 
-  const response = await request(app).post("/api/contact").send({
-    firstName: "Rose",
-    lastName: "Marry",
-    email: "Person@Example.com",
-    subject: "Feedback",
-    message: "Hello",
-    turnstileToken: "valid-token",
-  });
+  const response = await request(app)
+    .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      firstName: "Rose",
+      lastName: "Marry",
+      email: "Person@Example.com",
+      subject: "Feedback",
+      message: "Hello",
+      turnstileToken: "valid-token",
+    });
 
   assert.equal(response.status, 201);
   assert.deepEqual(email.contactReplies, [

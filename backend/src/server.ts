@@ -8,6 +8,7 @@ import { PreSignSchema } from "./models/subscripeModel.js";
 import { createAutoReplyEmailService } from "./services/autoReplyEmail.js";
 
 mongoose.set("sanitizeFilter", true);
+mongoose.set("strictQuery", "throw");
 
 // Fail secure when a hosting platform does not set NODE_ENV explicitly.
 const nodeEnv = process.env.NODE_ENV ?? "production";

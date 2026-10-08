@@ -7,6 +7,7 @@ import express, {
 import helmet from "helmet";
 import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 
+import { verifyFormRequest } from "./middleware/verifyFormRequest.js";
 import { createContactRouter } from "./routes/contactRoute.js";
 import { createPreSignupRouter } from "./routes/preSignupRoute.js";
 import {
@@ -23,6 +24,9 @@ const DEVELOPMENT_ORIGINS = [
   "http://localhost:4200",
   "http://127.0.0.1:4200",
 ] as const;
+const FORM_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const PRE_SIGNUP_RATE_LIMIT = 10;
+const CONTACT_RATE_LIMIT = 5;
 
 export interface AppOptions {
   autoReplyEmailService?: AutoReplyEmailService;
@@ -32,8 +36,8 @@ export interface AppOptions {
 
 // Allow the number of trusted proxy hops to be corrected via configuration
 // without a code change, since the real hop count depends on the deployment
-// (Render + Cloudflare). Rate-limit keying no longer depends on this value
-// (see resolveClientKey), but req.ip and other proxy-aware behaviour still do.
+// (Render + Cloudflare). Rate-limit keying depends on req.ip, so this setting
+// must only be changed after verifying the deployment's proxy topology.
 function parseTrustedProxyHops(raw: string | undefined): number | undefined {
   const value = raw?.trim();
   if (!value) {
@@ -46,19 +50,12 @@ function parseTrustedProxyHops(raw: string | undefined): number | undefined {
   return hops;
 }
 
-// Cloudflare fronts the Render origin (every response carries a `cf-ray`
-// header), so the request reaches Express through more than one proxy and a
-// hardcoded `trust proxy` hop count cannot be relied on to identify the caller.
-// Cloudflare stamps the real client address on the `CF-Connecting-IP` request
-// header, and the origin is only reachable through Cloudflare's edge, so that
-// header is the trustworthy rate-limit key. Fall back to `req.ip` (governed by
-// `trust proxy`) when the header is absent, e.g. local development and tests.
-// `ipKeyGenerator` normalises the value (grouping IPv6 addresses by subnet).
+// The public frontend calls the Render hostname directly, so client-supplied
+// forwarding headers (including CF-Connecting-IP) are not trustworthy here.
+// Express derives req.ip from Render's proxy chain according to `trust proxy`.
+// ipKeyGenerator normalises IPv4/IPv6 and groups IPv6 addresses by subnet.
 function resolveClientKey(req: Request): string {
-  const cfConnectingIp = req.get("cf-connecting-ip")?.trim();
-  const clientIp =
-    cfConnectingIp && cfConnectingIp.length > 0 ? cfConnectingIp : req.ip;
-  return ipKeyGenerator(clientIp ?? "unknown");
+  return ipKeyGenerator(req.ip ?? "unknown");
 }
 
 function createLimiter(identifier: string, limit: number, windowMs: number) {
@@ -84,6 +81,7 @@ export function createApp(options: AppOptions = {}) {
   const allowedOrigins = isDevelopment
     ? DEVELOPMENT_ORIGINS
     : PRODUCTION_ORIGINS;
+  const allowedOriginSet = new Set<string>(allowedOrigins);
   const autoReplyEmailService =
     options.autoReplyEmailService ?? disabledAutoReplyEmailService;
 
@@ -96,26 +94,65 @@ export function createApp(options: AppOptions = {}) {
       (isDevelopment ? false : 1),
   );
   app.disable("x-powered-by");
-  app.use(helmet());
+  app.disable("etag");
+  app.set("query parser", false);
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'none'"],
+          baseUri: ["'none'"],
+          connectSrc: ["'none'"],
+          fontSrc: ["'none'"],
+          formAction: ["'none'"],
+          frameAncestors: ["'none'"],
+          imgSrc: ["'none'"],
+          objectSrc: ["'none'"],
+          scriptSrc: ["'none'"],
+          styleSrc: ["'none'"],
+        },
+      },
+      frameguard: { action: "deny" },
+      hsts: {
+        maxAge: 63_072_000,
+        includeSubDomains: true,
+        preload: true,
+      },
+      referrerPolicy: { policy: "no-referrer" },
+    }),
+  );
   app.use(
     cors({
       origin: [...allowedOrigins],
       methods: ["GET", "POST", "OPTIONS"],
       allowedHeaders: ["Content-Type"],
+      credentials: false,
+      maxAge: 600,
     }),
   );
-  app.use(express.json({ limit: "32kb", strict: true }));
-
+  app.use("/api", function preventApiCaching(_req, res, next): void {
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
+    next();
+  });
   app.use(
     "/api/pre-signups",
-    createLimiter("pre-signup", 100, 15 * 60 * 1000),
-    createPreSignupRouter(autoReplyEmailService),
+    verifyFormRequest(allowedOriginSet),
+    createLimiter(
+      "pre-signup",
+      PRE_SIGNUP_RATE_LIMIT,
+      FORM_RATE_LIMIT_WINDOW_MS,
+    ),
   );
   app.use(
     "/api/contact",
-    createLimiter("contact", 50, 15 * 60 * 1000),
-    createContactRouter(autoReplyEmailService),
+    verifyFormRequest(allowedOriginSet),
+    createLimiter("contact", CONTACT_RATE_LIMIT, FORM_RATE_LIMIT_WINDOW_MS),
   );
+  app.use(express.json({ limit: "32kb", strict: true }));
+
+  app.use("/api/pre-signups", createPreSignupRouter(autoReplyEmailService));
+  app.use("/api/contact", createContactRouter(autoReplyEmailService));
 
   app.get("/api/health", function (_req: Request, res: Response): void {
     res.status(200).json({ message: "Backend is running" });
