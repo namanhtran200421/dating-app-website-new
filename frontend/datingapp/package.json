@@ -7,6 +7,7 @@
     "build": "npm run assets && ng build && node scripts/finalize-seo.mjs",
     "build:analyze": "npm run assets && ng build --source-map --stats-json && node scripts/finalize-seo.mjs",
     "social:image": "node scripts/generate-social-image.mjs",
+    "email:type": "node scripts/generate-email-type.mjs",
     "indexnow": "node scripts/submit-indexnow.mjs",
     "search:report": "node scripts/search-console.mjs report",
     "search:inspect": "node scripts/search-console.mjs inspect",

@@ -53,8 +53,32 @@ const COLORS = {
 // Gmail and Outlook ignore web fonts, so each stack falls back to the closest rounded system face.
 const DISPLAY_FONT = "'DynaPuff','Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif";
 const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
-const LOGO_URL = `${WEBSITE_URL}/img/rosemarry/rose-hand-logo-264.png`;
 const INSTAGRAM_URL = "https://www.instagram.com/rosemarry_app/";
+
+/*
+ * DynaPuff lines rendered to 2x PNGs by frontend/datingapp/scripts/generate-email-type.mjs
+ * (`npm run email:type`) and served from the website. Sizes are the CSS sizes that script prints.
+ * Bump EMAIL_TYPE_VERSION whenever the images are regenerated so mail proxies fetch the new ones.
+ */
+const EMAIL_TYPE_VERSION = "1";
+const EMAIL_TYPE = {
+  "brand-nav": { width: 195, height: 39, text: "Rosemarry", size: 26, color: COLORS.ink },
+  "brand-footer": { width: 144, height: 31, text: "Rosemarry", size: 18, color: COLORS.white },
+  "title-contact": { width: 568, height: 70, text: "We got your message", size: 52, color: COLORS.ink },
+  "title-early-access": { width: 454, height: 70, text: "You're on the list", size: 52, color: COLORS.ink },
+  "note-contact": { width: 190, height: 24, text: "Message received.", size: 20, color: COLORS.ink },
+  "note-early-access": { width: 183, height: 24, text: "You're on the list.", size: 20, color: COLORS.ink },
+  "panel-title": { width: 517, height: 48, text: "Get in before the first Circle", size: 36, color: COLORS.ink },
+  signoff: { width: 207, height: 23, text: "The Rosemarry team", size: 19, color: COLORS.rose },
+} as const;
+type EmailTypeKey = keyof typeof EMAIL_TYPE;
+
+// The alt text carries the line itself and is styled, so blocked images still read as the heading.
+function displayType(key: EmailTypeKey): string {
+  const { width, height, text, size, color } = EMAIL_TYPE[key];
+  return `<img src="${WEBSITE_URL}/images/email/${key}.png?v=${EMAIL_TYPE_VERSION}" width="${width}" height="${height}" alt="${escapeHtml(text)}" style="display:block;width:${width}px;max-width:100%;height:auto;border:0;font-family:${DISPLAY_FONT};font-size:${size}px;font-weight:700;line-height:1.1;color:${color};">`;
+}
+
 const PARAGRAPH_STYLE = `margin:0 0 16px;font-family:${BODY_FONT};font-size:16px;line-height:1.65;color:${COLORS.ink};`;
 
 /*
@@ -106,7 +130,7 @@ function paragraph(html: string, last = false): string {
 }
 
 // Same construction as the footer's "You're on the list" confirmation on the website.
-function successNote(title: string, detail: string): string {
+function successNote(title: EmailTypeKey, detail: string): string {
   return `<div style="margin:8px 0 24px;">${offsetShadow(
     `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
       <tr>
@@ -114,7 +138,7 @@ function successNote(title: string, detail: string): string {
           <div style="width:40px;height:40px;border:1.5px solid ${COLORS.ink};border-radius:50%;background:${COLORS.mint};font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px;text-align:center;color:${COLORS.ink};">&#10003;</div>
         </td>
         <td valign="middle" style="font-family:${BODY_FONT};font-size:14px;line-height:1.55;color:${COLORS.muted};">
-          <div style="font-family:${DISPLAY_FONT};font-size:20px;font-weight:700;line-height:1.25;color:${COLORS.ink};">${title}</div>
+          <div style="margin-bottom:2px;">${displayType(title)}</div>
           ${detail}
         </td>
       </tr>
@@ -127,12 +151,21 @@ interface EmailLayoutInput {
   preheader: string;
   label: string;
   heading: string;
+  headingImage: EmailTypeKey;
   content: string;
   cta: { text: string; href: string };
   showEarlyAccessPanel: boolean;
 }
 
-function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessPanel }: EmailLayoutInput): string {
+function emailLayout({
+  preheader,
+  label,
+  heading,
+  headingImage,
+  content,
+  cta,
+  showEarlyAccessPanel,
+}: EmailLayoutInput): string {
   const year = new Date().getFullYear();
 
   const nav = `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${COLORS.paper};border-bottom:2px solid ${COLORS.ink};">
@@ -141,10 +174,7 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
             <tr>
               <td valign="middle">
-                <a href="${WEBSITE_URL}" style="text-decoration:none;color:${COLORS.ink};">
-                  <img src="${LOGO_URL}" width="44" height="34" alt="" style="display:inline-block;width:44px;height:auto;border:0;vertical-align:middle;">
-                  <span style="display:inline-block;margin-left:8px;font-family:${DISPLAY_FONT};font-size:26px;font-weight:800;letter-spacing:-1px;line-height:34px;color:${COLORS.ink};vertical-align:middle;">Rosemarry</span>
-                </a>
+                <a href="${WEBSITE_URL}" style="text-decoration:none;">${displayType("brand-nav")}</a>
               </td>
               <td class="rm-hide-mobile" align="right" valign="middle">${pillButton("How it works", `${WEBSITE_URL}/how-it-works`, "small")}</td>
             </tr>
@@ -158,7 +188,7 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:28px;border-top:2px solid ${COLORS.ink};">
         <tr>
           <td class="rm-stack" valign="middle" style="padding-top:22px;font-family:${BODY_FONT};font-size:15px;line-height:1.5;color:${COLORS.ink};">
-            Warmly,<br><span style="font-family:${DISPLAY_FONT};font-size:19px;font-weight:700;color:${COLORS.rose};">The Rosemarry team</span>
+            Warmly,<div style="margin-top:4px;">${displayType("signoff")}</div>
           </td>
           <td class="rm-stack" align="right" valign="middle" style="padding-top:22px;">${pillButton(cta.text, cta.href)}</td>
         </tr>
@@ -174,7 +204,7 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
             <tr>
               <td style="color:${COLORS.ink};">
                 ${sticker("Early access", COLORS.paper)}
-                <h2 style="margin:16px 0 8px;font-family:${DISPLAY_FONT};font-size:38px;font-weight:700;letter-spacing:-1.5px;line-height:1;color:${COLORS.ink};">Get in before the first Circle</h2>
+                <h2 style="margin:16px 0 8px;">${displayType("panel-title")}</h2>
                 <p style="margin:0 0 22px;font-family:${BODY_FONT};font-size:13px;font-weight:800;color:${COLORS.ink};">1 month of Advanced free at launch</p>
                 ${pillButton("Join early access", `${WEBSITE_URL}/#join`)}
               </td>
@@ -192,10 +222,7 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
             <tr>
               <td style="font-family:${BODY_FONT};font-size:12px;font-weight:700;line-height:1.7;color:#a6a6ad;">
-                <a href="${WEBSITE_URL}" style="text-decoration:none;color:${COLORS.white};">
-                  <img src="${LOGO_URL}" width="36" height="28" alt="" style="display:inline-block;width:36px;height:auto;border:0;vertical-align:middle;">
-                  <span style="display:inline-block;margin-left:6px;font-family:${DISPLAY_FONT};font-size:18px;font-weight:800;line-height:28px;color:${COLORS.white};vertical-align:middle;">Rosemarry</span>
-                </a>
+                <a href="${WEBSITE_URL}" style="text-decoration:none;">${displayType("brand-footer")}</a>
                 <div style="margin-top:14px;">Good things take time &middot; &copy; ${year} Rosemarry</div>
                 <div style="margin-top:6px;">
                   <a href="${INSTAGRAM_URL}" style="${footerLink}">Instagram</a>&nbsp;&nbsp;&nbsp;
@@ -223,7 +250,6 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
       @media (max-width: 520px) {
         .rm-hide-mobile { display: none !important; }
         .rm-pad { padding: 22px !important; }
-        .rm-title { font-size: 42px !important; }
         .rm-stack { display: block !important; width: 100% !important; text-align: left !important; }
       }
     </style>
@@ -238,7 +264,7 @@ function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessP
             <tr>
               <td style="padding-bottom:26px;">
                 ${sticker(label, COLORS.yellow)}
-                <h1 class="rm-title" style="margin:18px 0 0;font-family:${DISPLAY_FONT};font-size:56px;font-weight:700;letter-spacing:-2.5px;line-height:0.95;color:${COLORS.ink};">${escapeHtml(heading)}</h1>
+                <h1 style="margin:18px 0 0;">${displayType(headingImage)}</h1>
               </td>
             </tr>
             <tr><td>${card}</td></tr>
@@ -284,9 +310,10 @@ export function createAutoReplyEmailService(
             preheader: "Your message is safely with the Rosemarry team.",
             label: "Message received",
             heading: "We got your message",
+            headingImage: "title-contact",
             content: `${paragraph(`Hi ${firstName},`)}
               ${paragraph("Thanks for reaching out. Your message is safely with us.")}
-              ${successNote("Message received.", `About: <strong style="color:${COLORS.ink};">${contactSubject}</strong>`)}
+              ${successNote("note-contact", `About: <strong style="color:${COLORS.ink};">${contactSubject}</strong>`)}
               ${paragraph("A member of the Rosemarry team will get back to you as soon as we can.", true)}`,
             cta: { text: "Back to Rosemarry", href: WEBSITE_URL },
             showEarlyAccessPanel: true,
@@ -315,8 +342,9 @@ export function createAutoReplyEmailService(
             preheader: "You're on the Rosemarry early access list.",
             label: "Early access",
             heading: "You're on the list",
+            headingImage: "title-early-access",
             content: `${paragraph("Thanks for joining Rosemarry early access.")}
-              ${successNote("You&rsquo;re on the list.", `We saved ${escapeHtml(input.email)} for early-access updates.`)}
+              ${successNote("note-early-access", `We saved ${escapeHtml(input.email)} for early-access updates.`)}
               ${paragraph("We'll email you when Rosemarry is ready for you. Until then, we'll only write when there is something worth sharing.", true)}`,
             cta: { text: "See how Circles work", href: `${WEBSITE_URL}/how-it-works` },
             showEarlyAccessPanel: false,
