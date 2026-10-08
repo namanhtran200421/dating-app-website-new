@@ -39,6 +39,7 @@ function escapeHtml(value: string): string {
   );
 }
 
+// Mirrors the website's tokens in frontend/datingapp/src/styles.css and DESIGN.md.
 const COLORS = {
   ink: "#202131",
   paper: "#fbf8ef",
@@ -47,37 +48,39 @@ const COLORS = {
   rose: "#d81e4a",
   yellow: "#ffc53d",
   mint: "#47d8ad",
-  purple: "#8d6cff",
-  muted: "#5b5566",
+  muted: "#5d5a68",
 };
-const DISPLAY_FONT = "'DynaPuff',Arial,Helvetica,sans-serif";
-const BODY_FONT = "'Playpen Sans',Arial,Helvetica,sans-serif";
+// Gmail and Outlook ignore web fonts, so each stack falls back to the closest rounded system face.
+const DISPLAY_FONT = "'DynaPuff','Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif";
+const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
+const LOGO_URL = `${WEBSITE_URL}/img/rosemarry/rose-hand-logo-264.png`;
+const INSTAGRAM_URL = "https://www.instagram.com/rosemarry_app/";
 const PARAGRAPH_STYLE = `margin:0 0 16px;font-family:${BODY_FONT};font-size:16px;line-height:1.65;color:${COLORS.ink};`;
 
 /*
- * Gmail and Outlook strip box-shadow, so the hard offset shadow is drawn with table cells:
- * a strip down the right (starting `offset` px from the top) and one along the bottom
- * (starting `offset` px from the left). Corners stay square so the shadow lines up everywhere.
+ * The site's cards sit on a solid offset shadow. Gmail strips box-shadow, so the shadow is a
+ * rounded block of colour behind the object, showing along its right and bottom edges.
  */
-function hardShadowBox(
+function offsetShadow(
   content: string,
-  options: { background: string; shadow: string; offset: number; border: number; padding: string },
+  options: {
+    background: string;
+    shadow: string;
+    offset: number;
+    radius: number;
+    padding: string;
+    width?: string;
+    className?: string;
+  },
 ): string {
-  const { background, shadow, offset, border, padding } = options;
-  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;">
+  const { background, shadow, offset, radius, padding, width = "100%", className } = options;
+  const classAttribute = className ? ` class="${className}"` : "";
+  return `<table role="presentation" width="${width}" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;">
   <tr>
-    <td rowspan="2" style="background:${background};border:${border}px solid ${COLORS.ink};padding:${padding};">${content}</td>
-    <td width="${offset}" height="${offset}" style="width:${offset}px;height:${offset}px;font-size:0;line-height:0;">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="${offset}" style="width:${offset}px;background:${shadow};font-size:0;line-height:0;">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="2" style="padding:0;">
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <td style="background:${shadow};border-radius:${radius}px;padding:0 ${offset}px ${offset}px 0;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;">
         <tr>
-          <td width="${offset}" height="${offset}" style="width:${offset}px;height:${offset}px;font-size:0;line-height:0;">&nbsp;</td>
-          <td height="${offset}" style="height:${offset}px;background:${shadow};font-size:0;line-height:0;">&nbsp;</td>
+          <td${classAttribute} style="background:${background};border:2px solid ${COLORS.ink};border-radius:${radius}px;padding:${padding};">${content}</td>
         </tr>
       </table>
     </td>
@@ -85,15 +88,38 @@ function hardShadowBox(
 </table>`;
 }
 
+function pillButton(text: string, href: string, size: "small" | "regular" = "regular"): string {
+  const padding = size === "small" ? "10px 18px" : "14px 24px";
+  const fontSize = size === "small" ? 13 : 15;
+  return offsetShadow(
+    `<a href="${href}" style="display:block;font-family:${BODY_FONT};font-size:${fontSize}px;font-weight:800;line-height:1;color:${COLORS.ink};text-decoration:none;white-space:nowrap;text-align:center;">${escapeHtml(text)}</a>`,
+    { background: COLORS.pink, shadow: COLORS.ink, offset: 4, radius: 999, padding, width: "auto" },
+  );
+}
+
+function sticker(text: string, background: string): string {
+  return `<span style="display:inline-block;background:${background};border:1.5px solid ${COLORS.ink};border-radius:2px;padding:6px 10px 5px;font-family:${BODY_FONT};font-size:11px;font-weight:900;letter-spacing:1px;line-height:1;text-transform:uppercase;color:${COLORS.ink};box-shadow:2px 2px 0 ${COLORS.ink};">${escapeHtml(text)}</span>`;
+}
+
 function paragraph(html: string, last = false): string {
   return `<p style="${PARAGRAPH_STYLE}${last ? "margin-bottom:0;" : ""}">${html}</p>`;
 }
 
-function noteBox(label: string, value: string, background: string): string {
-  return `<div style="margin:8px 0 24px;">${hardShadowBox(
-    `<div style="font-family:${BODY_FONT};font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${COLORS.ink};">${label}</div>
-     <div style="margin-top:4px;font-family:${DISPLAY_FONT};font-size:20px;line-height:1.3;color:${COLORS.ink};">${value}</div>`,
-    { background, shadow: COLORS.ink, offset: 4, border: 2, padding: "14px 18px" },
+// Same construction as the footer's "You're on the list" confirmation on the website.
+function successNote(title: string, detail: string): string {
+  return `<div style="margin:8px 0 24px;">${offsetShadow(
+    `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <td width="44" valign="middle" style="width:44px;padding-right:14px;">
+          <div style="width:40px;height:40px;border:1.5px solid ${COLORS.ink};border-radius:50%;background:${COLORS.mint};font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px;text-align:center;color:${COLORS.ink};">&#10003;</div>
+        </td>
+        <td valign="middle" style="font-family:${BODY_FONT};font-size:14px;line-height:1.55;color:${COLORS.muted};">
+          <div style="font-family:${DISPLAY_FONT};font-size:20px;font-weight:700;line-height:1.25;color:${COLORS.ink};">${title}</div>
+          ${detail}
+        </td>
+      </tr>
+    </table>`,
+    { background: COLORS.paper, shadow: COLORS.pink, offset: 6, radius: 22, padding: "14px 18px" },
   )}</div>`;
 }
 
@@ -103,23 +129,86 @@ interface EmailLayoutInput {
   heading: string;
   content: string;
   cta: { text: string; href: string };
+  showEarlyAccessPanel: boolean;
 }
 
-function emailLayout({ preheader, label, heading, content, cta }: EmailLayoutInput): string {
-  const button = `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:28px;"><tr><td>${hardShadowBox(
-    `<a href="${cta.href}" style="display:block;font-family:${BODY_FONT};font-size:16px;font-weight:700;line-height:1;color:${COLORS.ink};text-decoration:none;white-space:nowrap;">${escapeHtml(cta.text)} &rarr;</a>`,
-    { background: COLORS.pink, shadow: COLORS.ink, offset: 4, border: 2, padding: "14px 22px" },
-  )}</td></tr></table>`;
+function emailLayout({ preheader, label, heading, content, cta, showEarlyAccessPanel }: EmailLayoutInput): string {
+  const year = new Date().getFullYear();
 
-  const card = `<div class="rm-pad" style="background:${COLORS.pink};border-bottom:3px solid ${COLORS.ink};padding:28px 32px 26px;">
-      <span style="display:inline-block;background:${COLORS.yellow};border:2px solid ${COLORS.ink};padding:4px 10px;font-family:${BODY_FONT};font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${COLORS.ink};">${escapeHtml(label)}</span>
-      <h1 style="margin:16px 0 0;font-family:${DISPLAY_FONT};font-size:34px;font-weight:700;line-height:1.1;letter-spacing:-0.5px;color:${COLORS.ink};">${escapeHtml(heading)}</h1>
-    </div>
-    <div class="rm-pad" style="padding:28px 32px 32px;">
-      ${content}
-      ${button}
-      <p style="${PARAGRAPH_STYLE}margin:32px 0 0;">Warmly,<br><span style="font-family:${DISPLAY_FONT};font-size:20px;color:${COLORS.rose};">The Rosemarry team</span></p>
-    </div>`;
+  const nav = `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${COLORS.paper};border-bottom:2px solid ${COLORS.ink};">
+      <tr>
+        <td align="center" style="padding:14px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
+            <tr>
+              <td valign="middle">
+                <a href="${WEBSITE_URL}" style="text-decoration:none;color:${COLORS.ink};">
+                  <img src="${LOGO_URL}" width="44" height="34" alt="" style="display:inline-block;width:44px;height:auto;border:0;vertical-align:middle;">
+                  <span style="display:inline-block;margin-left:8px;font-family:${DISPLAY_FONT};font-size:26px;font-weight:800;letter-spacing:-1px;line-height:34px;color:${COLORS.ink};vertical-align:middle;">Rosemarry</span>
+                </a>
+              </td>
+              <td class="rm-hide-mobile" align="right" valign="middle">${pillButton("How it works", `${WEBSITE_URL}/how-it-works`, "small")}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>`;
+
+  const card = offsetShadow(
+    `${content}
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:28px;border-top:2px solid ${COLORS.ink};">
+        <tr>
+          <td class="rm-stack" valign="middle" style="padding-top:22px;font-family:${BODY_FONT};font-size:15px;line-height:1.5;color:${COLORS.ink};">
+            Warmly,<br><span style="font-family:${DISPLAY_FONT};font-size:19px;font-weight:700;color:${COLORS.rose};">The Rosemarry team</span>
+          </td>
+          <td class="rm-stack" align="right" valign="middle" style="padding-top:22px;">${pillButton(cta.text, cta.href)}</td>
+        </tr>
+      </table>`,
+    { background: COLORS.white, shadow: COLORS.pink, offset: 8, radius: 24, padding: "36px", className: "rm-pad" },
+  );
+
+  const earlyAccessPanel = showEarlyAccessPanel
+    ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${COLORS.yellow};border-top:2px solid ${COLORS.ink};">
+      <tr>
+        <td align="center" style="padding:40px 16px 44px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
+            <tr>
+              <td style="color:${COLORS.ink};">
+                ${sticker("Early access", COLORS.paper)}
+                <h2 style="margin:16px 0 8px;font-family:${DISPLAY_FONT};font-size:38px;font-weight:700;letter-spacing:-1.5px;line-height:1;color:${COLORS.ink};">Get in before the first Circle</h2>
+                <p style="margin:0 0 22px;font-family:${BODY_FONT};font-size:13px;font-weight:800;color:${COLORS.ink};">1 month of Advanced free at launch</p>
+                ${pillButton("Join early access", `${WEBSITE_URL}/#join`)}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>`
+    : "";
+
+  const footerLink = "color:#c7c7cd;text-decoration:underline;text-underline-offset:3px;";
+  const footer = `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${COLORS.ink};border-top:2px solid ${COLORS.ink};">
+      <tr>
+        <td align="center" style="padding:28px 16px 32px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
+            <tr>
+              <td style="font-family:${BODY_FONT};font-size:12px;font-weight:700;line-height:1.7;color:#a6a6ad;">
+                <a href="${WEBSITE_URL}" style="text-decoration:none;color:${COLORS.white};">
+                  <img src="${LOGO_URL}" width="36" height="28" alt="" style="display:inline-block;width:36px;height:auto;border:0;vertical-align:middle;">
+                  <span style="display:inline-block;margin-left:6px;font-family:${DISPLAY_FONT};font-size:18px;font-weight:800;line-height:28px;color:${COLORS.white};vertical-align:middle;">Rosemarry</span>
+                </a>
+                <div style="margin-top:14px;">Good things take time &middot; &copy; ${year} Rosemarry</div>
+                <div style="margin-top:6px;">
+                  <a href="${INSTAGRAM_URL}" style="${footerLink}">Instagram</a>&nbsp;&nbsp;&nbsp;
+                  <a href="${WEBSITE_URL}/privacy-and-terms" style="${footerLink}">Privacy + Terms</a>&nbsp;&nbsp;&nbsp;
+                  <a href="${WEBSITE_URL}/contact-us" style="${footerLink}">Contact</a>
+                </div>
+                <div style="margin-top:16px;font-size:11px;font-weight:400;color:#8b8b94;">This is an automatic confirmation from Rosemarry. Replies to this address are not monitored.</div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -129,46 +218,34 @@ function emailLayout({ preheader, label, heading, content, cta }: EmailLayoutInp
     <meta name="color-scheme" content="light only">
     <meta name="supported-color-schemes" content="light">
     <title>${escapeHtml(heading)}</title>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Playpen+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Playpen+Sans:wght@400..800&display=swap" rel="stylesheet">
     <style>
-      @media (max-width: 480px) {
+      @media (max-width: 520px) {
         .rm-hide-mobile { display: none !important; }
-        .rm-pad { padding-left: 20px !important; padding-right: 20px !important; }
+        .rm-pad { padding: 22px !important; }
+        .rm-title { font-size: 42px !important; }
+        .rm-stack { display: block !important; width: 100% !important; text-align: left !important; }
       }
     </style>
   </head>
   <body style="margin:0;padding:0;background:${COLORS.paper};color:${COLORS.ink};font-family:${BODY_FONT};">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${escapeHtml(preheader)}</div>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${COLORS.paper};">
+      <tr><td>${nav}</td></tr>
       <tr>
-        <td align="center" style="padding:32px 16px 40px;">
+        <td align="center" style="padding:44px 16px 52px;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
             <tr>
-              <td style="padding:0 0 24px;">
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-                  <tr>
-                    <td style="font-family:${DISPLAY_FONT};font-size:30px;font-weight:700;letter-spacing:-0.5px;color:${COLORS.rose};">
-                      <a href="${WEBSITE_URL}" style="color:${COLORS.rose};text-decoration:none;">Rosemarry</a>
-                    </td>
-                    <td class="rm-hide-mobile" align="right" style="font-family:${BODY_FONT};font-size:13px;font-weight:700;color:${COLORS.ink};">
-                      <span style="display:inline-block;background:${COLORS.mint};border:2px solid ${COLORS.ink};padding:4px 10px;white-space:nowrap;">Dating, at a better pace</span>
-                    </td>
-                  </tr>
-                </table>
+              <td style="padding-bottom:26px;">
+                ${sticker(label, COLORS.yellow)}
+                <h1 class="rm-title" style="margin:18px 0 0;font-family:${DISPLAY_FONT};font-size:56px;font-weight:700;letter-spacing:-2.5px;line-height:0.95;color:${COLORS.ink};">${escapeHtml(heading)}</h1>
               </td>
             </tr>
-            <tr>
-              <td>${hardShadowBox(card, { background: COLORS.white, shadow: COLORS.ink, offset: 8, border: 3, padding: "0" })}</td>
-            </tr>
-            <tr>
-              <td style="padding:28px 8px 0;text-align:center;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:${COLORS.muted};">
-                This is an automatic confirmation from Rosemarry. Replies to this address are not monitored.<br>
-                <a href="${WEBSITE_URL}" style="color:${COLORS.ink};font-weight:700;text-decoration:underline;text-decoration-color:${COLORS.pink};text-decoration-thickness:3px;">rosemarry.app</a>
-              </td>
-            </tr>
+            <tr><td>${card}</td></tr>
           </table>
         </td>
       </tr>
+      <tr><td>${earlyAccessPanel}${footer}</td></tr>
     </table>
   </body>
 </html>`;
@@ -209,9 +286,10 @@ export function createAutoReplyEmailService(
             heading: "We got your message",
             content: `${paragraph(`Hi ${firstName},`)}
               ${paragraph("Thanks for reaching out. Your message is safely with us.")}
-              ${noteBox("You wrote to us about", contactSubject, COLORS.yellow)}
+              ${successNote("Message received.", `About: <strong style="color:${COLORS.ink};">${contactSubject}</strong>`)}
               ${paragraph("A member of the Rosemarry team will get back to you as soon as we can.", true)}`,
             cta: { text: "Back to Rosemarry", href: WEBSITE_URL },
+            showEarlyAccessPanel: true,
           }),
           tags: [{ name: "form", value: "contact" }],
         },
@@ -238,9 +316,10 @@ export function createAutoReplyEmailService(
             label: "Early access",
             heading: "You're on the list",
             content: `${paragraph("Thanks for joining Rosemarry early access.")}
-              ${noteBox("What happens next", "We'll email you when Rosemarry is ready for you.", COLORS.mint)}
-              ${paragraph("Until then, we'll only write when there is something worth sharing.", true)}`,
+              ${successNote("You&rsquo;re on the list.", `We saved ${escapeHtml(input.email)} for early-access updates.`)}
+              ${paragraph("We'll email you when Rosemarry is ready for you. Until then, we'll only write when there is something worth sharing.", true)}`,
             cta: { text: "See how Circles work", href: `${WEBSITE_URL}/how-it-works` },
+            showEarlyAccessPanel: false,
           }),
           tags: [{ name: "form", value: "pre-signup" }],
         },
