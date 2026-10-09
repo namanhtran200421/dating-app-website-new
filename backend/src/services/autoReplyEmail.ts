@@ -69,7 +69,7 @@ const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
  * Sizes are the CSS sizes that script prints. Bump EMAIL_TYPE_VERSION whenever the images are
  * regenerated so mail proxies fetch the new ones.
  */
-const EMAIL_TYPE_VERSION = "3";
+const EMAIL_TYPE_VERSION = "4";
 const EMAIL_TYPE = {
   "brand-nav": { width: 195, height: 39, text: "Rosemarry", font: DISPLAY_FONT, size: 26, color: COLORS.ink },
   "title-contact": { width: 568, height: 70, text: "We got your message", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
