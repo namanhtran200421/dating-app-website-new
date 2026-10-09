@@ -79,6 +79,11 @@ for (const viewport of [
 
     await expect(page.locator('.people-deck .people-story-card')).toHaveCount(4);
     await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
+    const bonus = page.getByRole('button', { name: /Bonus.*people you click with most/i });
+    await expect(page.locator('app-members-demo .demo-title')).toHaveText('Circle 1');
+    await bonus.click();
+    await expect(page.locator('app-members-demo .demo-title')).toHaveText('Circle 2');
+    await expect(page.locator('app-members-demo .member--returning')).toHaveCount(3);
     await expect(
       page.getByRole('heading', { name: 'Less judging. More getting to know' }),
     ).toBeVisible();

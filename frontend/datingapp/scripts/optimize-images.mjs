@@ -46,6 +46,12 @@ const recipes = [
   { src: 'rosemarry/profile-asha-original.jpg', widths: [240, 360, 560] },
   { src: 'rosemarry/profile-jonah-original.jpg', widths: [240, 360, 560] },
 
+  // Generated members used in the interactive weekly Circle demo.
+  { src: 'rosemarry/profile-riley-generated.jpg', widths: [120, 240] },
+  { src: 'rosemarry/profile-jessica-generated.jpg', widths: [120, 240] },
+  { src: 'rosemarry/profile-arjun-generated.jpg', widths: [120, 240] },
+  { src: 'rosemarry/profile-chloe-generated.jpg', widths: [120, 240] },
+
   // Blog hero band.
   { src: 'rosemarry/hero-group.jpg', widths: [640, 1200] },
 

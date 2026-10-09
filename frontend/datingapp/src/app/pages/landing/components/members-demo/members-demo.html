@@ -1,31 +1,43 @@
-<div class="demo-phone">
-  <div class="demo-screen">
+<div id="members-demo-panel" class="demo-phone members-demo" [attr.aria-busy]="phase() !== 'idle'">
+  <div class="demo-screen members-panel">
     <header class="members-banner">
       <div class="members-banner__top">
-        <h4 class="demo-title">Members</h4>
-        <span class="members-count">{{ members.length + 1 }} total</span>
+        <h4 class="demo-title">Circle {{ circleIndex() + 1 }}</h4>
+        <span class="members-count">{{ members().length + 1 }} total</span>
       </div>
-      <p>Everyone in this week's Circle. Tap to see a profile.</p>
+      <p id="members-demo-hint">
+        @if (circleIndex() === 0) {
+          Your Circle this week.
+        } @else {
+          <span class="returning-key"><span aria-hidden="true">↻</span> Familiar faces</span>
+          stayed with you.
+        }
+      </p>
     </header>
 
-    <!-- Preview only for now: avatars react on hover; profiles open in a later version. -->
-    <ul class="member-grid" aria-label="Circle members">
+    <ul
+      class="member-grid"
+      aria-label="Circle members"
+      [class.member-grid--leaving]="phase() === 'leaving'"
+      [class.member-grid--entering]="phase() === 'entering'"
+    >
       <li class="member member--you">
         <span class="member__avatar" aria-hidden="true">You</span>
         <span class="member__name">You</span>
       </li>
-      @for (member of members; track member.name) {
-        <li class="member">
-          @if (member.avatar) {
+      @for (member of members(); track member.name) {
+        <li class="member" [class.member--returning]="member.returning">
+          <span class="member__photo-wrap">
             <img class="member__avatar" [src]="member.avatar" alt="" width="64" height="64" />
-          } @else {
-            <span class="member__avatar" [style.background]="member.tone" aria-hidden="true">
-              {{ member.name[0] }}
-            </span>
-          }
+            @if (member.returning) {
+              <span class="member__returning" aria-label="Returning member">↻</span>
+            }
+          </span>
           <span class="member__name">{{ member.name }}</span>
         </li>
       }
     </ul>
   </div>
+
+  <span class="members-demo__announcement" aria-live="polite">{{ announcement() }}</span>
 </div>

@@ -15,3 +15,9 @@ Sources checked on 27 September 2026:
 
 The visible article captions also link to the original photo pages. Keep this file and those
 captions with the images if the articles are moved or republished.
+
+## Generated profile images
+
+The four `profile-*-generated.jpg` images in `public/images/rosemarry/` were created for the
+interactive Circle demo with OpenAI's built-in image generation tool on 10 October 2026. They do
+not depict real users.
