@@ -60,7 +60,7 @@ for (const url of urls) {
     );
   }
 }
-assert.equal(docs.get('/')?.title, 'Rosemarry | Interaction-First Dating');
+assert.equal(docs.get('/')?.title, 'Rosemarry | Dating with deeper connections');
 assert.equal(
   docs.get('/how-it-works')?.title,
   'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
