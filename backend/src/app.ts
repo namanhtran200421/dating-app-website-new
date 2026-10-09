@@ -7,6 +7,7 @@ import express, {
 import helmet from "helmet";
 import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 
+import { createResendWebhookController } from "./controllers/resendWebhookController.js";
 import { verifyFormRequest } from "./middleware/verifyFormRequest.js";
 import { createContactRouter } from "./routes/contactRoute.js";
 import { createPreSignupRouter } from "./routes/preSignupRoute.js";
@@ -14,6 +15,8 @@ import {
   disabledAutoReplyEmailService,
   type AutoReplyEmailService,
 } from "./services/autoReplyEmail.js";
+import type { PreSignupWorkflow } from "./services/preSignupWorkflow.js";
+import type { ResendWebhookVerifier } from "./services/resendWebhook.js";
 
 const PRODUCTION_ORIGINS = [
   "https://www.rosemarry.app",
@@ -26,13 +29,42 @@ const DEVELOPMENT_ORIGINS = [
 ] as const;
 const FORM_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const PRE_SIGNUP_RATE_LIMIT = 10;
+const PRE_SIGNUP_RESEND_RATE_LIMIT = 3;
+const PRE_SIGNUP_TOKEN_RATE_LIMIT = 20;
 const CONTACT_RATE_LIMIT = 5;
+const RESEND_RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 
 export interface AppOptions {
   autoReplyEmailService?: AutoReplyEmailService;
   nodeEnv?: string;
+  preSignupWorkflow?: PreSignupWorkflow;
+  resendWebhookVerifier?: ResendWebhookVerifier;
   trustedProxyHops?: number | false;
 }
+
+const unavailablePreSignupWorkflow: PreSignupWorkflow = {
+  async submit(): Promise<void> {
+    throw new Error("Pre-signup workflow is not configured.");
+  },
+  async requestResend(): Promise<void> {
+    throw new Error("Pre-signup workflow is not configured.");
+  },
+  async confirmVerification(): Promise<boolean> {
+    return false;
+  },
+  async unsubscribe(): Promise<boolean> {
+    return false;
+  },
+  async handleWebhook(): Promise<void> {
+    throw new Error("Pre-signup workflow is not configured.");
+  },
+};
+
+const unavailableWebhookVerifier: ResendWebhookVerifier = {
+  verify() {
+    throw new Error("Webhook verification is not configured.");
+  },
+};
 
 // Allow the number of trusted proxy hops to be corrected via configuration
 // without a code change, since the real hop count depends on the deployment
@@ -84,6 +116,10 @@ export function createApp(options: AppOptions = {}) {
   const allowedOriginSet = new Set<string>(allowedOrigins);
   const autoReplyEmailService =
     options.autoReplyEmailService ?? disabledAutoReplyEmailService;
+  const preSignupWorkflow =
+    options.preSignupWorkflow ?? unavailablePreSignupWorkflow;
+  const resendWebhookVerifier =
+    options.resendWebhookVerifier ?? unavailableWebhookVerifier;
 
   // Render is the only network path to this process and contributes one proxy hop.
   // This makes req.ip, and therefore the rate-limit key, represent the client.
@@ -135,7 +171,25 @@ export function createApp(options: AppOptions = {}) {
     res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
     next();
   });
-  app.use(
+  app.post(
+    "/api/pre-signups/resend",
+    verifyFormRequest(allowedOriginSet),
+    createLimiter(
+      "pre-signup-resend",
+      PRE_SIGNUP_RESEND_RATE_LIMIT,
+      RESEND_RATE_LIMIT_WINDOW_MS,
+    ),
+  );
+  app.post(
+    ["/api/pre-signups/verify", "/api/pre-signups/unsubscribe"],
+    verifyFormRequest(allowedOriginSet),
+    createLimiter(
+      "pre-signup-token",
+      PRE_SIGNUP_TOKEN_RATE_LIMIT,
+      FORM_RATE_LIMIT_WINDOW_MS,
+    ),
+  );
+  app.post(
     "/api/pre-signups",
     verifyFormRequest(allowedOriginSet),
     createLimiter(
@@ -144,14 +198,19 @@ export function createApp(options: AppOptions = {}) {
       FORM_RATE_LIMIT_WINDOW_MS,
     ),
   );
-  app.use(
+  app.post(
     "/api/contact",
     verifyFormRequest(allowedOriginSet),
     createLimiter("contact", CONTACT_RATE_LIMIT, FORM_RATE_LIMIT_WINDOW_MS),
   );
+  app.post(
+    "/api/webhooks/resend",
+    express.raw({ limit: "64kb", type: "application/json" }),
+    createResendWebhookController(resendWebhookVerifier, preSignupWorkflow),
+  );
   app.use(express.json({ limit: "32kb", strict: true }));
 
-  app.use("/api/pre-signups", createPreSignupRouter(autoReplyEmailService));
+  app.use("/api/pre-signups", createPreSignupRouter(preSignupWorkflow));
   app.use("/api/contact", createContactRouter(autoReplyEmailService));
 
   app.get("/api/health", function (_req: Request, res: Response): void {

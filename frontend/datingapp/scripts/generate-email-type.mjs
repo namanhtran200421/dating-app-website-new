@@ -23,10 +23,10 @@ const bodyBold = { family: 'Playpen Sans', weight: 700 };
 const lines = [
   { file: 'brand-nav', text: 'Rosemarry', font: display, size: 26, tracking: -1, color: ink, surface: paper, logo: 44 },
   { file: 'title-contact', text: 'We got your message', font: display, size: 56, tracking: -2.5, color: ink, surface: paper },
-  { file: 'title-early-access', text: 'You’re on the list', font: display, size: 56, tracking: -2.5, color: ink, surface: paper },
+  { file: 'title-early-access', text: 'Confirm your email', font: display, size: 56, tracking: -2.5, color: ink, surface: paper },
   { file: 'message-contact', text: 'Thanks so much for reaching out! We’ll get back to you soon.', font: body, size: 18, color: ink, surface: white, wrap: 330 },
-  { file: 'message-early-access', text: 'We’ll email you as soon as Rosemarry is ready for you!', font: body, size: 18, color: ink, surface: white, wrap: 330 },
-  { file: 'button-early-access', text: 'See how Circles work', font: bodyBold, size: 15, color: ink, surface: pink },
+  { file: 'message-early-access', text: 'Tap below to confirm you want Rosemarry early-access updates.', font: body, size: 18, color: ink, surface: white, wrap: 330 },
+  { file: 'button-early-access', text: 'Confirm my email', font: bodyBold, size: 15, color: ink, surface: pink },
   { file: 'signoff-warmly', text: 'Warmly,', font: body, size: 16, color: ink, surface: white },
   { file: 'signoff-team', text: 'The Rosemarry team', font: display, size: 20, color: rose, surface: white },
   { file: 'footer-note', text: 'Automatic email from Rosemarry. Replies aren’t monitored.', font: body, size: 12, color: quiet, surface: paper },

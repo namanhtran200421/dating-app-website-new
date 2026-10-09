@@ -2,10 +2,18 @@ import "dotenv/config";
 import mongoose from "mongoose";
 
 import { createApp } from "./app.js";
-import { validateRetentionConfiguration } from "./config/retention.js";
+import {
+  retentionDays,
+  validateRetentionConfiguration,
+} from "./config/retention.js";
+import { loadSubscriptionConfiguration } from "./config/subscription.js";
 import { ContactMessageSchema } from "./models/contactModel.js";
 import { PreSignSchema } from "./models/subscripeModel.js";
+import { mongoosePreSignupRepository } from "./repositories/preSignupRepository.js";
 import { createAutoReplyEmailService } from "./services/autoReplyEmail.js";
+import { createEmailDomainValidator } from "./services/emailDomainValidation.js";
+import { createPreSignupWorkflow } from "./services/preSignupWorkflow.js";
+import { createResendWebhookVerifier } from "./services/resendWebhook.js";
 
 mongoose.set("sanitizeFilter", true);
 mongoose.set("strictQuery", "throw");
@@ -25,13 +33,44 @@ if (!mongo) {
 const mongoUri = mongo;
 
 validateRetentionConfiguration();
+const subscriptionConfiguration = loadSubscriptionConfiguration(nodeEnv);
 const autoReplyEmailService = createAutoReplyEmailService(nodeEnv);
+const resendApiKey = process.env.RESEND_API_KEY?.trim();
+const resendWebhookSecret = process.env.RESEND_WEBHOOK_SECRET?.trim();
+
+if (!resendApiKey) {
+  throw new Error("RESEND_API_KEY is required.");
+}
+
+if (!resendWebhookSecret) {
+  throw new Error("RESEND_WEBHOOK_SECRET is required.");
+}
+
+const preSignupWorkflow = createPreSignupWorkflow({
+  configuration: subscriptionConfiguration,
+  emailDomainValidator: createEmailDomainValidator({
+    blockDisposableEmails: subscriptionConfiguration.blockDisposableEmails,
+    timeoutMs: subscriptionConfiguration.dnsTimeoutMs,
+  }),
+  emailService: autoReplyEmailService,
+  repository: mongoosePreSignupRepository,
+  retentionDays: retentionDays("PRE_SIGNUP_RETENTION_DAYS"),
+});
+const resendWebhookVerifier = createResendWebhookVerifier(
+  resendApiKey,
+  resendWebhookSecret,
+);
 
 async function startServer(): Promise<void> {
   await mongoose.connect(mongoUri);
   await Promise.all([ContactMessageSchema.init(), PreSignSchema.init()]);
 
-  const app = createApp({ autoReplyEmailService, nodeEnv });
+  const app = createApp({
+    autoReplyEmailService,
+    nodeEnv,
+    preSignupWorkflow,
+    resendWebhookVerifier,
+  });
 
   console.log("Connected to required services");
 

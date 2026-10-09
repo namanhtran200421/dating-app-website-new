@@ -40,4 +40,40 @@ describe('PreSignupService', () => {
     expect(request.request.withCredentials).toBe(false);
     request.flush({ success: true });
   });
+
+  it('posts signup, resend, verification, and unsubscribe requests without credentials', () => {
+    service.preSignup({ email: 'reader@example.com', turnstileToken: 'turnstile' }).subscribe();
+    service
+      .resendVerification({ email: 'reader@example.com', turnstileToken: 'turnstile' })
+      .subscribe();
+    service.confirmVerification('verification-token').subscribe();
+    service.unsubscribe('unsubscribe-token').subscribe();
+
+    const expected = [
+      {
+        url: 'http://localhost:3000/api/pre-signups',
+        body: { email: 'reader@example.com', turnstileToken: 'turnstile' },
+      },
+      {
+        url: 'http://localhost:3000/api/pre-signups/resend',
+        body: { email: 'reader@example.com', turnstileToken: 'turnstile' },
+      },
+      {
+        url: 'http://localhost:3000/api/pre-signups/verify',
+        body: { token: 'verification-token' },
+      },
+      {
+        url: 'http://localhost:3000/api/pre-signups/unsubscribe',
+        body: { token: 'unsubscribe-token' },
+      },
+    ];
+
+    for (const item of expected) {
+      const request = httpTesting.expectOne(item.url);
+      expect(request.request.method).toBe('POST');
+      expect(request.request.body).toEqual(item.body);
+      expect(request.request.withCredentials).toBe(false);
+      request.flush({ success: true });
+    }
+  });
 });

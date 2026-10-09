@@ -14,16 +14,27 @@ export interface ContactAutoReplyInput {
 export interface PreSignupAutoReplyInput {
   email: string;
   signupId: string;
+  attemptId: string;
+  verificationUrl: string;
+  unsubscribeUrl: string;
+}
+
+export interface EmailDeliveryReceipt {
+  providerMessageId: string;
 }
 
 export interface AutoReplyEmailService {
   sendContactReply(input: ContactAutoReplyInput): Promise<void>;
-  sendPreSignupReply(input: PreSignupAutoReplyInput): Promise<void>;
+  sendPreSignupVerification(
+    input: PreSignupAutoReplyInput,
+  ): Promise<EmailDeliveryReceipt>;
 }
 
 export const disabledAutoReplyEmailService: AutoReplyEmailService = {
   async sendContactReply(): Promise<void> {},
-  async sendPreSignupReply(): Promise<void> {},
+  async sendPreSignupVerification(): Promise<EmailDeliveryReceipt> {
+    return { providerMessageId: "local-email-disabled" };
+  },
 };
 
 function escapeHtml(value: string): string {
@@ -58,14 +69,14 @@ const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
  * Sizes are the CSS sizes that script prints. Bump EMAIL_TYPE_VERSION whenever the images are
  * regenerated so mail proxies fetch the new ones.
  */
-const EMAIL_TYPE_VERSION = "2";
+const EMAIL_TYPE_VERSION = "3";
 const EMAIL_TYPE = {
   "brand-nav": { width: 195, height: 39, text: "Rosemarry", font: DISPLAY_FONT, size: 26, color: COLORS.ink },
   "title-contact": { width: 568, height: 70, text: "We got your message", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
-  "title-early-access": { width: 454, height: 70, text: "You're on the list", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-early-access": { width: 512, height: 70, text: "Confirm your email", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "message-contact": { width: 330, height: 60, text: "Thanks so much for reaching out! We'll get back to you soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
-  "message-early-access": { width: 330, height: 60, text: "We'll email you as soon as Rosemarry is ready for you!", font: BODY_FONT, size: 18, color: COLORS.ink },
-  "button-early-access": { width: 160, height: 24, text: "See how Circles work", font: BODY_FONT, size: 15, color: COLORS.ink },
+  "message-early-access": { width: 330, height: 60, text: "Tap below to confirm you want Rosemarry early-access updates.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "button-early-access": { width: 136, height: 24, text: "Confirm my email", font: BODY_FONT, size: 15, color: COLORS.ink },
   "signoff-warmly": { width: 66, height: 25, text: "Warmly,", font: BODY_FONT, size: 16, color: COLORS.ink },
   "signoff-team": { width: 218, height: 24, text: "The Rosemarry team", font: DISPLAY_FONT, size: 20, color: COLORS.rose },
   "footer-note": { width: 345, height: 20, text: "Automatic email from Rosemarry. Replies aren't monitored.", font: BODY_FONT, size: 12, color: COLORS.quiet },
@@ -126,9 +137,17 @@ interface EmailLayoutInput {
   headingImage: EmailTypeKey;
   message: EmailTypeKey;
   cta?: { label: EmailTypeKey; href: string };
+  secondaryLink?: { label: string; href: string };
 }
 
-function emailLayout({ preheader, heading, headingImage, message, cta }: EmailLayoutInput): string {
+function emailLayout({
+  preheader,
+  heading,
+  headingImage,
+  message,
+  cta,
+  secondaryLink,
+}: EmailLayoutInput): string {
   const card = offsetShadow(
     `${emailText(message)}
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:26px;">
@@ -139,7 +158,12 @@ function emailLayout({ preheader, heading, headingImage, message, cta }: EmailLa
           </td>
           ${cta ? `<td class="rm-stack rm-stack-gap" align="right" valign="bottom">${pillButton(cta.label, cta.href)}</td>` : ""}
         </tr>
-      </table>`,
+      </table>
+      ${
+        secondaryLink
+          ? `<p style="margin:24px 0 0;font-family:${BODY_FONT};font-size:12px;line-height:1.5;color:${COLORS.quiet};">Didn&rsquo;t request this? <a href="${secondaryLink.href}" style="color:${COLORS.ink};font-weight:700;">${escapeHtml(secondaryLink.label)}</a></p>`
+          : ""
+      }`,
     { background: COLORS.white, shadow: COLORS.pink, offset: 8, radius: 24, padding: "32px", className: "rm-pad" },
   );
 
@@ -231,31 +255,43 @@ export function createAutoReplyEmailService(
       }
     },
 
-    async sendPreSignupReply(input): Promise<void> {
-      const { error } = await resend.emails.send(
+    async sendPreSignupVerification(input): Promise<EmailDeliveryReceipt> {
+      const { data, error } = await resend.emails.send(
         {
           from: FROM_ADDRESS,
           to: [input.email],
-          subject: "You're on the Rosemarry early access list",
-          text: `You're on the list! We'll email you as soon as Rosemarry is ready for you.\n\nSee how Circles work: ${WEBSITE_URL}/how-it-works\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.`,
+          subject: "Confirm your Rosemarry early access email",
+          text: `Confirm that you want Rosemarry early-access updates:\n${input.verificationUrl}\n\nThis link expires soon and can only be used once. If you did not request it, you can ignore this email or unsubscribe here:\n${input.unsubscribeUrl}\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.`,
           html: emailLayout({
-            preheader: "We'll email you as soon as Rosemarry is ready for you!",
-            heading: "You're on the list",
+            preheader: "Confirm your email to join Rosemarry early access.",
+            heading: "Confirm your email",
             headingImage: "title-early-access",
             message: "message-early-access",
-            cta: { label: "button-early-access", href: `${WEBSITE_URL}/how-it-works` },
+            cta: {
+              label: "button-early-access",
+              href: input.verificationUrl,
+            },
+            secondaryLink: {
+              label: "Unsubscribe this address",
+              href: input.unsubscribeUrl,
+            },
           }),
-          tags: [{ name: "form", value: "pre-signup" }],
+          tags: [
+            { name: "form", value: "pre-signup" },
+            { name: "message_type", value: "email_verification" },
+          ],
         },
         {
-          idempotencyKey: `early-access-welcome/${input.signupId}`,
+          idempotencyKey: `early-access-verification/${input.attemptId}`,
           signal: AbortSignal.timeout(EMAIL_REQUEST_TIMEOUT_MS),
         },
       );
 
-      if (error) {
-        throw new Error("The email provider rejected the pre-signup auto-reply.");
+      if (error || !data?.id) {
+        throw new Error("The email provider rejected the verification email.");
       }
+
+      return { providerMessageId: data.id };
     },
   };
 }

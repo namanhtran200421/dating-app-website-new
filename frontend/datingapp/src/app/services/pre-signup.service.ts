@@ -12,6 +12,10 @@ interface PreSignupRequest {
   turnstileToken: string;
 }
 
+interface SubscriptionTokenRequest {
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -31,6 +35,20 @@ export class PreSignupService {
 
   preSignup(presignupData: PreSignupRequest) {
     return this.http.post(`${this.baseUrl}/api/pre-signups`, presignupData);
+  }
+
+  resendVerification(presignupData: PreSignupRequest) {
+    return this.http.post(`${this.baseUrl}/api/pre-signups/resend`, presignupData);
+  }
+
+  confirmVerification(token: string) {
+    const body: SubscriptionTokenRequest = { token };
+    return this.http.post(`${this.baseUrl}/api/pre-signups/verify`, body);
+  }
+
+  unsubscribe(token: string) {
+    const body: SubscriptionTokenRequest = { token };
+    return this.http.post(`${this.baseUrl}/api/pre-signups/unsubscribe`, body);
   }
 
   addContact(contactData: ContactRequest) {

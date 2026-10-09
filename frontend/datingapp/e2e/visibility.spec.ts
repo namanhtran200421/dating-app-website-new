@@ -96,6 +96,8 @@ test('every public page uses the shared section reveal contract', async ({ page 
     '/press',
     '/contact-us',
     '/privacy-and-terms',
+    '/email-confirmation',
+    '/unsubscribe',
     '/blog/dating-without-swiping',
   ]) {
     await page.goto(path);
@@ -252,7 +254,7 @@ for (const successful of [true, false]) {
     await page.locator('.footer-signup__form button[type="submit"]').click();
     if (successful) {
       await expect(page.locator('.footer-signup__success')).toContainText(
-        'We saved reader@example.com',
+        'We sent a confirmation link to reader@example.com',
       );
     } else {
       await expect(page.locator('.footer-signup__error')).toBeVisible();
@@ -261,6 +263,95 @@ for (const successful of [true, false]) {
     expect(cspViolations).toEqual([]);
   });
 }
+
+test('email confirmation keeps the token out of the page request and verifies once', async ({
+  page,
+}) => {
+  let submittedToken = '';
+  await page.route('https://www.rosemarry.app/**', async (route) => {
+    const url = new URL(route.request().url());
+    const response = await route.fetch({
+      url: `http://127.0.0.1:4173${url.pathname}${url.search}`,
+    });
+    await route.fulfill({ response });
+  });
+  await page.route('https://rosemarry-api.onrender.com/api/pre-signups/verify', async (route) => {
+    const headers = {
+      'access-control-allow-origin': 'https://www.rosemarry.app',
+      'access-control-allow-headers': 'content-type',
+      'access-control-allow-methods': 'POST,OPTIONS',
+    };
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({ status: 204, headers });
+      return;
+    }
+    submittedToken = (route.request().postDataJSON() as { token: string }).token;
+    await route.fulfill({
+      status: 200,
+      headers,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true }),
+    });
+  });
+
+  const response = await page.goto(
+    'https://www.rosemarry.app/email-confirmation#token=verification-token-value-1234567890',
+  );
+  expect(response?.request().url()).not.toContain('verification-token-value');
+  await expect(page).toHaveURL(/\/email-confirmation$/);
+  await page.getByRole('button', { name: 'Confirm my email' }).click();
+  await expect(page.getByText("You're confirmed and on the early-access list.")).toBeVisible();
+  expect(submittedToken).toBe('verification-token-value-1234567890');
+});
+
+test('invalid confirmation fragments are cleared without executing', async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+
+  await page.goto('/email-confirmation#token=too-short');
+  await expect(page).toHaveURL(/\/email-confirmation$/);
+  await expect(page.getByText('This link is incomplete or invalid.')).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
+
+test('unsubscribe requires the signed link token but no login', async ({ page }) => {
+  let submittedToken = '';
+  await page.route('https://www.rosemarry.app/**', async (route) => {
+    const url = new URL(route.request().url());
+    const response = await route.fetch({
+      url: `http://127.0.0.1:4173${url.pathname}${url.search}`,
+    });
+    await route.fulfill({ response });
+  });
+  await page.route(
+    'https://rosemarry-api.onrender.com/api/pre-signups/unsubscribe',
+    async (route) => {
+      const headers = {
+        'access-control-allow-origin': 'https://www.rosemarry.app',
+        'access-control-allow-headers': 'content-type',
+        'access-control-allow-methods': 'POST,OPTIONS',
+      };
+      if (route.request().method() === 'OPTIONS') {
+        await route.fulfill({ status: 204, headers });
+        return;
+      }
+      submittedToken = (route.request().postDataJSON() as { token: string }).token;
+      await route.fulfill({
+        status: 200,
+        headers,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true }),
+      });
+    },
+  );
+
+  await page.goto(
+    'https://www.rosemarry.app/unsubscribe#token=signed-unsubscribe-token-1234567890',
+  );
+  await page.getByRole('button', { name: 'Unsubscribe this address' }).click();
+  await expect(page.getByText('This address has been unsubscribed.')).toBeVisible();
+  expect(submittedToken).toBe('signed-unsubscribe-token-1234567890');
+});
 
 test('unknown URLs return a real 404', async ({ request }) => {
   const response = await request.get('/blog/this-article-does-not-exist');

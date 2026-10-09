@@ -20,8 +20,16 @@ website and its two form endpoints.
   passing request objects to MongoDB. Mongoose filter sanitization, strict
   queries, strict models, and model validators provide additional layers.
 - The early-access endpoint permits 10 requests per client IP per 15 minutes;
-  contact permits 5. Limits run before JSON parsing. Render and Vercel also
-  provide platform DDoS protection.
+  verification resends permit 3 per hour, and contact permits 5 per 15 minutes.
+  Per-address cooldowns add a second email-flooding control. Limits run before
+  JSON parsing. Render and Vercel also provide platform DDoS protection.
+- Early-access subscriptions use double opt-in. Verification tokens are random,
+  stored only as hashes, expire, and are atomically single-use. Only `VERIFIED`
+  records are newsletter-eligible; bounced and unsubscribed records are
+  suppressed.
+- Resend webhook requests are signature-verified against the raw body and
+  processed idempotently. Delivery-provider acceptance is not treated as proof
+  of delivery.
 - API and form responses are non-cacheable and do not echo submitted personal
   information or internal database fields.
 

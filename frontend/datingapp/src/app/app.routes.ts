@@ -110,6 +110,40 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'email-confirmation',
+    loadComponent: () =>
+      import('./pages/subscription-action/subscription-action').then(
+        (m) => m.SubscriptionActionPage,
+      ),
+    data: {
+      subscriptionAction: 'verify',
+      seo: {
+        title: 'Confirm your email | Rosemarry',
+        description: 'Confirm your Rosemarry early-access email address.',
+        canonicalPath: '/email-confirmation',
+        pageType: 'WebPage',
+        noIndex: true,
+      },
+    },
+  },
+  {
+    path: 'unsubscribe',
+    loadComponent: () =>
+      import('./pages/subscription-action/subscription-action').then(
+        (m) => m.SubscriptionActionPage,
+      ),
+    data: {
+      subscriptionAction: 'unsubscribe',
+      seo: {
+        title: 'Unsubscribe | Rosemarry',
+        description: 'Unsubscribe an email address from Rosemarry updates.',
+        canonicalPath: '/unsubscribe',
+        pageType: 'WebPage',
+        noIndex: true,
+      },
+    },
+  },
+  {
     path: 'policy-page',
     redirectTo: 'privacy-and-terms',
     pathMatch: 'full',

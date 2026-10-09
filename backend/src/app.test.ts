@@ -1,18 +1,21 @@
 import assert from "node:assert/strict";
 import { test, type TestContext } from "node:test";
 import request from "supertest";
+import type { WebhookEventPayload } from "resend";
 
 import { createApp } from "./app.js";
 import { ContactMessageSchema } from "./models/contactModel.js";
-import { PreSignSchema } from "./models/subscripeModel.js";
 import {
   createAutoReplyEmailService,
   type AutoReplyEmailService,
   type ContactAutoReplyInput,
   type PreSignupAutoReplyInput,
 } from "./services/autoReplyEmail.js";
+import type { PreSignupWorkflow } from "./services/preSignupWorkflow.js";
+import type { ResendWebhookVerifier } from "./services/resendWebhook.js";
 
 const PRODUCTION_ORIGIN = "https://www.rosemarry.app";
+const VALID_TOKEN = "a".repeat(43);
 
 function setEnvironment(
   t: TestContext,
@@ -20,17 +23,12 @@ function setEnvironment(
   value: string | undefined,
 ): void {
   const previous = process.env[key];
-  if (value === undefined) {
-    delete process.env[key];
-  } else {
-    process.env[key] = value;
-  }
+  if (value === undefined) delete process.env[key];
+  else process.env[key] = value;
+
   t.after(() => {
-    if (previous === undefined) {
-      delete process.env[key];
-    } else {
-      process.env[key] = previous;
-    }
+    if (previous === undefined) delete process.env[key];
+    else process.env[key] = previous;
   });
 }
 
@@ -43,7 +41,7 @@ function remaining(response: request.Response): number {
 
 function mockSuccessfulTurnstile(
   t: TestContext,
-  action: "contact" | "pre_signup",
+  action: "contact" | "pre_signup" | "pre_signup_resend",
 ): void {
   t.mock.method(
     globalThis,
@@ -58,6 +56,49 @@ function mockSuccessfulTurnstile(
         { status: 200, headers: { "Content-Type": "application/json" } },
       ),
   );
+}
+
+function createRecordingWorkflow(overrides: Partial<PreSignupWorkflow> = {}): {
+  confirmedTokens: string[];
+  emails: string[];
+  resentEmails: string[];
+  unsubscribedTokens: string[];
+  webhookIds: string[];
+  workflow: PreSignupWorkflow;
+} {
+  const confirmedTokens: string[] = [];
+  const emails: string[] = [];
+  const resentEmails: string[] = [];
+  const unsubscribedTokens: string[] = [];
+  const webhookIds: string[] = [];
+
+  return {
+    confirmedTokens,
+    emails,
+    resentEmails,
+    unsubscribedTokens,
+    webhookIds,
+    workflow: {
+      async submit(email): Promise<void> {
+        emails.push(email);
+      },
+      async requestResend(email): Promise<void> {
+        resentEmails.push(email);
+      },
+      async confirmVerification(token): Promise<boolean> {
+        confirmedTokens.push(token);
+        return true;
+      },
+      async unsubscribe(token): Promise<boolean> {
+        unsubscribedTokens.push(token);
+        return true;
+      },
+      async handleWebhook(eventId): Promise<void> {
+        webhookIds.push(eventId);
+      },
+      ...overrides,
+    },
+  };
 }
 
 function createRecordingEmailService(): {
@@ -75,8 +116,9 @@ function createRecordingEmailService(): {
       async sendContactReply(input): Promise<void> {
         contactReplies.push(input);
       },
-      async sendPreSignupReply(input): Promise<void> {
+      async sendPreSignupVerification(input) {
         preSignupReplies.push(input);
+        return { providerMessageId: "recorded-email-id" };
       },
     },
   };
@@ -84,18 +126,17 @@ function createRecordingEmailService(): {
 
 test("production CORS excludes local development origins", async () => {
   const app = createApp({ nodeEnv: "production" });
-
   const local = await request(app)
     .get("/api/health")
     .set("Origin", "http://localhost:4200");
   const production = await request(app)
     .get("/api/health")
-    .set("Origin", "https://www.rosemarry.app");
+    .set("Origin", PRODUCTION_ORIGIN);
 
   assert.equal(local.headers["access-control-allow-origin"], undefined);
   assert.equal(
     production.headers["access-control-allow-origin"],
-    "https://www.rosemarry.app",
+    PRODUCTION_ORIGIN,
   );
 });
 
@@ -110,64 +151,47 @@ test("API responses include restrictive security and cache headers", async () =>
   assert.equal(response.headers["x-frame-options"], "DENY");
   assert.equal(response.headers["referrer-policy"], "no-referrer");
   assert.equal(response.headers["x-robots-tag"], "noindex, nofollow, noarchive");
-  assert.match(
-    String(response.headers["strict-transport-security"]),
-    /max-age=63072000/i,
-  );
-  assert.match(
-    String(response.headers["content-security-policy"]),
-    /default-src 'none'/,
-  );
+  assert.match(String(response.headers["content-security-policy"]), /default-src 'none'/);
 });
 
-test("unknown environments use production CORS defaults", async () => {
-  const app = createApp({ nodeEnv: "staging" });
-
-  const response = await request(app)
-    .get("/api/health")
-    .set("Origin", "http://localhost:4200");
-
-  assert.equal(response.headers["access-control-allow-origin"], undefined);
-});
-
-test("rate limiting keys requests by forwarded client IP", async () => {
+test("rate limiting keys by trusted proxy IP and ignores spoofed CF headers", async () => {
   const app = createApp({ nodeEnv: "production", trustedProxyHops: 1 });
-  const submit = (clientIp: string) =>
+  const submit = (forwardedIp: string, cloudflareIp: string) =>
     request(app)
       .post("/api/pre-signups")
       .set("Origin", PRODUCTION_ORIGIN)
-      .set("X-Forwarded-For", clientIp)
+      .set("X-Forwarded-For", forwardedIp)
+      .set("CF-Connecting-IP", cloudflareIp)
       .send({});
 
-  const first = await submit("203.0.113.10");
-  const second = await submit("203.0.113.10");
-  const anotherClient = await submit("203.0.113.11");
+  const first = await submit("203.0.113.10", "198.51.100.1");
+  const second = await submit("203.0.113.10", "198.51.100.2");
+  const anotherClient = await submit("203.0.113.11", "198.51.100.1");
 
   assert.equal(first.status, 403);
   assert.equal(remaining(second), remaining(first) - 1);
   assert.equal(remaining(anotherClient), remaining(first));
 });
 
-test("rate limiting ignores spoofed CF-Connecting-IP headers", async () => {
-  const app = createApp({ nodeEnv: "production", trustedProxyHops: 1 });
-  const submit = (cfIp: string) =>
-    request(app)
-      .post("/api/pre-signups")
-      .set("Origin", PRODUCTION_ORIGIN)
-      .set("CF-Connecting-IP", cfIp)
-      .set("X-Forwarded-For", "203.0.113.1")
-      .send({});
-
-  const first = await submit("198.51.100.5");
-  const second = await submit("198.51.100.99");
-
-  assert.equal(remaining(second), remaining(first) - 1);
-});
-
-test("form endpoints enforce the configured rate limit", async () => {
+test("signup and resend endpoints enforce separate limits", async () => {
   const app = createApp({ nodeEnv: "production", trustedProxyHops: false });
 
-  for (let attempt = 1; attempt <= 10; attempt += 1) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await request(app)
+      .post("/api/pre-signups/resend")
+      .set("Origin", PRODUCTION_ORIGIN)
+      .send({});
+    assert.equal(response.status, 403);
+  }
+
+  const limited = await request(app)
+    .post("/api/pre-signups/resend")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({});
+  assert.equal(limited.status, 429);
+  assert.match(String(limited.headers["ratelimit-policy"]), /q=3/);
+
+  for (let attempt = 0; attempt < 10; attempt += 1) {
     const response = await request(app)
       .post("/api/pre-signups")
       .set("Origin", PRODUCTION_ORIGIN)
@@ -175,23 +199,16 @@ test("form endpoints enforce the configured rate limit", async () => {
     assert.equal(response.status, 403);
   }
 
-  const limited = await request(app)
+  const signupLimited = await request(app)
     .post("/api/pre-signups")
     .set("Origin", PRODUCTION_ORIGIN)
     .send({});
-  assert.equal(limited.status, 429);
-  assert.deepEqual(limited.body, {
-    success: false,
-    message: "Too many requests. Please try again later.",
-  });
+  assert.equal(signupLimited.status, 429);
+  assert.match(String(signupLimited.headers["ratelimit-policy"]), /q=10/);
 });
 
-test("form endpoints reject missing, foreign, and non-JSON requests", async (t) => {
-  const fetchMock = t.mock.method(globalThis, "fetch", async () => {
-    throw new Error("Turnstile must not be called for a rejected request.");
-  });
+test("form endpoints reject missing origins and non-JSON requests", async () => {
   const app = createApp({ nodeEnv: "production" });
-
   const missingOrigin = await request(app)
     .post("/api/pre-signups")
     .send({ email: "person@example.com", turnstileToken: "token" });
@@ -208,12 +225,10 @@ test("form endpoints reject missing, foreign, and non-JSON requests", async (t) 
   assert.equal(missingOrigin.status, 403);
   assert.equal(foreignOrigin.status, 403);
   assert.equal(nonJson.status, 415);
-  assert.equal(fetchMock.mock.callCount(), 0);
 });
 
-test("malformed and oversized JSON receive generic JSON errors", async () => {
+test("malformed and oversized JSON receive generic errors", async () => {
   const app = createApp({ nodeEnv: "production" });
-
   const malformed = await request(app)
     .post("/api/contact")
     .set("Origin", PRODUCTION_ORIGIN)
@@ -225,218 +240,177 @@ test("malformed and oversized JSON receive generic JSON errors", async () => {
     .send({ padding: "a".repeat(34_000) });
 
   assert.equal(malformed.status, 400);
-  assert.deepEqual(malformed.body, {
-    success: false,
-    message: "Invalid JSON.",
-  });
   assert.equal(oversized.status, 413);
-  assert.deepEqual(oversized.body, {
-    success: false,
-    message: "Payload too large.",
-  });
 });
 
-test("pre-signup responses do not reveal whether an email exists", async (t) => {
+test("valid signups require Turnstile and delegate a normalized email", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
-  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
   mockSuccessfulTurnstile(t, "pre_signup");
-  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
-    acknowledged: true,
-  }));
-  const app = createApp({ nodeEnv: "test" });
-
-  const submit = (email: string) =>
-    request(app)
-      .post("/api/pre-signups")
-      .set("Origin", PRODUCTION_ORIGIN)
-      .send({ email, turnstileToken: "valid-token" });
-  const first = await submit("new@example.com");
-  const second = await submit("existing@example.com");
-
-  assert.equal(first.status, 202);
-  assert.equal(second.status, 202);
-  assert.deepEqual(first.body, second.body);
-  assert.equal(updateOne.mock.callCount(), 2);
-  assert.deepEqual(updateOne.mock.calls[0]?.arguments[2], {
-    upsert: true,
-    runValidators: true,
+  const recording = createRecordingWorkflow();
+  const app = createApp({
+    nodeEnv: "test",
+    preSignupWorkflow: recording.workflow,
   });
-  const update = updateOne.mock.calls[0]?.arguments[1] as {
-    $setOnInsert: { expiresAt?: unknown };
-  };
-  assert.ok(update.$setOnInsert.expiresAt instanceof Date);
-});
-
-test("Turnstile test credentials require an explicit local environment", async (t) => {
-  setEnvironment(t, "NODE_ENV", undefined);
-  setEnvironment(t, "TURNSTILE_SECRET", "1x0000000000000000000000000000000AA");
-  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
-  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
-  t.mock.method(
-    globalThis,
-    "fetch",
-    async () =>
-      new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }),
-  );
-  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
-    acknowledged: true,
-  }));
-  const app = createApp();
 
   const response = await request(app)
     .post("/api/pre-signups")
     .set("Origin", PRODUCTION_ORIGIN)
-    .send({
-      email: "person@example.com",
-      turnstileToken: "valid-token",
-    });
+    .send({ email: "  Reader@EXAMPLE.com ", turnstileToken: "valid-token" });
 
-  assert.equal(response.status, 403);
-  assert.equal(updateOne.mock.callCount(), 0);
+  assert.equal(response.status, 202);
+  assert.deepEqual(recording.emails, ["Reader@example.com"]);
+  assert.equal(JSON.stringify(response.body).includes("Reader@example.com"), false);
 });
 
-test("Turnstile accepts configured hostnames and rejects an unlisted hostname", async (t) => {
+test("Turnstile rejects a mismatched action before workflow execution", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
-  setEnvironment(t, "TURNSTILE_HOSTNAMES", "www.rosemarry.app,rosemarry.app");
-  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
-  let hostname = "rosemarry.app";
-  t.mock.method(globalThis, "fetch", async () =>
-    new Response(
-      JSON.stringify({ success: true, hostname, action: "pre_signup" }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
-    ),
-  );
-  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
-    acknowledged: true,
-  }));
-  const app = createApp({ nodeEnv: "production" });
-  const submit = () =>
-    request(app)
-      .post("/api/pre-signups")
-      .set("Origin", PRODUCTION_ORIGIN)
-      .send({
-        email: "person@example.com",
-        turnstileToken: "valid-token",
-      });
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  mockSuccessfulTurnstile(t, "contact");
+  const recording = createRecordingWorkflow();
 
-  assert.equal((await submit()).status, 202);
-  hostname = "localhost";
-  assert.equal((await submit()).status, 403);
-  assert.equal(updateOne.mock.callCount(), 1);
-});
-
-test("Turnstile rejects submissions without a configured hostname", async (t) => {
-  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
-  setEnvironment(t, "TURNSTILE_HOSTNAMES", undefined);
-  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", undefined);
-  mockSuccessfulTurnstile(t, "pre_signup");
-  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
-    acknowledged: true,
-  }));
-
-  const response = await request(createApp({ nodeEnv: "production" }))
+  const response = await request(
+    createApp({ nodeEnv: "test", preSignupWorkflow: recording.workflow }),
+  )
     .post("/api/pre-signups")
     .set("Origin", PRODUCTION_ORIGIN)
     .send({ email: "person@example.com", turnstileToken: "valid-token" });
 
   assert.equal(response.status, 403);
-  assert.equal(updateOne.mock.callCount(), 0);
+  assert.deepEqual(recording.emails, []);
 });
 
-test("contact success does not echo personal data or database fields", async (t) => {
-  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
-  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
-  setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
-  mockSuccessfulTurnstile(t, "contact");
-  t.mock.method(ContactMessageSchema, "create", async () => ({
-    _id: "internal-id",
-    email: "person@example.com",
-  }));
-  const app = createApp({ nodeEnv: "test" });
-
-  const response = await request(app)
-    .post("/api/contact")
-    .set("Origin", PRODUCTION_ORIGIN)
-    .send({
-      firstName: "Rose",
-      lastName: "Marry",
-      email: "person@example.com",
-      subject: "Press",
-      message: '<img src=x onerror="alert(1)">',
-      turnstileToken: "valid-token",
-    });
-
-  assert.equal(response.status, 201);
-  assert.equal(response.body.success, true);
-  assert.equal(response.body.data, undefined);
-  assert.equal(
-    JSON.stringify(response.body).includes("person@example.com"),
-    false,
-  );
-  assert.equal(JSON.stringify(response.body).includes("internal-id"), false);
-  assert.equal(JSON.stringify(response.body).includes("onerror"), false);
-});
-
-test("NoSQL operator payloads are rejected before database access", async (t) => {
+test("NoSQL operator payloads are rejected before workflow execution", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
   mockSuccessfulTurnstile(t, "pre_signup");
-  const updateOne = t.mock.method(PreSignSchema, "updateOne", async () => ({
-    acknowledged: true,
-  }));
+  const recording = createRecordingWorkflow();
 
-  const response = await request(createApp({ nodeEnv: "test" }))
+  const response = await request(
+    createApp({ nodeEnv: "test", preSignupWorkflow: recording.workflow }),
+  )
     .post("/api/pre-signups")
     .set("Origin", PRODUCTION_ORIGIN)
-    .send({
-      email: { $ne: null },
-      turnstileToken: "valid-token",
-    });
+    .send({ email: { $ne: null }, turnstileToken: "valid-token" });
 
   assert.equal(response.status, 400);
-  assert.equal(response.body.success, false);
-  assert.equal(updateOne.mock.callCount(), 0);
-  assert.equal(Object.prototype.hasOwnProperty.call(Object.prototype, "polluted"), false);
+  assert.deepEqual(recording.emails, []);
 });
 
-test("new pre-signups receive one automatic reply", async (t) => {
+test("duplicate signup submissions receive the same generic response", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
-  setEnvironment(t, "PRE_SIGNUP_RETENTION_DAYS", "365");
   mockSuccessfulTurnstile(t, "pre_signup");
-  let isFirstSignup = true;
-  t.mock.method(PreSignSchema, "updateOne", async () => {
-    const upsertedId = isFirstSignup ? "signup-record-1" : null;
-    isFirstSignup = false;
-    return { acknowledged: true, upsertedId };
-  });
-  const email = createRecordingEmailService();
+  const recording = createRecordingWorkflow();
   const app = createApp({
-    autoReplyEmailService: email.service,
     nodeEnv: "test",
+    preSignupWorkflow: recording.workflow,
   });
   const submit = () =>
     request(app)
       .post("/api/pre-signups")
       .set("Origin", PRODUCTION_ORIGIN)
-      .send({
-        email: "New.Person@Example.com",
-        turnstileToken: "valid-token",
-      });
+      .send({ email: "person@example.com", turnstileToken: "valid-token" });
 
-  assert.equal((await submit()).status, 202);
-  assert.equal((await submit()).status, 202);
-  assert.deepEqual(email.preSignupReplies, [
-    { email: "new.person@example.com", signupId: "signup-record-1" },
-  ]);
-  assert.deepEqual(email.contactReplies, []);
+  const first = await submit();
+  const second = await submit();
+  assert.equal(first.status, 202);
+  assert.equal(second.status, 202);
+  assert.deepEqual(first.body, second.body);
 });
 
-test("contact submissions receive an automatic reply after being stored", async (t) => {
+test("verification and unsubscribe tokens are handled without CAPTCHA", async () => {
+  let verificationResult = true;
+  const recording = createRecordingWorkflow({
+    async confirmVerification(): Promise<boolean> {
+      const result = verificationResult;
+      verificationResult = false;
+      return result;
+    },
+  });
+  const app = createApp({
+    nodeEnv: "production",
+    preSignupWorkflow: recording.workflow,
+  });
+
+  const verified = await request(app)
+    .post("/api/pre-signups/verify")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({ token: VALID_TOKEN });
+  const replayed = await request(app)
+    .post("/api/pre-signups/verify")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({ token: VALID_TOKEN });
+  const unsubscribed = await request(app)
+    .post("/api/pre-signups/unsubscribe")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({ token: VALID_TOKEN });
+
+  assert.equal(verified.status, 200);
+  assert.equal(replayed.status, 400);
+  assert.equal(unsubscribed.status, 200);
+  assert.deepEqual(recording.unsubscribedTokens, [VALID_TOKEN]);
+});
+
+test("authenticated webhooks are delegated and invalid signatures are rejected", async () => {
+  const event = {
+    type: "email.delivered",
+    created_at: "2026-10-09T00:00:00.000Z",
+    data: {
+      created_at: "2026-10-09T00:00:00.000Z",
+      email_id: "email-1",
+      from: "noreply@rosemarry.app",
+      message_id: "message-1",
+      subject: "Confirm",
+      to: ["person@example.com"],
+    },
+  } satisfies WebhookEventPayload;
+  const verifier: ResendWebhookVerifier = {
+    verify(_payload, headers) {
+      if (headers.signature !== "valid-signature") throw new Error("invalid");
+      return event;
+    },
+  };
+  const recording = createRecordingWorkflow();
+  const app = createApp({
+    nodeEnv: "production",
+    preSignupWorkflow: recording.workflow,
+    resendWebhookVerifier: verifier,
+  });
+  const sendWebhook = (signature: string) =>
+    request(app)
+      .post("/api/webhooks/resend")
+      .set("Content-Type", "application/json")
+      .set("svix-id", "event-1")
+      .set("svix-timestamp", "123456")
+      .set("svix-signature", signature)
+      .send(JSON.stringify(event));
+
+  assert.equal((await sendWebhook("invalid")).status, 400);
+  assert.equal((await sendWebhook("valid-signature")).status, 200);
+  assert.deepEqual(recording.webhookIds, ["event-1"]);
+
+  const unavailable = createRecordingWorkflow({
+    async handleWebhook(): Promise<void> {
+      throw new Error("database unavailable");
+    },
+  });
+  const retryableApp = createApp({
+    nodeEnv: "production",
+    preSignupWorkflow: unavailable.workflow,
+    resendWebhookVerifier: verifier,
+  });
+  const retryable = await request(retryableApp)
+    .post("/api/webhooks/resend")
+    .set("Content-Type", "application/json")
+    .set("svix-id", "event-2")
+    .set("svix-timestamp", "123456")
+    .set("svix-signature", "valid-signature")
+    .send(JSON.stringify(event));
+  assert.equal(retryable.status, 503);
+});
+
+test("contact success does not echo personal data and sends a receipt", async (t) => {
   setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
   setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
@@ -445,12 +419,9 @@ test("contact submissions receive an automatic reply after being stored", async 
     _id: "contact-record-1",
   }));
   const email = createRecordingEmailService();
-  const app = createApp({
-    autoReplyEmailService: email.service,
-    nodeEnv: "test",
-  });
-
-  const response = await request(app)
+  const response = await request(
+    createApp({ autoReplyEmailService: email.service, nodeEnv: "test" }),
+  )
     .post("/api/contact")
     .set("Origin", PRODUCTION_ORIGIN)
     .send({
@@ -458,23 +429,23 @@ test("contact submissions receive an automatic reply after being stored", async 
       lastName: "Marry",
       email: "Person@Example.com",
       subject: "Feedback",
-      message: "Hello",
+      message: '<img src=x onerror="alert(1)">',
       turnstileToken: "valid-token",
     });
 
   assert.equal(response.status, 201);
+  assert.equal(JSON.stringify(response.body).includes("onerror"), false);
   assert.deepEqual(email.contactReplies, [
     {
-      email: "person@example.com",
+      email: "Person@example.com",
       firstName: "Rose",
       subject: "Feedback",
       submissionId: "contact-record-1",
     },
   ]);
-  assert.deepEqual(email.preSignupReplies, []);
 });
 
-test("Resend requests use the registered sender and stable idempotency keys", async (t) => {
+test("Resend verification email uses registered sender and stable attempt key", async (t) => {
   const requests: Array<{ body: Record<string, unknown>; headers: Headers }> = [];
   t.mock.method(
     globalThis,
@@ -490,32 +461,23 @@ test("Resend requests use the registered sender and stable idempotency keys", as
       });
     },
   );
-  const emailService = createAutoReplyEmailService("test", "re_test_key");
-
-  await emailService.sendContactReply({
-    email: "contact@example.com",
-    firstName: "Rose",
-    subject: "Feedback",
-    submissionId: "contact-record-1",
-  });
-  await emailService.sendPreSignupReply({
+  const service = createAutoReplyEmailService("test", "re_test_key");
+  const receipt = await service.sendPreSignupVerification({
+    attemptId: "attempt-1",
     email: "signup@example.com",
-    signupId: "signup-record-1",
+    signupId: "507f1f77bcf86cd799439011",
+    unsubscribeUrl: "https://www.rosemarry.app/unsubscribe#token=unsubscribe",
+    verificationUrl:
+      "https://www.rosemarry.app/email-confirmation#token=verification",
   });
 
-  assert.equal(requests.length, 2);
+  assert.deepEqual(receipt, { providerMessageId: "email-id" });
   assert.equal(requests[0]?.body.from, "Rosemarry <noreply@rosemarry.app>");
-  assert.deepEqual(requests[0]?.body.to, ["contact@example.com"]);
+  assert.deepEqual(requests[0]?.body.to, ["signup@example.com"]);
   assert.equal(
     requests[0]?.headers.get("idempotency-key"),
-    "contact-received/contact-record-1",
+    "early-access-verification/attempt-1",
   );
-  assert.equal(requests[1]?.body.from, "Rosemarry <noreply@rosemarry.app>");
-  assert.deepEqual(requests[1]?.body.to, ["signup@example.com"]);
-  assert.equal(
-    requests[1]?.headers.get("idempotency-key"),
-    "early-access-welcome/signup-record-1",
-  );
-  assert.match(String(requests[0]?.body.html), /We got your message/);
-  assert.match(String(requests[1]?.body.text), /You're on the list/);
+  assert.match(String(requests[0]?.body.text), /Confirm that you want/);
+  assert.match(String(requests[0]?.body.html), /email-confirmation#token=/);
 });

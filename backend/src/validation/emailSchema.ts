@@ -1,15 +1,12 @@
-import * as z from "zod";
-
-const emailSchema = z
-  .string()
-  .trim()
-  .normalize()
-  .toLowerCase()
-  .max(254, { error: "Email is too long." })
-  .pipe(z.email({ error: "Please provide a valid email address." }));
+import { z } from "zod";
+import { normalizedEmailSchema } from "./normalizedEmail.js";
 
 export const preSignupInputSchema = z.strictObject({
-  email: emailSchema,
+  email: normalizedEmailSchema,
+});
+
+export const verificationTokenInputSchema = z.strictObject({
+  token: z.string().min(32).max(256),
 });
 
 export type PreSignupInput = z.infer<typeof preSignupInputSchema>;

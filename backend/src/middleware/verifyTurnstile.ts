@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-type TurnstileAction = "pre_signup" | "contact";
+type TurnstileAction = "pre_signup" | "pre_signup_resend" | "contact";
 
 interface TurnstileVerification {
   success?: boolean;
@@ -12,7 +12,6 @@ interface TurnstileVerification {
 const SITEVERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const MAX_TOKEN_LENGTH = 2048;
-const TEST_SECRET = "1x0000000000000000000000000000000AA";
 
 function rejectSecurityCheck(res: Response): void {
   res.setHeader("Cache-Control", "no-store");
@@ -72,10 +71,6 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
 
       const verification =
         (await verificationResponse.json()) as TurnstileVerification;
-      const isLocalEnvironment =
-        process.env.NODE_ENV === "development" ||
-        process.env.NODE_ENV === "test";
-      const usingLocalTestKey = isLocalEnvironment && secret === TEST_SECRET;
       const expectedHostnames = new Set(
         (
           process.env.TURNSTILE_HOSTNAMES ??
@@ -88,11 +83,9 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
       );
       const hostnameMatches =
         expectedHostnames.size > 0 &&
-        (usingLocalTestKey ||
-          (typeof verification.hostname === "string" &&
-            expectedHostnames.has(verification.hostname)));
-      const actionMatches =
-        usingLocalTestKey || verification.action === expectedAction;
+        typeof verification.hostname === "string" &&
+        expectedHostnames.has(verification.hostname);
+      const actionMatches = verification.action === expectedAction;
 
       if (!verification.success || !hostnameMatches || !actionMatches) {
         console.warn("Turnstile rejected a form submission.", {

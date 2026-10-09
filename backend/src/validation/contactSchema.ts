@@ -1,6 +1,7 @@
 // schemas/contactSchema.ts
 
 import { z } from "zod";
+import { normalizedEmailSchema } from "./normalizedEmail.js";
 
 export const CONTACT_SUBJECTS = [
   "General question",
@@ -14,14 +15,6 @@ const UNSAFE_CONTROL_CHARACTERS =
 
 const NAME_PATTERN =
   /^[\p{L}\p{M}][\p{L}\p{M}\p{Zs}'’.-]*$/u;
-
-const emailSchema = z
-  .string()
-  .trim()
-  .normalize()
-  .toLowerCase()
-  .max(254, { error: "Email is too long." })
-  .pipe(z.email({ error: "Please provide a valid email address." }));
 
 const nameSchema = z
   .string()
@@ -47,7 +40,7 @@ const messageSchema = z
 export const contactInputSchema = z.strictObject({
   firstName: nameSchema,
   lastName: nameSchema,
-  email: emailSchema,
+  email: normalizedEmailSchema,
   subject: z.enum(CONTACT_SUBJECTS, {
     error: "Please select a valid subject.",
   }),

@@ -1,0 +1,65 @@
+<main class="subscription-action" aria-labelledby="subscription-action-title">
+  <section data-motion-reveal class="subscription-action__card rm-sticker">
+    <span class="subscription-action__label">
+      {{ mode === 'verify' ? 'Early access' : 'Email preferences' }}
+    </span>
+    <h1 id="subscription-action-title">
+      {{ mode === 'verify' ? 'Confirm your email' : 'Unsubscribe' }}
+    </h1>
+    <p role="status">{{ message() }}</p>
+
+    @if (status() === 'ready' || status() === 'working') {
+      <button
+        type="button"
+        class="subscription-action__primary rm-pop"
+        [disabled]="status() === 'working'"
+        (click)="runAction()"
+      >
+        @if (status() === 'working') {
+          Working…
+        } @else if (mode === 'verify') {
+          Confirm my email
+        } @else {
+          Unsubscribe this address
+        }
+      </button>
+    }
+
+    @if (status() === 'success') {
+      <a routerLink="/" class="subscription-action__primary rm-pop">Back to Rosemarry</a>
+    }
+
+    @if (mode === 'verify' && status() === 'error') {
+      <div class="subscription-action__resend">
+        <h2>Need a fresh link?</h2>
+        @if (resendStatus() === 'sent') {
+          <p>If the address is pending, a new confirmation email will arrive shortly.</p>
+        } @else {
+          <form [formGroup]="resendForm" (ngSubmit)="resend()" novalidate>
+            <label for="resend-email">Email address</label>
+            <input id="resend-email" type="email" autocomplete="email" formControlName="email" />
+            @if (resendForm.controls.email.touched && resendForm.controls.email.invalid) {
+              <small role="alert">Enter a valid email address.</small>
+            }
+            <app-turnstile-widget
+              action="pre_signup_resend"
+              [resetVersion]="turnstileResetVersion()"
+              (tokenChange)="setTurnstileToken($event)"
+              (verificationError)="setTurnstileToken(null)"
+            />
+            <button
+              type="submit"
+              class="subscription-action__secondary rm-pop"
+              [disabled]="resendStatus() === 'working' || !turnstileToken()"
+            >
+              {{ resendStatus() === 'working' ? 'Sending…' : 'Send a new link' }}
+            </button>
+            @if (resendStatus() === 'error') {
+              <small role="alert">We could not send a new link right now. Please try again.</small>
+            }
+          </form>
+        }
+      </div>
+    }
+  </section>
+</main>
