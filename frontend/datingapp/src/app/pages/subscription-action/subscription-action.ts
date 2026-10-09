@@ -25,8 +25,15 @@ export class SubscriptionActionPage implements OnInit {
   private readonly service = inject(PreSignupService);
 
   protected readonly mode = this.route.snapshot.data['subscriptionAction'] as ActionMode;
-  protected readonly status = signal<ActionStatus>('error');
-  protected readonly message = signal('This link is incomplete or invalid.');
+  // The page is prerendered without the #token fragment. Render the state a real link lands on,
+  // so the static HTML and the hydrated page match and nothing flashes; ngOnInit falls back to the
+  // error state only when the link really has no token.
+  protected readonly status = signal<ActionStatus>('ready');
+  protected readonly message = signal(
+    this.mode === 'verify'
+      ? 'Confirm that you want Rosemarry early-access updates.'
+      : 'Confirm that this address should stop receiving Rosemarry updates.',
+  );
   protected readonly receiptSent = signal(false);
   protected readonly eyebrow = computed(() => {
     if (this.status() === 'success') {
@@ -71,13 +78,9 @@ export class SubscriptionActionPage implements OnInit {
       }
     }
 
-    if (this.token) {
-      this.status.set('ready');
-      this.message.set(
-        this.mode === 'verify'
-          ? 'Confirm that you want Rosemarry early-access updates.'
-          : 'Confirm that this address should stop receiving Rosemarry updates.',
-      );
+    if (!this.token) {
+      this.status.set('error');
+      this.message.set('This link is incomplete or invalid.');
     }
   }
 

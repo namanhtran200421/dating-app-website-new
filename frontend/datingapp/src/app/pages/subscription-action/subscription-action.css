@@ -5,7 +5,8 @@
 .subscription-action {
   display: grid;
   min-height: 72vh;
-  place-items: center;
+  /* Top-aligned, so the card grows downward between states instead of jumping vertically. */
+  place-items: start center;
   padding: 8.5rem clamp(1.25rem, 5vw, 3.5rem) 5rem;
   background: #fbf2e9;
   color: #1c1418;
@@ -122,7 +123,24 @@
 
 .subscription-action button:disabled {
   cursor: wait;
-  opacity: 0.55;
+  opacity: 0.7;
+}
+
+/* Content that appears after confirming eases in instead of popping. */
+.subscription-action__success-mark,
+.subscription-action__receipt-note,
+.subscription-action__message--success,
+.subscription-action__message--error,
+.subscription-action__card--success .subscription-action__primary,
+.subscription-action__resend {
+  animation: subscription-action-swap-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes subscription-action-swap-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
 }
 
 .subscription-action__resend {
@@ -166,5 +184,14 @@
 @media (prefers-reduced-motion: reduce) {
   .subscription-action__card {
     transition: none;
+  }
+
+  .subscription-action__success-mark,
+  .subscription-action__receipt-note,
+  .subscription-action__message--success,
+  .subscription-action__message--error,
+  .subscription-action__card--success .subscription-action__primary,
+  .subscription-action__resend {
+    animation: none;
   }
 }
