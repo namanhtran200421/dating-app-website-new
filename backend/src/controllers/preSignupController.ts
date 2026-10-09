@@ -100,11 +100,12 @@ export function createVerificationController(workflow: PreSignupWorkflow) {
     }
 
     try {
-      const verified = await workflow.confirmVerification(parsed.data.token);
-      return verified
+      const confirmation = await workflow.confirmVerification(parsed.data.token);
+      return confirmation.verified
         ? res.status(200).json({
             success: true,
             message: "Your email is confirmed. You're on the early-access list.",
+            receiptSent: confirmation.receiptSent,
           })
         : res.status(400).json({
             success: false,

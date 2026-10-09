@@ -11,6 +11,7 @@ import type {
 import type {
   AutoReplyEmailService,
   PreSignupAutoReplyInput,
+  PreSignupConfirmationInput,
 } from "./services/autoReplyEmail.js";
 import {
   createPreSignupWorkflow,
@@ -85,18 +86,25 @@ class InMemoryRepository implements PreSignupRepository {
     this.tokenHash = undefined;
   }
 
-  async consumeVerificationToken(tokenHash: string, now: Date): Promise<boolean> {
+  async consumeVerificationToken(tokenHash: string, now: Date) {
     if (
       this.status !== "PENDING" ||
       tokenHash !== this.tokenHash ||
       !this.tokenExpiresAt ||
       this.tokenExpiresAt <= now
     ) {
-      return false;
+      return null;
     }
     this.status = "VERIFIED";
     this.tokenHash = undefined;
-    return true;
+    return { email: this.email!, id: ID };
+  }
+
+  async recordConfirmationEmail(
+    _id: string,
+    providerMessageId: string,
+  ): Promise<void> {
+    this.providerMessageId = providerMessageId;
   }
 
   async unsubscribe(id: string): Promise<boolean> {
@@ -128,16 +136,24 @@ function verificationTokenFrom(input: PreSignupAutoReplyInput): string {
   return decodeURIComponent(fragment.slice("#token=".length));
 }
 
-function setup(options: { emailFails?: boolean } = {}) {
+function setup(
+  options: { confirmationFails?: boolean; emailFails?: boolean } = {},
+) {
   let currentTime = new Date("2026-10-09T00:00:00.000Z");
   const repository = new InMemoryRepository();
   const emails: PreSignupAutoReplyInput[] = [];
+  const confirmations: PreSignupConfirmationInput[] = [];
   const emailService: AutoReplyEmailService = {
     async sendContactReply(): Promise<void> {},
     async sendPreSignupVerification(input) {
       emails.push(input);
       if (options.emailFails) throw new Error("provider unavailable");
       return { providerMessageId: `provider-${emails.length}` };
+    },
+    async sendPreSignupConfirmation(input) {
+      confirmations.push(input);
+      if (options.confirmationFails) throw new Error("provider unavailable");
+      return { providerMessageId: `confirmation-${confirmations.length}` };
     },
   };
   const workflow = createPreSignupWorkflow({
@@ -154,6 +170,7 @@ function setup(options: { emailFails?: boolean } = {}) {
   });
 
   return {
+    confirmations,
     emails,
     repository,
     workflow,
@@ -205,14 +222,44 @@ test("verification tokens expire, reject invalid values, and are single-use atom
     valid.workflow.confirmVerification(token),
     valid.workflow.confirmVerification(token),
   ]);
-  assert.deepEqual(concurrent.sort(), [false, true]);
-  assert.equal(await valid.workflow.confirmVerification("wrong-token"), false);
+  assert.equal(concurrent.filter((result) => result.verified).length, 1);
+  assert.equal(concurrent.filter((result) => result.receiptSent).length, 1);
+  assert.equal(valid.confirmations.length, 1);
+  assert.equal(valid.confirmations[0]!.email, "person@example.com");
+  assert.equal(valid.confirmations[0]!.signupId, ID);
+  assert.match(valid.confirmations[0]!.unsubscribeUrl, /\/unsubscribe#token=/);
+  assert.equal(valid.repository.providerMessageId, "confirmation-1");
+  assert.deepEqual(await valid.workflow.confirmVerification("wrong-token"), {
+    receiptSent: false,
+    verified: false,
+  });
 
   const expired = setup();
   await expired.workflow.submit("person@example.com");
   const expiredToken = verificationTokenFrom(expired.emails[0]!);
   expired.advance(CONFIGURATION.verificationTtlMs + 1);
-  assert.equal(await expired.workflow.confirmVerification(expiredToken), false);
+  assert.deepEqual(await expired.workflow.confirmVerification(expiredToken), {
+    receiptSent: false,
+    verified: false,
+  });
+});
+
+test("confirmation remains successful when its receipt cannot be sent", async (t) => {
+  t.mock.method(console, "error", () => {});
+  const context = setup({ confirmationFails: true });
+  await context.workflow.submit("person@example.com");
+  const token = verificationTokenFrom(context.emails[0]!);
+
+  assert.deepEqual(await context.workflow.confirmVerification(token), {
+    receiptSent: false,
+    verified: true,
+  });
+  assert.equal(context.repository.status, "VERIFIED");
+  assert.equal(context.confirmations.length, 1);
+  assert.deepEqual(await context.workflow.confirmVerification(token), {
+    receiptSent: false,
+    verified: false,
+  });
 });
 
 test("signed unsubscribe links work without login and reject tampering", async () => {

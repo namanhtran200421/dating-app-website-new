@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -27,6 +27,19 @@ export class SubscriptionActionPage implements OnInit {
   protected readonly mode = this.route.snapshot.data['subscriptionAction'] as ActionMode;
   protected readonly status = signal<ActionStatus>('error');
   protected readonly message = signal('This link is incomplete or invalid.');
+  protected readonly receiptSent = signal(false);
+  protected readonly eyebrow = computed(() => {
+    if (this.status() === 'success') {
+      return this.mode === 'verify' ? 'Confirmed' : 'Preferences updated';
+    }
+    return this.mode === 'verify' ? 'Early access' : 'Email preferences';
+  });
+  protected readonly heading = computed(() => {
+    if (this.status() === 'success') {
+      return this.mode === 'verify' ? 'Email confirmed!' : "You're unsubscribed";
+    }
+    return this.mode === 'verify' ? 'Confirm your email' : 'Unsubscribe';
+  });
   protected readonly resendStatus = signal<'idle' | 'working' | 'sent' | 'error'>('idle');
   protected readonly turnstileToken = signal<string | null>(null);
   protected readonly turnstileResetVersion = signal(0);
@@ -78,8 +91,9 @@ export class SubscriptionActionPage implements OnInit {
         : this.service.unsubscribe(this.token);
 
     request.subscribe({
-      next: () => {
+      next: (response) => {
         this.status.set('success');
+        this.receiptSent.set(this.mode === 'verify' && response.receiptSent === true);
         this.message.set(
           this.mode === 'verify'
             ? "You're confirmed and on the early-access list."

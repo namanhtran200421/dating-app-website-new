@@ -16,6 +16,11 @@ interface SubscriptionTokenRequest {
   token: string;
 }
 
+interface SubscriptionActionResponse {
+  receiptSent?: boolean;
+  success: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,12 +48,18 @@ export class PreSignupService {
 
   confirmVerification(token: string) {
     const body: SubscriptionTokenRequest = { token };
-    return this.http.post(`${this.baseUrl}/api/pre-signups/verify`, body);
+    return this.http.post<SubscriptionActionResponse>(
+      `${this.baseUrl}/api/pre-signups/verify`,
+      body,
+    );
   }
 
   unsubscribe(token: string) {
     const body: SubscriptionTokenRequest = { token };
-    return this.http.post(`${this.baseUrl}/api/pre-signups/unsubscribe`, body);
+    return this.http.post<SubscriptionActionResponse>(
+      `${this.baseUrl}/api/pre-signups/unsubscribe`,
+      body,
+    );
   }
 
   addContact(contactData: ContactRequest) {

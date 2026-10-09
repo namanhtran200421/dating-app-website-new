@@ -290,7 +290,7 @@ test('email confirmation keeps the token out of the page request and verifies on
       status: 200,
       headers,
       contentType: 'application/json',
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ success: true, receiptSent: true }),
     });
   });
 
@@ -300,7 +300,9 @@ test('email confirmation keeps the token out of the page request and verifies on
   expect(response?.request().url()).not.toContain('verification-token-value');
   await expect(page).toHaveURL(/\/email-confirmation$/);
   await page.getByRole('button', { name: 'Confirm my email' }).click();
+  await expect(page.getByRole('heading', { name: 'Email confirmed!' })).toBeVisible();
   await expect(page.getByText("You're confirmed and on the early-access list.")).toBeVisible();
+  await expect(page.getByText('A confirmation receipt has been sent to your inbox.')).toBeVisible();
   expect(submittedToken).toBe('verification-token-value-1234567890');
 });
 

@@ -10,6 +10,7 @@ import {
   type AutoReplyEmailService,
   type ContactAutoReplyInput,
   type PreSignupAutoReplyInput,
+  type PreSignupConfirmationInput,
 } from "./services/autoReplyEmail.js";
 import type { PreSignupWorkflow } from "./services/preSignupWorkflow.js";
 import type { ResendWebhookVerifier } from "./services/resendWebhook.js";
@@ -85,9 +86,9 @@ function createRecordingWorkflow(overrides: Partial<PreSignupWorkflow> = {}): {
       async requestResend(email): Promise<void> {
         resentEmails.push(email);
       },
-      async confirmVerification(token): Promise<boolean> {
+      async confirmVerification(token) {
         confirmedTokens.push(token);
-        return true;
+        return { receiptSent: true, verified: true };
       },
       async unsubscribe(token): Promise<boolean> {
         unsubscribedTokens.push(token);
@@ -102,14 +103,17 @@ function createRecordingWorkflow(overrides: Partial<PreSignupWorkflow> = {}): {
 }
 
 function createRecordingEmailService(): {
+  confirmations: PreSignupConfirmationInput[];
   contactReplies: ContactAutoReplyInput[];
   preSignupReplies: PreSignupAutoReplyInput[];
   service: AutoReplyEmailService;
 } {
   const contactReplies: ContactAutoReplyInput[] = [];
   const preSignupReplies: PreSignupAutoReplyInput[] = [];
+  const confirmations: PreSignupConfirmationInput[] = [];
 
   return {
+    confirmations,
     contactReplies,
     preSignupReplies,
     service: {
@@ -119,6 +123,10 @@ function createRecordingEmailService(): {
       async sendPreSignupVerification(input) {
         preSignupReplies.push(input);
         return { providerMessageId: "recorded-email-id" };
+      },
+      async sendPreSignupConfirmation(input) {
+        confirmations.push(input);
+        return { providerMessageId: "recorded-confirmation-id" };
       },
     },
   };
@@ -322,10 +330,10 @@ test("duplicate signup submissions receive the same generic response", async (t)
 test("verification and unsubscribe tokens are handled without CAPTCHA", async () => {
   let verificationResult = true;
   const recording = createRecordingWorkflow({
-    async confirmVerification(): Promise<boolean> {
+    async confirmVerification() {
       const result = verificationResult;
       verificationResult = false;
-      return result;
+      return { receiptSent: result, verified: result };
     },
   });
   const app = createApp({
@@ -445,7 +453,7 @@ test("contact success does not echo personal data and sends a receipt", async (t
   ]);
 });
 
-test("Resend verification email uses registered sender and stable attempt key", async (t) => {
+test("Resend subscription emails use registered sender and stable idempotency keys", async (t) => {
   const requests: Array<{ body: Record<string, unknown>; headers: Headers }> = [];
   t.mock.method(
     globalThis,
@@ -480,4 +488,20 @@ test("Resend verification email uses registered sender and stable attempt key", 
   );
   assert.match(String(requests[0]?.body.text), /Confirm that you want/);
   assert.match(String(requests[0]?.body.html), /email-confirmation#token=/);
+
+  const confirmationReceipt = await service.sendPreSignupConfirmation({
+    email: "signup@example.com",
+    signupId: "507f1f77bcf86cd799439011",
+    unsubscribeUrl: "https://www.rosemarry.app/unsubscribe#token=unsubscribe",
+  });
+
+  assert.deepEqual(confirmationReceipt, { providerMessageId: "email-id" });
+  assert.equal(requests[1]?.body.from, "Rosemarry <noreply@rosemarry.app>");
+  assert.deepEqual(requests[1]?.body.to, ["signup@example.com"]);
+  assert.equal(
+    requests[1]?.headers.get("idempotency-key"),
+    "early-access-confirmed/507f1f77bcf86cd799439011",
+  );
+  assert.match(String(requests[1]?.body.text), /You're confirmed/);
+  assert.match(String(requests[1]?.body.html), /Email confirmed/);
 });

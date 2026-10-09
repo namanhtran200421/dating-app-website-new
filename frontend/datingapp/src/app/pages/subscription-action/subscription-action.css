@@ -19,6 +19,22 @@
   padding: clamp(2rem, 7vw, 4rem);
   text-align: center;
   box-shadow: 9px 10px 0 #ed77a8;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.subscription-action__card--success {
+  background: #f4fffb;
+  box-shadow: 9px 10px 0 #47d8ad;
+}
+
+.subscription-action__card--success .subscription-action__label {
+  background: #47d8ad;
+}
+
+.subscription-action__card--error {
+  box-shadow: 9px 10px 0 #ffc53d;
 }
 
 .subscription-action__label {
@@ -44,11 +60,42 @@
   line-height: 1.08;
 }
 
+.subscription-action__success-mark {
+  display: grid;
+  width: 4.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  margin: 1.5rem auto 0;
+  border: 2px solid #1c1418;
+  border-radius: 50%;
+  background: #47d8ad;
+  font-family: 'DynaPuff', system-ui, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 #1c1418;
+}
+
 .subscription-action p {
   margin: 1rem auto 0;
   max-width: 32rem;
   font-weight: 650;
   line-height: 1.7;
+}
+
+.subscription-action__message--success {
+  border: 2px solid #1c1418;
+  border-radius: 1rem;
+  background: #dff9ef;
+  padding: 0.9rem 1rem;
+}
+
+.subscription-action__message--error {
+  color: #9d163b;
+}
+
+.subscription-action__receipt-note {
+  color: #4f4a55;
+  font-size: 0.86rem;
 }
 
 .subscription-action__primary,
@@ -114,4 +161,10 @@
 .subscription-action__resend small {
   color: #d81e4a;
   font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .subscription-action__card {
+    transition: none;
+  }
 }

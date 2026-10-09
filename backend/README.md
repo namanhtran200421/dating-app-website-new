@@ -16,6 +16,8 @@ confirmed. The workflow is:
 5. Send a Resend transactional verification email. The token is placed in a URL
    fragment so it is not sent to Vercel in the initial page request.
 6. Atomically consume an unexpired token and move the record to `VERIFIED`.
+7. Show an explicit confirmation screen and send one idempotent confirmation
+   receipt. A receipt-provider failure does not undo the completed verification.
 
 Only records matching `{ status: "VERIFIED" }` are eligible for future
 newsletter campaigns. `PENDING`, `BOUNCED`, and `UNSUBSCRIBED` records must not
@@ -63,9 +65,9 @@ environment variables. They must never be exposed to Angular or committed.
 The endpoint verifies the raw request body with Resend's SDK and the Svix
 signature headers. Events are applied only when both the recipient and current
 Resend email ID match. Event IDs are atomically recorded on the signup, making
-retries idempotent. Permanent bounces, complaints, and suppressions move a
-pending address to `BOUNCED`; older events cannot overwrite a newer send or a
-verified subscription.
+retries idempotent. Permanent bounces, complaints, and suppressions from the
+currently associated verification or confirmation receipt move the address to
+`BOUNCED`; older events cannot overwrite a newer send.
 
 Provider API acceptance is not treated as delivery. Delivery status changes
 only after a verified webhook event.

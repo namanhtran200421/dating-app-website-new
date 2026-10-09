@@ -35,8 +35,15 @@ export interface VerificationEmailEvent {
 }
 
 export interface PreSignupRepository {
-  consumeVerificationToken(tokenHash: string, now: Date): Promise<boolean>;
+  consumeVerificationToken(
+    tokenHash: string,
+    now: Date,
+  ): Promise<VerificationReservation | null>;
   processVerificationEmailEvent(event: VerificationEmailEvent): Promise<void>;
+  recordConfirmationEmail(
+    id: string,
+    providerMessageId: string,
+  ): Promise<void>;
   recordVerificationEmail(
     id: string,
     attemptId: string,
@@ -118,6 +125,8 @@ function reservationUpdate(
       unsubscribedAt: 1,
       verificationDeliveredAt: 1,
       verificationEmailId: 1,
+      confirmationDeliveredAt: 1,
+      confirmationEmailId: 1,
       verifiedAt: 1,
     },
   };
@@ -242,11 +251,19 @@ export const mongoosePreSignupRepository: PreSignupRepository = {
       },
       { new: true, runValidators: true },
     )
-      .select("_id")
-      .lean<{ _id: Types.ObjectId }>()
+      .select("_id email")
+      .lean<{ _id: Types.ObjectId; email: string }>()
       .exec();
 
-    return document !== null;
+    return asReservation(document);
+  },
+
+  async recordConfirmationEmail(id, providerMessageId) {
+    await PreSignSchema.updateOne(
+      { _id: id, status: "VERIFIED" },
+      { $set: { confirmationEmailId: providerMessageId } },
+      { runValidators: true },
+    );
   },
 
   async unsubscribe(id, now) {
@@ -271,36 +288,62 @@ export const mongoosePreSignupRepository: PreSignupRepository = {
   },
 
   async processVerificationEmailEvent(event) {
-    const update =
-      event.eventKind === "delivered"
-        ? { $set: { verificationDeliveredAt: event.eventTime } }
-        : event.eventKind === "permanent-failure"
-          ? {
-              $set: {
-                bouncedAt: event.eventTime,
-                lastDeliveryFailureAt: event.eventTime,
-                status: "BOUNCED" as SubscriptionStatus,
-              },
-              $unset: {
-                verificationAttemptId: 1,
-                verificationExpiresAt: 1,
-                verificationTokenHash: 1,
-              },
-            }
-          : { $set: { lastDeliveryFailureAt: event.eventTime } };
+    const commonFilter = {
+      emailKey: event.email.toLowerCase(),
+      processedWebhookIds: mongoose.trusted({ $ne: event.eventId }),
+    };
+    const updateFor = (
+      deliveredField: "verificationDeliveredAt" | "confirmationDeliveredAt",
+    ): UpdateQuery<PreSignup> => {
+      if (event.eventKind === "delivered") {
+        return {
+          $set: { [deliveredField]: event.eventTime },
+          $addToSet: { processedWebhookIds: event.eventId },
+        };
+      }
 
-    await PreSignSchema.updateOne(
+      if (event.eventKind === "permanent-failure") {
+        return {
+          $set: {
+            bouncedAt: event.eventTime,
+            lastDeliveryFailureAt: event.eventTime,
+            status: "BOUNCED" as SubscriptionStatus,
+          },
+          $unset: {
+            verificationAttemptId: 1,
+            verificationExpiresAt: 1,
+            verificationTokenHash: 1,
+          },
+          $addToSet: { processedWebhookIds: event.eventId },
+        };
+      }
+
+      return {
+        $set: { lastDeliveryFailureAt: event.eventTime },
+        $addToSet: { processedWebhookIds: event.eventId },
+      };
+    };
+
+    const verificationResult = await PreSignSchema.updateOne(
       {
-        emailKey: event.email.toLowerCase(),
+        ...commonFilter,
         status: "PENDING",
         verificationEmailId: event.providerMessageId,
-        processedWebhookIds: mongoose.trusted({ $ne: event.eventId }),
       },
-      {
-        ...update,
-        $addToSet: { processedWebhookIds: event.eventId },
-      },
+      updateFor("verificationDeliveredAt"),
       { runValidators: true },
     );
+
+    if (verificationResult.matchedCount === 0) {
+      await PreSignSchema.updateOne(
+        {
+          ...commonFilter,
+          status: "VERIFIED",
+          confirmationEmailId: event.providerMessageId,
+        },
+        updateFor("confirmationDeliveredAt"),
+        { runValidators: true },
+      );
+    }
   },
 };

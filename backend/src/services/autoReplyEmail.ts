@@ -19,6 +19,12 @@ export interface PreSignupAutoReplyInput {
   unsubscribeUrl: string;
 }
 
+export interface PreSignupConfirmationInput {
+  email: string;
+  signupId: string;
+  unsubscribeUrl: string;
+}
+
 export interface EmailDeliveryReceipt {
   providerMessageId: string;
 }
@@ -28,11 +34,17 @@ export interface AutoReplyEmailService {
   sendPreSignupVerification(
     input: PreSignupAutoReplyInput,
   ): Promise<EmailDeliveryReceipt>;
+  sendPreSignupConfirmation(
+    input: PreSignupConfirmationInput,
+  ): Promise<EmailDeliveryReceipt>;
 }
 
 export const disabledAutoReplyEmailService: AutoReplyEmailService = {
   async sendContactReply(): Promise<void> {},
   async sendPreSignupVerification(): Promise<EmailDeliveryReceipt> {
+    return { providerMessageId: "local-email-disabled" };
+  },
+  async sendPreSignupConfirmation(): Promise<EmailDeliveryReceipt> {
     return { providerMessageId: "local-email-disabled" };
   },
 };
@@ -69,13 +81,15 @@ const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
  * Sizes are the CSS sizes that script prints. Bump EMAIL_TYPE_VERSION whenever the images are
  * regenerated so mail proxies fetch the new ones.
  */
-const EMAIL_TYPE_VERSION = "4";
+const EMAIL_TYPE_VERSION = "5";
 const EMAIL_TYPE = {
   "brand-nav": { width: 195, height: 39, text: "Rosemarry", font: DISPLAY_FONT, size: 26, color: COLORS.ink },
   "title-contact": { width: 568, height: 70, text: "We got your message", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "title-early-access": { width: 512, height: 70, text: "Confirm your email", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-confirmed": { width: 437, height: 70, text: "Email confirmed", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "message-contact": { width: 330, height: 60, text: "Thanks so much for reaching out! We'll get back to you soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
   "message-early-access": { width: 330, height: 60, text: "Tap below to confirm you want Rosemarry early-access updates.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "message-confirmed": { width: 330, height: 60, text: "You're confirmed and on the Rosemarry early-access list.", font: BODY_FONT, size: 18, color: COLORS.ink },
   "button-early-access": { width: 136, height: 24, text: "Confirm my email", font: BODY_FONT, size: 15, color: COLORS.ink },
   "signoff-warmly": { width: 66, height: 25, text: "Warmly,", font: BODY_FONT, size: 16, color: COLORS.ink },
   "signoff-team": { width: 218, height: 24, text: "The Rosemarry team", font: DISPLAY_FONT, size: 20, color: COLORS.rose },
@@ -289,6 +303,41 @@ export function createAutoReplyEmailService(
 
       if (error || !data?.id) {
         throw new Error("The email provider rejected the verification email.");
+      }
+
+      return { providerMessageId: data.id };
+    },
+
+    async sendPreSignupConfirmation(input): Promise<EmailDeliveryReceipt> {
+      const { data, error } = await resend.emails.send(
+        {
+          from: FROM_ADDRESS,
+          to: [input.email],
+          subject: "Your Rosemarry email is confirmed",
+          text: `You're confirmed and on the Rosemarry early-access list. We'll email you when Rosemarry is ready for you.\n\nYou can unsubscribe at any time:\n${input.unsubscribeUrl}\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.`,
+          html: emailLayout({
+            preheader: "Your Rosemarry early-access email is confirmed.",
+            heading: "Email confirmed",
+            headingImage: "title-confirmed",
+            message: "message-confirmed",
+            secondaryLink: {
+              label: "Unsubscribe this address",
+              href: input.unsubscribeUrl,
+            },
+          }),
+          tags: [
+            { name: "form", value: "pre-signup" },
+            { name: "message_type", value: "email_confirmation_receipt" },
+          ],
+        },
+        {
+          idempotencyKey: `early-access-confirmed/${input.signupId}`,
+          signal: AbortSignal.timeout(EMAIL_REQUEST_TIMEOUT_MS),
+        },
+      );
+
+      if (error || !data?.id) {
+        throw new Error("The email provider rejected the confirmation receipt.");
       }
 
       return { providerMessageId: data.id };

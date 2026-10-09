@@ -18,6 +18,8 @@ export interface PreSignup {
   verificationAttemptId?: string;
   verificationEmailId?: string;
   verificationDeliveredAt?: Date;
+  confirmationEmailId?: string;
+  confirmationDeliveredAt?: Date;
   lastDeliveryFailureAt?: Date;
   processedWebhookIds: string[];
 }
@@ -83,6 +85,12 @@ const preSignupSchema = new Schema<PreSignup>(
       index: true,
     },
     verificationDeliveredAt: Date,
+    confirmationEmailId: {
+      type: String,
+      maxlength: 200,
+      index: true,
+    },
+    confirmationDeliveredAt: Date,
     lastDeliveryFailureAt: Date,
     processedWebhookIds: {
       type: [String],

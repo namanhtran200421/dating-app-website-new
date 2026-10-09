@@ -1,12 +1,38 @@
 <main class="subscription-action" aria-labelledby="subscription-action-title">
-  <section data-motion-reveal class="subscription-action__card rm-sticker">
-    <span class="subscription-action__label">
-      {{ mode === 'verify' ? 'Early access' : 'Email preferences' }}
-    </span>
-    <h1 id="subscription-action-title">
-      {{ mode === 'verify' ? 'Confirm your email' : 'Unsubscribe' }}
-    </h1>
-    <p role="status">{{ message() }}</p>
+  <section
+    data-motion-reveal
+    class="subscription-action__card rm-sticker"
+    [class.subscription-action__card--success]="status() === 'success'"
+    [class.subscription-action__card--error]="status() === 'error'"
+  >
+    <span class="subscription-action__label">{{ eyebrow() }}</span>
+
+    @if (status() === 'success') {
+      <span class="subscription-action__success-mark" aria-hidden="true">✓</span>
+    }
+
+    <h1 id="subscription-action-title">{{ heading() }}</h1>
+    <p
+      class="subscription-action__message"
+      [class.subscription-action__message--success]="status() === 'success'"
+      [class.subscription-action__message--error]="status() === 'error'"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {{ message() }}
+    </p>
+
+    @if (mode === 'verify' && status() === 'success') {
+      <p class="subscription-action__receipt-note">
+        @if (receiptSent()) {
+          A confirmation receipt has been sent to your inbox. You can safely close this page.
+        } @else {
+          Your signup is confirmed, but we could not send the receipt. You do not need to confirm
+          again.
+        }
+      </p>
+    }
 
     @if (status() === 'ready' || status() === 'working') {
       <button
@@ -16,7 +42,7 @@
         (click)="runAction()"
       >
         @if (status() === 'working') {
-          Working…
+          {{ mode === 'verify' ? 'Confirming…' : 'Unsubscribing…' }}
         } @else if (mode === 'verify') {
           Confirm my email
         } @else {

@@ -49,8 +49,8 @@ const unavailablePreSignupWorkflow: PreSignupWorkflow = {
   async requestResend(): Promise<void> {
     throw new Error("Pre-signup workflow is not configured.");
   },
-  async confirmVerification(): Promise<boolean> {
-    return false;
+  async confirmVerification() {
+    return { receiptSent: false, verified: false };
   },
   async unsubscribe(): Promise<boolean> {
     return false;

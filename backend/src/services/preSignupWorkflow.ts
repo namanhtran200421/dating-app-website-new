@@ -30,8 +30,13 @@ export class InvalidEmailDomainError extends Error {
 export class EmailDomainTemporarilyUnavailableError extends Error {}
 export class VerificationEmailUnavailableError extends Error {}
 
+export interface VerificationConfirmationResult {
+  receiptSent: boolean;
+  verified: boolean;
+}
+
 export interface PreSignupWorkflow {
-  confirmVerification(token: string): Promise<boolean>;
+  confirmVerification(token: string): Promise<VerificationConfirmationResult>;
   handleWebhook(eventId: string, event: WebhookEventPayload): Promise<void>;
   requestResend(email: string): Promise<void>;
   submit(email: string): Promise<void>;
@@ -169,11 +174,49 @@ export function createPreSignupWorkflow(
       await reserveAndSend(email, "resend");
     },
 
-    async confirmVerification(token): Promise<boolean> {
-      return options.repository.consumeVerificationToken(
+    async confirmVerification(token): Promise<VerificationConfirmationResult> {
+      const verified = await options.repository.consumeVerificationToken(
         hashVerificationToken(token),
         now(),
       );
+
+      if (!verified) {
+        return { receiptSent: false, verified: false };
+      }
+
+      const unsubscribeToken = createUnsubscribeToken(
+        verified.id,
+        options.configuration.linkSecret,
+      );
+      const unsubscribeUrl = `${options.configuration.publicWebUrl}/unsubscribe#token=${encodeURIComponent(unsubscribeToken)}`;
+
+      let receiptSent = false;
+
+      try {
+        const delivery = await options.emailService.sendPreSignupConfirmation({
+          email: verified.email,
+          signupId: verified.id,
+          unsubscribeUrl,
+        });
+        receiptSent = true;
+
+        try {
+          await options.repository.recordConfirmationEmail(
+            verified.id,
+            delivery.providerMessageId,
+          );
+        } catch {
+          // The provider accepted the receipt. A later association failure is
+          // logged without misreporting the already-sent email to the user.
+          console.error("Unable to associate confirmation receipt.");
+        }
+      } catch {
+        // Ownership is already verified atomically. A receipt failure must not
+        // turn a successful confirmation into an error or allow token replay.
+        console.error("Unable to send confirmation receipt.");
+      }
+
+      return { receiptSent, verified: true };
     },
 
     async unsubscribe(token): Promise<boolean> {
