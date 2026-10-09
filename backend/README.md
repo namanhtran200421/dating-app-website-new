@@ -24,8 +24,10 @@ newsletter campaigns. `PENDING`, `BOUNCED`, and `UNSUBSCRIBED` records must not
 be exported or sent campaigns. DNS checks establish only that a domain can
 receive mail; they do not prove that an individual mailbox exists.
 
-Submitting the same address returns the same generic response regardless of
-whether it exists. A separate lowercased `emailKey` unique index prevents
+Submitting an address that is already `VERIFIED` returns an "already on the
+list" response and sends no email; this deliberately reveals that the address
+is confirmed. Every other address (new, pending, bounced, or unsubscribed)
+receives the same generic response. A separate lowercased `emailKey` unique index prevents
 case-variant duplicates while the deliverable address retains its valid local
 part. Pending addresses can receive another verification email
 only after `EMAIL_RESEND_COOLDOWN_SECONDS`; the resend endpoint also has a
@@ -92,6 +94,18 @@ action on the Rosemarry website without logging in. The signature does not
 contain the email address, and tampering invalidates it. Unsubscribing clears
 any active verification token and changes the status to `UNSUBSCRIBED`.
 
+## Operations
+
+- `GET /api/health` returns `200 {"status":"ok"}` while MongoDB is connected
+  and `503` otherwise. Point the Render health check at it.
+- Rate-limit counters live in the `rateLimits` MongoDB collection (expired
+  windows are removed by a TTL index), so limits hold across any number of
+  instances.
+- On `SIGTERM`/`SIGINT` the server stops accepting connections, finishes
+  in-flight requests, closes the MongoDB pool, and exits within 10 seconds.
+- Startup fails fast when required configuration is missing; in production
+  that includes `TURNSTILE_SECRET` and `TURNSTILE_HOSTNAMES`.
+
 ## Verification
 
 ```sh
@@ -100,4 +114,6 @@ npm audit --audit-level=moderate
 ```
 
 Tests mock DNS, Turnstile, Resend, webhook verification, and the repository;
-they do not send real email or alter production data.
+they do not send real email or alter production data. The rate-limit store
+tests run against a real MongoDB only when `MONGO_TEST_URI` points at a
+disposable instance (CI starts one); otherwise they are skipped.

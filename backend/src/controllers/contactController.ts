@@ -2,10 +2,17 @@ import type { Request, Response } from "express";
 import { retentionExpiry } from "../config/retention.js";
 import { ContactMessageSchema } from "../models/contactModel.js";
 import type { AutoReplyEmailService } from "../services/autoReplyEmail.js";
+import {
+  invalidEmailDomainMessage,
+  type EmailDomainValidator,
+} from "../services/emailDomainValidation.js";
 import { contactInputSchema } from "../validation/contactSchema.js";
 import { sendValidationError } from "../validation/validationResponse.js";
 
-export function createContactController(emailService: AutoReplyEmailService) {
+export function createContactController(
+  emailService: AutoReplyEmailService,
+  emailDomainValidator: EmailDomainValidator,
+) {
   return async function createContact(
     req: Request,
     res: Response,
@@ -15,6 +22,18 @@ export function createContactController(emailService: AutoReplyEmailService) {
 
     if (!parsed.success) {
       return sendValidationError(res, parsed.error);
+    }
+
+    // Same domain check as pre-signup, but no double opt-in: the auto-reply is
+    // just a receipt. A DNS hiccup should not cost someone their message, so
+    // only a definitive "invalid" result is rejected.
+    const domainResult = await emailDomainValidator.validate(parsed.data.email);
+
+    if (domainResult.status === "invalid") {
+      return res.status(400).json({
+        success: false,
+        message: invalidEmailDomainMessage(domainResult.reason),
+      });
     }
 
     try {

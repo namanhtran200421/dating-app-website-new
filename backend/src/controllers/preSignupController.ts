@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 
+import { invalidEmailDomainMessage } from "../services/emailDomainValidation.js";
 import type { PreSignupWorkflow } from "../services/preSignupWorkflow.js";
 import {
   EmailDomainTemporarilyUnavailableError,
@@ -28,10 +29,7 @@ function workflowErrorResponse(error: unknown, res: Response): Response {
   if (error instanceof InvalidEmailDomainError) {
     return res.status(400).json({
       success: false,
-      message:
-        error.reason === "disposable"
-          ? "Please use a permanent email address."
-          : "That email domain does not appear to receive mail.",
+      message: invalidEmailDomainMessage(error.reason),
     });
   }
 

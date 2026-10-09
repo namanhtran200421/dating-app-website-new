@@ -149,6 +149,15 @@ test("production CORS excludes local development origins", async () => {
   );
 });
 
+test("health reports 503 while the database is unavailable", async () => {
+  let ready = false;
+  const app = createApp({ isReady: () => ready, nodeEnv: "production" });
+
+  assert.equal((await request(app).get("/api/health")).status, 503);
+  ready = true;
+  assert.equal((await request(app).get("/api/health")).status, 200);
+});
+
 test("API responses include restrictive security and cache headers", async () => {
   const response = await request(createApp({ nodeEnv: "production" })).get(
     "/api/health",
@@ -472,6 +481,81 @@ test("contact success does not echo personal data and sends a receipt", async (t
       submissionId: "contact-record-1",
     },
   ]);
+});
+
+test("contact rejects the same email domains as pre-signup without saving or replying", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
+  mockSuccessfulTurnstile(t, "contact");
+  const create = t.mock.method(ContactMessageSchema, "create", async () => ({
+    _id: "contact-record-1",
+  }));
+  const email = createRecordingEmailService();
+  const validatedEmails: string[] = [];
+  const response = await request(
+    createApp({
+      autoReplyEmailService: email.service,
+      emailDomainValidator: {
+        async validate(address) {
+          validatedEmails.push(address);
+          return { status: "invalid", reason: "disposable" };
+        },
+      },
+      nodeEnv: "test",
+    }),
+  )
+    .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      firstName: "Rose",
+      lastName: "Marry",
+      email: "Person@Mailinator.com",
+      subject: "Feedback",
+      message: "Hello",
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal(response.status, 400);
+  assert.equal(response.body.message, "Please use a permanent email address.");
+  assert.deepEqual(validatedEmails, ["Person@mailinator.com"]);
+  assert.equal(create.mock.callCount(), 0);
+  assert.deepEqual(email.contactReplies, []);
+});
+
+test("contact keeps the message when the email domain check is temporarily unavailable", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
+  mockSuccessfulTurnstile(t, "contact");
+  t.mock.method(ContactMessageSchema, "create", async () => ({
+    _id: "contact-record-1",
+  }));
+  const email = createRecordingEmailService();
+  const response = await request(
+    createApp({
+      autoReplyEmailService: email.service,
+      emailDomainValidator: {
+        async validate() {
+          return { status: "temporary-failure" };
+        },
+      },
+      nodeEnv: "test",
+    }),
+  )
+    .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      firstName: "Rose",
+      lastName: "Marry",
+      email: "person@example.com",
+      subject: "Feedback",
+      message: "Hello",
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal(response.status, 201);
+  assert.equal(email.contactReplies.length, 1);
 });
 
 test("Resend subscription emails use registered sender and stable idempotency keys", async (t) => {

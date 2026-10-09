@@ -24,8 +24,12 @@ After deployment run `npm run check:live`, then `npm run indexnow -- --check`. S
 
 ## Content and measurement
 
-Journal summaries and full articles live in `src/app/pages/blog/article-catalog.ts` and `article-content.ts`. Add each new public article path to the backend analytics allowlist too. Change modification dates only for substantive updates.
+Journal summaries and full articles live in `src/app/pages/blog/article-catalog.ts` and `article-content.ts`. Change modification dates only for substantive updates.
 
-First-party measurement sends only fixed aggregate dimensions to the existing backend; it respects Do Not Track and Global Privacy Control and never sends emails, full query strings or visitor identifiers. The backend must deploy the analytics endpoint before counts can accumulate. Its private report command requires `MONGO_URI`; Google reports require an authorized `GOOGLE_ACCESS_TOKEN`. Never commit credentials.
+`npm run search:report` and `npm run search:inspect` read Google Search Console and require an authorized `GOOGLE_ACCESS_TOKEN`. Never commit credentials.
+
+## Automatic email type
+
+The backend's automatic emails show their copy as images so Gmail and Outlook render the site's fonts. After changing a line in `scripts/generate-email-type.mjs`, run `npm run email:type`, copy the printed sizes into `EMAIL_TYPE` in `backend/src/services/autoReplyEmail.ts`, and bump `EMAIL_TYPE_VERSION`. Deploy the website before the backend sends emails that use new images.
 
 See [search visibility runbook](../../docs/search-visibility-runbook.md) and [content and promotion plan](../../docs/visibility-content-and-promotion.md) for authenticated indexing tasks, profile copy, social drafts and measurement definitions.

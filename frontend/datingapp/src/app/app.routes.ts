@@ -98,7 +98,7 @@ export const routes: Routes = [
   },
   {
     path: 'privacy-and-terms',
-    loadComponent: () => import('./policie-page/policie-page').then((m) => m.PoliciePage),
+    loadComponent: () => import('./pages/privacy-page/privacy-page').then((m) => m.PrivacyPage),
     data: {
       seo: {
         title: 'Privacy, Safety & Terms | Rosemarry',

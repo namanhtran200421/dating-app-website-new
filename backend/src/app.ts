@@ -5,7 +5,7 @@ import express, {
   type Response,
 } from "express";
 import helmet from "helmet";
-import { rateLimit, ipKeyGenerator } from "express-rate-limit";
+import { rateLimit, ipKeyGenerator, type Store } from "express-rate-limit";
 
 import { createResendWebhookController } from "./controllers/resendWebhookController.js";
 import { verifyFormRequest } from "./middleware/verifyFormRequest.js";
@@ -15,6 +15,10 @@ import {
   disabledAutoReplyEmailService,
   type AutoReplyEmailService,
 } from "./services/autoReplyEmail.js";
+import {
+  acceptAllEmailDomainValidator,
+  type EmailDomainValidator,
+} from "./services/emailDomainValidation.js";
 import type { PreSignupWorkflow } from "./services/preSignupWorkflow.js";
 import type { ResendWebhookVerifier } from "./services/resendWebhook.js";
 
@@ -36,8 +40,14 @@ const RESEND_RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 
 export interface AppOptions {
   autoReplyEmailService?: AutoReplyEmailService;
+  // Pass the same validator the pre-signup workflow uses so both forms accept the same addresses.
+  emailDomainValidator?: EmailDomainValidator;
+  // Reports whether dependencies (MongoDB) can serve requests; drives /api/health.
+  isReady?: () => boolean;
   nodeEnv?: string;
   preSignupWorkflow?: PreSignupWorkflow;
+  // Shared counters for running several instances. Defaults to per-process memory.
+  rateLimitStore?: (identifier: string) => Store;
   resendWebhookVerifier?: ResendWebhookVerifier;
   trustedProxyHops?: number | false;
 }
@@ -90,9 +100,15 @@ function resolveClientKey(req: Request): string {
   return ipKeyGenerator(req.ip ?? "unknown");
 }
 
-function createLimiter(identifier: string, limit: number, windowMs: number) {
+function createLimiter(
+  identifier: string,
+  limit: number,
+  windowMs: number,
+  storeFor?: (identifier: string) => Store,
+) {
   return rateLimit({
     identifier,
+    ...(storeFor ? { store: storeFor(identifier) } : {}),
     windowMs,
     limit,
     keyGenerator: resolveClientKey,
@@ -116,6 +132,8 @@ export function createApp(options: AppOptions = {}) {
   const allowedOriginSet = new Set<string>(allowedOrigins);
   const autoReplyEmailService =
     options.autoReplyEmailService ?? disabledAutoReplyEmailService;
+  const emailDomainValidator =
+    options.emailDomainValidator ?? acceptAllEmailDomainValidator;
   const preSignupWorkflow =
     options.preSignupWorkflow ?? unavailablePreSignupWorkflow;
   const resendWebhookVerifier =
@@ -178,6 +196,7 @@ export function createApp(options: AppOptions = {}) {
       "pre-signup-resend",
       PRE_SIGNUP_RESEND_RATE_LIMIT,
       RESEND_RATE_LIMIT_WINDOW_MS,
+      options.rateLimitStore,
     ),
   );
   app.post(
@@ -187,6 +206,7 @@ export function createApp(options: AppOptions = {}) {
       "pre-signup-token",
       PRE_SIGNUP_TOKEN_RATE_LIMIT,
       FORM_RATE_LIMIT_WINDOW_MS,
+      options.rateLimitStore,
     ),
   );
   app.post(
@@ -196,12 +216,18 @@ export function createApp(options: AppOptions = {}) {
       "pre-signup",
       PRE_SIGNUP_RATE_LIMIT,
       FORM_RATE_LIMIT_WINDOW_MS,
+      options.rateLimitStore,
     ),
   );
   app.post(
     "/api/contact",
     verifyFormRequest(allowedOriginSet),
-    createLimiter("contact", CONTACT_RATE_LIMIT, FORM_RATE_LIMIT_WINDOW_MS),
+    createLimiter(
+      "contact",
+      CONTACT_RATE_LIMIT,
+      FORM_RATE_LIMIT_WINDOW_MS,
+      options.rateLimitStore,
+    ),
   );
   app.post(
     "/api/webhooks/resend",
@@ -211,10 +237,19 @@ export function createApp(options: AppOptions = {}) {
   app.use(express.json({ limit: "32kb", strict: true }));
 
   app.use("/api/pre-signups", createPreSignupRouter(preSignupWorkflow));
-  app.use("/api/contact", createContactRouter(autoReplyEmailService));
+  app.use(
+    "/api/contact",
+    createContactRouter(autoReplyEmailService, emailDomainValidator),
+  );
 
+  const isReady = options.isReady ?? (() => true);
   app.get("/api/health", function (_req: Request, res: Response): void {
-    res.status(200).json({ message: "Backend is running" });
+    // 503 lets the platform stop routing to an instance that lost its database.
+    if (!isReady()) {
+      res.status(503).json({ status: "unavailable" });
+      return;
+    }
+    res.status(200).json({ status: "ok" });
   });
 
   app.use("/api", function (_req: Request, res: Response): void {

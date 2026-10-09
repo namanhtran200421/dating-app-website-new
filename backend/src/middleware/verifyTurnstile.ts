@@ -54,6 +54,10 @@ export function verifyTurnstile(expectedAction: TurnstileAction) {
         secret,
         response: token,
       });
+      // req.ip is the client address resolved through the trusted proxy chain.
+      if (req.ip) {
+        body.set("remoteip", req.ip);
+      }
       const verificationResponse = await fetch(SITEVERIFY_URL, {
         method: "POST",
         headers: {

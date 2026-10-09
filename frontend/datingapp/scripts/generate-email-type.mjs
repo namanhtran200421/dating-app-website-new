@@ -4,7 +4,7 @@
 // changing any line below, then update EMAIL_TYPE with the printed sizes; the PNGs are committed.
 //
 // Each image bakes in the surface it sits on, so it stays legible when a client inverts colours.
-import { chromium } from 'playwright';
+import { chromium } from '@playwright/test';
 import { resolve } from 'node:path';
 import { mkdir, readFile } from 'node:fs/promises';
 

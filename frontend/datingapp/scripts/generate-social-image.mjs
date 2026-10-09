@@ -1,7 +1,7 @@
 // Renders scripts/social-card.html to the versioned Open Graph image (1200 x 630),
 // the Open Graph / Twitter card and the press kit's social artwork. Run on demand with
 // `npm run social:image` after the card design changes; the PNG is committed.
-import { chromium } from 'playwright';
+import { chromium } from '@playwright/test';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 import { stat } from 'node:fs/promises';

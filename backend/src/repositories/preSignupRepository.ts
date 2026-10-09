@@ -4,7 +4,7 @@ import {
   PreSignSchema,
   type PreSignup,
   type SubscriptionStatus,
-} from "../models/subscripeModel.js";
+} from "../models/preSignupModel.js";
 
 export interface VerificationReservationInput {
   attemptId: string;

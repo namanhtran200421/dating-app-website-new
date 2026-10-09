@@ -1,5 +1,3 @@
-// schemas/contactSchema.ts
-
 import { z } from "zod";
 import { normalizedEmailSchema } from "./normalizedEmail.js";
 
@@ -13,8 +11,7 @@ export const CONTACT_SUBJECTS = [
 const UNSAFE_CONTROL_CHARACTERS =
   /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/u;
 
-const NAME_PATTERN =
-  /^[\p{L}\p{M}][\p{L}\p{M}\p{Zs}'’.-]*$/u;
+export const NAME_PATTERN = /^[\p{L}\p{M}][\p{L}\p{M}\p{Zs}'’.-]*$/u;
 
 const nameSchema = z
   .string()
@@ -35,7 +32,6 @@ const messageSchema = z
   .refine((value) => !UNSAFE_CONTROL_CHARACTERS.test(value), {
     error: "Message contains unsupported control characters.",
   });
-
 
 export const contactInputSchema = z.strictObject({
   firstName: nameSchema,

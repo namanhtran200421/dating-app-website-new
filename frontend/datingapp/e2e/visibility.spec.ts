@@ -96,14 +96,20 @@ test('every public page uses the shared section reveal contract', async ({ page 
     '/press',
     '/contact-us',
     '/privacy-and-terms',
-    '/email-confirmation',
-    '/unsubscribe',
     '/blog/dating-without-swiping',
   ]) {
     await page.goto(path);
     if (path === '/') await dismissDevelopmentNotice(page);
     expect(await page.locator('main [data-motion-reveal]').count(), path).toBeGreaterThan(0);
     await expect(page.locator('main [data-reveal]')).toHaveCount(0);
+  }
+
+  // Pages opened from email links show their card immediately: hiding it for a reveal made the
+  // confirmation flow flash.
+  for (const path of ['/email-confirmation', '/unsubscribe']) {
+    await page.goto(path);
+    await expect(page.locator('main [data-motion-reveal]')).toHaveCount(0);
+    await expect(page.locator('main section').first()).toHaveCSS('opacity', '1');
   }
 
   await page.goto('/');

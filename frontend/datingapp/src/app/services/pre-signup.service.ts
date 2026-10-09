@@ -1,11 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { Contacts } from '../model/contactModel';
 
-type ContactRequest = Omit<Contacts, '_id' | 'createdAt'> & {
+interface ContactRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  message: string;
+  subject: string;
   turnstileToken: string;
-};
+}
 
 interface PreSignupRequest {
   email: string;

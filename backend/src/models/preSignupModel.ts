@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { STORED_EMAIL_PATTERN } from "../validation/normalizedEmail.js";
 
 export interface PreSignup {
   email: string;
@@ -45,7 +45,7 @@ const preSignupSchema = new Schema<PreSignup>(
       unique: true,
       trim: true,
       maxlength: 254,
-      match: EMAIL_PATTERN,
+      match: STORED_EMAIL_PATTERN,
     },
     emailKey: {
       type: String,

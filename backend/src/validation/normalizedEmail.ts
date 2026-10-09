@@ -31,9 +31,13 @@ export function normalizeEmailAddress(value: string): string | null {
     : null;
 }
 
+// Coarse shape check for Mongoose validators; request input is validated by normalizedEmailSchema.
+export const STORED_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const MAX_EMAIL_LENGTH = 320;
+
 export const normalizedEmailSchema = z
   .string()
-  .max(320, { error: "Email is too long." })
+  .max(MAX_EMAIL_LENGTH, { error: "Email is too long." })
   .transform((value, context) => {
     const email = normalizeEmailAddress(value);
 

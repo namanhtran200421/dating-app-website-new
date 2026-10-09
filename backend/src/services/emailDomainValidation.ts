@@ -16,6 +16,21 @@ export interface EmailDomainValidator {
   validate(email: string): Promise<EmailDomainValidationResult>;
 }
 
+// Used when no validator is wired in (tests and local tooling).
+export const acceptAllEmailDomainValidator: EmailDomainValidator = {
+  async validate(): Promise<EmailDomainValidationResult> {
+    return { status: "valid" };
+  },
+};
+
+export function invalidEmailDomainMessage(
+  reason: "disposable" | "no-mail",
+): string {
+  return reason === "disposable"
+    ? "Please use a permanent email address."
+    : "That email domain does not appear to receive mail.";
+}
+
 type DnsError = Error & { code?: string };
 
 const DEFINITIVE_DNS_ERRORS = new Set(["ENODATA", "ENOTFOUND", "NXDOMAIN"]);
@@ -39,7 +54,6 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
       error.code = "ETIMEOUT";
       reject(error);
     }, timeoutMs);
-    timeout.unref();
 
     promise.then(
       (value) => {

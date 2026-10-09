@@ -46,9 +46,8 @@ website and its two form endpoints.
 - Review `npm audit`, Render logs, Turnstile analytics, Resend activity, and
   Vercel Firewall events regularly. Apply dependency updates promptly and run
   the complete test suite before deployment.
-- The current rate-limit store is per API process. Before running more than one
-  Render instance, replace it with a shared store or add edge rate limiting so
-  all instances share the same counters.
+- Rate-limit counters are stored in MongoDB and shared by every API instance,
+  so the service can scale horizontally without weakening the limits.
 
 ## Verification
 

@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
-import { CONTACT_SUBJECTS } from "../validation/contactSchema.js";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const NAME_PATTERN = /^[\p{L}\p{M}][\p{L}\p{M}\p{Zs}'’.-]*$/u;
+import { CONTACT_SUBJECTS, NAME_PATTERN } from "../validation/contactSchema.js";
+import {
+  MAX_EMAIL_LENGTH,
+  STORED_EMAIL_PATTERN,
+} from "../validation/normalizedEmail.js";
 
 export interface ContactMessage {
   firstName: string;
@@ -34,7 +35,8 @@ const contactMessageSchema = new Schema<ContactMessage>(
       type: String,
       required: true,
       trim: true,
-      match: EMAIL_PATTERN,
+      maxlength: MAX_EMAIL_LENGTH,
+      match: STORED_EMAIL_PATTERN,
     },
     subject: {
       type: String,

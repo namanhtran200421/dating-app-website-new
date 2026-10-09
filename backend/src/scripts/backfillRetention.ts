@@ -6,7 +6,7 @@ import {
   validateRetentionConfiguration,
 } from "../config/retention.js";
 import { ContactMessageSchema } from "../models/contactModel.js";
-import { PreSignSchema } from "../models/subscripeModel.js";
+import { PreSignSchema } from "../models/preSignupModel.js";
 
 const mongoUri = process.env.MONGO_URI?.trim();
 

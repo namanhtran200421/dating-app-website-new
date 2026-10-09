@@ -13,6 +13,12 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      # Disposable database for the backend's MongoDB-backed tests.
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -44,3 +50,5 @@ jobs:
         working-directory: backend
       - run: npm test
         working-directory: backend
+        env:
+          MONGO_TEST_URI: mongodb://127.0.0.1:27017
