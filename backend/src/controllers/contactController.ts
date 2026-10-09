@@ -1,13 +1,44 @@
 import type { Request, Response } from "express";
 import { retentionExpiry } from "../config/retention.js";
-import { ContactMessageSchema } from "../models/contactModel.js";
+import {
+  ContactMessageSchema,
+  type ContactMessage,
+} from "../models/contactModel.js";
 import type { AutoReplyEmailService } from "../services/autoReplyEmail.js";
+import { createContactReference } from "../services/contactReference.js";
 import {
   invalidEmailDomainMessage,
   type EmailDomainValidator,
 } from "../services/emailDomainValidation.js";
 import { contactInputSchema } from "../validation/contactSchema.js";
 import { sendValidationError } from "../validation/validationResponse.js";
+
+const REFERENCE_ATTEMPTS = 3;
+
+function isDuplicateReference(error: unknown): boolean {
+  const { code, keyPattern } = (error ?? {}) as {
+    code?: number;
+    keyPattern?: Record<string, unknown>;
+  };
+  return code === 11000 && keyPattern?.referenceId !== undefined;
+}
+
+async function saveContactMessage(
+  fields: Omit<ContactMessage, "referenceId" | "createdAt">,
+) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await ContactMessageSchema.create({
+        ...fields,
+        referenceId: createContactReference(),
+      });
+    } catch (error) {
+      if (attempt >= REFERENCE_ATTEMPTS || !isDuplicateReference(error)) {
+        throw error;
+      }
+    }
+  }
+}
 
 export function createContactController(
   emailService: AutoReplyEmailService,
@@ -37,7 +68,7 @@ export function createContactController(
     }
 
     try {
-      const contact = await ContactMessageSchema.create({
+      const contact = await saveContactMessage({
         firstName: parsed.data.firstName,
         lastName: parsed.data.lastName,
         email: parsed.data.email,
@@ -51,6 +82,7 @@ export function createContactController(
           email: parsed.data.email,
           firstName: parsed.data.firstName,
           subject: parsed.data.subject,
+          referenceId: contact.referenceId,
           submissionId: contact._id.toString(),
         });
       } catch {
@@ -61,6 +93,7 @@ export function createContactController(
 
       return res.status(201).json({
         message: "Contact message saved successfully",
+        referenceId: contact.referenceId,
         success: true,
       });
     } catch {

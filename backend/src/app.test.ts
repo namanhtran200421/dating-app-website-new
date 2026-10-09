@@ -12,7 +12,12 @@ import {
   type PreSignupAutoReplyInput,
   type PreSignupConfirmationInput,
 } from "./services/autoReplyEmail.js";
+import {
+  CONTACT_REFERENCE_PATTERN,
+  createContactReference,
+} from "./services/contactReference.js";
 import type { PreSignupWorkflow } from "./services/preSignupWorkflow.js";
+import { CONTACT_SUBJECTS } from "./validation/contactSchema.js";
 import type { ResendWebhookVerifier } from "./services/resendWebhook.js";
 
 const PRODUCTION_ORIGIN = "https://www.rosemarry.app";
@@ -453,8 +458,9 @@ test("contact success does not echo personal data and sends a receipt", async (t
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
   setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
   mockSuccessfulTurnstile(t, "contact");
-  t.mock.method(ContactMessageSchema, "create", async () => ({
+  t.mock.method(ContactMessageSchema, "create", async (fields: { referenceId: string }) => ({
     _id: "contact-record-1",
+    referenceId: fields.referenceId,
   }));
   const email = createRecordingEmailService();
   const response = await request(
@@ -473,14 +479,99 @@ test("contact success does not echo personal data and sends a receipt", async (t
 
   assert.equal(response.status, 201);
   assert.equal(JSON.stringify(response.body).includes("onerror"), false);
+  assert.equal(JSON.stringify(response.body).includes("Person@"), false);
+  assert.match(response.body.referenceId, CONTACT_REFERENCE_PATTERN);
   assert.deepEqual(email.contactReplies, [
     {
       email: "Person@example.com",
       firstName: "Rose",
       subject: "Feedback",
+      referenceId: response.body.referenceId,
       submissionId: "contact-record-1",
     },
   ]);
+});
+
+test("contact retries with a fresh reference when one is already taken", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
+  mockSuccessfulTurnstile(t, "contact");
+  const triedReferences: string[] = [];
+  t.mock.method(ContactMessageSchema, "create", async (fields: { referenceId: string }) => {
+    triedReferences.push(fields.referenceId);
+    if (triedReferences.length === 1) {
+      throw Object.assign(new Error("E11000 duplicate key"), {
+        code: 11000,
+        keyPattern: { referenceId: 1 },
+      });
+    }
+    return { _id: "contact-record-2", referenceId: fields.referenceId };
+  });
+  const email = createRecordingEmailService();
+  const response = await request(
+    createApp({ autoReplyEmailService: email.service, nodeEnv: "test" }),
+  )
+    .post("/api/contact")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({
+      firstName: "Rose",
+      lastName: "Marry",
+      email: "person@example.com",
+      subject: "Press",
+      message: "Hello",
+      turnstileToken: "valid-token",
+    });
+
+  assert.equal(response.status, 201);
+  assert.equal(triedReferences.length, 2);
+  assert.equal(response.body.referenceId, triedReferences[1]);
+  assert.equal(email.contactReplies[0]?.referenceId, triedReferences[1]);
+});
+
+test("contact references are readable and unambiguous", () => {
+  for (let index = 0; index < 500; index += 1) {
+    const reference = createContactReference();
+    assert.match(reference, CONTACT_REFERENCE_PATTERN);
+    assert.doesNotMatch(reference.slice(3), /[01ILO]/);
+  }
+});
+
+test("each contact subject gets its own auto-reply carrying the reference", async (t) => {
+  const requests: Array<Record<string, unknown>> = [];
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (_input: string | URL | Request, init?: RequestInit) => {
+      requests.push(JSON.parse(String(init?.body)) as Record<string, unknown>);
+      return new Response(JSON.stringify({ id: "email-id" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  );
+  const service = createAutoReplyEmailService("test", "re_test_key");
+
+  for (const subject of CONTACT_SUBJECTS) {
+    await service.sendContactReply({
+      email: "person@example.com",
+      firstName: "Rose",
+      subject,
+      referenceId: "RM-7K3P-9QXA",
+      submissionId: `record-${subject}`,
+    });
+  }
+
+  assert.equal(requests.length, CONTACT_SUBJECTS.length);
+  assert.equal(new Set(requests.map((body) => body.subject)).size, CONTACT_SUBJECTS.length);
+  assert.equal(new Set(requests.map((body) => body.html)).size, CONTACT_SUBJECTS.length);
+  for (const body of requests) {
+    assert.match(String(body.subject), /\[RM-7K3P-9QXA\]$/);
+    assert.match(String(body.text), /Your reference: RM-7K3P-9QXA/);
+    assert.match(String(body.html), /RM-7K3P-9QXA/);
+  }
+  assert.match(String(requests[1]?.html), /title-contact-feedback\.png/);
+  assert.match(String(requests[1]?.text), /yours helps shape Rosemarry/);
 });
 
 test("contact rejects the same email domains as pre-signup without saving or replying", async (t) => {
@@ -488,8 +579,9 @@ test("contact rejects the same email domains as pre-signup without saving or rep
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
   setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
   mockSuccessfulTurnstile(t, "contact");
-  const create = t.mock.method(ContactMessageSchema, "create", async () => ({
+  const create = t.mock.method(ContactMessageSchema, "create", async (fields: { referenceId: string }) => ({
     _id: "contact-record-1",
+    referenceId: fields.referenceId,
   }));
   const email = createRecordingEmailService();
   const validatedEmails: string[] = [];
@@ -528,8 +620,9 @@ test("contact keeps the message when the email domain check is temporarily unava
   setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
   setEnvironment(t, "CONTACT_RETENTION_DAYS", "365");
   mockSuccessfulTurnstile(t, "contact");
-  t.mock.method(ContactMessageSchema, "create", async () => ({
+  t.mock.method(ContactMessageSchema, "create", async (fields: { referenceId: string }) => ({
     _id: "contact-record-1",
+    referenceId: fields.referenceId,
   }));
   const email = createRecordingEmailService();
   const response = await request(

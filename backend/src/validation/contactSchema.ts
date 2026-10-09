@@ -7,6 +7,7 @@ export const CONTACT_SUBJECTS = [
   "Partnerships",
   "Press",
 ] as const;
+export type ContactSubject = (typeof CONTACT_SUBJECTS)[number];
 
 const UNSAFE_CONTROL_CHARACTERS =
   /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/u;

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { CONTACT_REFERENCE_PATTERN } from "../services/contactReference.js";
 import { CONTACT_SUBJECTS, NAME_PATTERN } from "../validation/contactSchema.js";
 import {
   MAX_EMAIL_LENGTH,
@@ -6,6 +7,7 @@ import {
 } from "../validation/normalizedEmail.js";
 
 export interface ContactMessage {
+  referenceId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -17,6 +19,13 @@ export interface ContactMessage {
 
 const contactMessageSchema = new Schema<ContactMessage>(
   {
+    // Shown to the sender in their auto-reply; support looks messages up by it.
+    referenceId: {
+      type: String,
+      required: true,
+      match: CONTACT_REFERENCE_PATTERN,
+      immutable: true,
+    },
     firstName: {
       type: String,
       required: true,
@@ -61,6 +70,9 @@ const contactMessageSchema = new Schema<ContactMessage>(
   },
   { timestamps: true, strict: "throw" },
 );
+
+// Sparse because messages saved before reference IDs existed have none.
+contactMessageSchema.index({ referenceId: 1 }, { unique: true, sparse: true });
 
 export const ContactMessageSchema = model<ContactMessage>(
   "Contact",

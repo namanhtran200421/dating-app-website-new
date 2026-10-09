@@ -11,6 +11,12 @@ interface ContactRequest {
   turnstileToken: string;
 }
 
+export interface ContactResponse {
+  message: string;
+  referenceId?: string;
+  success: boolean;
+}
+
 interface PreSignupRequest {
   email: string;
   turnstileToken: string;
@@ -73,6 +79,6 @@ export class PreSignupService {
   }
 
   addContact(contactData: ContactRequest) {
-    return this.http.post(`${this.baseUrl}/api/contact`, contactData);
+    return this.http.post<ContactResponse>(`${this.baseUrl}/api/contact`, contactData);
   }
 }

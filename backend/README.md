@@ -33,6 +33,27 @@ part. Pending addresses can receive another verification email
 only after `EMAIL_RESEND_COOLDOWN_SECONDS`; the resend endpoint also has a
 separate IP limit of three requests per hour.
 
+## Contact form
+
+Contact messages are single opt-in: the sender gets an automatic receipt but
+never has to confirm their address. Each address passes the same domain check
+as early access (disposable and no-mail domains are rejected), except that a
+temporary DNS failure still saves the message.
+
+Every message gets a reference such as `RM-7K3P-9QXA`. It is shown in the
+success dialog and in the receipt's subject line and body, and is stored
+under a unique index, so support can find a message straight from what the
+sender quotes:
+
+```js
+db.contacts.findOne({ referenceId: "RM-7K3P-9QXA" })
+```
+
+Each subject (General question, Feedback, Partnerships, Press) has its own
+receipt copy in `CONTACT_REPLIES` in `src/services/autoReplyEmail.ts`. The
+heading and message are images; after changing their text, run
+`npm run email:type` in `frontend/datingapp` and update `EMAIL_TYPE`.
+
 ## Required environment
 
 Environment files, including examples, are intentionally excluded from Git.

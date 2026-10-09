@@ -1,5 +1,7 @@
 import { Resend } from "resend";
 
+import type { ContactSubject } from "../validation/contactSchema.js";
+
 const FROM_ADDRESS = "Rosemarry <noreply@rosemarry.app>";
 const WEBSITE_URL = "https://www.rosemarry.app";
 const EMAIL_REQUEST_TIMEOUT_MS = 8_000;
@@ -7,7 +9,8 @@ const EMAIL_REQUEST_TIMEOUT_MS = 8_000;
 export interface ContactAutoReplyInput {
   email: string;
   firstName: string;
-  subject: string;
+  subject: ContactSubject;
+  referenceId: string;
   submissionId: string;
 }
 
@@ -81,13 +84,20 @@ const BODY_FONT = "'Playpen Sans','Trebuchet MS',Arial,sans-serif";
  * Sizes are the CSS sizes that script prints. Bump EMAIL_TYPE_VERSION whenever the images are
  * regenerated so mail proxies fetch the new ones.
  */
-const EMAIL_TYPE_VERSION = "5";
+const EMAIL_TYPE_VERSION = "6";
 const EMAIL_TYPE = {
   "brand-nav": { width: 195, height: 39, text: "Rosemarry", font: DISPLAY_FONT, size: 26, color: COLORS.ink },
   "title-contact": { width: 568, height: 70, text: "We got your message", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-contact-feedback": { width: 502, height: 70, text: "Feedback received", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-contact-partnerships": { width: 395, height: 70, text: "Let's talk soon", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
+  "title-contact-press": { width: 545, height: 70, text: "We got your request", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "title-early-access": { width: 512, height: 70, text: "Confirm your email", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "title-confirmed": { width: 437, height: 70, text: "Email confirmed", font: DISPLAY_FONT, size: 52, color: COLORS.ink },
   "message-contact": { width: 330, height: 60, text: "Thanks so much for reaching out! We'll get back to you soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "message-contact-feedback": { width: 330, height: 60, text: "Thank you! We read every note, and yours helps shape Rosemarry.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "message-contact-partnerships": { width: 330, height: 60, text: "Thanks for thinking of Rosemarry! We'll review your idea and reply soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "message-contact-press": { width: 330, height: 88, text: "Thanks for your interest in Rosemarry! We'll reply with what you need soon.", font: BODY_FONT, size: 18, color: COLORS.ink },
+  "reference-label": { width: 96, height: 21, text: "Your reference", font: BODY_FONT, size: 13, color: COLORS.quiet },
   "message-early-access": { width: 330, height: 60, text: "Tap below to confirm you want Rosemarry early-access updates.", font: BODY_FONT, size: 18, color: COLORS.ink },
   "message-confirmed": { width: 330, height: 60, text: "You're confirmed and on the Rosemarry early-access list.", font: BODY_FONT, size: 18, color: COLORS.ink },
   "button-early-access": { width: 136, height: 24, text: "Confirm my email", font: BODY_FONT, size: 15, color: COLORS.ink },
@@ -96,6 +106,34 @@ const EMAIL_TYPE = {
   "footer-note": { width: 345, height: 20, text: "Automatic email from Rosemarry. Replies aren't monitored.", font: BODY_FONT, size: 12, color: COLORS.quiet },
 } as const;
 type EmailTypeKey = keyof typeof EMAIL_TYPE;
+
+// One auto-reply per contact subject. The heading and message reuse EMAIL_TYPE's copy so the
+// plain-text part always says the same thing as the images.
+const CONTACT_REPLIES: Record<
+  ContactSubject,
+  { emailSubject: string; headingImage: EmailTypeKey; message: EmailTypeKey }
+> = {
+  "General question": {
+    emailSubject: "We received your Rosemarry message",
+    headingImage: "title-contact",
+    message: "message-contact",
+  },
+  Feedback: {
+    emailSubject: "Thanks for your Rosemarry feedback",
+    headingImage: "title-contact-feedback",
+    message: "message-contact-feedback",
+  },
+  Partnerships: {
+    emailSubject: "We received your Rosemarry partnership idea",
+    headingImage: "title-contact-partnerships",
+    message: "message-contact-partnerships",
+  },
+  Press: {
+    emailSubject: "We received your Rosemarry press request",
+    headingImage: "title-contact-press",
+    message: "message-contact-press",
+  },
+};
 
 // The alt text carries the line itself and is styled, so blocked images still read as the copy.
 function emailText(key: EmailTypeKey): string {
@@ -151,6 +189,7 @@ interface EmailLayoutInput {
   headingImage: EmailTypeKey;
   message: EmailTypeKey;
   cta?: { label: EmailTypeKey; href: string };
+  referenceId?: string;
   secondaryLink?: { label: string; href: string };
 }
 
@@ -160,10 +199,23 @@ function emailLayout({
   headingImage,
   message,
   cta,
+  referenceId,
   secondaryLink,
 }: EmailLayoutInput): string {
+  // The code itself stays live text so it can be copied and searched; only the label is an image.
+  const reference = referenceId
+    ? `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:22px;border-collapse:separate;">
+        <tr>
+          <td style="background:${COLORS.paper};border:2px solid ${COLORS.ink};border-radius:14px;padding:10px 16px;">
+            ${emailText("reference-label")}
+            <div style="margin-top:2px;font-family:${BODY_FONT};font-size:20px;font-weight:700;letter-spacing:1px;line-height:1.3;color:${COLORS.ink};">${escapeHtml(referenceId)}</div>
+          </td>
+        </tr>
+      </table>`
+    : "";
   const card = offsetShadow(
     `${emailText(message)}
+      ${reference}
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:26px;">
         <tr>
           <td class="rm-stack" valign="bottom">
@@ -244,19 +296,26 @@ export function createAutoReplyEmailService(
 
   return {
     async sendContactReply(input): Promise<void> {
+      const reply = CONTACT_REPLIES[input.subject];
+      const messageText = EMAIL_TYPE[reply.message].text;
       const { error } = await resend.emails.send(
         {
           from: FROM_ADDRESS,
           to: [input.email],
-          subject: "We received your Rosemarry message",
-          text: `Hi ${input.firstName},\n\nThanks so much for reaching out about ${input.subject}! We'll get back to you soon.\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.\n${WEBSITE_URL}`,
+          // The reference in the subject line makes the thread easy to find in an inbox search.
+          subject: `${reply.emailSubject} [${input.referenceId}]`,
+          text: `Hi ${input.firstName},\n\n${messageText}\n\nYour reference: ${input.referenceId}\nMention it if you contact us again so we can find your message quickly.\n\nWarmly,\nThe Rosemarry team\n\nAutomatic email from Rosemarry. Replies aren't monitored.\n${WEBSITE_URL}`,
           html: emailLayout({
-            preheader: "Thanks so much for reaching out! We'll get back to you soon.",
-            heading: "We got your message",
-            headingImage: "title-contact",
-            message: "message-contact",
+            preheader: `${messageText} Your reference: ${input.referenceId}`,
+            heading: EMAIL_TYPE[reply.headingImage].text,
+            headingImage: reply.headingImage,
+            message: reply.message,
+            referenceId: input.referenceId,
           }),
-          tags: [{ name: "form", value: "contact" }],
+          tags: [
+            { name: "form", value: "contact" },
+            { name: "contact_subject", value: input.subject.toLowerCase().replace(/\s+/g, "_") },
+          ],
         },
         {
           idempotencyKey: `contact-received/${input.submissionId}`,

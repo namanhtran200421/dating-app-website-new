@@ -107,7 +107,7 @@ export class ContactUs {
         }),
       )
       .subscribe({
-        next: async () => {
+        next: async ({ referenceId }) => {
           this.submissionError.set('');
           this.contactForm.reset();
           // Script and stylesheet are both off the critical path; fetch them together.
@@ -118,7 +118,9 @@ export class ContactUs {
 
           Swal.fire({
             title: 'Message delivered!',
-            text: 'We got your message. Keep an eye on your inbox for a response.',
+            text: referenceId
+              ? `Your reference is ${referenceId}. We emailed you a copy, so keep an eye on your inbox.`
+              : 'We got your message. Keep an eye on your inbox for a response.',
             icon: 'success',
             iconColor: '#d81e4a',
 
@@ -126,7 +128,8 @@ export class ContactUs {
             target: document.body,
             width: 'min(92vw, 440px)',
 
-            timer: 2400,
+            // Long enough to read or copy the reference; clicking outside still closes it.
+            timer: referenceId ? 6000 : 2400,
             showConfirmButton: false,
 
             heightAuto: false,
