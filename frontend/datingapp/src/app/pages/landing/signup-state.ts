@@ -33,6 +33,7 @@ export class SignupState {
   public readonly turnstileToken = signal<string | null>(null);
   public readonly turnstileResetVersion = signal(0);
   public readonly submittedEmail = signal('');
+  public readonly alreadyListed = signal(false);
 
   readonly showSignupButton = computed(() => !this.signupOpen() && !this.submitted());
   readonly showSignupForm = computed(() => this.signupOpen() && !this.submitted());
@@ -94,7 +95,8 @@ export class SignupState {
         }),
       )
       .subscribe({
-        next: () => {
+        next: (response) => {
+          this.alreadyListed.set(response?.status === 'already-listed');
           this.submittedEmail.set(email);
           this.preSignForm.reset();
           this.emailError.set(false);

@@ -43,6 +43,10 @@ class InMemoryRepository implements PreSignupRepository {
   processedEvents = new Set<string>();
   webhookUpdates: VerificationEmailEvent[] = [];
 
+  async isVerified(email: string): Promise<boolean> {
+    return this.status === "VERIFIED" && email.toLowerCase() === this.email?.toLowerCase();
+  }
+
   async reserveVerification(input: VerificationReservationInput) {
     if (this.status === "VERIFIED" || this.status === "BOUNCED") return null;
     if (this.sentAt && this.sentAt > input.cooldownBefore) return null;
@@ -190,6 +194,20 @@ test("stores only a token hash and keeps the signup pending", async () => {
   assert.notEqual(context.repository.tokenHash, token);
   assert.equal(context.repository.status, "PENDING");
   assert.equal(context.repository.providerMessageId, "provider-1");
+});
+
+test("a confirmed address is told it is already listed and gets no new email", async () => {
+  const context = setup();
+  assert.equal(await context.workflow.submit("person@example.com"), "verification-sent");
+  const verification = await context.workflow.confirmVerification(
+    verificationTokenFrom(context.emails[0]!),
+  );
+  assert.equal(verification.verified, true);
+
+  context.advance(CONFIGURATION.resendCooldownMs + 1);
+  assert.equal(await context.workflow.submit("Person@Example.com"), "already-listed");
+  assert.equal(context.emails.length, 1);
+  assert.equal(context.repository.status, "VERIFIED");
 });
 
 test("duplicates and cooldown retries do not flood verification emails", async () => {

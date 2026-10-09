@@ -43,7 +43,7 @@ export interface AppOptions {
 }
 
 const unavailablePreSignupWorkflow: PreSignupWorkflow = {
-  async submit(): Promise<void> {
+  async submit(): Promise<never> {
     throw new Error("Pre-signup workflow is not configured.");
   },
   async requestResend(): Promise<void> {

@@ -39,6 +39,7 @@ export interface PreSignupRepository {
     tokenHash: string,
     now: Date,
   ): Promise<VerificationReservation | null>;
+  isVerified(email: string): Promise<boolean>;
   processVerificationEmailEvent(event: VerificationEmailEvent): Promise<void>;
   recordConfirmationEmail(
     id: string,
@@ -141,6 +142,15 @@ function asReservation(
 }
 
 export const mongoosePreSignupRepository: PreSignupRepository = {
+  async isVerified(email) {
+    const document = await PreSignSchema.exists({
+      emailKey: email.toLowerCase(),
+      status: "VERIFIED",
+    }).exec();
+
+    return document !== null;
+  },
+
   async reserveVerification(input) {
     try {
       const document = await PreSignSchema.findOneAndUpdate(

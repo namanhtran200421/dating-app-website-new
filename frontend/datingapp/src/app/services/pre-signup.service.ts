@@ -12,6 +12,12 @@ interface PreSignupRequest {
   turnstileToken: string;
 }
 
+export interface PreSignupResponse {
+  message: string;
+  status?: 'already-listed' | 'verification-sent';
+  success: boolean;
+}
+
 interface SubscriptionTokenRequest {
   token: string;
 }
@@ -39,7 +45,7 @@ export class PreSignupService {
   }
 
   preSignup(presignupData: PreSignupRequest) {
-    return this.http.post(`${this.baseUrl}/api/pre-signups`, presignupData);
+    return this.http.post<PreSignupResponse>(`${this.baseUrl}/api/pre-signups`, presignupData);
   }
 
   resendVerification(presignupData: PreSignupRequest) {

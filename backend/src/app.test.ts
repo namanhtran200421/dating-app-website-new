@@ -80,8 +80,9 @@ function createRecordingWorkflow(overrides: Partial<PreSignupWorkflow> = {}): {
     unsubscribedTokens,
     webhookIds,
     workflow: {
-      async submit(email): Promise<void> {
+      async submit(email) {
         emails.push(email);
+        return "verification-sent" as const;
       },
       async requestResend(email): Promise<void> {
         resentEmails.push(email);
@@ -325,6 +326,26 @@ test("duplicate signup submissions receive the same generic response", async (t)
   assert.equal(first.status, 202);
   assert.equal(second.status, 202);
   assert.deepEqual(first.body, second.body);
+});
+
+test("a confirmed address gets an already-listed response", async (t) => {
+  setEnvironment(t, "TURNSTILE_SECRET", "test-secret");
+  setEnvironment(t, "TURNSTILE_EXPECTED_HOSTNAME", "www.rosemarry.app");
+  mockSuccessfulTurnstile(t, "pre_signup");
+  const recording = createRecordingWorkflow({
+    async submit() {
+      return "already-listed";
+    },
+  });
+  const response = await request(
+    createApp({ nodeEnv: "test", preSignupWorkflow: recording.workflow }),
+  )
+    .post("/api/pre-signups")
+    .set("Origin", PRODUCTION_ORIGIN)
+    .send({ email: "person@example.com", turnstileToken: "valid-token" });
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.status, "already-listed");
 });
 
 test("verification and unsubscribe tokens are handled without CAPTCHA", async () => {

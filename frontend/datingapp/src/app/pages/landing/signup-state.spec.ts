@@ -56,5 +56,15 @@ describe('SignupState', () => {
     signup.submit();
     expect(service.calls).toBe(1);
     expect(signup.submitted()).toBe(true);
+    expect(signup.alreadyListed()).toBe(false);
+  });
+
+  it('flags an address that is already confirmed', () => {
+    service.response = of({ success: true, status: 'already-listed' });
+    signup.preSignForm.controls.email.setValue('reader@example.com');
+    signup.setTurnstileToken('valid-test-token');
+    signup.submit();
+    expect(signup.submitted()).toBe(true);
+    expect(signup.alreadyListed()).toBe(true);
   });
 });

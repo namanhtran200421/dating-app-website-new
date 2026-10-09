@@ -12,6 +12,12 @@ import {
 } from "../validation/emailSchema.js";
 import { sendValidationError } from "../validation/validationResponse.js";
 
+const ALREADY_LISTED_RESPONSE = {
+  message: "You're already on the list! Be patient, we'll email you when Rosemarry is ready.",
+  status: "already-listed",
+  success: true,
+};
+
 const ACCEPTED_RESPONSE = {
   message:
     "If this address is eligible, a confirmation email will arrive shortly.",
@@ -57,8 +63,10 @@ export function createPreSignupController(workflow: PreSignupWorkflow) {
     }
 
     try {
-      await workflow.submit(parsed.data.email);
-      return res.status(202).json(ACCEPTED_RESPONSE);
+      const outcome = await workflow.submit(parsed.data.email);
+      return outcome === "already-listed"
+        ? res.status(200).json(ALREADY_LISTED_RESPONSE)
+        : res.status(202).json({ ...ACCEPTED_RESPONSE, status: "verification-sent" });
     } catch (error) {
       return workflowErrorResponse(error, res);
     }

@@ -30,6 +30,10 @@ export class InvalidEmailDomainError extends Error {
 export class EmailDomainTemporarilyUnavailableError extends Error {}
 export class VerificationEmailUnavailableError extends Error {}
 
+// "already-listed" is shown on the site, so a confirmed address can be looked up by anyone who
+// knows it. Accepted product decision: repeat signups get a clear answer instead of another email.
+export type SignupOutcome = "already-listed" | "verification-sent";
+
 export interface VerificationConfirmationResult {
   receiptSent: boolean;
   verified: boolean;
@@ -39,7 +43,7 @@ export interface PreSignupWorkflow {
   confirmVerification(token: string): Promise<VerificationConfirmationResult>;
   handleWebhook(eventId: string, event: WebhookEventPayload): Promise<void>;
   requestResend(email: string): Promise<void>;
-  submit(email: string): Promise<void>;
+  submit(email: string): Promise<SignupOutcome>;
   unsubscribe(token: string): Promise<boolean>;
 }
 
@@ -122,8 +126,8 @@ export function createPreSignupWorkflow(
         ? await options.repository.reserveVerification(reservationInput)
         : await options.repository.reserveExistingVerification(reservationInput);
 
-    // A verified, bounced, unknown, or recently emailed address receives the
-    // same public response. This prevents account enumeration and email floods.
+    // A bounced, pending, or recently emailed address receives the same public
+    // response as a new one. This prevents email floods.
     if (!reservation) {
       return;
     }
@@ -166,8 +170,13 @@ export function createPreSignupWorkflow(
   }
 
   return {
-    async submit(email): Promise<void> {
+    async submit(email): Promise<SignupOutcome> {
+      if (await options.repository.isVerified(email)) {
+        return "already-listed";
+      }
+
       await reserveAndSend(email, "signup");
+      return "verification-sent";
     },
 
     async requestResend(email): Promise<void> {
