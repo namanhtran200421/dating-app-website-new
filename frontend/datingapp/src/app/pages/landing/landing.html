@@ -215,15 +215,20 @@
             <span class="step-card__number" aria-hidden="true">04</span>
             <h3>Like when it clicks</h3>
             <p>Choose when it feels right, with more than a profile to go off.</p>
-            <p class="step-card__bonus">
+            <button
+              type="button"
+              class="step-card__bonus"
+              aria-controls="members-demo-panel"
+              (click)="showNextCircle()"
+            >
               <span class="step-card__bonus-tag"><span aria-hidden="true">↻</span> Bonus</span>
-              Next week, you are put in a Circle again with the people from this one you matched
-              best with.
-            </p>
+              <span>The people you click with most stay with you in your next Circle.</span>
+              <span class="step-card__bonus-action">See it <span aria-hidden="true">→</span></span>
+            </button>
           </div>
           <div class="step-card__demo">
             <span class="sticker sticker--mint step-card__try" aria-hidden="true"
-              >Meet the Circle</span
+              >Next week's Circle</span
             >
             <app-members-demo />
           </div>

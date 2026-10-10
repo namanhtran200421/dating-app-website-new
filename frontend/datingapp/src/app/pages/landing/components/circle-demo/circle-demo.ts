@@ -26,34 +26,34 @@ interface ChatMessage {
 
 const SOPHIA: CircleMember = {
   name: 'Sophia',
-  avatar: '/images/placeholders/profile-1.svg',
+  avatar: '/img/rosemarry/profile-jessica-generated-240.webp',
   color: '#c41843',
 };
 const LIAM: CircleMember = {
   name: 'Liam',
-  avatar: '/images/placeholders/profile-2.svg',
+  avatar: '/img/rosemarry/profile-riley-generated-240.webp',
   color: '#a35800',
 };
-const MAYA: CircleMember = {
-  name: 'Maya',
-  avatar: '/images/placeholders/profile-3.svg',
+const MIA: CircleMember = {
+  name: 'Mia',
+  avatar: '/img/rosemarry/profile-mia-original-240.webp',
   color: '#0b7a5a',
 };
-const NOAH: CircleMember = {
-  name: 'Noah',
-  avatar: '/images/placeholders/profile-4.svg',
+const JONAH: CircleMember = {
+  name: 'Jonah',
+  avatar: '/img/rosemarry/profile-jonah-original-240.webp',
   color: '#5b3fd0',
 };
 
 // Placeholder replies until the demo is wired to anything real; they cycle in order.
 const REPLIES: ReadonlyArray<[CircleMember, string]> = [
   [LIAM, 'Haha okay, I like you already 😂'],
-  [MAYA, 'Wait, same!! 🙌'],
-  [NOAH, 'Hot take, but I agree'],
+  [MIA, 'Wait, same!! 🙌'],
+  [JONAH, 'Hot take, but I agree'],
   [SOPHIA, "Who's up for trivia later? 🧠"],
   [LIAM, 'Noted 👀'],
-  [MAYA, "This Circle is too good, I don't want it to reset"],
-  [NOAH, 'Okay, tell us more'],
+  [MIA, "This Circle is too good, I don't want it to reset"],
+  [JONAH, 'Okay, tell us more'],
   [SOPHIA, 'Love that for you 💫'],
 ];
 
@@ -78,7 +78,7 @@ export class CircleDemo {
   readonly playActivity = output<void>();
 
   protected readonly days = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  protected readonly avatars = [SOPHIA, LIAM, MAYA, NOAH];
+  protected readonly avatars = [SOPHIA, LIAM, MIA, JONAH];
   private readonly replyDelayMs = { typing: 600, reply: 1400 };
 
   protected readonly screen = signal<'circle' | 'chat'>('circle');
@@ -92,28 +92,27 @@ export class CircleDemo {
       [
         ['event', 'Day 6 · Last day of this Circle'],
         [LIAM, "Morning Owls ☀️ who's actually awake?"],
-        [MAYA, 'Barely. Coffee first ☕'],
-        [NOAH, 'Been up since 6, already went for a run 🏃'],
-        [SOPHIA, 'Noah you are a machine'],
+        [MIA, 'Barely. Coffee first ☕'],
+        [JONAH, 'Been up since 6, already went for a run 🏃'],
+        [SOPHIA, 'Jonah you are a machine'],
         [LIAM, 'Okay, who is doing trivia tonight?'],
-        [MAYA, 'Me! I got destroyed on geography last time though 😭'],
-        [NOAH, 'Same, I genuinely thought Canberra was made up'],
-        [SOPHIA, 'LOL Noah'],
-        [MAYA, 'Also that riverside picnic spot rec was so good'],
+        [MIA, 'Me! I got destroyed on geography last time though 😭'],
+        [JONAH, 'Same, I genuinely thought Canberra was made up'],
+        [SOPHIA, 'LOL Jonah'],
+        [MIA, 'Also that riverside picnic spot rec was so good'],
         [LIAM, 'Told you 😎 best sunset in town'],
-        ['event', 'Maya completed "Flirty prompt"'],
+        ['event', 'Mia completed "Flirty prompt"'],
         [
-          MAYA,
+          MIA,
           "What's something small someone could do that would instantly make you like them more?",
         ],
         [SOPHIA, 'Send me a song that reminded them of me 🎶'],
-        [NOAH, 'Actually be on time 😅'],
-        [LIAM, 'Noah calling us all out 😂'],
+        [JONAH, 'Actually be on time 😅'],
+        [LIAM, 'Jonah calling us all out 😂'],
         [SOPHIA, "Last day already! This Circle's been a good one 💫"],
       ] as const
-    ).map(
-      ([from, text], id): ChatMessage =>
-        from === 'event' ? { id, kind: 'event', text } : { id, kind: 'member', member: from, text },
+    ).map(([from, text], id): ChatMessage =>
+      from === 'event' ? { id, kind: 'event', text } : { id, kind: 'member', member: from, text },
     ),
   );
 
