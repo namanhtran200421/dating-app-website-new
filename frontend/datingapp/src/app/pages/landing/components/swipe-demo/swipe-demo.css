@@ -488,13 +488,8 @@
   text-align: center;
 }
 
-.sticker--answer {
-  margin-inline: auto;
-  background: var(--pink);
-}
-
 .swipe-answer__heading h2 {
-  margin: 28px 0 0;
+  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(54px, 7vw, 92px);
   font-weight: 700;
