@@ -20,7 +20,7 @@ if (urls.length < 11 || !urls.includes(`${site}/how-it-works`))
   throw new Error('The latest sitemap with the How it works page is not live.');
 const homepage = await fetchPublic('/');
 if (
-  !homepage.includes('<title>Rosemarry | Dating with deeper connections</title>') ||
+  !homepage.includes('<title>Rosemarry | Interest-Based Group Dating</title>') ||
   !homepage.includes(
     'property="og:image" content="https://www.rosemarry.app/images/rosemarry-social-20260920.png"',
   )

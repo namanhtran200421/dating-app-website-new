@@ -16,7 +16,7 @@ export class HomeFaq {
     {
       question: 'How do weekly Circles work?',
       answer:
-        'Each week, Rosemarry brings together a Circle of 10 compatible people nearby for five days. You can get to know each other through prompts, shared activities and group conversations before deciding whether there is a connection.',
+        'Each week, Rosemarry brings together a Circle of 10 nearby singles based on shared interests for six days. You can get to know each other through prompts, shared activities and group conversations before deciding whether there is a connection.',
     },
     {
       question: 'Do I have to decide from a profile first?',
@@ -29,9 +29,14 @@ export class HomeFaq {
         'Attraction is not always instant. Familiarity, shared moments and repeated conversations let personality, humour and chemistry emerge in a way that a single profile impression often cannot.',
     },
     {
+      question: 'How does the AI matching work?',
+      answer:
+        'Your first Circle is based on nearby singles who share your interests. As you chat, join activities and build connections, Rosemarry’s AI learns from those interactions to help find more compatible matches over time. You always decide who you match with.',
+    },
+    {
       question: 'What happens when the week ends?',
       answer:
-        'Your Circle ends and a new one begins. What Rosemarry learns from how the group connected helps shape future Circles, and people with strong compatibility may be brought together again.',
+        'Your Circle ends and a new one begins. What Rosemarry’s AI learns from your interactions helps shape future Circles, and people who appear more compatible may be brought together again.',
     },
     {
       question: 'Is Rosemarry actually free to use?',

@@ -7,12 +7,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
     data: {
       seo: {
-        title: 'Rosemarry | Dating with deeper connections',
+        title: 'Rosemarry | Interest-Based Group Dating',
         description:
-          'Rosemarry is an early-stage dating app built around weekly Circles, shared activities and real conversation. The app is still in development.',
+          'Rosemarry puts nearby singles into small Circles based on shared interests, then uses AI to learn from interactions and improve compatibility over time.',
         canonicalPath: '/',
         pageType: 'WebPage',
-        modified: '2026-09-20',
+        modified: '2026-10-15',
       },
     },
   },
@@ -23,10 +23,10 @@ export const routes: Routes = [
       seo: {
         title: 'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
         description:
-          'See how Rosemarry plans to use five-day Circles, group conversation and shared activities to help people connect before matching.',
+          'See how Rosemarry forms six-day Circles around shared interests, then learns from interactions to improve compatibility over time.',
         canonicalPath: '/how-it-works',
         pageType: 'WebPage',
-        modified: '2026-09-27',
+        modified: '2026-10-15',
       },
     },
   },
@@ -106,6 +106,7 @@ export const routes: Routes = [
           'Read Rosemarry’s privacy policy, safety commitments and website terms of use.',
         canonicalPath: '/privacy-and-terms',
         pageType: 'WebPage',
+        modified: '2026-10-15',
       },
     },
   },

@@ -24,9 +24,7 @@ for (const viewport of [
       await page.waitForTimeout(750);
     }
 
-    await expect(
-      page.getByRole('heading', { name: 'Get to know someone before you match' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Interest-Based Group Dating' })).toBeVisible();
     await expect(page.locator('.hero-visual .photo-card')).toHaveCount(4);
     await expect(page.locator('.hero-visual .photo-card img')).toHaveCount(4);
     await expect(page.locator('.hero-visual')).not.toHaveAttribute('data-motion-reveal');
@@ -71,7 +69,7 @@ for (const viewport of [
     }));
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
-    await expect(page.getByRole('heading', { name: 'One week. Four simple steps' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Six days. Four simple steps' })).toBeVisible();
     await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(2);
     await expect(page.locator('.swipe-card__photo img')).toHaveCount(2);
     await expect(page.locator('button.swipe-card__btn')).toHaveCount(4);

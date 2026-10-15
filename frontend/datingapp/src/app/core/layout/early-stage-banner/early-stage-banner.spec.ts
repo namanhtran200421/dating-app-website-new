@@ -20,7 +20,9 @@ describe('EarlyStageBanner', () => {
     fixture.detectChanges();
 
     const dialog = fixture.nativeElement.querySelector('dialog') as HTMLDialogElement;
+    expect(fixture.nativeElement.textContent).toContain('Coming to Melbourne');
     expect(fixture.nativeElement.textContent).toContain('in development');
+    expect(fixture.nativeElement.textContent).toContain('launch in Melbourne first');
     expect(dialog.open).toBe(true);
     expect(dialog.getAttribute('aria-labelledby')).toBe('early-stage-title');
     expect(document.body.style.overflow).toBe('hidden');

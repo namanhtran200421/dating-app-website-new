@@ -150,7 +150,7 @@ export class SeoService {
         alternateName: 'Rosemarry Dating App',
         url: `${SITE_URL}/`,
         description:
-          'An early-stage dating app built around weekly Circles, shared activities and real conversation.',
+          'An interest-based group dating app where nearby singles meet in Circles and AI learns from their interactions to improve compatibility over time.',
         email: 'support@rosemarry.app',
         logo: {
           '@type': 'ImageObject',
@@ -172,7 +172,7 @@ export class SeoService {
         name: 'Rosemarry',
         alternateName: ['Rosemarry Dating App', 'rosemarry.app'],
         description:
-          'The official website for Rosemarry, a dating app in development around weekly Circles, shared activities and real conversation.',
+          'The official website for Rosemarry, an interest-based group dating app where AI learns from interactions to improve compatibility over time.',
         publisher: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'en-AU',
       },
@@ -224,7 +224,7 @@ export class SeoService {
             name: 'What is Rosemarry?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Rosemarry is an early-stage dating app built around small weekly Circles. It gives compatible people time to talk, try shared activities and get familiar before deciding whether to match.',
+              text: 'Rosemarry is an interest-based group dating app. It brings nearby singles into small Circles based on shared interests, while AI learns from their interactions to find more compatible matches over time.',
             },
           },
           {
@@ -232,7 +232,15 @@ export class SeoService {
             name: 'How do weekly Circles work?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'A Circle brings 10 compatible people together for five days of group chat, prompts and activities. Members can match at any time. A new Circle begins after the current one ends.',
+              text: 'A Circle brings 10 nearby singles together based on shared interests for six days of group chat, prompts and activities. Members can match at any time. A new Circle begins after the current one ends.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How does the AI matching work?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'A first Circle is based on nearby singles with shared interests. As members interact, Rosemarry’s AI learns from those interactions to help find more compatible matches over time. Members always decide who they match with.',
             },
           },
           {
@@ -240,7 +248,7 @@ export class SeoService {
             name: 'Is Rosemarry available yet?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No. As of 5 September 2026, Rosemarry is still in development and is not available to download. Launch timing and locations have not been announced.',
+              text: 'No. As of 15 October 2026, Rosemarry is still in development and is not available to download. It will launch in Melbourne first, but launch timing has not been announced.',
             },
           },
           {
