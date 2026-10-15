@@ -7,6 +7,36 @@
     </div>
 
     <div class="swipe-phone-stage" data-motion-reveal="fade">
+      @let previewLeft = profiles[2];
+      @let previewRight = profiles[5];
+      <article class="swipe-queue-preview swipe-queue-preview--left" aria-hidden="true">
+        <picture>
+          <source type="image/avif" [srcset]="previewLeft.photo.avif" sizes="220px" />
+          <source type="image/webp" [srcset]="previewLeft.photo.webp" sizes="220px" />
+          <img
+            [src]="previewLeft.photo.src"
+            alt=""
+            width="560"
+            height="700"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </article>
+      <article class="swipe-queue-preview swipe-queue-preview--right" aria-hidden="true">
+        <picture>
+          <source type="image/avif" [srcset]="previewRight.photo.avif" sizes="220px" />
+          <source type="image/webp" [srcset]="previewRight.photo.webp" sizes="220px" />
+          <img
+            [src]="previewRight.photo.src"
+            alt=""
+            width="560"
+            height="700"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </article>
       <div class="swipe-phone" aria-label="Interactive dating profile demo">
         <div class="swipe-phone__screen">
           <div class="swipe-phone__statusbar" aria-hidden="true">

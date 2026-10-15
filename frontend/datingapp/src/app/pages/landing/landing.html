@@ -174,9 +174,113 @@
             <h3>Find your people</h3>
             <p>Choose your interests so we can introduce you to nearby singles who share them.</p>
           </div>
-          <div class="step-card__demo">
-            <span class="sticker sticker--yellow step-card__try" aria-hidden="true">Try it</span>
-            <app-interests-demo />
+          <div class="step-card__demo step-card__demo--interests">
+            <div class="interest-collage" aria-label="Shared interest examples">
+              <figure class="interest-photo interest-photo--sport">
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="
+                      /img/rosemarry/interest-sport-mountain-360.avif 360w,
+                      /img/rosemarry/interest-sport-mountain-560.avif 560w,
+                      /img/rosemarry/interest-sport-mountain-900.avif 900w
+                    "
+                    sizes="(max-width: 620px) 64vw, 400px"
+                  />
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /img/rosemarry/interest-sport-mountain-360.webp 360w,
+                      /img/rosemarry/interest-sport-mountain-560.webp 560w,
+                      /img/rosemarry/interest-sport-mountain-900.webp 900w
+                    "
+                    sizes="(max-width: 620px) 64vw, 400px"
+                  />
+                  <img
+                    src="/images/rosemarry/interest-sport-mountain.jpg"
+                    alt="A climber ascending a snow-covered mountain ridge"
+                    width="3579"
+                    height="5472"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <figcaption class="interest-photo__label interest-photo__label--pink">
+                  <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+                  Sport
+                </figcaption>
+              </figure>
+
+              <figure class="interest-photo interest-photo--gaming">
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="
+                      /img/rosemarry/interest-gaming-360.avif 360w,
+                      /img/rosemarry/interest-gaming-560.avif 560w,
+                      /img/rosemarry/interest-gaming-900.avif 900w
+                    "
+                    sizes="(max-width: 620px) 52vw, 320px"
+                  />
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /img/rosemarry/interest-gaming-360.webp 360w,
+                      /img/rosemarry/interest-gaming-560.webp 560w,
+                      /img/rosemarry/interest-gaming-900.webp 900w
+                    "
+                    sizes="(max-width: 620px) 52vw, 320px"
+                  />
+                  <img
+                    src="/images/rosemarry/interest-gaming.jpg"
+                    alt="A group of gamers celebrating a win together"
+                    width="6048"
+                    height="4024"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <figcaption class="interest-photo__label">
+                  <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                  Gaming
+                </figcaption>
+              </figure>
+
+              <figure class="interest-photo interest-photo--cooking">
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="
+                      /img/rosemarry/interest-cooking-360.avif 360w,
+                      /img/rosemarry/interest-cooking-560.avif 560w,
+                      /img/rosemarry/interest-cooking-900.avif 900w
+                    "
+                    sizes="(max-width: 620px) 56vw, 340px"
+                  />
+                  <source
+                    type="image/webp"
+                    srcset="
+                      /img/rosemarry/interest-cooking-360.webp 360w,
+                      /img/rosemarry/interest-cooking-560.webp 560w,
+                      /img/rosemarry/interest-cooking-900.webp 900w
+                    "
+                    sizes="(max-width: 620px) 56vw, 340px"
+                  />
+                  <img
+                    src="/images/rosemarry/interest-cooking.jpg"
+                    alt="A woman enjoying a meal at a restaurant"
+                    width="5472"
+                    height="3648"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <figcaption class="interest-photo__label">
+                  <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+                  Cooking
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </li>
 
@@ -186,25 +290,170 @@
             <h3>Join your Circle</h3>
             <p>Meet a small group for six days instead of an endless feed.</p>
           </div>
-          <div class="step-card__demo">
-            <span class="sticker sticker--purple step-card__try" aria-hidden="true"
-              >Open the chat</span
-            >
-            <app-circle-demo (playActivity)="goToStep(activitiesStep, activitiesTitle)" />
+          <div class="step-card__demo step-card__demo--circle">
+            <div class="circle-static" aria-label="Example of a six-day Circle conversation">
+              <header class="circle-static__header">
+                <div>
+                  <h4>The Night Owls</h4>
+                  <p>Music, travel &amp; late-night talks</p>
+                </div>
+                <span>Day 2/6</span>
+              </header>
+
+              <div class="circle-static__members" aria-label="Ten Circle members">
+                <div class="static-avatar-row" aria-hidden="true">
+                  <img src="/img/rosemarry/profile-asha-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-daniel-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-mia-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-jonah-original-240.webp" alt="" />
+                  <span>+6</span>
+                </div>
+                <strong>10 people in your Circle</strong>
+              </div>
+
+              <div class="circle-static__thread" aria-hidden="true">
+                <article class="circle-static__message">
+                  <img src="/img/rosemarry/profile-priya-240.webp" alt="" />
+                  <div>
+                    <p><strong>Sophia</strong><span>8:24 PM</span></p>
+                    <span>Anyone up for live music this weekend?</span>
+                  </div>
+                </article>
+                <article class="circle-static__message circle-static__message--reply">
+                  <img src="/img/rosemarry/profile-mia-original-240.webp" alt="" />
+                  <div>
+                    <p><strong>Mia</strong><span>8:26 PM</span></p>
+                    <span>Yes! I’ve been meaning to check out a new venue.</span>
+                  </div>
+                </article>
+              </div>
+
+              <p class="circle-static__typing">
+                <span aria-hidden="true">•••</span> 3 people are typing
+              </p>
+            </div>
           </div>
         </li>
 
-        <li #activitiesStep class="step-card step-card--chat" data-motion-reveal="fade">
+        <li class="step-card step-card--chat" data-motion-reveal="fade">
           <div class="step-card__copy">
             <span class="step-card__number" aria-hidden="true">03</span>
-            <h3 #activitiesTitle tabindex="-1">Chat. Play.<br />Get familiar</h3>
+            <h3>Chat. Play.<br />Get familiar</h3>
             <p>Prompts and shared activities give personality time to show up.</p>
           </div>
-          <div class="step-card__demo">
-            <span class="sticker sticker--yellow step-card__try" aria-hidden="true"
-              >This week's games</span
-            >
-            <app-activities-demo />
+          <div class="step-card__demo step-card__demo--activities">
+            <div class="activities-static" aria-label="Examples of shared Circle activities">
+              <aside class="activities-static__list" aria-hidden="true">
+                <div class="activity-mini activity-mini--purple">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  <span><small>Tue</small><b>Trivia</b></span>
+                  <em>Play</em>
+                </div>
+                <div class="activity-mini activity-mini--yellow">
+                  <i class="fa-solid fa-shuffle"></i>
+                  <span><small>Wed</small><b>This or that</b></span>
+                  <em>Play</em>
+                </div>
+                <div class="activity-mini activity-mini--pink">
+                  <i class="fa-solid fa-user-secret"></i>
+                  <span><small>Thu</small><b>Guess who?</b></span>
+                  <em>Play</em>
+                </div>
+                <div class="activity-mini activity-mini--mint">
+                  <i class="fa-solid fa-heart"></i>
+                  <span><small>Fri</small><b>Matching answers</b></span>
+                  <em>Play</em>
+                </div>
+                <div class="activity-mini activity-mini--purple">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  <span><small>Sat</small><b>Pick for someone</b></span>
+                  <em>Play</em>
+                </div>
+              </aside>
+
+              <article class="activities-static__main">
+                <header>
+                  <span>This or that</span>
+                  <small>2 of 6 complete</small>
+                </header>
+                <h4>Beach date or mountain getaway?</h4>
+                <div class="activities-static__choices" aria-hidden="true">
+                  <div class="activities-static__choice activities-static__choice--beach">
+                    <picture>
+                      <source
+                        type="image/avif"
+                        srcset="
+                          /img/rosemarry/activity-beach-360.avif 360w,
+                          /img/rosemarry/activity-beach-560.avif 560w,
+                          /img/rosemarry/activity-beach-900.avif 900w
+                        "
+                        sizes="(max-width: 620px) 32vw, 180px"
+                      />
+                      <source
+                        type="image/webp"
+                        srcset="
+                          /img/rosemarry/activity-beach-360.webp 360w,
+                          /img/rosemarry/activity-beach-560.webp 560w,
+                          /img/rosemarry/activity-beach-900.webp 900w
+                        "
+                        sizes="(max-width: 620px) 32vw, 180px"
+                      />
+                      <img
+                        src="/images/rosemarry/activity-beach.jpg"
+                        alt="A tropical beach with turquoise water"
+                        width="2400"
+                        height="3600"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                    <strong>Beach date</strong>
+                  </div>
+                  <div class="activities-static__choice activities-static__choice--mountain">
+                    <picture>
+                      <source
+                        type="image/avif"
+                        srcset="
+                          /img/rosemarry/activity-mountain-360.avif 360w,
+                          /img/rosemarry/activity-mountain-560.avif 560w,
+                          /img/rosemarry/activity-mountain-900.avif 900w
+                        "
+                        sizes="(max-width: 620px) 32vw, 180px"
+                      />
+                      <source
+                        type="image/webp"
+                        srcset="
+                          /img/rosemarry/activity-mountain-360.webp 360w,
+                          /img/rosemarry/activity-mountain-560.webp 560w,
+                          /img/rosemarry/activity-mountain-900.webp 900w
+                        "
+                        sizes="(max-width: 620px) 32vw, 180px"
+                      />
+                      <img
+                        src="/images/rosemarry/activity-mountain.jpg"
+                        alt="A snow-capped mountain range under a blue sky"
+                        width="2400"
+                        height="1600"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                    <strong>Mountain getaway</strong>
+                  </div>
+                </div>
+              </article>
+
+              <aside class="activities-static__guess" aria-hidden="true">
+                <span>Guess who?</span>
+                <strong>Who has played in a live band?</strong>
+                <p>Choose the Circle member whose profile matches.</p>
+                <div class="static-avatar-row">
+                  <img src="/img/rosemarry/profile-elena-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-steve-candid-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-priya-240.webp" alt="" />
+                </div>
+              </aside>
+            </div>
           </div>
         </li>
 
@@ -212,23 +461,56 @@
           <div class="step-card__copy">
             <span class="step-card__number" aria-hidden="true">04</span>
             <h3>Like when it clicks</h3>
-            <p>Choose when it feels right, with more than a profile to go off.</p>
-            <button
-              type="button"
-              class="step-card__bonus"
-              aria-controls="members-demo-panel"
-              (click)="showNextCircle()"
-            >
-              <span class="step-card__bonus-tag"><span aria-hidden="true">↻</span> Bonus</span>
-              <span>The people you click with most stay with you in your next Circle.</span>
-              <span class="step-card__bonus-action">See it <span aria-hidden="true">→</span></span>
-            </button>
+            <p>
+              Like someone when it feels right. What you do in each Circle helps AI improve who it
+              introduces next.
+            </p>
           </div>
-          <div class="step-card__demo">
-            <span class="sticker sticker--mint step-card__try" aria-hidden="true"
-              >Next week's Circle</span
-            >
-            <app-members-demo />
+          <div class="step-card__demo step-card__demo--match">
+            <div class="match-static" aria-label="A match and two example Circles">
+              <article class="match-static__notice">
+                <strong>It’s a match!</strong>
+                <span>You both liked each other.</span>
+                <div class="match-static__faces" aria-hidden="true">
+                  <img src="/img/rosemarry/profile-daniel-240.webp" alt="" />
+                  <span>♥</span>
+                  <img src="/img/rosemarry/profile-mia-original-240.webp" alt="" />
+                </div>
+                <span class="match-static__chat" aria-hidden="true">Start chatting</span>
+              </article>
+
+              <article class="circle-mini circle-mini--first">
+                <header><strong>Circle 1</strong><span>10 people</span></header>
+                <div class="circle-mini__grid" aria-hidden="true">
+                  <img src="/img/rosemarry/profile-daniel-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-mia-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-asha-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-jonah-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-elena-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-steve-candid-240.webp" alt="" />
+                </div>
+              </article>
+
+              <article class="circle-mini circle-mini--second">
+                <header><strong>Circle 2</strong><span>10 people</span></header>
+                <div class="circle-mini__grid" aria-hidden="true">
+                  <span class="circle-mini__familiar"
+                    ><img src="/img/rosemarry/profile-mia-original-240.webp" alt="" /><i>♥</i></span
+                  >
+                  <span class="circle-mini__familiar"
+                    ><img src="/img/rosemarry/profile-steve-candid-240.webp" alt="" /><i>♥</i></span
+                  >
+                  <img src="/img/rosemarry/profile-priya-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-jonah-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-asha-original-240.webp" alt="" />
+                  <img src="/img/rosemarry/profile-elena-240.webp" alt="" />
+                </div>
+              </article>
+
+              <p class="match-static__ai-note">
+                AI brings compatible people back into your next Circle.
+              </p>
+            </div>
           </div>
         </li>
       </ol>
@@ -246,7 +528,7 @@
       <header class="split-heading split-heading--dark" data-motion-reveal>
         <div>
           <span class="sticker sticker--mint">Why it feels different</span>
-          <h2 id="outcome-title">Less judging.<br />More getting to know</h2>
+          <h2 id="outcome-title">Get to know them.<br />Then decide.</h2>
         </div>
       </header>
       <div class="feelgood" data-motion-reveal="fade">

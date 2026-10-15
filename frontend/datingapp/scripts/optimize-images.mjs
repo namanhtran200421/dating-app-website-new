@@ -37,6 +37,15 @@ const recipes = [
   { src: 'rosemarry/story-friend.jpg', widths: [240, 360, 560, 720] },
   { src: 'rosemarry/story-partner.jpg', widths: [240, 360, 560] },
 
+  // Step 01 interest collage: cards paint between ~260 and 420 CSS px.
+  { src: 'rosemarry/interest-gaming.jpg', widths: [360, 560, 900] },
+  { src: 'rosemarry/interest-sport-mountain.jpg', widths: [360, 560, 900] },
+  { src: 'rosemarry/interest-cooking.jpg', widths: [360, 560, 900] },
+
+  // Step 03 activity choice: two cards paint at roughly 180 CSS px each.
+  { src: 'rosemarry/activity-beach.jpg', widths: [360, 560, 900] },
+  { src: 'rosemarry/activity-mountain.jpg', widths: [360, 560, 900] },
+
   // Swipe deck profiles: four across at ~250 CSS px, one across at ~320 on a phone.
   { src: 'rosemarry/profile-elena.jpg', widths: [240, 360, 560] },
   { src: 'rosemarry/profile-priya.jpg', widths: [240, 360, 560] },
