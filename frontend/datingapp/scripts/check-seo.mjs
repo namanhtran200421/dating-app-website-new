@@ -60,14 +60,14 @@ for (const url of urls) {
     );
   }
 }
-assert.equal(docs.get('/')?.title, 'Rosemarry | Dating with deeper connections');
+assert.equal(docs.get('/')?.title, 'Rosemarry | Interest-Based Group Dating');
 assert.equal(
   docs.get('/how-it-works')?.title,
   'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
 );
 assert.match(
   docs.get('/')?.querySelector('meta[property="og:updated_time"]')?.content || '',
-  /^2026-09-20T/,
+  /^2026-10-15T/,
 );
 for (const [path, doc] of docs) {
   for (const node of doc.querySelectorAll('a[href], img[src], source[srcset]')) {

@@ -20,7 +20,7 @@ describe('HomeFaq', () => {
     const element = fixture.nativeElement as HTMLElement;
     const questions = Array.from(element.querySelectorAll<HTMLButtonElement>('.faq-card__trigger'));
 
-    expect(questions).toHaveLength(6);
+    expect(questions).toHaveLength(7);
     expect(questions.every((question) => question.getAttribute('aria-expanded') === 'false')).toBe(
       true,
     );

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 async function dismissDevelopmentNotice(page: import('@playwright/test').Page): Promise<void> {
   const dialog = page.getByRole('dialog', { name: /still in development/i });
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator('.early-stage-card__eyebrow')).toHaveText('heads-up');
+  await expect(dialog.locator('.early-stage-card__eyebrow')).toHaveText('Coming to Melbourne');
   await dialog.getByRole('button', { name: 'Keep exploring' }).click();
   await expect(dialog).toBeHidden();
 }
@@ -24,9 +24,7 @@ for (const viewport of [
       await page.waitForTimeout(750);
     }
 
-    await expect(
-      page.getByRole('heading', { name: 'Get to know someone before you match' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Interest-Based Group Dating' })).toBeVisible();
     await expect(page.locator('.hero-visual .photo-card')).toHaveCount(4);
     await expect(page.locator('.hero-visual .photo-card img')).toHaveCount(4);
     await expect(page.locator('.hero-visual')).not.toHaveAttribute('data-motion-reveal');
@@ -71,7 +69,7 @@ for (const viewport of [
     }));
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
-    await expect(page.getByRole('heading', { name: 'One week. Four simple steps' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Six days. Four simple steps' })).toBeVisible();
     await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(2);
     await expect(page.locator('.swipe-card__photo img')).toHaveCount(2);
     await expect(page.locator('button.swipe-card__btn')).toHaveCount(4);
@@ -79,17 +77,27 @@ for (const viewport of [
 
     await expect(page.locator('.people-deck .people-story-card')).toHaveCount(4);
     await expect(page.locator('.steps-deck .step-card')).toHaveCount(4);
-    const bonus = page.getByRole('button', { name: /Bonus.*people you click with most/i });
-    await expect(page.locator('app-members-demo .demo-title')).toHaveText('Circle 1');
-    await bonus.click();
-    await expect(page.locator('app-members-demo .demo-title')).toHaveText('Circle 2');
-    await expect(page.locator('app-members-demo .member--returning')).toHaveCount(3);
+    await expect(page.locator('.interest-collage .interest-photo')).toHaveCount(3);
+    await expect(page.locator('.interest-collage')).toContainText('Sport');
+    await expect(page.locator('.interest-collage')).toContainText('Gaming');
+    await expect(page.locator('.interest-collage')).toContainText('Cooking');
+    await expect(page.locator('.circle-static__message')).toHaveCount(2);
+    await expect(page.locator('.activities-static__choice')).toHaveCount(2);
+    await expect(page.locator('.activities-static__choice img')).toHaveCount(2);
+    await expect(page.locator('.activities-static__list .activity-mini')).toHaveCount(5);
+    await expect(page.locator('.circle-mini')).toHaveCount(2);
+    await expect(page.locator('.match-static__notice')).toContainText('It’s a match!');
+    await expect(page.locator('.match-static__chat')).toHaveText('Start chatting');
+    await expect(page.locator('.match-static__ai-note')).toHaveText(
+      'AI brings compatible people back into your next Circle.',
+    );
+    await expect(page.locator('.step-card__bonus')).toHaveCount(0);
     await expect(
-      page.getByRole('heading', { name: 'Less judging. More getting to know' }),
+      page.getByRole('heading', { name: 'Get to know them. Then decide.' }),
     ).toBeVisible();
     await expect(page.locator('.feelgood .fg-label h3')).toHaveCount(3);
     await expect(page.locator('.feelgood .fg-bubble')).toHaveCount(3);
-    await expect(page.locator('.faq-card')).toHaveCount(6);
+    await expect(page.locator('.faq-card')).toHaveCount(7);
 
     const footerCta = page.locator('.footer-signup-panel');
     const heightBeforeSignup = (await footerCta.boundingBox())?.height;
