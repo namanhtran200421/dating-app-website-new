@@ -16,7 +16,7 @@ export class HomeFaq {
     {
       question: 'How do weekly Circles work?',
       answer:
-        'Each week, Rosemarry brings together a Circle of 10 nearby singles based on shared interests for six days. You can get to know each other through prompts, shared activities and group conversations before deciding whether there is a connection.',
+        'Each week, Rosemarry brings together a Circle of 10 nearby singles based on shared interests for one week. You can get to know each other through prompts, shared activities and group conversations before deciding whether there is a connection.',
     },
     {
       question: 'Do I have to decide from a profile first?',

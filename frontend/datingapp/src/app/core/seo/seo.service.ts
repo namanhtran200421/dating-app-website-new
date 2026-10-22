@@ -232,7 +232,7 @@ export class SeoService {
             name: 'How do weekly Circles work?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'A Circle brings 10 nearby singles together based on shared interests for six days of group chat, prompts and activities. Members can match at any time. A new Circle begins after the current one ends.',
+              text: 'A Circle brings 10 nearby singles together based on shared interests for one week of group chat, prompts and activities. Members can match at any time. A new Circle begins after the current one ends.',
             },
           },
           {

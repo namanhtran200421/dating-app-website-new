@@ -69,7 +69,7 @@ for (const viewport of [
     }));
     expect(Math.abs(logoDimensions.renderedRatio - logoDimensions.naturalRatio)).toBeLessThan(0.02);
     await expect(page.locator('.footer-bar')).not.toContainText('18+');
-    await expect(page.getByRole('heading', { name: 'Six days. Four simple steps' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '1 week. Four simple steps' })).toBeVisible();
     await expect(page.locator('.swipe-fan .swipe-card')).toHaveCount(2);
     await expect(page.locator('.swipe-card__photo img')).toHaveCount(2);
     await expect(page.locator('button.swipe-card__btn')).toHaveCount(4);
