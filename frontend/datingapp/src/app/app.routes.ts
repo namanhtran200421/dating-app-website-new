@@ -23,7 +23,7 @@ export const routes: Routes = [
       seo: {
         title: 'How Rosemarry Works | Weekly Circles, Not Endless Swiping',
         description:
-          'See how Rosemarry forms six-day Circles around shared interests, then learns from interactions to improve compatibility over time.',
+          'See how Rosemarry forms one-week Circles around shared interests, then learns from interactions to improve compatibility over time.',
         canonicalPath: '/how-it-works',
         pageType: 'WebPage',
         modified: '2026-10-15',
